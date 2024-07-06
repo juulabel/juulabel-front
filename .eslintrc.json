@@ -1,3 +1,39 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "@typescript-eslint"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "next",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "react/jsx-uses-react": "off", // 해결: 'React' must be in scope when using JSX (Next.js)
+    "react/react-in-jsx-scope": "off", // 해결: Import React is not needed
+    "@typescript-eslint/no-unused-vars": "off", // 사용하지 않는 변수값 에러 표시 기능 끄기
+    "react/no-unescaped-entities": "off", // React 컴포넌트에서 엔티티를 직접 사용하는 것을 허용합니다.
+    "@next/next/no-page-custom-font": "off", // Next.js에서 페이지에 사용자 지정 폰트를 로드하는 것을 허용합니다,
+    "react/jsx-filename-extension": [
+      // ts파일에서 tsx구문 허용 (Next.js)
+      1,
+      {
+        "extensions": [".ts", ".tsx"]
+      }
+    ]
+  }
 }
