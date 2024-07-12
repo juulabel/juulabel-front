@@ -16,3 +16,18 @@
 .checkbox-custom:checked {
   @apply border-none bg-primary-700;
 }
+
+.text-emphasis {
+  position: relative;
+  display: inline-block;
+}
+
+.text-emphasis::after {
+  content: ".";
+  position: absolute;
+  top: -1.5rem;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  color: white;
+}

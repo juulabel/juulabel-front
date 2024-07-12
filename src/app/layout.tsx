@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex justify-center items-center ">
+        <div className="flex items-center justify-center">
           <QueryProvider>
             <MSWComponent>{children}</MSWComponent>
           </QueryProvider>

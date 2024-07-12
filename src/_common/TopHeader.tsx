@@ -25,12 +25,12 @@ export default function TopHeader(props: TopHeaderProps) {
             <GoChevronLeft size={24} />
           </Link>
         </div>
-        <div className="font-bold text-lg">{props.title}</div>
+        <div className="text-lg font-bold">{props.title}</div>
         <div></div>
       </div>
       <div className="flex">
-        <div className={`${width[props.step]} h-1 bg-active`} />
-        <div className={`${width[props.rest]} h-1 bg-progress-bar-inactive`} />
+        <div className={`${width[props.step]} h-1 bg-primary-700`} />
+        <div className={`${width[props.rest]} h-1 bg-primary-300`} />
       </div>
     </div>
   );
