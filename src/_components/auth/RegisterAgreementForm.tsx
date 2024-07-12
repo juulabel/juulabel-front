@@ -5,14 +5,28 @@ import { Controller, useFormContext } from "react-hook-form";
 import { GoChevronRight } from "react-icons/go";
 import Checkbox from "@/_common/Checkbox";
 import BottomButton from "@/_common/BottomButton";
+import { useRouter } from "next/navigation";
 
 export default function RegisterAgreementForm() {
+  const router = useRouter();
   const { control, watch, setValue } = useFormContext<RegisterUserFormValues>();
 
   const handleAllAgree = (value: boolean) => {
     setValue("serviceAgree", value);
     setValue("privateInformationAgree", value);
     setValue("marketingAgree", value);
+  };
+
+  const handleServiceDocumentButton = () => {
+    router.push("/document/서비스 이용약관(필수)");
+  };
+
+  const handlePrivateInformationDocumentButton = () => {
+    router.push("/document/개인정보 수집 및 이용동의(필수)");
+  };
+
+  const handleMarketingDocumentButton = () => {
+    router.push("/document/마케팅 수신동의(선택)");
   };
 
   const allAgreeWatch = watch("allAgree");
@@ -57,7 +71,11 @@ export default function RegisterAgreementForm() {
               서비스 이용약관(필수)
             </span>
           </label>
-          <GoChevronRight size={24} className="text-[#64748B]" />
+          <GoChevronRight
+            size={24}
+            className="text-[#64748B]"
+            onClick={handleServiceDocumentButton}
+          />
         </div>
         <div className="my-3 flex items-center justify-between">
           <label>
@@ -72,7 +90,11 @@ export default function RegisterAgreementForm() {
               개인정보 수집 및 이용동의(필수)
             </span>
           </label>
-          <GoChevronRight size={24} className="text-[#64748B]" />
+          <GoChevronRight
+            size={24}
+            className="text-[#64748B]"
+            onClick={handlePrivateInformationDocumentButton}
+          />
         </div>
         <div className="my-3 flex items-center justify-between">
           <label>
@@ -88,7 +110,11 @@ export default function RegisterAgreementForm() {
               마케팅 수신동의(선택)
             </span>
           </label>
-          <GoChevronRight size={24} className="text-[#64748B]" />
+          <GoChevronRight
+            size={24}
+            className="text-[#64748B]"
+            onClick={handleMarketingDocumentButton}
+          />
         </div>
       </div>
       <BottomButton
