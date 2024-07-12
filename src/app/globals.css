@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.checkbox-custom {
+  @apply relative mr-1 h-[18px] w-[18px] cursor-pointer appearance-none rounded border-2 border-gray-300 bg-cool-grayscale-300;
+}
+
+.checkbox-custom {
+  background-image: url("/images/check_icon.png");
+  background-size: 12px 8px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.checkbox-custom:checked {
+  @apply border-none bg-primary-700;
+}
