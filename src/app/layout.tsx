@@ -2,6 +2,7 @@ import QueryProvider from "@/_lib/Provider/QueryProvider";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
+import { MSWComponent } from "@/_lib/Provider/MockProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <QueryProvider>{children}</QueryProvider>
+        <div className="flex items-center justify-center">
+          <QueryProvider>
+            <MSWComponent>{children}</MSWComponent>
+          </QueryProvider>
+        </div>
       </body>
     </html>
   );
