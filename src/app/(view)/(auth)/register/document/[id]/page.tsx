@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import TopHeader from "@/_common/TopHeader";
 import axios from "axios";
+import { Fragment } from "react";
 
 export default function Page() {
   const { id } = useParams();
@@ -22,7 +23,14 @@ export default function Page() {
   });
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error : {error.message}</div>;
-  console.log(termsDetail.content);
+  const convertNewLinesToBreaks = (text: string) => {
+    return text.split("\r\n").map((line: string, index: number) => (
+      <Fragment key={index}>
+        {line}
+        <br />
+      </Fragment>
+    ));
+  };
   return (
     <div className="w-[393px]">
       <TopHeader
@@ -31,7 +39,7 @@ export default function Page() {
         step={0}
         title={`${termsDetail.title} ${termsDetail.is_required ? "(필수)" : "(선택)"}`}
       />
-      {termsDetail.content}
+      {convertNewLinesToBreaks(termsDetail.content)}
     </div>
   );
 }
