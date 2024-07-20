@@ -1,14 +1,19 @@
 "use client";
 
-import { RegisterUserFormValues } from "@/_types/yup/yupRegister";
-import { useFormContext } from "react-hook-form";
-import { useState } from "react";
-import axios from "axios";
-import { FaCheckCircle } from "react-icons/fa";
+import {
+  nicknameDefaultValues,
+  NicknameUserFormValues,
+} from "@/_types/yup/yupRegister";
 import { AiFillExclamationCircle } from "react-icons/ai";
 import BottomButton from "@/_common/BottomButton";
+import { useForm } from "react-hook-form";
+import { FaCheckCircle } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRegisterStore } from "@/_store/register";
 
 export default function NicknameForm() {
+  const { setNickname } = useRegisterStore();
   const [nicknamePass, setNicknamePass] = useState<string>("");
   const [enableButton, setEnableButton] = useState<boolean>(false);
   const {
@@ -16,28 +21,52 @@ export default function NicknameForm() {
     register,
     handleSubmit,
     setError,
+    clearErrors,
+    getValues,
     formState: { errors },
-  } = useFormContext<RegisterUserFormValues>();
+  } = useForm<NicknameUserFormValues>({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    defaultValues: nicknameDefaultValues,
+  });
 
-  const nicknameWatch = watch("nickname");
+  const nicknameWatch = watch("nickname") ?? "";
+  const nicknameLength = nicknameWatch.length;
 
-  const onClickNext = async (data: RegisterUserFormValues) => {
-    const response = await axios.post(
-      "https://api.example.com/api/register/nickname",
-      data.nickname,
-    );
-    if (response.data.data.isAble) {
-      setEnableButton(true);
-      setError("nickname", { message: "" });
-      setNicknamePass("사용 가능한 닉네임이에요.");
-      console.log("1");
-    } else {
-      setError("nickname", { message: "이미 사용중인 닉네임이에요." });
+  const onSubmit = async (data: NicknameUserFormValues) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/nicknames/${data.nickname}/exists`,
+      );
+
+      if (response.data) {
+        console.log(response.data);
+        if (response.data.success) {
+          setEnableButton(true);
+          clearErrors("nickname");
+          setNicknamePass("사용 가능한 닉네임이에요.");
+        } else {
+          setNicknamePass("");
+          setError("nickname", { message: "이미 사용중인 닉네임이에요." });
+        }
+      }
+    } catch (error) {
+      setNicknamePass("");
+      setError("nickname", {
+        message: "에러가 발생했습니다. 다시 시도해주세요.",
+      });
     }
   };
 
+  const saveNicknameData = () => {
+    setNickname(getValues("nickname"));
+  };
+  useEffect(() => {
+    clearErrors("nickname");
+  }, []);
+
   return (
-    <form onSubmit={handleSubmit(onClickNext)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4 w-[393px]">
         <input
           className="h-11 w-full rounded-[6px] border-[1px] border-solid border-cool-grayscale-300 p-4"
@@ -53,7 +82,7 @@ export default function NicknameForm() {
             </p>
           </div>
         )}
-        {nicknamePass && (
+        {nicknamePass && !errors.nickname?.message?.length && (
           <div className="mt-1 flex flex-row items-center">
             <FaCheckCircle className="mr-[2px] text-success" />
             <p className="text-[13px] font-medium text-success">
@@ -69,11 +98,15 @@ export default function NicknameForm() {
       </div>
       <button
         type="submit"
-        className={`m-auto flex justify-center rounded-[10px] bg-black px-[151px] py-[14px] text-center text-white`}
+        className={`m-auto flex justify-center rounded-[10px] px-[151px] py-[14px] text-center text-white ${nicknameLength >= 2 ? "bg-black" : "pointer-events-none bg-[#C4C4C4]"}`}
       >
         중복 검사
       </button>
-      <BottomButton url="/register/details" enableButton={enableButton}>
+      <BottomButton
+        url="/register/details"
+        enableButton={enableButton}
+        onClick={saveNicknameData}
+      >
         다음
       </BottomButton>
     </form>
