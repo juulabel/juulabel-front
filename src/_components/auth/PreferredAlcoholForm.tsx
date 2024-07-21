@@ -1,6 +1,10 @@
 "use client";
 
+import Loading from "@/_common/Loading";
 import { alcoholType } from "@/_config/alcoholType";
+import { getAlcoholTypes } from "@/app/api/auth/register/getAlcoholTypes";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Image from "next/image";
 
 interface IPreferredAlcohol {
@@ -12,6 +16,14 @@ export default function PreferredAlcoholForm({
   alcoholTypes = [],
   onChangeAlcoholType,
 }: IPreferredAlcohol) {
+  const {
+    data: alcoholTypeList,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["alcoholTypes"],
+    queryFn: getAlcoholTypes,
+  });
   const handlePreferredAlcohol = (
     event: React.MouseEvent<HTMLButtonElement>,
     value: string,
@@ -19,6 +31,8 @@ export default function PreferredAlcoholForm({
     event.preventDefault();
     onChangeAlcoholType(value);
   };
+  if (isLoading) return <Loading />;
+  if (error) return <div>Error : {error.message}</div>;
 
   return (
     <div className="mt-6 flex flex-row flex-wrap">

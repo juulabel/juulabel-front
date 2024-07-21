@@ -9,7 +9,7 @@ import BottomButton from "@/_common/BottomButton";
 import { useForm } from "react-hook-form";
 import { FaCheckCircle } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/app/api/axios";
 import { useRegisterStore } from "@/_store/register";
 
 export default function NicknameForm() {
@@ -36,11 +36,10 @@ export default function NicknameForm() {
   const onSubmit = async (data: NicknameUserFormValues) => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/nicknames/${data.nickname}/exists`,
+        `/v1/api/members/nicknames/${data.nickname}/exists`,
       );
 
       if (response.data) {
-        console.log(response.data);
         if (response.data.success) {
           setEnableButton(true);
           clearErrors("nickname");

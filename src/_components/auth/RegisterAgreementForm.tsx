@@ -8,11 +8,13 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { useRegisterStore } from "@/_store/register";
 import BottomButton from "@/_common/BottomButton";
+import { useQuery } from "@tanstack/react-query";
 import { GoChevronRight } from "react-icons/go";
 import { useRouter } from "next/navigation";
+import requests from "@/app/api/requests";
 import Checkbox from "@/_common/Checkbox";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import axios from "@/app/api/axios";
+import { getTerms } from "@/app/api/auth/register/getTerms";
 
 export default function RegisterAgreementForm() {
   const router = useRouter();
@@ -23,12 +25,7 @@ export default function RegisterAgreementForm() {
     error,
   } = useQuery({
     queryKey: ["terms"],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/terms`,
-      );
-      if (response.data) return response.data.result;
-    },
+    queryFn: getTerms,
   });
   const { control, watch, setValue, getValues } =
     useForm<AgreementUserFormValues>({

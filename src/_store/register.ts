@@ -3,9 +3,18 @@ import { persist } from "zustand/middleware";
 
 interface IRegisterUserState {
   allAgree: boolean;
-  serviceAgree: boolean;
-  privateInformationAgree: boolean;
-  marketingAgree: boolean;
+  serviceAgree: {
+    termsId: number;
+    isAgreed: boolean;
+  };
+  privateInformationAgree: {
+    termsId: number;
+    isAgreed: boolean;
+  };
+  marketingAgree: {
+    termsId: number;
+    isAgreed: boolean;
+  };
   nickname: string;
   email: string;
   provider: string;
@@ -30,9 +39,18 @@ export const useRegisterStore = create(
   persist<IRegisterUserState>(
     (set) => ({
       allAgree: false,
-      serviceAgree: false,
-      privateInformationAgree: false,
-      marketingAgree: false,
+      serviceAgree: {
+        termsId: 1,
+        isAgreed: false,
+      },
+      privateInformationAgree: {
+        termsId: 2,
+        isAgreed: false,
+      },
+      marketingAgree: {
+        termsId: 3,
+        isAgreed: false,
+      },
       nickname: "",
       email: "",
       provider: "",
@@ -43,11 +61,29 @@ export const useRegisterStore = create(
       setAllAgree: (value: boolean) =>
         set((state) => ({ ...state, allAgree: value })),
       setServiceAgree: (value: boolean) =>
-        set((state) => ({ ...state, serviceAgree: value })),
+        set((state) => ({
+          ...state,
+          serviceAgree: {
+            termsId: 1,
+            isAgreed: value,
+          },
+        })),
       setPrivateInformationAGree: (value: boolean) =>
-        set((state) => ({ ...state, privateInformationAgree: value })),
+        set((state) => ({
+          ...state,
+          privateInformationAgree: {
+            termsId: 2,
+            isAgreed: value,
+          },
+        })),
       setMarketingAgree: (value: boolean) =>
-        set((state) => ({ ...state, marketingAgree: value })),
+        set((state) => ({
+          ...state,
+          marketingAgree: {
+            termsId: 3,
+            isAgreed: value,
+          },
+        })),
       setNickname: (value: string) =>
         set((state) => ({ ...state, nickname: value })),
       setEmail: (value: string) => set((state) => ({ ...state, email: value })),
