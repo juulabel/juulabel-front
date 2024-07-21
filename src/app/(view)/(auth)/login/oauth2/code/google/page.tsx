@@ -1,30 +1,27 @@
 "use client";
 
-import { useRegisterStore } from "@/_store/register";
-import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRegisterStore } from "@/_store/register";
+import { Suspense, useEffect } from "react";
+import requests from "@/app/api/requests";
+import Loading from "@/_common/Loading";
+import axios from "@/app/api/axios";
 
-export default function Page() {
+function GoogleLoginHandlerComponent() {
   const { setEmail, setProvider, setProviderId } = useRegisterStore();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const authCode = searchParams.get("code");
     if (authCode) {
-      setIsLoading(true);
       const loginHandler = async () => {
         try {
-          const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/login/google`,
-            {
-              code: authCode,
-              provider: "GOOGLE",
-              redirectUri: process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI,
-            },
-          );
+          const response = await axios.post(requests.postGoogleLogin, {
+            code: authCode,
+            provider: "GOOGLE",
+            redirectUri: process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI,
+          });
           if (response.status === 200) {
             const data = response.data;
             if (data.result.isNewMember) {
@@ -43,17 +40,18 @@ export default function Page() {
           }
         } catch (error) {
           console.error(error);
-        } finally {
-          setIsLoading(false);
         }
       };
       loginHandler();
     }
-  }, [searchParams, setEmail, setProviderId, setProvider, router]);
+  }, []);
+  return <div>구글 소셜 로그인</div>;
+}
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return <div>구글 소셜 로그인 인가 코드 테스트</div>;
+export default function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <GoogleLoginHandlerComponent />
+    </Suspense>
+  );
 }

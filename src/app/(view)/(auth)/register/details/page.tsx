@@ -74,9 +74,9 @@ export default function page() {
       providerId: registerStore.providerId,
       alcoholTypeIds: getAlocholTypeIds(registerStore.preferredAlcoholType),
       termsAgreements: [
-        { termsId: 0, isAgreed: registerStore.serviceAgree },
-        { termsId: 1, isAgreed: registerStore.privateInformationAgree },
-        { termsId: 2, isAgreed: registerStore.marketingAgree },
+        registerStore.serviceAgree,
+        registerStore.privateInformationAgree,
+        registerStore.marketingAgree,
       ],
     };
     console.log(data);
@@ -114,7 +114,7 @@ export default function page() {
             마지막 단계에요!
           </h2>
           <h2 className="text-xl font-bold leading-7 text-[#334155]">
-            본인에 대해서 조그만 알려주세요!
+            본인에 대해서 조금만 알려주세요!
           </h2>
           <p className="font-[Pretendard] text-sm leading-6 text-cool-grayscale-600">
             입력정보에 따른 시음노트와 피드를 추천해드릴게요!
