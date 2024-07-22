@@ -1,15 +1,38 @@
 "use client";
 
-import { RegisterUserFormValues } from "@/_types/yup/yupRegister";
-import { Controller, useFormContext } from "react-hook-form";
-import { GoChevronRight } from "react-icons/go";
-import Checkbox from "@/_common/Checkbox";
+import {
+  agreementDefaultValues,
+  AgreementUserFormValues,
+  termsMapping,
+} from "@/_types/yup/yupRegister";
+import { Controller, useForm } from "react-hook-form";
+import { useRegisterStore } from "@/_store/register";
 import BottomButton from "@/_common/BottomButton";
+import { useQuery } from "@tanstack/react-query";
+import { GoChevronRight } from "react-icons/go";
 import { useRouter } from "next/navigation";
+import requests from "@/app/api/requests";
+import Checkbox from "@/_common/Checkbox";
+import axios from "@/app/api/axios";
+import { getTerms } from "@/app/api/auth/register/getTerms";
 
 export default function RegisterAgreementForm() {
   const router = useRouter();
-  const { control, watch, setValue } = useFormContext<RegisterUserFormValues>();
+  const registerStore = useRegisterStore();
+  const {
+    data: terms,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["terms"],
+    queryFn: getTerms,
+  });
+  const { control, watch, setValue, getValues } =
+    useForm<AgreementUserFormValues>({
+      mode: "onSubmit",
+      reValidateMode: "onSubmit",
+      defaultValues: agreementDefaultValues,
+    });
 
   const handleAllAgree = (value: boolean) => {
     setValue("serviceAgree", value);
@@ -17,21 +40,24 @@ export default function RegisterAgreementForm() {
     setValue("marketingAgree", value);
   };
 
-  const handleServiceDocumentButton = () => {
-    router.push("/document/서비스 이용약관(필수)");
-  };
-
-  const handlePrivateInformationDocumentButton = () => {
-    router.push("/document/개인정보 수집 및 이용동의(필수)");
-  };
-
-  const handleMarketingDocumentButton = () => {
-    router.push("/document/마케팅 수신동의(선택)");
+  const handleDocumentButton = (value: number) => {
+    router.push(`/register/document/${value}`);
   };
 
   const allAgreeWatch = watch("allAgree");
   const serviceAgreeWatch = watch("serviceAgree");
   const privateInformationAgreeWatch = watch("privateInformationAgree");
+
+  const saveAgreementData = () => {
+    registerStore.setAllAgree(getValues("allAgree"));
+    registerStore.setServiceAgree(getValues("serviceAgree"));
+    registerStore.setPrivateInformationAGree(
+      getValues("privateInformationAgree"),
+    );
+    registerStore.setMarketingAgree(getValues("marketingAgree"));
+  };
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error : {error.message}</div>;
   return (
     <form>
       <div className="absolute bottom-24 w-[393px]">
@@ -40,6 +66,7 @@ export default function RegisterAgreementForm() {
             <Controller
               name="allAgree"
               control={control}
+              defaultValue={false}
               render={({ field: { onChange, value } }) => (
                 <Checkbox
                   checked={value}
@@ -57,71 +84,48 @@ export default function RegisterAgreementForm() {
             </span>
           </label>
         </div>
-
-        <div className="my-2 flex items-center justify-between">
-          <label>
-            <Controller
-              name="serviceAgree"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Checkbox checked={value} onChange={onChange} />
-              )}
-            ></Controller>
-            <span className="text-base font-medium text-[#1E293B]">
-              서비스 이용약관(필수)
-            </span>
-          </label>
-          <GoChevronRight
-            size={24}
-            className="text-[#64748B]"
-            onClick={handleServiceDocumentButton}
-          />
-        </div>
-        <div className="my-3 flex items-center justify-between">
-          <label>
-            <Controller
-              name="privateInformationAgree"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Checkbox checked={value} onChange={onChange} />
-              )}
-            ></Controller>
-            <span className="text-base font-medium text-[#1E293B]">
-              개인정보 수집 및 이용동의(필수)
-            </span>
-          </label>
-          <GoChevronRight
-            size={24}
-            className="text-[#64748B]"
-            onClick={handlePrivateInformationDocumentButton}
-          />
-        </div>
-        <div className="my-3 flex items-center justify-between">
-          <label>
-            <Controller
-              name="marketingAgree"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <Checkbox checked={value} onChange={onChange} />
-              )}
-            ></Controller>
-
-            <span className="text-base font-medium text-[#1E293B]">
-              마케팅 수신동의(선택)
-            </span>
-          </label>
-          <GoChevronRight
-            size={24}
-            className="text-[#64748B]"
-            onClick={handleMarketingDocumentButton}
-          />
-        </div>
+        {terms.used_terms_infos.map(
+          (term: {
+            id: number;
+            title: string;
+            type: string;
+            is_required: boolean;
+          }) => {
+            const termType = term.type as keyof typeof termsMapping;
+            return (
+              <div
+                key={term.id}
+                className="my-3 flex items-center justify-between"
+              >
+                <label>
+                  <Controller
+                    name={termsMapping[termType]}
+                    control={control}
+                    defaultValue={false}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                  <span className="text-base font-medium text-[#1E293B]">
+                    {term.title} {term.is_required ? "(필수)" : "(선택)"}
+                  </span>
+                </label>
+                <GoChevronRight
+                  size={24}
+                  className="text-[#64748B]"
+                  onClick={() => handleDocumentButton(term.id)}
+                />
+              </div>
+            );
+          },
+        )}
       </div>
       <BottomButton
         url="/register/name"
         enableButton={
           allAgreeWatch || (serviceAgreeWatch && privateInformationAgreeWatch)
         }
+        onClick={saveAgreementData}
       >
         다음
       </BottomButton>

@@ -1,7 +1,7 @@
 import { HttpResponse, http } from "msw";
 
 export const handlers = [
-  http.post("https://api.example.com/api/register/nickname", () => {
+  http.post("/v1/api/members/nicknames/exists", () => {
     return HttpResponse.json({
       data: {
         isAble: true,
@@ -9,7 +9,7 @@ export const handlers = [
     });
   }),
 
-  http.get("https://api.example.com/api/register/document", () => {
+  http.get("/v1/api/terms", () => {
     return HttpResponse.json({
       data: {
         document: [

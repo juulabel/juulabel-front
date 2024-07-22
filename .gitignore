@@ -13,12 +13,18 @@
 /.next/
 /out/
 
+#env
+.env
+
 # production
 /build
 
 # misc
 .DS_Store
 *.pem
+
+#yarn
+yarn.lock
 
 # debug
 npm-debug.log*
