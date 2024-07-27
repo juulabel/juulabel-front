@@ -1,10 +1,15 @@
 import QueryProvider from "@/_lib/Provider/QueryProvider";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import type { Metadata } from "next";
 import "./globals.css";
 import { MSWComponent } from "@/_lib/Provider/MockProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const pretendard = localFont({
+  src: "fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard",
+});
 
 export const metadata: Metadata = {
   title: "주라벨",
@@ -17,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="kr">
+      <body className={`${pretendard.variable}`}>
         <div className="flex items-center justify-center">
           <QueryProvider>
             <MSWComponent>{children}</MSWComponent>
