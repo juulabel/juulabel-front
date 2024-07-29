@@ -1,14 +1,16 @@
 "use client";
 
 import BottomButton from "@/_common/BottomButton";
+import ConfirmModal from "@/_common/ConfirmModal";
 import TopHeader from "@/_common/TopHeader";
+import DetailsText from "@/_components/auth/DetailsText";
 import GenderForm from "@/_components/auth/GenderForm";
 import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
-import RegisterCancelModal from "@/_components/auth/RegisterCancelModal";
 import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
 import { useRegisterStore } from "@/_store/register";
 import { getAlocholTypeIds } from "@/_utils/getAlcoholTypeIds";
-import axios from "axios";
+import axios from "@/app/api/axios";
+import requests from "@/app/api/requests";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -79,11 +81,7 @@ export default function page() {
         registerStore.marketingAgree,
       ],
     };
-    console.log(data);
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/sign-up`,
-      data,
-    );
+    const response = await axios.post(requests.postSignUp, data);
     console.log(response);
   };
 
@@ -101,55 +99,14 @@ export default function page() {
 
   return (
     registerStore.nickname && (
-      <div className="w-[393px]">
+      <div className="w-full max-w-[560px]">
         <TopHeader
-          backUrl="/register/name"
           title="회원가입"
           step={3}
           rest={0}
           onClick={handleRegisterCancelModalOpen}
         />
-        <div className="ml-4 mt-7">
-          <h2 className="font-[Pretendard] text-xl font-bold leading-7 text-cool-grayscale-800">
-            마지막 단계에요!
-          </h2>
-          <h2 className="text-xl font-bold leading-7 text-[#334155]">
-            본인에 대해서 조금만 알려주세요!
-          </h2>
-          <p className="font-[Pretendard] text-sm leading-6 text-cool-grayscale-600">
-            입력정보에 따른 시음노트와 피드를 추천해드릴게요!
-          </p>
-        </div>
-        <div className="mx-4 mt-12">
-          <p className="mb-2 font-[Pretendard] text-base font-medium leading-6 text-cool-grayscale-700">
-            가입 정보
-          </p>
-          <div className="mb-2 flex flex-row justify-between text-center">
-            <p className="font-[Pretendard] text-base font-normal leading-6 text-cool-grayscale-500">
-              닉네임
-            </p>
-            <p className="font-[Pretendard] text-base font-semibold leading-6 text-cool-grayscale-700">
-              {registerStore.nickname}
-            </p>
-          </div>
-          <div className="mb-2 flex flex-row justify-between text-center">
-            <p className="font-[Pretendard] text-base font-normal leading-6 text-cool-grayscale-500">
-              아이디(이메일)
-            </p>
-            <p className="font-[Pretendard] text-base font-semibold leading-6 text-cool-grayscale-700">
-              {registerStore.email}
-            </p>
-          </div>
-          <div className="mb-2 flex flex-row justify-between text-center">
-            <p className="font-[Pretendard] text-base font-normal leading-6 text-cool-grayscale-500">
-              가입방식
-            </p>
-            <p className="font-[Pretendard] text-base font-semibold leading-6 text-cool-grayscale-700">
-              {registerStore.provider === "KAKAO" ? "카카오톡" : "구글"}
-            </p>
-          </div>
-        </div>
-        <div className="mt-6 h-[1px] w-[91%] bg-[lightly]" />
+        <DetailsText />
         <GenderForm
           genderCheck={genderCheck}
           maleClicked={maleClicked}
@@ -159,20 +116,18 @@ export default function page() {
           onChangeGender={(value: string) => handleGender(value)}
         />
         <div className="mt-6 h-[1px] w-[91%] bg-[lightly]" />
-        <div>
-          <div className="mt-6 flex flex-row justify-between">
-            <p className="font-[Pretendard] text-base font-semibold leading-6 text-cool-grayscale-700">
-              선호전통주 주종 선택(필수)
-            </p>
-            <p className="font-[Pretendard] text-sm font-normal leading-5 text-cool-grayscale-500">
-              복수선택 가능
-            </p>
-          </div>
-          <PreferredAlcoholForm
-            alcoholTypes={alcoholTypes}
-            onChangeAlcoholType={handleAlcoholType}
-          />
+        <div className="mx-[4%] mt-6 flex flex-row justify-between">
+          <p className="text-base font-semibold leading-6 text-cool-grayscale-700">
+            선호전통주 주종 선택(필수)
+          </p>
+          <p className="text-sm font-normal leading-5 text-cool-grayscale-500">
+            복수선택 가능
+          </p>
         </div>
+        <PreferredAlcoholForm
+          alcoholTypes={alcoholTypes}
+          onChangeAlcoholType={handleAlcoholType}
+        />
 
         <BottomButton
           enableButton={enableRegisterButton}
@@ -181,9 +136,13 @@ export default function page() {
           회원가입 완료하기
         </BottomButton>
         {registerCancelModalOpen && (
-          <RegisterCancelModal
-            handleRegisterCancelModalClose={handleRegisterCancelModalClose}
-            handleRegisterCancel={handleRegisterCancel}
+          <ConfirmModal
+            modalTitle="회원가입을 중단하시겠어요?"
+            modalDescription="마지막 단계에요! 그래도 중단하시겠어요?"
+            confirmText="중단하기"
+            cancelText="닫기"
+            handleConfirm={handleRegisterCancel}
+            handleCancel={handleRegisterCancelModalClose}
           />
         )}
         {registerConfirmModalOpen && (

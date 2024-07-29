@@ -1,4 +1,4 @@
-interface FollowButtonProps {
+interface IFollowButton {
   width?: string;
   textSize: string;
   isFollowed: boolean;
@@ -10,7 +10,7 @@ export default function FollowButton({
   textSize,
   isFollowed,
   onChangeFollow,
-}: FollowButtonProps) {
+}: IFollowButton) {
   return isFollowed ? (
     <button
       type="button"

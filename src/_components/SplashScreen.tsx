@@ -20,20 +20,20 @@ export default function SplashScreen() {
   return (
     <>
       {isLoading && isHome ? (
-        <div className="flex h-[100vh] w-[393px] flex-col items-center justify-center bg-primary-700">
+        <div className="flex h-[100vh] w-full max-w-[560px] flex-col items-center justify-center bg-primary-700">
           <Image
             src="/images/main_logo2.png"
             width={226}
             height={148}
             alt="주라벨 메인 로고2"
           />
-          <div className="mt-8 flex flex-row text-xl text-white">
-            <p>우리술,</p>
-            <p className="mx-[2px] text-primary-100">우리에게</p>
-            <p className="font-semibold">자부</p>
+          <div className="mt-8 flex w-full flex-row justify-center text-xl text-white">
+            <span>우리술,</span>
+            <span className="mx-[1%] text-primary-100">우리에게</span>
+            <span className="font-semibold">자부</span>
             <span className="text-emphasis" />
-            <p className="mr-1 font-semibold">심이</p>
-            <p className="text-primary-100">되도록</p>
+            <span className="mr-[1%] font-semibold">심이</span>
+            <span className="text-primary-100">되도록</span>
           </div>
         </div>
       ) : (

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 //MSW가 v2로 업그레이드 되면서 if(typeof window !== "undefined")로 감싸주게 변경
 //window!== undefined이면 window가 존재 == 클라이언트 환경 == 브라우저
 
-interface MSWComponentProps {
+interface IMSWComponent {
   children: React.ReactNode;
 }
 
@@ -17,7 +17,7 @@ async function startClientMSW() {
   }
 }
 
-export const MSWComponent = ({ children }: MSWComponentProps) => {
+export const MSWComponent = ({ children }: IMSWComponent) => {
   useEffect(() => {
     startClientMSW();
   }, []);

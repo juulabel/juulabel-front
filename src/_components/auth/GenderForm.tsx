@@ -25,8 +25,8 @@ export default function GenderForm({
   };
   return (
     <div>
-      <div className="mt-6 flex flex-row justify-between text-center">
-        <label className="font-[Pretendard] text-base font-medium leading-6">
+      <div className="mx-[4%] mt-6 flex flex-row justify-between text-center">
+        <label className="text-base font-medium leading-6">
           성별선택(필수)
         </label>
         <div className="flex flex-row">
@@ -42,7 +42,7 @@ export default function GenderForm({
       <div className="mt-3 flex flex-row justify-center">
         <button
           type="button"
-          className={`mx-2 h-12 w-44 rounded-[8px] border-[1px] border-cool-grayscale-300 font-[Pretendard] text-base font-bold leading-6 ${maleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
+          className={`mx-[2%] h-12 w-[43%] rounded-[8px] border-[1px] border-cool-grayscale-300 text-base font-bold leading-6 ${maleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
           onClick={(e) => handleGender(e)}
           disabled={genderDisable}
         >
@@ -50,7 +50,7 @@ export default function GenderForm({
         </button>
         <button
           type="button"
-          className={`mx-2 h-12 w-44 rounded-[8px] border-[1px] border-cool-grayscale-300 font-[Pretendard] text-base font-bold leading-6 ${femaleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
+          className={`mx-[2%] h-12 w-[43%] rounded-[8px] border-[1px] border-cool-grayscale-300 text-base font-bold leading-6 ${femaleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
           onClick={(e) => handleGender(e)}
           disabled={genderDisable}
         >

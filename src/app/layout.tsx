@@ -2,7 +2,9 @@ import QueryProvider from "@/_lib/Provider/QueryProvider";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
-import { MSWComponent } from "@/_lib/Provider/MockProvider";
+import ToastProvider from "@/_lib/Provider/ToastProvider";
+import "react-toastify/dist/ReactToastify.css";
+import { MSWComponent } from "@/_components/MSWComponent";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="flex items-center justify-center">
           <QueryProvider>
-            <MSWComponent>{children}</MSWComponent>
+            <ToastProvider>
+              <MSWComponent>{children}</MSWComponent>
+            </ToastProvider>
           </QueryProvider>
         </div>
       </body>

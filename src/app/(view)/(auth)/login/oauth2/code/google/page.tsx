@@ -23,19 +23,15 @@ function GoogleLoginHandlerComponent() {
             redirectUri: process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI,
           });
           if (response.status === 200) {
-            const data = response.data;
+            const data = response.data.result.oAuthUserInfo;
+            setEmail(data.email);
+            setProvider(data.provider);
+            setProviderId(data.providerId);
+            localStorage.setItem("recentLogin", "google");
             if (data.result.isNewMember) {
-              setEmail(data.result.o_auth_user_info.email);
-              setProvider(data.result.o_auth_user_info.provider);
-              setProviderId(data.result.o_auth_user_info.provider_id);
-              localStorage.setItem("recentLogin", "google");
               router.push("/register/agreement");
             } else {
-              setEmail(data.result.o_auth_user_info.email);
-              setProvider(data.result.o_auth_user_info.provider);
-              setProviderId(data.result.o_auth_user_info.provider_id);
-              localStorage.setItem("recentLogin", "google");
-              router.push("/register/agreement");
+              router.push("/register/agreement"); //추후 수정 예정
             }
           }
         } catch (error) {
