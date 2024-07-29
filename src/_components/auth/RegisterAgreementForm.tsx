@@ -84,7 +84,7 @@ export default function RegisterAgreementForm() {
             </span>
           </label>
         </div>
-        {terms.used_terms_infos.map(
+        {terms.usedTermsInfos.map(
           (term: {
             id: number;
             title: string;

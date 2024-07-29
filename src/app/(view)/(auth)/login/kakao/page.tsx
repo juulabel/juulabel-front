@@ -23,12 +23,16 @@ function KakaoLoginHandlerComponent() {
             redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI,
           });
           if (response.status === 200) {
-            const data = response.data;
-            setEmail(data.result.o_auth_user_info.email);
-            setProvider(data.result.o_auth_user_info.provider);
-            setProviderId(data.result.o_auth_user_info.provider_id);
+            const data = response.data.result.oAuthUserInfo;
+            setEmail(data.email);
+            setProvider(data.provider);
+            setProviderId(data.providerId);
             localStorage.setItem("recentLogin", "kakao");
-            router.push("/register/agreement");
+            if (response.data.result.isNewMember) {
+              router.push("/register/agreement");
+            } else {
+              router.push("/share/notes"); //추후 수정 예정
+            }
           }
         } catch (error) {
           console.error(error);
