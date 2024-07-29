@@ -1,4 +1,10 @@
 import { HttpResponse, http } from "msw";
+import {
+  profileDummyData,
+  recommendedDummyData,
+  reportListDummyData,
+  searchDummyData,
+} from "./data";
 
 export const handlers = [
   http.post("/v1/api/members/nicknames/exists", () => {
@@ -9,14 +15,24 @@ export const handlers = [
     });
   }),
 
-  http.get("/v1/api/terms", () => {
+  http.get("/v1/api/user/recommend/sommelier", () => {
     return HttpResponse.json({
-      data: {
-        document: [
-          "제 1조",
-          "공무원인 근로자는 법류이 정하는 자에 한하여 단결권-단체 교섭권 및 단체행동권을 가진다.",
-        ],
-      },
+      data: recommendedDummyData,
+    });
+  }),
+  http.get("/v1/api/user/search", () => {
+    return HttpResponse.json({
+      data: searchDummyData,
+    });
+  }),
+  http.get("/v1/api/user/profile/1", () => {
+    return HttpResponse.json({
+      data: profileDummyData,
+    });
+  }),
+  http.get("/v1/api/user/report/list", () => {
+    return HttpResponse.json({
+      data: reportListDummyData,
     });
   }),
 ];
