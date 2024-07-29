@@ -31,7 +31,7 @@ function GoogleLoginHandlerComponent() {
             if (data.result.isNewMember) {
               router.push("/register/agreement");
             } else {
-              router.push("/register/agreement"); //추후 수정 예정
+              router.push("/share/notes"); //추후 수정 예정
             }
           }
         } catch (error) {
