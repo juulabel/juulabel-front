@@ -4,6 +4,7 @@ const requests = {
   postKakaoLogin: `/v1/api/members/login/kakao`,
   postGoogleLogin: `/v1/api/members/login/google`,
   getTerms: `/v1/api/terms`,
+  follow: `/v1/api/follow`,
 };
 
 export default requests;
