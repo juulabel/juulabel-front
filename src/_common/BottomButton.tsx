@@ -15,10 +15,10 @@ export default function BottomButton({
   onClick,
 }: IBottomButton) {
   return (
-    <>
+    <div className="fixed bottom-[4%] left-1/2 flex w-full -translate-x-1/2 transform justify-center">
       {url ? (
         <Link
-          className={`absolute bottom-[4%] mx-[4%] mt-8 flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-center text-base font-bold text-white ${
+          className={`flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-center text-base font-bold text-white ${
             enableButton
               ? "bg-primary-700"
               : "pointer-events-none bg-primary-300"
@@ -31,7 +31,7 @@ export default function BottomButton({
       ) : (
         <button
           onClick={onClick}
-          className={`relative bottom-[4%] mx-[4%] my-[4%] flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-base font-bold text-white ${
+          className={`flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-base font-bold text-white ${
             enableButton
               ? "bg-primary-700"
               : "pointer-events-none bg-primary-300"
@@ -40,6 +40,6 @@ export default function BottomButton({
           {children}
         </button>
       )}
-    </>
+    </div>
   );
 }

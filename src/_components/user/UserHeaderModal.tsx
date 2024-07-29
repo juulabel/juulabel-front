@@ -13,7 +13,7 @@ export default function UserHeaderModal({
 }: IUserHeaderModal) {
   return (
     <div
-      className="fixed right-[9%] top-4 w-52 text-sm"
+      className="custom-right fixed top-4 w-52 text-sm"
       onClick={onCloseOption}
     >
       <div
