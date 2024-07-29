@@ -32,9 +32,8 @@ export default function Page() {
     ));
   };
   return (
-    <div className="w-[393px]">
+    <div className="w-full max-w-[560px]">
       <TopHeader
-        backUrl="/register/agreement"
         rest={0}
         step={0}
         title={`${termsDetail.title} ${termsDetail.is_required ? "(필수)" : "(선택)"}`}

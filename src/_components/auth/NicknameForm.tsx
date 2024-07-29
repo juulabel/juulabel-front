@@ -66,7 +66,7 @@ export default function NicknameForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4 w-[393px]">
+      <div className="mx-[4%] mb-4">
         <input
           className="h-11 w-full rounded-[6px] border-[1px] border-solid border-cool-grayscale-300 p-4"
           placeholder="닉네임을 입력해주세요."
@@ -97,7 +97,7 @@ export default function NicknameForm() {
       </div>
       <button
         type="submit"
-        className={`m-auto flex justify-center rounded-[10px] px-[151px] py-[14px] text-center text-white ${nicknameLength >= 2 ? "bg-black" : "pointer-events-none bg-[#C4C4C4]"}`}
+        className={`mx-[4%] flex w-[91%] justify-center rounded-[10px] py-[14px] text-center text-white ${nicknameLength >= 2 ? "bg-black" : "pointer-events-none bg-[#C4C4C4]"}`}
       >
         중복 검사
       </button>

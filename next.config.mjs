@@ -1,17 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["juulabel.s3.ap-northeast-2.amazonaws.com"],
-    // 추후 pathname 경로에 맞게 수정
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",
-        port: "",
-        pathname: "member/**",
-      },
+    domains: [
+      "via.placeholder.com",
+      "juulabel.s3.ap-northeast-2.amazonaws.com",
     ],
+    // 추후 pathname 경로에 맞게 수정
   },
+  experimental: {
+    instrumentationHook: true,
+  },
+  remotePatterns: [
+    {
+      protocol: "https",
+      hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",
+      port: "",
+      pathname: "member/**",
+    },
+  ],
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
@@ -21,5 +27,4 @@ const nextConfig = {
     return config;
   },
 };
-
 export default nextConfig;

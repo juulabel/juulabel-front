@@ -1,4 +1,5 @@
 import Link from "next/link";
+import React from "react";
 
 interface IBottomButton {
   url?: string;
@@ -17,7 +18,7 @@ export default function BottomButton({
     <>
       {url ? (
         <Link
-          className={`absolute inset-x-0 bottom-2 m-auto w-[393px] items-center rounded-[10px] py-[14px] text-center text-base font-bold text-white ${
+          className={`absolute bottom-[4%] mx-[4%] mt-8 flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-center text-base font-bold text-white ${
             enableButton
               ? "bg-primary-700"
               : "pointer-events-none bg-primary-300"
@@ -30,7 +31,7 @@ export default function BottomButton({
       ) : (
         <button
           onClick={onClick}
-          className={`absolute inset-x-0 bottom-2 m-auto w-[393px] items-center rounded-[10px] py-[14px] text-center text-base font-bold text-white ${
+          className={`relative bottom-[4%] mx-[4%] my-[4%] flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-base font-bold text-white ${
             enableButton
               ? "bg-primary-700"
               : "pointer-events-none bg-primary-300"

@@ -11,9 +11,7 @@ import BottomButton from "@/_common/BottomButton";
 import { useQuery } from "@tanstack/react-query";
 import { GoChevronRight } from "react-icons/go";
 import { useRouter } from "next/navigation";
-import requests from "@/app/api/requests";
 import Checkbox from "@/_common/Checkbox";
-import axios from "@/app/api/axios";
 import { getTerms } from "@/app/api/auth/register/getTerms";
 
 export default function RegisterAgreementForm() {
@@ -59,31 +57,29 @@ export default function RegisterAgreementForm() {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error : {error.message}</div>;
   return (
-    <form>
-      <div className="absolute bottom-24 w-[393px]">
-        <div className="flex items-end">
-          <label className="my-3 flex flex-row items-center">
-            <Controller
-              name="allAgree"
-              control={control}
-              defaultValue={false}
-              render={({ field: { onChange, value } }) => (
-                <Checkbox
-                  checked={value}
-                  onChange={(e) => {
-                    onChange(e.target.checked);
-                    handleAllAgree(e.target.checked);
-                  }}
-                />
-              )}
-            ></Controller>
+    <form className="w-full max-w-[560px]">
+      <div>
+        <label className="mx-[4%] my-3 flex flex-row items-center">
+          <Controller
+            name="allAgree"
+            control={control}
+            defaultValue={false}
+            render={({ field: { onChange, value } }) => (
+              <Checkbox
+                checked={value}
+                onChange={(e) => {
+                  onChange(e.target.checked);
+                  handleAllAgree(e.target.checked);
+                }}
+              />
+            )}
+          ></Controller>
 
-            <span className="flex flex-row text-base font-medium text-[#475569]">
-              <p className="mx-1 text-lg font-bold">약관 전체동의</p> 선택동의
-              포함
-            </span>
-          </label>
-        </div>
+          <span className="flex flex-row text-base font-medium text-[#475569]">
+            <p className="mx-1 text-lg font-bold">약관 전체동의</p> 선택동의
+            포함
+          </span>
+        </label>
         {terms.usedTermsInfos.map(
           (term: {
             id: number;

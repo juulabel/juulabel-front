@@ -27,8 +27,8 @@ export default function LoginForm() {
   }, []);
 
   return (
-    <div className="w-[393px]">
-      <TopHeader backUrl="" title="로그인" step={0} rest={0} />
+    <div className="w-full max-w-[560px]">
+      <TopHeader title="로그인" step={0} rest={0} />
       <div className="mb-[60px] mt-[136px] flex flex-col items-center justify-center">
         <Image
           width={228}
@@ -42,7 +42,7 @@ export default function LoginForm() {
       </div>
       <LoginButton buttonType="kakao" handleButton={handleKakaoLogin}>
         {kakaoRecentLogin && (
-          <div className="absolute bottom-9 right-[280px]">
+          <div className="absolute bottom-9 left-[2%]">
             <Image
               width={71}
               height={31}

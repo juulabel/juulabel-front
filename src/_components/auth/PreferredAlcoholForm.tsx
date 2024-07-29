@@ -35,14 +35,14 @@ export default function PreferredAlcoholForm({
   if (error) return <div>Error : {error.message}</div>;
 
   return (
-    <div className="mt-6 flex flex-row flex-wrap">
+    <div className="mx-[4%] mt-6 flex flex-row flex-wrap">
       {alcoholType.map((drink) => (
         <div
           key={drink.key}
-          className="flex flex-col items-center justify-center"
+          className="mx-[1%] flex flex-col items-center justify-center"
         >
           <div
-            className={`mx-2 flex h-28 w-28 items-center justify-center rounded-full ${
+            className={`mx-[1%] flex h-28 w-28 items-center justify-center rounded-full ${
               alcoholTypes && alcoholTypes.includes(drink.value)
                 ? "border-2 border-[#FF823C] bg-[#FF823C] bg-opacity-10"
                 : "bg-cool-grayscale-100"

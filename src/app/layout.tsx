@@ -2,7 +2,9 @@ import QueryProvider from "@/_lib/Provider/QueryProvider";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 import "./globals.css";
-import { MSWComponent } from "@/_lib/Provider/MockProvider";
+import ToastProvider from "@/_lib/Provider/ToastProvider";
+import "react-toastify/dist/ReactToastify.css";
+import { MSWComponent } from "@/_components/MSWComponent";
 
 const pretendard = localFont({
   src: "fonts/PretendardVariable.woff2",
@@ -26,7 +28,9 @@ export default function RootLayout({
       <body className={`${pretendard.variable}`}>
         <div className="flex items-center justify-center">
           <QueryProvider>
-            <MSWComponent>{children}</MSWComponent>
+            <ToastProvider>
+              <MSWComponent>{children}</MSWComponent>
+            </ToastProvider>
           </QueryProvider>
         </div>
       </body>

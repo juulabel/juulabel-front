@@ -13,9 +13,9 @@ export default function LoginButton({
 }: ILoginButton) {
   const buttonColor: buttonType = {
     kakao:
-      "flex justify-center items-center rounded-[6px] w-[361px] py-[13px] bg-[#EDD923] relative",
+      "flex justify-center items-center rounded-[6px] w-[91%] mx-[4%] py-[13px] bg-[#EDD923] relative",
     google:
-      "flex justify-center items-center rounded-[6px] w-[361px] py-[13px] bg-white border-[1px] border-cool-grayscale-300 relative",
+      "flex justify-center items-center rounded-[6px] w-[91%] mx-[4%] py-[13px] bg-white border-[1px] border-cool-grayscale-300 relative",
   };
   return (
     <button className={buttonColor[buttonType]} onClick={handleButton}>
