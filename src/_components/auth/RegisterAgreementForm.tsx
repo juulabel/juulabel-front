@@ -59,7 +59,7 @@ export default function RegisterAgreementForm() {
   return (
     <form className="w-full max-w-[560px]">
       <div>
-        <label className="mx-[4%] my-3 flex flex-row items-center">
+        <label className="mx-[4%] my-4 flex flex-row items-center">
           <Controller
             name="allAgree"
             control={control}
@@ -91,7 +91,7 @@ export default function RegisterAgreementForm() {
             return (
               <div
                 key={term.id}
-                className="my-3 flex items-center justify-between"
+                className="mx-[4%] my-4 flex items-center justify-between"
               >
                 <label>
                   <Controller
