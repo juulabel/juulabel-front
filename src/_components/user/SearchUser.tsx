@@ -1,11 +1,13 @@
 interface ISearchUser {
   searchQuery: string;
-  handleChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
   handleClearSearchQuery: () => void;
+  handleChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function SearchUser({
   searchQuery,
+  placeholder,
   handleChangeQuery,
   handleClearSearchQuery,
 }: ISearchUser) {
@@ -23,7 +25,7 @@ export default function SearchUser({
         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
           handleChangeQuery(event)
         }
-        placeholder="닉네임으로 검색해보세요."
+        placeholder={placeholder}
       />
       {searchQuery && (
         <img

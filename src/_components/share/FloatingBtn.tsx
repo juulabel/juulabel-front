@@ -24,8 +24,12 @@ export default function FloatingBtn() {
             "pointer-events-auto h-24 w-[143px] rounded-lg border bg-white opacity-0 transition-opacity duration-200 ease-out",
             clicked && "opacity-100",
           )}
+          onClick={() => setClicked((prev) => !prev)}
         >
-          <Link href="#" className="flex h-1/2 items-center justify-center">
+          <Link
+            href="/tasting-note/search"
+            className="flex h-1/2 items-center justify-center"
+          >
             <Image
               src="/icons/addingBtn/tasting.png"
               alt="시음노트 작성 아이콘"

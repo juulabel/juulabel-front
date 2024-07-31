@@ -51,6 +51,7 @@ export default function Page() {
       <TopHeader title="유저 검색" rest={0} step={0} />
       <SearchUser
         searchQuery={searchQuery}
+        placeholder="닉네임으로 검색해보세요."
         handleChangeQuery={handleChangeQuery}
         handleClearSearchQuery={handleClearSearchQuery}
       />
