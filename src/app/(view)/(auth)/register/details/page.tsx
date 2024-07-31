@@ -9,14 +9,16 @@ import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
 import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
 import { useRegisterStore } from "@/_store/register";
 import { getAlocholTypeIds } from "@/_utils/getAlcoholTypeIds";
-import axios from "@/app/api/axios";
+import instance from "@/app/api/axios";
 import requests from "@/app/api/requests";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 
 export default function page() {
   const registerStore = useRegisterStore();
   const router = useRouter();
+  const [cookies, setCookie] = useCookies(["accessToken"]);
   const [alcoholTypes, setAlcoholTypes] = useState<string[]>([]);
   const [gender, setGender] = useState<string>("");
   const [genderDisable, setGenderDisable] = useState<boolean>(false);
@@ -81,8 +83,14 @@ export default function page() {
         registerStore.marketingAgree,
       ],
     };
-    const response = await axios.post(requests.postSignUp, data);
-    console.log(response);
+    const response = await instance.post(requests.postSignUp, data);
+    if (response.status === 200) {
+      registerStore.setMemberId(response.data.result.memberId);
+      setCookie("accessToken", response.data.result.token.accessToken, {
+        path: "/",
+      });
+      router.push("/share/life");
+    }
   };
 
   const handleGenderCheck = (value: boolean) => {
