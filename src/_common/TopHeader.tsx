@@ -8,7 +8,7 @@ interface ITopHeader {
   title: string;
   step: number;
   rest: number;
-  onClick?: (event: React.MouseEvent<SVGElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 type widthType = Record<number, string>;
@@ -20,23 +20,26 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
     2: "w-2/3",
     3: "w-full",
   };
-  const handleClick = (event: React.MouseEvent<SVGElement>) => {
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
       event.preventDefault();
       onClick(event);
+    } else {
+      router.back(); // onClick이 없을 때만 router.back() 호출
     }
   };
+
   return (
     <div>
       <div className="mx-7 flex h-16 flex-row items-center justify-between">
         <div>
-          <button onClick={() => router.back()}>
-            <GoChevronLeft
-              size={24}
-              onClick={(event: React.MouseEvent<SVGElement>) =>
-                handleClick(event)
-              }
-            />
+          <button
+            onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+              handleClick(event)
+            }
+          >
+            <GoChevronLeft size={24} />
           </button>
         </div>
         <div className="text-lg font-bold">{title}</div>

@@ -22,6 +22,7 @@ interface IRegisterUserState {
   gender: string;
   genderCheck: boolean;
   preferredAlcoholType: string[];
+  memberId: number;
   setAllAgree: (value: boolean) => void;
   setServiceAgree: (value: boolean) => void;
   setPrivateInformationAGree: (value: boolean) => void;
@@ -33,6 +34,7 @@ interface IRegisterUserState {
   setGender: (value: string) => void;
   setGendercheck: (value: boolean) => void;
   setPreferredAlcoholType: (value: string[]) => void;
+  setMemberId: (value: number) => void;
 }
 
 export const useRegisterStore = create(
@@ -58,6 +60,7 @@ export const useRegisterStore = create(
       gender: "",
       genderCheck: false,
       preferredAlcoholType: [],
+      memberId: 0,
       setAllAgree: (value: boolean) =>
         set((state) => ({ ...state, allAgree: value })),
       setServiceAgree: (value: boolean) =>
@@ -97,6 +100,9 @@ export const useRegisterStore = create(
         set((state) => ({ ...state, genderCheck: value })),
       setPreferredAlcoholType: (value: string[]) => {
         set((state) => ({ ...state, preferredAlcoholType: value }));
+      },
+      setMemberId: (value: number) => {
+        set((state) => ({ ...state, memberId: value }));
       },
     }),
     {
