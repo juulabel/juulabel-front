@@ -12,7 +12,7 @@ export default function TastingNoteSearchHeader({
 }: ITastingNoteSearchHeader) {
   const router = useRouter();
   return (
-    <div className="flex h-16 flex-row items-center justify-between">
+    <div className="mx-[4%] flex h-16 flex-row items-center justify-between">
       <div>
         <button onClick={() => router.back()}>
           <GoChevronLeft size={24} />

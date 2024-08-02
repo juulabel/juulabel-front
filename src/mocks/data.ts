@@ -346,3 +346,12 @@ export const shareLifesDummyData = [
     commentCount: 23,
   },
 ];
+
+export const relatedDummyData = [
+  "이동막걸리",
+  "이동식 막걸리",
+  "이동식소주",
+  "포천이동식 막걸리",
+  "이동식 막걸리",
+  "이동식 막걸리",
+];

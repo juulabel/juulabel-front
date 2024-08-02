@@ -2,6 +2,7 @@ import { HttpResponse, http } from "msw";
 import {
   profileDummyData,
   recommendedDummyData,
+  relatedDummyData,
   reportListDummyData,
   searchDummyData,
   shareLifesDummyData,
@@ -49,4 +50,12 @@ export const handlers = [
       life: shareLifesDummyData,
     });
   }),
+  http.get(
+    "https://api.example.com/v1/api/tasting-note/search/related-data",
+    () => {
+      return HttpResponse.json({
+        relatedData: relatedDummyData,
+      });
+    },
+  ),
 ];
