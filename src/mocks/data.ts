@@ -355,3 +355,68 @@ export const relatedDummyData = [
   "이동식 막걸리",
   "이동식 막걸리",
 ];
+
+export const tastingNoteBasicInformationDummyData = {
+  productName: "탁 100",
+  alcoholContent: "10.5%",
+  alcoholType: "탁주",
+  brewery: "탁브루",
+  breweryLocation: "인천광역시 부평구",
+};
+
+export const officialDataDummyData = [
+  {
+    productName: "느린마을 증류주",
+    alcoholContent: "10.5%",
+    alcoholType: "소주•증류주",
+    alcoholThumbnail:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
+    brewery: "어디양조장양조장",
+    breweryLocation: "인천광역시 부평구",
+  },
+  {
+    productName: "느린마을 증류주",
+    alcoholContent: "10.5%",
+    alcoholType: "소주•증류주",
+    alcoholThumbnail:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
+    brewery: "어디양조장양조장",
+    breweryLocation: "인천광역시 부평구",
+  },
+  {
+    productName: "느린마을 증류주",
+    alcoholContent: "10.5%",
+    alcoholType: "소주•증류주",
+    alcoholThumbnail:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
+    brewery: "어디양조장양조장",
+    breweryLocation: "인천광역시 부평구",
+  },
+  {
+    productName: "느린마을 증류주",
+    alcoholContent: "10.5%",
+    alcoholType: "소주•증류주",
+    alcoholThumbnail:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
+    brewery: "어디양조장양조장",
+    breweryLocation: "인천광역시 부평구",
+  },
+  {
+    productName: "느린마을 증류주",
+    alcoholContent: "10.5%",
+    alcoholType: "소주•증류주",
+    alcoholThumbnail:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
+    brewery: "어디양조장양조장",
+    breweryLocation: "인천광역시 부평구",
+  },
+  {
+    productName: "느린마을 증류주",
+    alcoholContent: "10.5%",
+    alcoholType: "소주•증류주",
+    alcoholThumbnail:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
+    brewery: "어디양조장양조장",
+    breweryLocation: "인천광역시 부평구",
+  },
+];

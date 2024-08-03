@@ -11,15 +11,9 @@ interface ITopHeader {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-type widthType = Record<number, string>;
-
 export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
   const router = useRouter();
-  const width: widthType = {
-    1: "w-1/3",
-    2: "w-2/3",
-    3: "w-full",
-  };
+  const totalSteps = step + rest; // 전체 단계 수
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
@@ -34,11 +28,7 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
     <div>
       <div className="mx-7 flex h-16 flex-row items-center justify-between">
         <div>
-          <button
-            onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-              handleClick(event)
-            }
-          >
+          <button onClick={handleClick}>
             <GoChevronLeft size={24} />
           </button>
         </div>
@@ -46,8 +36,14 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
         <div></div>
       </div>
       <div className="flex">
-        <div className={`${width[step]} h-1 bg-primary-700`} />
-        <div className={`${width[rest]} h-1 bg-primary-300`} />
+        <div
+          className="h-1 bg-primary-700"
+          style={{ width: `${(step / totalSteps) * 100}%` }}
+        />
+        <div
+          className="h-1 bg-primary-300"
+          style={{ width: `${(rest / totalSteps) * 100}%` }}
+        />
       </div>
     </div>
   );

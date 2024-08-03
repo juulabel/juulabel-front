@@ -1,16 +1,24 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
+import { getOfficialDataList } from "@/app/api/tasting-note/getOfficialDataList";
 import { useEffect, useState } from "react";
 
 interface IRecentSearchList {
   localStorageKey: string;
+  setSearchQuery: (value: string) => void;
+  setSearchResult: (data: IOfficialData[]) => void;
+  handleUnOfficialDataSearchList: () => void;
+  handleOfficialDataSearchList: () => void;
 }
 
 export default function RecentSearchList({
   localStorageKey,
+  setSearchQuery,
+  setSearchResult,
+  handleUnOfficialDataSearchList,
+  handleOfficialDataSearchList,
 }: IRecentSearchList) {
-  const router = useRouter();
   const [recentSearchList, setRecentSearchList] = useState<string[]>([]);
   useEffect(() => {
     const localStorageRecentSearchList = localStorage.getItem(localStorageKey);
@@ -36,8 +44,16 @@ export default function RecentSearchList({
     setRecentSearchList([]);
   };
 
-  const onClickRecentSearchData = () => {
-    //해당 데이터가 OD인지 UD인지 API 요청 후 분기처리
+  const onClickRecentSearchData = async (recentSearch: string) => {
+    const data = await getOfficialDataList();
+    if (data) {
+      setSearchQuery(recentSearch);
+      setSearchResult(data);
+      handleOfficialDataSearchList();
+    } else {
+      setSearchQuery(recentSearch);
+      handleUnOfficialDataSearchList();
+    }
   };
 
   return (
@@ -60,7 +76,7 @@ export default function RecentSearchList({
               >
                 <p
                   className="cursor-pointer text-base text-cool-grayscale-700"
-                  onClick={() => onClickRecentSearchData()}
+                  onClick={() => onClickRecentSearchData(recentSearch)}
                 >
                   {recentSearch}
                 </p>
