@@ -1,7 +1,7 @@
 "use client";
 
 import TopHeader from "@/_common/TopHeader";
-import SearchUser from "@/_components/user/SearchUser";
+import SearchData from "@/_common/SearchData";
 import { useDebounce } from "@/_utils/useDebounce";
 import { getSearchUser } from "@/app/api/user/getSearchUser";
 import { useRouter } from "next/navigation";
@@ -49,8 +49,9 @@ export default function Page() {
   return (
     <div className="w-full max-w-[560px]">
       <TopHeader title="유저 검색" rest={0} step={0} />
-      <SearchUser
+      <SearchData
         searchQuery={searchQuery}
+        placeholder="닉네임으로 검색해보세요."
         handleChangeQuery={handleChangeQuery}
         handleClearSearchQuery={handleClearSearchQuery}
       />
