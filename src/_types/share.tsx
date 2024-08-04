@@ -1,7 +1,7 @@
 export interface IPostList {
   title: string;
   content: string;
-  postHref: string;
+  postId: string;
   username: string;
   userImage: string;
   contentThumbnail?: string;
@@ -12,6 +12,7 @@ export interface IPostList {
 }
 
 export interface INoteThumbnail {
+  noteId: string;
   alcoholType: string;
   alcoholThumbnail?: string;
   alcoholImageCount?: number;

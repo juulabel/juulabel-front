@@ -127,6 +127,7 @@ export const reportListDummyData = [
 
 export const shareNotesDummyData = [
   {
+    noteId: "1",
     alcoholType: "소주",
     alcoholThumbnail:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
@@ -138,6 +139,7 @@ export const shareNotesDummyData = [
     published: "2024.7.11",
   },
   {
+    noteId: "2",
     alcoholType: "기타주류",
     alcoholThumbnail:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
@@ -149,6 +151,7 @@ export const shareNotesDummyData = [
     published: "2024.7.11",
   },
   {
+    noteId: "3",
     alcoholType: "소주",
     alcoholThumbnail:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
@@ -160,6 +163,7 @@ export const shareNotesDummyData = [
     published: "2024.7.11",
   },
   {
+    noteId: "4",
     alcoholType: "소주",
     alcoholName: "느린마을 증류주",
     username: "작성자 닉네임",
@@ -174,7 +178,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말 어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "1",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -187,7 +191,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말 어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "2",
     username: "테스트테스트",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -202,7 +206,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "3",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -217,7 +221,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "4",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -229,22 +233,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
-    username: "김뭅잉",
-    userImage:
-      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
-    contentThumbnail:
-      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/a348614bd66d440dimage",
-    contentImageCount: 2,
-    published: "2024-07-22T11:20:01.512Z",
-    likeCount: 20,
-    commentCount: 23,
-  },
-  {
-    title: "용산 아이파크몰 시음회 후기",
-    content:
-      "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "5",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -259,7 +248,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "6",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -274,7 +263,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "7",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -289,7 +278,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "8",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -304,7 +293,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "9",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -319,7 +308,7 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postId: "10",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
@@ -334,7 +323,22 @@ export const shareLifesDummyData = [
     title: "용산 아이파크몰 시음회 후기",
     content:
       "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
-    postHref: "#",
+    postHref: "11",
+    username: "김뭅잉",
+    userImage:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
+    contentThumbnail:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/a348614bd66d440dimage",
+    contentImageCount: 2,
+    published: "2024-07-22T11:20:01.512Z",
+    likeCount: 20,
+    commentCount: 23,
+  },
+  {
+    title: "용산 아이파크몰 시음회 후기",
+    content:
+      "어제 용산 아이파크몰에서 시음회가 열렸대서 찾아가봤어용 시음회가 열렸대서 찾아가봤어용 주종은 다양하게 구성이 되어있었는데 이번에는 전통주도 많았어서 정말",
+    postHref: "12",
     username: "김뭅잉",
     userImage:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
