@@ -1,0 +1,65 @@
+"use client";
+
+import Caption from "@/_common/Caption";
+import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+export default function OfficialDataThumbnail({
+  productName,
+  alcoholContent,
+  alcoholType,
+  alcoholThumbnail,
+  brewery,
+  breweryLocation,
+}: IOfficialData) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(
+      `/tasting-note/write?productName=${encodeURIComponent(
+        productName,
+      )}&alcoholContent=${encodeURIComponent(
+        alcoholContent,
+      )}&alcoholType=${encodeURIComponent(
+        alcoholType,
+      )}&brewery=${brewery ? encodeURIComponent(brewery) : ""}&breweryLocation=${
+        breweryLocation ? encodeURIComponent(breweryLocation) : ""
+      }`,
+    );
+  };
+
+  return (
+    <div
+      className="mb-[5%] flex w-full cursor-pointer flex-col"
+      onClick={handleClick}
+    >
+      <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
+        <Caption type="primary" className="absolute left-2 top-2 z-10">
+          {alcoholType}
+        </Caption>
+        <Image
+          src={
+            alcoholThumbnail ??
+            `/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType)}.png`
+          }
+          alt="시음노트 썸네일"
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="mb-[1%] text-base font-medium text-cool-grayscale-800">
+        {productName}
+      </div>
+      <div className="flex flex-row items-center">
+        <img
+          src="/svg/pin_icon.svg"
+          alt="위치 아이콘"
+          className="mr-[1%] h-4 w-4"
+        />
+        <p className="text-sm font-normal text-cool-grayscale-500">{brewery}</p>
+      </div>
+    </div>
+  );
+}

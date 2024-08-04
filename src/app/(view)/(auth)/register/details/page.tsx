@@ -89,7 +89,7 @@ export default function page() {
       setCookie("accessToken", response.data.result.token.accessToken, {
         path: "/",
       });
-      router.push("/share/life");
+      router.push("/share/notes");
     }
   };
 

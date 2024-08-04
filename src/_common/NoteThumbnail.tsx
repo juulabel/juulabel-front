@@ -2,7 +2,7 @@ import Image from "next/image";
 import Caption from "./Caption";
 import { INoteThumbnail } from "@/_types/share";
 
-const placeholderThumbnailProvider = (alcoholType: string) => {
+export const placeholderThumbnailProvider = (alcoholType: string) => {
   switch (alcoholType) {
     case "소주":
     case "증류주":

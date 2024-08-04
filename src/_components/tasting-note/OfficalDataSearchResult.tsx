@@ -1,22 +1,25 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
+import OfficialData from "./OfficialData";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
 
 interface IOfficialDataSearchResult {
   query: string;
-  officialDataList?: string[]; //임시 데이터 타입
+  officialDataList: IOfficialData[] | []; //임시 데이터 타입
   closeOfficialDataSearchResult: () => void;
   handleClearSearchQuery: () => void;
+  handleCloseSearchList: () => void;
 }
 
 export default function OfficialDataSearchResult({
   query,
+  officialDataList,
   closeOfficialDataSearchResult,
   handleClearSearchQuery,
+  handleCloseSearchList,
 }: IOfficialDataSearchResult) {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   useEffect(() => {
     setSearchQuery(query);
@@ -26,7 +29,7 @@ export default function OfficialDataSearchResult({
     <div className="w-full max-w-[560px]">
       <div className="mx-[2%] my-2 flex flex-row items-center">
         <div className="mx-[2%] cursor-pointer">
-          <GoChevronLeft size={24} onClick={() => router.back()} />
+          <GoChevronLeft size={24} onClick={handleCloseSearchList} />
         </div>
         <div className="flex h-11 w-full flex-row items-center rounded-[6px] bg-cool-grayscale-100">
           <img
@@ -55,6 +58,7 @@ export default function OfficialDataSearchResult({
           />
         </div>
       </div>
+      <OfficialData officialDataList={officialDataList} />
     </div>
   );
 }

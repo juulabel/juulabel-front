@@ -1,5 +1,6 @@
 import { HttpResponse, http } from "msw";
 import {
+  officialDataDummyData,
   profileDummyData,
   recommendedDummyData,
   relatedDummyData,
@@ -7,6 +8,7 @@ import {
   searchDummyData,
   shareLifesDummyData,
   shareNotesDummyData,
+  tastingNoteBasicInformationDummyData,
 } from "./data";
 
 export const handlers = [
@@ -58,4 +60,14 @@ export const handlers = [
       });
     },
   ),
+  http.get(`https://api.example.com/v1/api/tasting-note/basic?id=1`, () => {
+    return HttpResponse.json({
+      information: tastingNoteBasicInformationDummyData,
+    });
+  }),
+  http.get("https://api.example.com/v1/api/tasting-note/official-data", () => {
+    return HttpResponse.json({
+      data: officialDataDummyData,
+    });
+  }),
 ];

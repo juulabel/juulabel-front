@@ -1,32 +1,48 @@
 "use client";
 
+import { IOfficialData } from "@/_types/tasting-note/officialData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
-import { useRouter } from "next/navigation";
+import { getOfficialDataList } from "@/app/api/tasting-note/getOfficialDataList";
 import { useEffect, useState } from "react";
 
 interface IRelatedSearchResult {
   searchedData: string;
   searchQuery: string;
   localStorageKey: string;
+  setQuery: (value: string) => void;
+  setSearchResult: (data: IOfficialData[]) => void;
+  handleUnOfficialDataSearchList: () => void;
+  handleOfficialDataSearchList: () => void;
 }
 
 export default function RelatedSearchResult({
   searchedData,
   searchQuery,
   localStorageKey,
+  setQuery,
+  setSearchResult,
+  handleUnOfficialDataSearchList,
+  handleOfficialDataSearchList,
 }: IRelatedSearchResult) {
-  const router = useRouter();
   const [filteredSearchQuery, setFilteredSearchQuery] = useState<string>("");
   useEffect(() => {
     setFilteredSearchQuery(searchedData.replace(searchQuery, ""));
   }, [searchQuery]);
 
-  const onClickRelatedSearchData = () => {
+  const onClickRelatedSearchData = async () => {
     saveRecentSearchDataToLocalStorage({
       localStorageKey,
       searchData: searchedData,
     });
-    //api 요청 후 OfficialDataSearchResult Component 호출
+    const data = await getOfficialDataList();
+    if (data) {
+      setQuery(searchedData);
+      setSearchResult(data);
+      handleOfficialDataSearchList();
+    } else {
+      setQuery(searchedData);
+      handleUnOfficialDataSearchList();
+    }
   };
   return (
     <div className="mx-[5%] my-2 flex h-6 items-center">

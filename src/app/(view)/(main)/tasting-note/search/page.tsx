@@ -7,18 +7,18 @@ import TraditionalDrinkInformationComponent from "@/_components/tasting-note/Tra
 import SearchData from "@/_common/SearchData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import { useDebounce } from "@/_utils/useDebounce";
-import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import OfficialDataSearchResult from "@/_components/tasting-note/OfficalDataSearchResult";
 import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
+import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
 
 export default function Page() {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [relatedSearchDataList, setRelatedSearchDataList] = useState<
     string[] | null
   >([]);
+  const [searchResult, setSearchResult] = useState<IOfficialData[] | []>([]);
   const [openOfficialSearchDataList, setOpenOfficialSearchDataList] =
     useState<boolean>(false);
   const [openUnOfficialSearchDataList, setOpenUnOfficialSearchDataList] =
@@ -43,6 +43,16 @@ export default function Page() {
     if (debouncedSearchQuery) getRelatedSearchDataList();
     else setRelatedSearchDataList([]);
   }, [debouncedSearchQuery]);
+
+  useEffect(() => {
+    console.log("SearchResult : ", searchResult);
+  }, [searchResult]);
+
+  const handleCloseSearchList = () => {
+    if (openOfficialSearchDataList) setOpenOfficialSearchDataList(false);
+    else if (openUnOfficialSearchDataList)
+      setOpenUnOfficialSearchDataList(false);
+  };
 
   const handleQuerySearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     //최근 검색어 저장 기능 => enter 키를 눌러서 검색이 동작했을 때에만 localStorage 저장
@@ -76,11 +86,35 @@ export default function Page() {
                 searchedData={data}
                 searchQuery={debouncedSearchQuery}
                 localStorageKey="TastingNoteRecentSearchList"
+                setQuery={(relatedData: string) => setSearchQuery(relatedData)}
+                setSearchResult={(data: IOfficialData[]) =>
+                  setSearchResult(data)
+                }
+                handleOfficialDataSearchList={() =>
+                  setOpenOfficialSearchDataList(true)
+                }
+                handleUnOfficialDataSearchList={() =>
+                  setOpenUnOfficialSearchDataList(true)
+                }
               />
             ))}
           {relatedSearchDataList?.length === 0 && (
             <>
-              <RecentSearchList localStorageKey="TastingNoteRecentSearchList" />
+              <RecentSearchList
+                localStorageKey="TastingNoteRecentSearchList"
+                setSearchQuery={(recentSearch: string) =>
+                  setSearchQuery(recentSearch)
+                }
+                setSearchResult={(searchResult: IOfficialData[]) =>
+                  setSearchResult(searchResult)
+                }
+                handleOfficialDataSearchList={() =>
+                  setOpenOfficialSearchDataList(true)
+                }
+                handleUnOfficialDataSearchList={() =>
+                  setOpenUnOfficialSearchDataList
+                }
+              />
               <div className="absolute bottom-[21%] left-1/2 translate-x-[-50%]">
                 <TraditionalDrinkInformationComponent />
               </div>
@@ -90,11 +124,13 @@ export default function Page() {
       )}
       {openOfficialSearchDataList && (
         <OfficialDataSearchResult
+          officialDataList={searchResult}
           query={searchQuery}
           closeOfficialDataSearchResult={() =>
             setOpenOfficialSearchDataList(false)
           }
           handleClearSearchQuery={handleClearSearchQuery}
+          handleCloseSearchList={handleCloseSearchList}
         />
       )}
       {openUnOfficialSearchDataList && (
