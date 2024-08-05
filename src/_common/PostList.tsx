@@ -63,7 +63,7 @@ export default function PostList({
         </div>
         <div className="flex items-center">
           <Image
-            src="/icons/like.png"
+            src="/svg/like.svg"
             alt="좋아요 아이콘"
             width={16}
             height={16}

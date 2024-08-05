@@ -3,7 +3,7 @@ export async function register() {
     process.env.NEXT_RUNTIME === "nodejs" &&
     process.env.NODE_ENV === "development"
   ) {
-    const server = (await import("./mocks/server")).default;
+    const server = (await import("./mocks/server")).server;
     server.listen({
       onUnhandledRequest: "bypass",
     });
