@@ -1,4 +1,4 @@
-import { cn } from "@/utils/commons";
+import { cn } from "@/_utils/commons";
 import { cva } from "class-variance-authority";
 
 interface ICaption {

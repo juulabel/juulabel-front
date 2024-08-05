@@ -1,12 +1,12 @@
 import { IPostList } from "@/_types/share";
-import { dateView } from "@/utils/time";
+import { dateView } from "@/_utils/time";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function PostList({
   title,
   content,
-  postHref,
+  postId,
   username,
   userImage,
   contentThumbnail,
@@ -16,7 +16,7 @@ export default function PostList({
   commentCount,
 }: IPostList) {
   return (
-    <Link href={postHref} className="block px-4 pt-5">
+    <Link href={`/share/life/${postId}`} className="block px-4 pt-5">
       <div className="flex items-center gap-4">
         <div>
           <div className="mb-1 font-medium text-cool-grayscale-800">
@@ -37,6 +37,7 @@ export default function PostList({
             <Image
               src={contentThumbnail}
               alt="일상생활 썸네일 이미지"
+              sizes="30vw"
               fill
               className="object-cover"
             />
@@ -50,6 +51,7 @@ export default function PostList({
             <Image
               src={userImage}
               alt="작성자 이미지"
+              sizes="10vw"
               fill
               className="object-cover"
             />
@@ -61,7 +63,7 @@ export default function PostList({
         </div>
         <div className="flex items-center">
           <Image
-            src="/icons/like.png"
+            src="/svg/like.svg"
             alt="좋아요 아이콘"
             width={16}
             height={16}

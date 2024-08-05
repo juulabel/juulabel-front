@@ -1,26 +1,30 @@
 "use client";
 
-import { useEffect } from "react";
-//MSW가 v2로 업그레이드 되면서 if(typeof window !== "undefined")로 감싸주게 변경
-//window!== undefined이면 window가 존재 == 클라이언트 환경 == 브라우저
+import { useEffect, useState } from "react";
 
-interface IMSWComponent {
-  children: React.ReactNode;
-}
+const isMockingMode = process.env.NEXT_PUBLIC_API_MOCKING === "enabled";
 
-async function startClientMSW() {
-  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-    const worker = await import("@/mocks/browser").then((res) => res.default);
-    worker.start({
-      onUnhandledRequest: "bypass",
-    });
-  }
-}
-
-export const MSWComponent = ({ children }: IMSWComponent) => {
+export const MSWComponent = ({ children }: { children: React.ReactNode }) => {
+  const [mswReady, setMswReady] = useState(false);
   useEffect(() => {
-    startClientMSW();
-  }, []);
+    const init = async () => {
+      if (isMockingMode) {
+        const initMsw = await import("@/mocks/index").then(
+          (res) => res.initMsw,
+        );
+        await initMsw();
+        setMswReady(true);
+      }
+    };
+
+    if (!mswReady) {
+      init();
+    }
+  }, [mswReady]);
+
+  if (!mswReady) {
+    return null;
+  }
 
   return <>{children}</>;
 };

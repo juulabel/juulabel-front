@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Caption from "./Caption";
 import { INoteThumbnail } from "@/_types/share";
+import Link from "next/link";
 
 export const placeholderThumbnailProvider = (alcoholType: string) => {
   switch (alcoholType) {
@@ -18,6 +19,7 @@ export const placeholderThumbnailProvider = (alcoholType: string) => {
 };
 
 export default function NoteThumbnail({
+  noteId,
   alcoholType,
   alcoholThumbnail,
   alcoholImageCount,
@@ -27,7 +29,7 @@ export default function NoteThumbnail({
   published,
 }: INoteThumbnail) {
   return (
-    <div className="flex w-full flex-col">
+    <Link href={`/share/notes/${noteId}`} className="flex w-full flex-col">
       <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholType}
@@ -47,6 +49,7 @@ export default function NoteThumbnail({
             `/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType)}.png`
           }
           alt="시음노트 썸네일"
+          sizes="50vw"
           fill
           className="object-cover"
         />
@@ -59,6 +62,7 @@ export default function NoteThumbnail({
           <Image
             src={userImage}
             alt="작성자 이미지"
+            sizes="10vw"
             fill
             className="object-cover"
           />
@@ -69,6 +73,6 @@ export default function NoteThumbnail({
         </div>
       </div>
       <div className="text-xs text-cool-grayscale-500">{published}</div>
-    </div>
+    </Link>
   );
 }

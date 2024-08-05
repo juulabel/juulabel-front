@@ -4,6 +4,7 @@ import NoteThumbnail from "@/_common/NoteThumbnail";
 import { INoteThumbnail } from "@/_types/share";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import ShareLayout from "@/_components/share/ShareLayout";
 
 export default function Notes() {
   const {
@@ -23,8 +24,10 @@ export default function Notes() {
   if (error) return <div>An error occurred : {error.message}</div>;
 
   return (
-    <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
-      {notes?.map((note) => <NoteThumbnail {...note} />)}
-    </div>
+    <ShareLayout>
+      <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
+        {notes?.map((note) => <NoteThumbnail {...note} />)}
+      </div>
+    </ShareLayout>
   );
 }

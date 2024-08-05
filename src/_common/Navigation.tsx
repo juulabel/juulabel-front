@@ -12,7 +12,7 @@ import MypageSvg from "@/icons/navigation/mypage.svg";
 import MypageActSvg from "@/icons/navigation/mypage-active.svg";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { cn } from "@/utils/commons";
+import { cn } from "@/_utils/commons";
 
 export default function Navigation() {
   const pathname = usePathname();
