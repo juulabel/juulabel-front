@@ -20,3 +20,19 @@ export function dateView(date: string) {
     return inputDate.format("YYYY.MM.DD");
   }
 }
+
+export function dateViewKoreanFull(date: string) {
+  dayjs.extend(utc);
+  dayjs.locale("ko");
+  dayjs.extend(relativeTime);
+
+  const now = dayjs();
+  const inputDate = dayjs(date).utc(); // 입력된 날짜를 UTC로 변환
+  const diffInHours = now.diff(inputDate, "hour");
+
+  if (diffInHours < 24) {
+    return now.to(inputDate);
+  } else {
+    return inputDate.format("YYYY년 MM월 DD일");
+  }
+}

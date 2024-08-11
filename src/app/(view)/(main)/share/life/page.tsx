@@ -13,8 +13,10 @@ export default function Life() {
   } = useQuery<IPostList[]>({
     queryKey: ["life"],
     queryFn: async () => {
-      const res = await axios.get("https://api.example.com/v1/api/share/life");
-      return res.data.life;
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/daily-lives?lastDailyLifeId=0&pageSize=1`,
+      );
+      return res.data.result.dailyLifeSummaries.content;
     },
   });
 

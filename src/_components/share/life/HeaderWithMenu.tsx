@@ -24,7 +24,7 @@ export default function HeaderWithMenu({ title, onClick }: IHeaderWithMenu) {
   };
 
   return (
-    <div className="flex h-16 w-full items-center justify-between p-4">
+    <div className="border-cool-grayscale fixed top-0 z-20 flex h-16 w-full max-w-[560px] items-center justify-between border-b bg-white p-4">
       <button onClick={handleClick}>
         <GoChevronLeft size={24} className="text-cool-grayscale-500" />
       </button>
