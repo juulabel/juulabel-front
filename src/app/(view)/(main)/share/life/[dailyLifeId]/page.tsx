@@ -1,7 +1,7 @@
 "use client";
 import PostList from "@/_common/PostList";
 import CommentFooter from "@/_components/reaction/CommentFooter";
-import HeaderWithMenu from "@/_components/share/life/HeaderWithMenu";
+import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
 import LifeViewer from "@/_components/share/life/LifeViewer";
 import { ILifeDetail, IPostList } from "@/_types/share";
 import { useQuery } from "@tanstack/react-query";
@@ -77,7 +77,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
 
   return (
     <>
-      <HeaderWithMenu title="전통주 일상생활" />
+      <HeaderWithButton title="전통주 일상생활" buttonType="meatballs" />
       <div className="h-dvh overflow-y-scroll pb-[62px] pt-16 scrollbar-hide">
         <LifeViewer
           title={title}

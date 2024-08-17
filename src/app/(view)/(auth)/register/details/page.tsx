@@ -107,7 +107,7 @@ export default function page() {
 
   return (
     registerStore.nickname && (
-      <div className="w-full max-w-[560px]">
+      <div className="h-full w-full max-w-[560px]">
         <TopHeader
           title="회원가입"
           step={3}

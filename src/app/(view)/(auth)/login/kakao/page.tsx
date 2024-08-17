@@ -6,11 +6,13 @@ import { Suspense, useEffect } from "react";
 import requests from "@/app/api/requests";
 import Loading from "@/_common/Loading";
 import axios from "@/app/api/axios";
+import { useCookies } from "react-cookie";
 
 function KakaoLoginHandlerComponent() {
   const { setEmail, setProvider, setProviderId } = useRegisterStore();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
 
   useEffect(() => {
     const authCode = searchParams.get("code");
@@ -31,6 +33,10 @@ function KakaoLoginHandlerComponent() {
             if (response.data.result.isNewMember) {
               router.push("/register/agreement");
             } else {
+              setCookie("accessToken", response.data.result.token.accessToken, {
+                path: "/",
+                expires: new Date(response.data.result.token.accessExpiredAt),
+              });
               router.push("/share/notes"); //추후 수정 예정
             }
           }

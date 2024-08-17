@@ -8,6 +8,7 @@ interface ICheckbox {
 export default function Checkbox({ checked, onChange }: ICheckbox) {
   return (
     <input
+      id="checkbox-custom"
       type="checkbox"
       className="checkbox-custom"
       checked={checked}
