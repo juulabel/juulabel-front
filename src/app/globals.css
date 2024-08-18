@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --toastify-toast-min-height: 43px;
+}
+
 .checkbox-custom {
   @apply relative mr-1 h-[18px] w-[18px] min-w-[18px] cursor-pointer appearance-none rounded border-2 border-gray-300 bg-cool-grayscale-300;
 }

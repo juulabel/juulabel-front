@@ -9,7 +9,7 @@ import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
 import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
 import { useRegisterStore } from "@/_store/register";
 import { getAlocholTypeIds } from "@/_utils/getAlcoholTypeIds";
-import instance from "@/app/api/axios";
+import { instance } from "@/app/api/axios";
 import requests from "@/app/api/requests";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

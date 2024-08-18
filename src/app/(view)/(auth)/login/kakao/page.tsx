@@ -5,8 +5,9 @@ import { useRegisterStore } from "@/_store/register";
 import { Suspense, useEffect } from "react";
 import requests from "@/app/api/requests";
 import Loading from "@/_common/Loading";
-import axios from "@/app/api/axios";
 import { useCookies } from "react-cookie";
+import axios from "axios";
+import { instance } from "@/app/api/axios";
 
 function KakaoLoginHandlerComponent() {
   const { setEmail, setProvider, setProviderId } = useRegisterStore();
@@ -19,7 +20,7 @@ function KakaoLoginHandlerComponent() {
     if (authCode) {
       const loginHandler = async () => {
         try {
-          const response = await axios.post(requests.postKakaoLogin, {
+          const response = await instance.post(requests.postKakaoLogin, {
             code: authCode,
             provider: "KAKAO",
             redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI,

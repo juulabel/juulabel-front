@@ -1,10 +1,11 @@
 "use client";
-import PostList from "@/_common/PostList";
-import { IPostList } from "@/_types/share";
+
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import ShareLayout from "@/_components/share/ShareLayout";
 import { useCookies } from "react-cookie";
+import LifeList from "@/_common/LifeList";
+import { ILifeList } from "@/_types/share";
 
 export default function Life() {
   const [cookies, setCookie] = useCookies(["accessToken"]);
@@ -12,11 +13,11 @@ export default function Life() {
     data: life,
     isLoading,
     error,
-  } = useQuery<IPostList[]>({
+  } = useQuery<ILifeList[]>({
     queryKey: ["life"],
     queryFn: async () => {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/daily-lives?lastDailyLifeId=0&pageSize=1`,
+        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/daily-lives?pageSize=10`,
         {
           withCredentials: true,
           headers: {
@@ -24,11 +25,9 @@ export default function Life() {
           },
         },
       );
-      return res.data.result;
+      return res.data.result.dailyLifeSummaries.content;
     },
   });
-
-  console.log(life);
 
   // 임시 에러 및 로딩 컴포넌트
   if (isLoading) return <div>Loading...</div>;
@@ -37,7 +36,7 @@ export default function Life() {
     return null;
   }
 
-  // return (
-  //   <ShareLayout>{life?.map((post) => <PostList {...post} />)}</ShareLayout>
-  // );
+  return (
+    <ShareLayout>{life?.map((post) => <LifeList {...post} />)}</ShareLayout>
+  );
 }

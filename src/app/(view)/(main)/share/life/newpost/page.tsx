@@ -10,6 +10,11 @@ import { IoClose } from "react-icons/io5";
 import ImageIcon from "@/icons/image_icon.svg";
 import ConfirmModal from "@/_common/ConfirmModal";
 import Modal from "@/_common/Modal";
+import { formInstance, instance } from "@/app/api/axios";
+import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 interface Inputs {
   title: string;
@@ -23,7 +28,15 @@ interface FileInfo {
   id: string;
 }
 
+interface ErrorResponse {
+  message: string;
+  result: string;
+  success: boolean;
+}
+
 function NewPostPage() {
+  const [cookie, setCookie] = useCookies(["accessToken"]);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -40,13 +53,51 @@ function NewPostPage() {
     },
   });
 
-  const onSubmit = (data: Inputs) => {
+  const onSubmit = async (data: Inputs) => {
     if (data.isPrivate && !confirm) {
       setModalOpen(true);
       return;
     }
 
-    console.log(data);
+    const { title, content, isPrivate, files } = data;
+    const request = {
+      title,
+      content,
+      isPrivate,
+    };
+
+    const requestBlob = new Blob([JSON.stringify(request)], {
+      type: "application/json",
+    });
+
+    const formData = new FormData();
+    formData.append("request", requestBlob);
+    files.forEach((image) => {
+      formData.append("files", image);
+    });
+
+    try {
+      const response = await formInstance.post(
+        "/v1/api/daily-lives",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie.accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      if (response.data.success) {
+        router.replace(
+          `/share/life/${response.data.result.dailyLifeId}?posted=true`,
+        );
+      }
+    } catch (error) {
+      if (axios.isAxiosError<ErrorResponse, any>(error)) {
+        toast(error.response?.data.result);
+      }
+    }
+
     setConfirm(false);
   };
 
@@ -57,6 +108,20 @@ function NewPostPage() {
   const watchContent = watch("content");
   const watchIsPrivate = watch("isPrivate");
 
+  useEffect(() => {
+    setValue(
+      "files",
+      images.map((image) => image.file),
+    );
+  }, [images]);
+
+  useEffect(() => {
+    if (confirm) {
+      handleSubmit(onSubmit)();
+    }
+  }, [confirm]);
+
+  // 이미지 선택 이벤트 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files
       ? Array.from(event.target.files)
@@ -87,28 +152,13 @@ function NewPostPage() {
     } else {
       setImages([]);
     }
-
-    // setImages(updatedImages);
-    // onChange(updatedImages.map((image) => image.file)); // react-hook-form에 파일 데이터 설정
   };
 
-  useEffect(() => {
-    setValue(
-      "files",
-      images.map((image) => image.file),
-    );
-  }, [images]);
-
+  // 이미지 삭제 이벤트 핸들러
   const removeHandler = (event: MouseEvent) => {
     const clickedImageId = event.currentTarget.id;
     setImages((prev) => prev.filter((image) => image.id !== clickedImageId));
   };
-
-  useEffect(() => {
-    if (confirm) {
-      handleSubmit(onSubmit)();
-    }
-  }, [confirm]);
 
   // const {
   //   data: lifeDetail,
@@ -200,11 +250,7 @@ function NewPostPage() {
         {images.length !== 0 && (
           <div className="flex w-full items-center space-x-4 overflow-x-scroll px-4 pb-3 pt-2 scrollbar-hide">
             {images.map((image) => (
-              <div
-                className="relative shrink-0"
-                key={image.id}
-                onClick={(e) => {}}
-              >
+              <div className="relative shrink-0" key={image.id}>
                 <div className="h-14 w-14 md:h-16 md:w-16">
                   <img
                     alt="일상생활 내용 이미지"

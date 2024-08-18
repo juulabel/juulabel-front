@@ -9,6 +9,7 @@ import { RxDotsHorizontal } from "react-icons/rx";
 
 interface IHeaderWithButton {
   title: string;
+  titleLink?: string;
   buttonType: "meatballs" | "action";
   buttonName?: string;
   isActiveButton?: boolean;
@@ -17,6 +18,7 @@ interface IHeaderWithButton {
 
 export default function HeaderWithButton({
   title,
+  titleLink,
   buttonType,
   buttonName,
   isActiveButton = false,
@@ -54,11 +56,21 @@ export default function HeaderWithButton({
   };
 
   return (
-    <div className="border-cool-grayscale fixed top-0 flex h-16 w-full max-w-[560px] items-center justify-between border-b bg-white p-4">
+    <div className="border-cool-grayscale fixed top-0 z-20 flex h-16 w-full max-w-[560px] items-center justify-between border-b bg-white px-4">
       <button onClick={() => router.back()}>
         <GoChevronLeft size={24} className="text-cool-grayscale-500" />
       </button>
-      <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
+      {titleLink ? (
+        <Link
+          href={titleLink}
+          className="text-lg font-bold text-cool-grayscale-700"
+        >
+          {title}
+        </Link>
+      ) : (
+        <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
+      )}
+
       {renderButton()}
     </div>
   );

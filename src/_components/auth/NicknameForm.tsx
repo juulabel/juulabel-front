@@ -9,7 +9,7 @@ import BottomButton from "@/_common/BottomButton";
 import { useForm } from "react-hook-form";
 import { FaCheckCircle } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import axios from "@/app/api/axios";
+import { instance } from "@/app/api/axios";
 import { useRegisterStore } from "@/_store/register";
 
 export default function NicknameForm() {
@@ -35,7 +35,7 @@ export default function NicknameForm() {
 
   const onSubmit = async (data: NicknameUserFormValues) => {
     try {
-      const response = await axios.get(
+      const response = await instance.get(
         `/v1/api/members/nicknames/${data.nickname}/exists`,
       );
 

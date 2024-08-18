@@ -1,8 +1,14 @@
 import axios from "axios";
 
-const instance = axios.create({
+export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_JUULABEL_API_URL,
   timeout: 3000,
 });
 
-export default instance;
+export const formInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_JUULABEL_API_URL,
+  timeout: 3000,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});

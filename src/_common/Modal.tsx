@@ -20,7 +20,7 @@ export default function Modal({
   handleCancel,
 }: IModal) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+    <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-60">
       <div className="flex w-[91%] max-w-[560px] flex-col items-center gap-6 rounded-2xl bg-white p-6">
         <div className="flex flex-col items-center justify-center gap-3">
           <div className="text-balance break-keep text-center text-lg font-bold leading-[27px] text-cool-grayscale-800">

@@ -46,8 +46,10 @@ export default function LifeViewer({
       </div>
       <LifeCarousel imageUrlList={imageUrlList} />
 
-      <div className="text-2xl font-bold text-cool-grayscale-800">{title}</div>
-      <hr className="mb-4 mt-5 h-1 border-none bg-cool-grayscale-50" />
+      <div className="py-5 text-2xl font-bold text-cool-grayscale-800">
+        {title}
+      </div>
+      <hr className="mb-4 h-1 border-none bg-cool-grayscale-50" />
       <p className="whitespace-pre text-wrap text-cool-grayscale-700">
         {content}
       </p>

@@ -11,12 +11,13 @@ export default function ToastProvider({ children }: IToastProvider) {
     <>
       {children}
       <ToastContainer
-        toastClassName="flex items-center justify-center bg-black text-white"
+        toastClassName="flex w-full bg-cool-grayscale-800 text-white rounded px-4 py-3 mx-4"
+        bodyClassName={() => "w-full text-sm"}
         closeButton={false}
         hideProgressBar={true}
         position="bottom-center"
         autoClose={2000}
-        className="flex w-[91%] max-w-[560px] flex-col items-center justify-center"
+        className="bottom-20 z-50 flex w-full max-w-[560px] flex-col items-center justify-end px-4"
       />
     </>
   );
