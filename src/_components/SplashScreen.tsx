@@ -4,8 +4,16 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import LoginForm from "./auth/LoginForm";
+import TopHeader from "@/_common/TopHeader";
+import RegisterAgreementForm from "./auth/RegisterAgreementForm";
+import NicknameForm from "./auth/NicknameForm";
+import { useQuery } from "@tanstack/react-query";
+import { INoteThumbnail } from "@/_types/share";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function SplashScreen() {
+  const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [isLoading, setIsLoading] = useState<boolean>(isHome);
@@ -17,6 +25,13 @@ export default function SplashScreen() {
       return () => clearTimeout(timer); //컴포넌트가 언마운트될 때 타이머를 정리
     }
   }, [isLoading]);
+
+  const onPushNote = async () => {
+    router.push("/share/notes");
+  };
+
+  // 임시 에러 및 로딩 컴포넌트
+
   return (
     <>
       {isLoading && isHome ? (

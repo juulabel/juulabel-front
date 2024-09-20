@@ -53,6 +53,7 @@ export default function Navigation() {
             <LabelCameraSvg className="w-[32px] fill-white" />
           </div>
         </Link>
+        
 
         <Link
           href="/shop"

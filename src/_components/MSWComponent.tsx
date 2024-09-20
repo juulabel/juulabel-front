@@ -22,7 +22,7 @@ export const MSWComponent = ({ children }: { children: React.ReactNode }) => {
     }
   }, [mswReady]);
 
-  if (!mswReady) {
+  if (!mswReady) {    
     return null;
   }
 
