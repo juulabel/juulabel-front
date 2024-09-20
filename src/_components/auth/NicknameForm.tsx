@@ -90,11 +90,10 @@ export default function NicknameForm() {
           </div>
         )}
         {nicknameWatch ? (
-          <p className="my-0 flex justify-end text-xs">{nicknameWatch.length}/8</p>
+          <p className="my-0 flex justify-end">{nicknameWatch.length}/8</p>
         ) : (
-          <p className="my-0 flex justify-end text-xs">0/8</p>
+          <p className="my-0 flex justify-end">0/8</p>
         )}
-
       </div>
       <button
         type="submit"
