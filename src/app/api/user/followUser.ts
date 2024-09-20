@@ -1,9 +1,9 @@
-import axios from "@/app/api/axios";
+import { instance } from "@/app/api/axios";
 import requests from "../requests";
 
 export async function followUser(id: number) {
   try {
-    const response = await axios.post(requests.follow, { followeeId: id });
+    const response = await instance.post(requests.follow, { followeeId: id });
     if (response.status === 200 && response.data) {
       return response.data;
     } else {

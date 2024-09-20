@@ -25,8 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="kr">
-      <body className={`${pretendard.variable}`}>
-        <div className="flex items-center justify-center">
+      <body className={`${pretendard.variable} h-screen`}>
+        <div className="flex h-full items-center justify-center">
           <QueryProvider>
             <ToastProvider>
               <MSWComponent>{children}</MSWComponent>

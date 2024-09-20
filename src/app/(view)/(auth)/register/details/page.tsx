@@ -9,7 +9,7 @@ import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
 import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
 import { useRegisterStore } from "@/_store/register";
 import { getAlocholTypeIds } from "@/_utils/getAlcoholTypeIds";
-import instance from "@/app/api/axios";
+import { instance } from "@/app/api/axios";
 import requests from "@/app/api/requests";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -107,7 +107,7 @@ export default function page() {
 
   return (
     registerStore.nickname && (
-      <div className="w-full max-w-[560px]">
+      <div className="h-full w-full max-w-[560px]">
         <TopHeader
           title="회원가입"
           step={3}
