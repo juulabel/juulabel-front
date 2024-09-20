@@ -2,6 +2,7 @@
 import { cn } from "@/_utils/commons";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function FloatingBtn() {
@@ -18,7 +19,7 @@ export default function FloatingBtn() {
       />
 
       {/* floating button */}
-      <div className="pointer-events-none sticky bottom-20 right-0 z-20 flex flex-col items-end justify-end space-y-4 border-white px-4">
+      <div className="pointer-events-none fixed bottom-20 z-20 flex w-full max-w-[560px] flex-col items-end justify-end space-y-4 border-white px-4">
         <div
           className={cn(
             "pointer-events-auto h-24 w-[143px] rounded-lg border bg-white opacity-0 transition-opacity duration-200 ease-out",
@@ -26,10 +27,7 @@ export default function FloatingBtn() {
           )}
           onClick={() => setClicked((prev) => !prev)}
         >
-          <Link
-            href="/tasting-note/search"
-            className="flex h-1/2 items-center justify-center"
-          >
+          <Link href="#" className="flex h-1/2 items-center justify-center">
             <Image
               src="/icons/addingBtn/tasting.png"
               alt="시음노트 작성 아이콘"
@@ -40,7 +38,10 @@ export default function FloatingBtn() {
               시음노트 작성
             </div>
           </Link>
-          <Link href="#" className="flex h-1/2 items-center justify-center">
+          <Link
+            href="/share/life/newpost"
+            className="flex h-1/2 items-center justify-center"
+          >
             <Image
               src="/icons/addingBtn/dailyfeed.png"
               alt="일상생활 작성 아이콘"

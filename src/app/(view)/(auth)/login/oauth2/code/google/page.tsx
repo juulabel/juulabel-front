@@ -5,7 +5,7 @@ import { useRegisterStore } from "@/_store/register";
 import { Suspense, useEffect } from "react";
 import requests from "@/app/api/requests";
 import Loading from "@/_common/Loading";
-import axios from "@/app/api/axios";
+import { instance } from "@/app/api/axios";
 
 function GoogleLoginHandlerComponent() {
   const { setEmail, setProvider, setProviderId } = useRegisterStore();
@@ -17,7 +17,7 @@ function GoogleLoginHandlerComponent() {
     if (authCode) {
       const loginHandler = async () => {
         try {
-          const response = await axios.post(requests.postGoogleLogin, {
+          const response = await instance.post(requests.postGoogleLogin, {
             code: authCode,
             provider: "GOOGLE",
             redirectUri: process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI,

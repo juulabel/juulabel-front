@@ -27,7 +27,7 @@ export default function LoginForm() {
   }, []);
 
   return (
-    <div className="w-full max-w-[560px]">
+    <div className="h-full w-full max-w-[560px]">
       <TopHeader title="로그인" step={0} rest={0} />
       <div className="mb-[60px] mt-[136px] flex flex-col items-center justify-center">
         <Image

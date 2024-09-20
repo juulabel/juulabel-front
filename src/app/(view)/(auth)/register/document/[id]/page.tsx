@@ -32,7 +32,7 @@ export default function Page() {
     ));
   };
   return (
-    <div className="w-full max-w-[560px]">
+    <div className="h-full w-full max-w-[560px]">
       <TopHeader
         rest={0}
         step={0}

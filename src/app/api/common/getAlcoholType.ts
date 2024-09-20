@@ -1,4 +1,4 @@
-import instance from "../axios";
+import { instance } from "../axios";
 import requests from "../requests";
 
 export async function getAlcoholType() {

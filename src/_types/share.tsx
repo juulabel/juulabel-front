@@ -1,27 +1,39 @@
-export interface IPostList {
+export interface ILifeList {
   title: string;
   content: string;
-  postId: string;
-  username: string;
-  userImage: string;
-  contentThumbnail?: string;
-  contentImageCount?: number;
-  published: string;
+  dailyLifeId: number;
+  memberInfo: {
+    memberId: number;
+    nickname: string;
+    profileImage: null | string;
+  };
+  thumbnailPath: null | string;
+  imageCount: number;
+  createdAt: string;
   likeCount: number;
   commentCount: number;
+  isLiked: boolean;
 }
 
 export interface ILifeDetail {
-  title: string;
-  content: string;
-  postId: string;
-  username: string;
-  userImage: string;
-  contentImages?: string[];
-  contentImageCount?: number;
-  published: string;
-  likeCount: number;
-  commentCount: number;
+  dailyLifeDetailInfo: {
+    title: string;
+    content: string;
+    dailyLifeId: number;
+    memberInfo: {
+      memberId: number;
+      nickname: string;
+      profileImage: string;
+    };
+    createdAt: string;
+    commentCount: number;
+    likeCount: number;
+    isLiked: boolean;
+  };
+  dailyLifeImageInfo: {
+    imageUrlList: string[];
+    imageCount: number;
+  };
 }
 
 export interface INoteThumbnail {

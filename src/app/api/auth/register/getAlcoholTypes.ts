@@ -1,9 +1,9 @@
-import axios from "@/app/api/axios";
+import { instance } from "@/app/api/axios";
 import requests from "../../requests";
 
 export const getAlcoholTypes = async () => {
   try {
-    const response = await axios.get(requests.getAlcoholTypes);
+    const response = await instance.get(requests.getAlcoholTypes);
     if (response.data) {
       return response.data.result;
     } else {

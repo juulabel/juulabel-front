@@ -1,9 +1,9 @@
-import axios from "@/app/api/axios";
+import { instance } from "@/app/api/axios";
 import requests from "../../requests";
 
 export const getTerms = async () => {
   try {
-    const response = await axios.get(requests.getTerms);
+    const response = await instance.get(requests.getTerms);
     if (response.status === 200 && response.data) {
       return response.data.result;
     } else {
