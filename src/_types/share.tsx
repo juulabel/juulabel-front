@@ -37,12 +37,15 @@ export interface ILifeDetail {
 }
 
 export interface INoteThumbnail {
-  noteId: string;
-  alcoholType: string;
-  alcoholThumbnail?: string;
-  alcoholImageCount?: number;
-  alcoholName: string;
-  username: string;
-  userImage: string;
-  published: string;
+  TastingNoteId: string;
+  alcoholicDrinksName: string;    
+  memberInfo: {
+    memberId: number;
+    nickname: string;
+    profileImage: null | string;
+  };
+  thumbnailPath: null | string,
+  alcoholTypeName: string;
+  createdAt: string;
+  hasMultipleImages: boolean;
 }

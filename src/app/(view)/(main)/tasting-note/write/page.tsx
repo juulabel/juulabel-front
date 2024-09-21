@@ -25,7 +25,7 @@ function WriteTastingNote() {
     }
   };
   return (
-    <div className="w-full max-w-[560px]">
+    <div className="h-full w-full max-w-[560px]">
       <TopHeader title="전통주 기본 정보" step={step} rest={rest} />
       <div className="mx-[4%] mt-6">
         <p className="text-xl font-bold text-cool-grayscale-800">

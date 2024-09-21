@@ -9,12 +9,12 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <div className="fixed top-0 z-20 w-full max-w-[560px] bg-white">
-        <header className="flex h-16 items-center justify-between px-4">
+        <header className="flex h-16 items-center justify-between p-4">
           <h1 className="text-2xl font-bold text-cool-grayscale-800 lg:text-3xl">
             공유 공간
           </h1>
           <div className="flex space-x-3">
-            <Link href="#">
+            {/* <Link href="#">
               <Image
                 src="/icons/header/add-people.png"
                 width="24"
@@ -22,7 +22,7 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
                 alt="add people"
                 className="w-[24px] lg:w-[32px]"
               />
-            </Link>
+            </Link> */}
             <Link href="#" className="relative">
               <Image
                 src="/icons/header/notification.png"

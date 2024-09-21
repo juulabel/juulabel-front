@@ -1,117 +1,147 @@
 "use client";
 
-import TopHeader from "@/_common/TopHeader";
+import RecentSearchList from "@/_common/RecentSearchList";
+import RelatedSearchResult from "@/_components/tasting-note/RelatedSearchResult";
+import TastingNoteSearchHeader from "@/_components/tasting-note/TastingNoteSearchHeader";
+import TraditionalDrinkInformationComponent from "@/_components/tasting-note/TraditionalDrinkInformationComponent";
 import SearchData from "@/_common/SearchData";
+import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import { useDebounce } from "@/_utils/useDebounce";
-import { getSearchUser } from "@/app/api/user/getSearchUser";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-interface ISearchUser {
-  id: string;
-  image?: string;
-  name: string;
-  badge: string[];
-}
+import OfficialDataSearchResult from "@/_components/tasting-note/OfficalDataSearchResult";
+import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
+import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
 
 export default function Page() {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [relatedSearchDataList, setRelatedSearchDataList] = useState<
+    string[] | null
+  >([]);
+  const [searchResult, setSearchResult] = useState<IOfficialData[] | []>([]);
+  const [openOfficialSearchDataList, setOpenOfficialSearchDataList] =
+    useState<boolean>(false);
+  const [openUnOfficialSearchDataList, setOpenUnOfficialSearchDataList] =
+    useState<boolean>(false);
+  const handleChangeSearchQuery = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSearchQuery(event.target.value);
   };
-
-  const [searchQueryResult, setSearchQueryResult] = useState<ISearchUser[]>([]);
-  const debouncedSearchQuery = useDebounce(searchQuery, 1000);
-
   const handleClearSearchQuery = () => {
     setSearchQuery("");
   };
 
-  const handleClickUser = (id: string) => {
-    router.push(`/user/profile/${id}`);
-  };
+  const debouncedSearchQuery = useDebounce(searchQuery, 1000);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getSearchUser();
-      console.log(data);
-      setSearchQueryResult(data.data);
+    //작성하는 동작을 1초 이상 멈추면 연관검색어 API 동작
+    const getRelatedSearchDataList = async () => {
+      const data = await getRelatedSearchData(searchQuery);
+      setRelatedSearchDataList(data);
     };
-    if (debouncedSearchQuery) {
-      fetchData();
-    }
+    if (debouncedSearchQuery) getRelatedSearchDataList();
+    else setRelatedSearchDataList([]);
   }, [debouncedSearchQuery]);
 
   useEffect(() => {
-    console.log(searchQueryResult);
-  }, [searchQueryResult]);
+    console.log("SearchResult : ", searchResult);
+  }, [searchResult]);
 
+  const handleCloseSearchList = () => {
+    if (openOfficialSearchDataList) setOpenOfficialSearchDataList(false);
+    else if (openUnOfficialSearchDataList)
+      setOpenUnOfficialSearchDataList(false);
+  };
+
+  const handleQuerySearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    //최근 검색어 저장 기능 => enter 키를 눌러서 검색이 동작했을 때에만 localStorage 저장
+    if (event.key === "Enter") {
+      saveRecentSearchDataToLocalStorage({
+        localStorageKey: "TastingNoteRecentSearchList",
+        searchData: searchQuery,
+      });
+      //api 요청
+      setOpenOfficialSearchDataList(true); //임시 테스트용
+    }
+  };
   return (
-    <div className="w-full max-w-[560px]">
-      <TopHeader title="유저 검색" rest={0} step={0} />
-      <SearchData
-        searchQuery={searchQuery}
-        placeholder="닉네임으로 검색해보세요."
-        handleChangeQuery={handleChangeQuery}
-        handleClearSearchQuery={handleClearSearchQuery}
-      />
-      <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
-      {debouncedSearchQuery &&
-        (searchQueryResult.length > 0 ? (
-          <>
-            <span className="mx-[4%] my-4 flex flex-row items-center text-sm text-cool-grayscale-500">
-              <p className="text-cool-grayscale-800">
-                {searchQueryResult.length}명
-              </p>
-              의 유저를 찾았어요.
-            </span>
-            {searchQueryResult.map((user, index) => (
-              <div
-                key={user.id}
-                className={`border-t-[1px] border-cool-grayscale-200 ${index === searchQueryResult.length - 1 ? "border-b-[1px] border-cool-grayscale-200" : ""} `}
-              >
-                <div
-                  className="mx-[4%] my-4 flex items-center justify-between"
-                  onClick={() => handleClickUser(user.id)}
-                >
-                  <div className="flex">
-                    <div>
-                      <img
-                        src={user.image ? user.image : "/images/kakao_icon.png"}
-                        alt="유저 이미지"
-                        className="h-12 w-12 rounded-full"
-                      />
-                    </div>
-                    <div>
-                      <p>{user.name}</p>
-                      <div className="flex flex-row">
-                        {user.badge.map((badge: string, badgeIndex: number) => (
-                          <p key={badgeIndex}>{badge}</p>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <button className="h-8 w-[71px] rounded-[4px] bg-black text-xs font-bold text-white">
-                      팔로우 하기
-                    </button>
-                  </div>
-                </div>
-              </div>
+    <>
+      {!openOfficialSearchDataList && !openUnOfficialSearchDataList && (
+        <div className="h-full w-full max-w-[560px]">
+          <TastingNoteSearchHeader title="시음노트 작성하기" />
+          <SearchData
+            searchQuery={searchQuery}
+            placeholder="전통주 또는 양조장 이름으로 검색해보세요."
+            handleChangeQuery={handleChangeSearchQuery}
+            handleClearSearchQuery={handleClearSearchQuery}
+            handleQuerySearch={handleQuerySearch}
+          />
+          <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
+          {relatedSearchDataList &&
+            relatedSearchDataList.length > 0 &&
+            relatedSearchDataList.map((data: string, index: number) => (
+              <RelatedSearchResult
+                key={index}
+                searchedData={data}
+                searchQuery={debouncedSearchQuery}
+                localStorageKey="TastingNoteRecentSearchList"
+                setQuery={(relatedData: string) => setSearchQuery(relatedData)}
+                setSearchResult={(data: IOfficialData[]) =>
+                  setSearchResult(data)
+                }
+                handleOfficialDataSearchList={() =>
+                  setOpenOfficialSearchDataList(true)
+                }
+                handleUnOfficialDataSearchList={() =>
+                  setOpenUnOfficialSearchDataList(true)
+                }
+              />
             ))}
-          </>
-        ) : (
-          <div className="flex min-h-screen w-full items-center justify-center">
-            <div className="items-cente r flex flex-col justify-center">
-              <p className="text-lg font-medium leading-7 text-cool-grayscale-600">
-                찾으시는 검색 결 과가 없어요.
-              </p>
-              <p className="text-base font-normal leading-6 text-cool-grayscale-500">
-                단어의 철자가 올바른지 확인해주세요.
-              </p>
-            </div>
-          </div>
-        ))}
-    </div>
+          {relatedSearchDataList?.length === 0 && (
+            <>
+              <RecentSearchList
+                localStorageKey="TastingNoteRecentSearchList"
+                setSearchQuery={(recentSearch: string) =>
+                  setSearchQuery(recentSearch)
+                }
+                setSearchResult={(searchResult: IOfficialData[]) =>
+                  setSearchResult(searchResult)
+                }
+                handleOfficialDataSearchList={() =>
+                  setOpenOfficialSearchDataList(true)
+                }
+                handleUnOfficialDataSearchList={() =>
+                  setOpenUnOfficialSearchDataList
+                }
+              />
+              <div className="absolute bottom-[21%] left-1/2 translate-x-[-50%]">
+                <TraditionalDrinkInformationComponent />
+              </div>
+            </>
+          )}
+        </div>
+      )}
+      {openOfficialSearchDataList && (
+        <OfficialDataSearchResult
+          officialDataList={searchResult}
+          query={searchQuery}
+          closeOfficialDataSearchResult={() =>
+            setOpenOfficialSearchDataList(false)
+          }
+          handleClearSearchQuery={handleClearSearchQuery}
+          handleCloseSearchList={handleCloseSearchList}
+        />
+      )}
+      {openUnOfficialSearchDataList && (
+        <UnOfficialDataSearchResult
+          query={searchQuery}
+          closeUnOfficialDataSearchResult={() =>
+            setOpenUnOfficialSearchDataList(false)
+          }
+          handleClearSearchQuery={handleClearSearchQuery}
+        />
+      )}
+    </>
   );
 }
