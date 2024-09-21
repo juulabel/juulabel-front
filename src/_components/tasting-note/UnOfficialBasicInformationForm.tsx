@@ -89,7 +89,7 @@ export default function UnOfficialBasicInformationForm({
             {...register("alcoholType", {
               required: "주종을 선택하여 주세요",
             })}
-            className="h-11 w-full appearance-none rounded-[6px] bg-cool-grayscale-50 px-[4%]"
+            className="h-full w-full appearance-none rounded-[6px] bg-cool-grayscale-50 px-[4%]"
             defaultValue="" // 기본값 설정
           >
             <option value="" disabled hidden>
