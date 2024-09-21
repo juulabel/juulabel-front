@@ -5,19 +5,19 @@ const nextConfig = {
       "via.placeholder.com",
       "juulabel.s3.ap-northeast-2.amazonaws.com",
     ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",
+        port: "",
+        pathname: "member/**",
+      },
+    ],
     // 추후 pathname 경로에 맞게 수정
   },
   experimental: {
     instrumentationHook: true,
   },
-  remotePatterns: [
-    {
-      protocol: "https",
-      hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",
-      port: "",
-      pathname: "member/**",
-    },
-  ],
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
