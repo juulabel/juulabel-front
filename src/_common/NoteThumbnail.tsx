@@ -2,6 +2,7 @@ import Image from "next/image";
 import Caption from "./Caption";
 import { INoteThumbnail } from "@/_types/share";
 import Link from "next/link";
+import { dateViewKoreanFull } from "@/_utils/time";
 
 export const placeholderThumbnailProvider = (alcoholType: string) => {
   switch (alcoholType) {
@@ -71,7 +72,7 @@ export default function NoteThumbnail({
           {nickname}
         </div>
       </div>
-      <div className="text-xs text-cool-grayscale-500">{createdAt}</div>
+      <div className="text-xs text-cool-grayscale-500">{dateViewKoreanFull(createdAt)}</div>
     </Link>
   );
 }
