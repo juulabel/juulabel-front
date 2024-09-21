@@ -1,22 +1,44 @@
 "use client";
 
+import { jwtDecode } from "jwt-decode";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import LoginForm from "./auth/LoginForm";
+import { useCookies } from "react-cookie";
+import Notes from "@/app/(view)/(main)/share/notes/page";
+
+const isTokenExpired = (token: string): boolean => {
+  const decoded: any = jwtDecode(token);
+  const currentTime = Date.now() / 1000; // Convert to seconds    
+  return decoded.exp < currentTime;
+};
 
 export default function SplashScreen() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const router = useRouter(); // Initialize useRouter for programmatic navigation
   const [isLoading, setIsLoading] = useState<boolean>(isHome);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
+
+  const accessToken = cookies.accessToken;
+  const isExpired = useMemo(() => accessToken && isTokenExpired(accessToken), [accessToken]);
+
   useEffect(() => {
     if (isLoading) {
       const timer = setTimeout(() => {
         setIsLoading(false);
       }, 1000);
-      return () => clearTimeout(timer); //컴포넌트가 언마운트될 때 타이머를 정리
+      return () => clearTimeout(timer);
+    } else if (accessToken) {
+      if (isExpired) {
+        removeCookie("accessToken", { path: "/" });
+      } else {
+        router.push("/share/notes");
+      }
     }
-  }, [isLoading]);
+  }, [isLoading, accessToken, isExpired, removeCookie, router]);
+
   return (
     <>
       {isLoading && isHome ? (

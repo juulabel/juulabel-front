@@ -132,7 +132,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 시음노트
               </p>
               <p className="ml-1 text-sm text-cool-grayscale-600">
-                {user.tastingNote.length}개
+                3
+                {/* {user.tastingNote.length}개 */}
               </p>
             </button>
             <button
@@ -145,7 +146,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 일상생활
               </p>
               <p className="ml-1 text-sm text-cool-grayscale-600">
-                {user.dailyLife.length}개
+                5
+                {/* {user.dailyLife.length}개 */}
               </p>
             </button>
           </div>
