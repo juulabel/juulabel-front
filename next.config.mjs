@@ -5,12 +5,7 @@ const nextConfig = {
       "via.placeholder.com",
       "juulabel.s3.ap-northeast-2.amazonaws.com",
     ],
-    // 추후 pathname 경로에 맞게 수정
-  },
-  experimental: {
-    instrumentationHook: true,
-  },
-  remotePatterns: [
+   remotePatterns: [
     {
       protocol: "https",
       hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",
@@ -18,11 +13,22 @@ const nextConfig = {
       pathname: "member/**",
     },
   ],
-  webpack: (config) => {
+  },
+  experimental: {
+    instrumentationHook: true,
+  },
+  
+  webpack: (config, {isServer}) => {    
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
+
+    // fixing the msw error (_http_common not found)
+    if (isServer) {
+      config.externals = [...(config.externals || []), '_http_common'];
+      config.target = 'node';
+    }
 
     return config;
   },

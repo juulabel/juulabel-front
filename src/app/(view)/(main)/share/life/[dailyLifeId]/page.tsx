@@ -29,7 +29,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
         headers: {
           Authorization: `Bearer ${cookie.accessToken}`,
         },
-      });
+      });      
       return res.data.result;
     },
   });
@@ -58,7 +58,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
       likeCount,
       commentCount,
     },
-    dailyLifeImageInfo: { imageUrlList, imageCount },
+    imageInfo: { imageUrlList, imageCount },
   } = lifeDetail;
 
   return (

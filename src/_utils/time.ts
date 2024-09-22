@@ -6,15 +6,20 @@ import "dayjs/locale/ko";
 import timezone from "dayjs/plugin/timezone";
 
 // 시간 처리 함수
-export function dateView(date: string) {
+export function dateView(date: string) {  
   dayjs.extend(utc);
   dayjs.locale("ko");
   dayjs.extend(relativeTime);
 
   const now = dayjs();
 
-  // 추후 수정!!
-  const inputDate = dayjs(date + "Z").local(); // 입력된 날짜를 UTC로 변환
+  // Parse the date without appending "Z" if it's already in UTC
+  const inputDate = dayjs(date); // Ensure the input is a valid date string
+
+  if (!inputDate.isValid()) {
+    return "유효하지 않은 날짜"; // Return a fallback message for invalid dates
+  }
+
   const diffInHours = now.diff(inputDate, "hour");
   const diffInSeconds = now.diff(inputDate, "seconds");
 
@@ -27,14 +32,14 @@ export function dateView(date: string) {
 }
 
 export function dateViewKoreanFull(date: string) {
-  dayjs.extend(utc);
-  dayjs.locale("ko");
-  dayjs.extend(relativeTime);
-
   const now = dayjs();
 
-  // 추후 수정!!
-  const inputDate = dayjs(date + "Z").local(); // 입력된 날짜를 UTC로 변환
+  const inputDate = dayjs(date); // Ensure the input is a valid date string
+
+  if (!inputDate.isValid()) {
+    return "유효하지 않은 날짜"; // Return a fallback message for invalid dates
+  }
+
   const diffInHours = now.diff(inputDate, "hour");
   const diffInSeconds = now.diff(inputDate, "seconds");
 
