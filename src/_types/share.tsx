@@ -30,7 +30,7 @@ export interface ILifeDetail {
     likeCount: number;
     isLiked: boolean;
   };
-  dailyLifeImageInfo: {
+  imageInfo: {
     imageUrlList: string[];
     imageCount: number;
   };

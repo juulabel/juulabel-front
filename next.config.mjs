@@ -24,6 +24,7 @@ const nextConfig = {
       use: ["@svgr/webpack"],
     });
 
+    // fixing the msw error (_http_common not found)
     if (isServer) {
       config.externals = [...(config.externals || []), '_http_common'];
       config.target = 'node';

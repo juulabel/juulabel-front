@@ -5,6 +5,7 @@ import "./globals.css";
 import ToastProvider from "@/_lib/Provider/ToastProvider";
 import "react-toastify/dist/ReactToastify.css";
 import { MSWComponent } from "@/_components/MSWComponent";
+import { AuthProvider } from "@/_lib/Provider/AuthProvider";
 
 const pretendard = localFont({
   src: "fonts/PretendardVariable.woff2",
@@ -29,7 +30,7 @@ export default function RootLayout({
         <div className="flex h-full items-center justify-center">
           <QueryProvider>
             <ToastProvider>
-              <MSWComponent>{children}</MSWComponent>
+              <AuthProvider>{children}</AuthProvider>
             </ToastProvider>
           </QueryProvider>
         </div>
