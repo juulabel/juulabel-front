@@ -13,16 +13,22 @@ const nextConfig = {
         pathname: "member/**",
       },
     ],
-    // 추후 pathname 경로에 맞게 수정
   },
   experimental: {
     instrumentationHook: true,
   },
-  webpack: (config) => {
+
+  webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
+
+    // fixing the msw error (_http_common not found)
+    if (isServer) {
+      config.externals = [...(config.externals || []), "_http_common"];
+      config.target = "node";
+    }
 
     return config;
   },

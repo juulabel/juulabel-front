@@ -6,17 +6,19 @@ import { Suspense, useEffect } from "react";
 import requests from "@/app/api/requests";
 import Loading from "@/_common/Loading";
 import { instance } from "@/app/api/axios";
+import { useCookies } from "react-cookie";
 
 function GoogleLoginHandlerComponent() {
   const { setEmail, setProvider, setProviderId } = useRegisterStore();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
 
   useEffect(() => {
     const authCode = searchParams.get("code");
     if (authCode) {
       const loginHandler = async () => {
-        try {
+        try {          
           const response = await instance.post(requests.postGoogleLogin, {
             code: authCode,
             provider: "GOOGLE",
@@ -27,10 +29,14 @@ function GoogleLoginHandlerComponent() {
             setEmail(data.email);
             setProvider(data.provider);
             setProviderId(data.providerId);
-            localStorage.setItem("recentLogin", "google");
-            if (data.result.isNewMember) {
+            localStorage.setItem("recentLogin", "google");                                    
+            if (response.data.result.isNewMember) {
               router.push("/register/agreement");
             } else {
+              setCookie("accessToken", response.data.result.token.accessToken, {
+                path: "/",
+                expires: new Date(response.data.result.token.accessExpiredAt),
+              });
               router.push("/share/notes"); //추후 수정 예정
             }
           }
