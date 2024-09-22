@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import LoginForm from "./auth/LoginForm";
 import { useCookies } from "react-cookie";
+import LoginForm from "./auth/LoginForm";
 
 export default function SplashScreen() {
   const pathname = usePathname();

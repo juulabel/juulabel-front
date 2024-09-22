@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useRegisterStore } from "@/_store/register";
-import { Suspense, useEffect } from "react";
-import requests from "@/app/api/requests";
 import Loading from "@/_common/Loading";
+import { useRegisterStore } from "@/_store/register";
 import { instance } from "@/app/api/axios";
+import requests from "@/app/api/requests";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import { useCookies } from "react-cookie";
 
 function GoogleLoginHandlerComponent() {
