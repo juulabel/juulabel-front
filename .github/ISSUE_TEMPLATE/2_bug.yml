@@ -1,0 +1,74 @@
+name: Bug Report
+title: 'FIX: '
+labels: ["[FIX]"]
+
+description: |
+  버그 리포트 이슈
+body:
+  - type: textarea
+    attributes:
+      label: 재현 단계
+      description: 문제가 발생하는 과정을 정확하게 설명해주세요.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 예상 결과
+      description: 예상되는 결과를 설명해주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 실제 결과
+      description: 실제로 발생하는 일을 설명해주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 코드 샘플
+      description: |
+        문제를 재현할 수 있는 최소한의 샘플 코드를 작성하고, 아래에 백틱(```) 사이에 붙여넣어 주세요.
+        
+        참고: 텍스트 스크린샷을 업로드하지 마세요. 코드 블록 또는 위에 언급된 방법을 사용하여 코드 샘플을 업로드해 주세요.
+      value: |
+        <details open><summary>코드 샘플</summary>
+
+        ```typescript
+        [여기에 코드를 붙여넣어 주세요]
+        ```
+
+        </details>
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 참고할만한 스크린샷 또는 비디오(선택)
+      description: |
+        가능한 경우 버그의 스크린샷 또는 비디오를 업로드해 주세요.
+      value: |
+        <details open>
+        <summary>스크린샷 / 비디오 시연</summary>
+
+        [여기에 미디어를 업로드하세요]
+
+        </details>
+  - type: textarea
+    attributes:
+      label: 로그
+      description: |        
+        로그가 너무 커서 GitHub에 업로드할 수 없는 경우 `txt` 파일로 업로드하거나 https://pastebin.com과 같은 온라인 도구를 사용해 공유할 수 있습니다.
+
+        참고: 텍스트 스크린샷을 업로드하지 마세요. 코드 블록 또는 위에 언급된 방법을 사용하여 로그를 업로드해 주세요.
+      value: |
+        <details open><summary>로그</summary>
+
+        ```console
+        [여기에 로그를 붙여넣어 주세요]
+        ```
+
+        </details>
+  
