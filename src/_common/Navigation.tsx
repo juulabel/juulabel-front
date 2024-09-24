@@ -10,12 +10,16 @@ import ShopSvg from "@/icons/navigation/shop.svg";
 import ShopActSvg from "@/icons/navigation/shop-active.svg";
 import MypageSvg from "@/icons/navigation/mypage.svg";
 import MypageActSvg from "@/icons/navigation/mypage-active.svg";
-import { useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/_utils/commons";
+import Modal from "./Modal";
+import ModalWithoutCancel from "./ModalWithoutCancel";
 
 export default function Navigation() {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const pathname = usePathname();
+
   return (
     <>
       <footer className="fixed bottom-0 z-10 flex h-[66px] w-full max-w-[560px] items-center justify-between space-x-2 border-t border-cool-grayscale-200 bg-white px-4 py-2">
@@ -48,7 +52,11 @@ export default function Navigation() {
           <div className="hidden text-xs min-[350px]:block">전통주 검색</div>
         </Link>
 
-        <Link href="#" className="flex w-1/5 justify-center">
+        <Link
+          onClick={() => setModalOpen(true)}
+          href="#"
+          className="flex w-1/5 justify-center"
+        >
           <div className="flex h-full items-center justify-center rounded-full bg-cool-grayscale-800 p-2.5">
             <LabelCameraSvg className="w-[32px] fill-white" />
           </div>
@@ -85,6 +93,15 @@ export default function Navigation() {
           <div className="hidden text-xs min-[350px]:block">내 공간</div>
         </Link>
       </footer>
+      {modalOpen && (
+        <ModalWithoutCancel
+          modalTitle={"라벨 스캔 기능은 현재 준비중이에요. \n 빠른 시일 내에 찾아뵐게요."}
+          primaryBtnText={"닫기"}
+          handlePrimaryBtn={() => {
+            setModalOpen(false);
+          }}
+        />
+      )}
     </>
   );
 }

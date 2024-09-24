@@ -1,5 +1,6 @@
 import { HttpResponse, http } from "msw";
 import {
+  notificationDummyData,
   officialDataDummyData,
   profileDummyData,
   recommendedDummyData,
@@ -19,7 +20,6 @@ export const handlers = [
       },
     });
   }),
-
   http.get("/v1/api/user/recommend/sommelier", () => {
     return HttpResponse.json({
       data: recommendedDummyData,
@@ -28,6 +28,11 @@ export const handlers = [
   http.get("/v1/api/user/search", () => {
     return HttpResponse.json({
       data: searchDummyData,
+    });
+  }),
+  http.get("/v1/api/user/notification", () => {
+    return HttpResponse.json({
+      data: notificationDummyData,
     });
   }),
   http.get("/v1/api/user/profile/1", () => {
