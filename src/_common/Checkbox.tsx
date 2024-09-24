@@ -7,12 +7,14 @@ interface ICheckbox {
 
 export default function Checkbox({ checked, onChange }: ICheckbox) {
   return (
-    <input
-      id="checkbox-custom"
-      type="checkbox"
-      className="checkbox-custom"
-      checked={checked}
-      onChange={onChange}
-    />
+    <div className="mr-[4px] flex items-center justify-center">
+      <input
+        id="checkbox-custom"
+        type="checkbox"
+        className="checkbox-custom"
+        checked={checked}
+        onChange={onChange}
+      />
+    </div>
   );
 }
