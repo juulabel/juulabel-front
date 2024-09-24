@@ -2,7 +2,7 @@
 
 import Loading from "@/_common/Loading";
 import TopHeader from "@/_common/TopHeader";
-import CommonInformationForm from "@/_components/tasting-note/CommonInformationForm";
+import CommonBasicInformationForm from "@/_components/tasting-note/CommonBasicInformationForm";
 import OfficialBasicInformationForm from "@/_components/tasting-note/OfficialBasicInformationForm";
 import UnOfficialBasicInformationForm from "@/_components/tasting-note/UnOfficialBasicInformationForm";
 import { useSearchParams } from "next/navigation";
@@ -40,7 +40,7 @@ function WriteTastingNote() {
       ) : step === 1 ? (
         <UnOfficialBasicInformationForm handleStep={handleStep} />
       ) : (
-        <CommonInformationForm handleStep={handleStep} />
+        <CommonBasicInformationForm handleStep={handleStep} />
       )}
     </div>
   );
