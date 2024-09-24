@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import Loading from "@/_common/Loading";
 import NotificationList from "@/_components/notification/NotificationList";
 import NotificationTabButton from "@/_components/notification/NotificationTabButton";
@@ -7,14 +8,16 @@ import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
 import { Alarm } from "@/_types/user/alarm";
 import { getNotificationList } from "@/app/api/notification/getNotificationList";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { deleteNotification } from "../api/notification/deleteNotification";
+import {
+  deleteNotification,
+  deleteAllNotification,
+} from "../api/notification/deleteNotification";
 import NotificationDeleteAll from "@/_components/notification/NotificationDeleteAllModal";
 import NotificationEditModal from "@/_components/notification/NotificationEditModal";
 import { toast } from "react-toastify";
 
 export default function Page() {
-  const queryClient = useQueryClient(); // Get the query client for refetching data
+  const queryClient = useQueryClient();
 
   const {
     data: alarmList = [],
@@ -25,19 +28,32 @@ export default function Page() {
     queryFn: getNotificationList,
   });
 
-  const [selectedTab, setSelectedTab] = useState<string>("전체"); // State to track the selected tab
+  const [selectedTab, setSelectedTab] = useState<string>("전체");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteAllNotiModalOpen, setDeleteAllNotiModalOpen] = useState(false);
 
-  const mutation = useMutation({
+  // Optimized callback with memoization
+  const handleTabClick = useCallback(
+    (tabName: string) => {
+      if (tabName === selectedTab) return;
+      setSelectedTab(tabName);
+      queryClient.setQueryData(
+        ["alarmList"],
+        (prev: Alarm[] | undefined) =>
+          prev?.filter((notification) => notification.type === tabName) || [],
+      );
+    },
+    [selectedTab, queryClient],
+  );
+
+  const selectionDeleteMutation = useMutation({
     mutationFn: deleteNotification,
     onMutate: (id) => {
       // Update the alarmList directly without refetching
       // Move this login to onSuccess in production
       try {
         const previousAlarms = queryClient.getQueryData<Alarm[]>(["alarmList"]);
-        console.log(previousAlarms);
         if (previousAlarms) {
           queryClient.setQueryData(
             ["alarmList"],
@@ -46,6 +62,7 @@ export default function Page() {
             ),
           );
         }
+        return { previousAlarms };
       } catch (error) {
         console.error("Error in optimistic update:", error);
       }
@@ -53,24 +70,24 @@ export default function Page() {
     onSuccess: (data, id) => {},
     onError: (error, id, context) => {
       console.error("Error in API:", error);
-    },
-    onSettled: () => {
-      // Optional: Refetch the list, though you prefer not to
-      // queryClient.invalidateQueries(["alarmList"]);
+      if (context?.previousAlarms) {
+        queryClient.setQueryData(["alarmList"], context.previousAlarms);
+      }
     },
   });
 
-  const handleTabClick = (tabName: string) => {
-    if (tabName === selectedTab) return;
-    setSelectedTab(tabName);
-    queryClient.setQueryData(["alarmList"], (prev: Alarm[]) =>
-      prev.filter((notification: Alarm) => notification.type === tabName),
-    );
-  };
-
-  const handleDelete = (id: number) => {
-    mutation.mutate(id); // Call the delete mutation with the ID
-  };
+  const allDeleteMutation = useMutation({
+    mutationFn: deleteAllNotification,
+    onMutate: () => {
+      // Update the alarmList directly without refetching
+      // Move this login to onSuccess in production
+      queryClient.setQueryData(["alarmList"], []);
+    },
+    onSuccess: (data) => {},
+    onError: (error) => {
+      console.error("Error in API:", error);
+    },
+  });
 
   const handleEditButton = () => {
     if (!isEditing) {
@@ -80,26 +97,32 @@ export default function Page() {
     }
   };
 
-  const handleSelectionDelete = () => {
-    setIsModalOpen(false);
-    setIsEditing(true);
-  };
-
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleCloseDeleteAllNotiModal = () => setDeleteAllNotiModalOpen(false);
 
-  const handleMarkAsRead = () => {};
-
-  const handleDeleteAllNotification = () => {
-    setDeleteAllNotiModalOpen(false);
-    toast("모든 알림이 삭제되었어요.");
+  const handleSelectionDelete = () => {
+    handleCloseModal();
+    setIsEditing(true);
   };
 
   const handleOpenDeleteAllModal = () => {
-    setIsModalOpen(false);
+    handleCloseModal();
     setDeleteAllNotiModalOpen(true);
   };
+
+  const handleDeleteAlarmById = useCallback(
+    (id: number) => selectionDeleteMutation.mutate(id),
+    [selectionDeleteMutation],
+  );
+
+  const handleDeleteAllNotification = () => {
+    allDeleteMutation.mutate();
+    handleCloseDeleteAllNotiModal();
+    toast("모든 알림이 삭제되었어요.");
+  };
+
+  const handleMarkAsRead = () => {};
 
   if (isLoading) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
@@ -115,14 +138,14 @@ export default function Page() {
           onClick={handleEditButton}
         />
         <NotificationTabButton
-          selectedTab={selectedTab} // Pass the selected tab to the child
-          onTabClick={handleTabClick} // Pass the click handler
+          selectedTab={selectedTab}
+          onTabClick={handleTabClick}
         />
         {alarmList?.length > 0 ? (
           <NotificationList
             alarmList={alarmList}
             isEditing={isEditing}
-            onDelete={handleDelete} // Pass the delete handler
+            onDelete={handleDeleteAlarmById}
           />
         ) : (
           <div className="flex h-full flex-col items-center justify-center text-center">
@@ -139,10 +162,10 @@ export default function Page() {
       </div>
       {isModalOpen && (
         <NotificationEditModal
-          handleMarkAsRead={handleMarkAsRead}
           handleSelectionDelete={handleSelectionDelete}
           handleOpenDeleteAllModal={handleOpenDeleteAllModal}
           handleCancel={handleCloseModal}
+          handleMarkAsRead={handleMarkAsRead}
         />
       )}
       {deleteAllNotiModalOpen && (
