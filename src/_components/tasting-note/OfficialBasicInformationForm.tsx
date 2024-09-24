@@ -9,6 +9,7 @@ interface IOfficialBasicInformationForm {
   alcoholType: string;
   brewery?: string;
   breweryLocation?: string;
+  handleStep: () => void;
 }
 
 export default function OfficialBasicInformationForm({
@@ -17,6 +18,7 @@ export default function OfficialBasicInformationForm({
   alcoholType,
   brewery,
   breweryLocation,
+  handleStep,
 }: IOfficialBasicInformationForm) {
   const tastingNoteInformationStore = useTastingNoteInformationStore();
 
@@ -29,48 +31,65 @@ export default function OfficialBasicInformationForm({
       breweryLocation ? breweryLocation : "",
     );
     //다음 단계로 이동
+    handleStep();
   };
   return (
-    <div>
-      <div className="mx-[4%] mt-[5vh]">
-        <div className="my-[1%] flex items-center justify-between">
-          <p className="text-base font-normal text-cool-grayscale-500">
-            제품명
-          </p>
-          <p className="text-base font-medium text-cool-grayscale-700">
-            {productName}
-          </p>
-        </div>
-        <div className="my-[1%] flex items-center justify-between">
-          <p className="text-base font-normal text-cool-grayscale-500">도수</p>
-          <p className="text-base font-medium text-cool-grayscale-700">
-            {alcoholContent}
-          </p>
-        </div>
-        <div className="my-[1%] flex items-center justify-between">
-          <p className="text-base font-normal text-cool-grayscale-500">주종</p>
-          <p className="text-base font-medium text-cool-grayscale-700">
-            {alcoholType}
-          </p>
-        </div>
-        <div className="my-[1%] flex items-center justify-between">
-          <p className="text-base font-normal text-cool-grayscale-500">
-            양조장
-          </p>
-          <p className="text-base font-medium text-cool-grayscale-700">
-            {brewery}
-          </p>
-        </div>
-        <div className="my-[1%] flex items-center justify-between">
-          <p className="text-base font-normal text-cool-grayscale-500">지역</p>
-          <p className="text-base font-medium text-cool-grayscale-700">
-            {breweryLocation}
-          </p>
-        </div>
+    <>
+      <div className="mx-[4%] mt-6">
+        <p className="text-xl font-bold text-cool-grayscale-800">
+          전통주 기본 정보
+        </p>
+        <p className="text-sm font-medium text-cool-grayscale-500">
+          전통주의 기본 정보가 자동 입력되었어요.
+        </p>
       </div>
-      <BottomButton enableButton={true} onClick={handleNextButton}>
-        다음
-      </BottomButton>
-    </div>
+      <div>
+        <div className="mx-[4%] mt-[5vh]">
+          <div className="my-[2%] flex items-center justify-between">
+            <p className="text-base font-normal text-cool-grayscale-500">
+              제품명
+            </p>
+            <p className="text-base font-medium text-cool-grayscale-700">
+              {productName}
+            </p>
+          </div>
+          <div className="my-[2%] flex items-center justify-between">
+            <p className="text-base font-normal text-cool-grayscale-500">
+              도수
+            </p>
+            <p className="text-base font-medium text-cool-grayscale-700">
+              {alcoholContent}%
+            </p>
+          </div>
+          <div className="my-[2%] flex items-center justify-between">
+            <p className="text-base font-normal text-cool-grayscale-500">
+              주종
+            </p>
+            <p className="text-base font-medium text-cool-grayscale-700">
+              {alcoholType}
+            </p>
+          </div>
+          <div className="my-[2%] flex items-center justify-between">
+            <p className="text-base font-normal text-cool-grayscale-500">
+              양조장
+            </p>
+            <p className="text-base font-medium text-cool-grayscale-700">
+              {brewery}
+            </p>
+          </div>
+          <div className="my-[2%] flex items-center justify-between">
+            <p className="text-base font-normal text-cool-grayscale-500">
+              지역
+            </p>
+            <p className="text-base font-medium text-cool-grayscale-700">
+              {breweryLocation}
+            </p>
+          </div>
+        </div>
+        <BottomButton enableButton={true} onClick={handleNextButton}>
+          다음
+        </BottomButton>
+      </div>
+    </>
   );
 }
