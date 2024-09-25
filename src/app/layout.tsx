@@ -30,7 +30,9 @@ export default function RootLayout({
         <div className="flex h-full items-center justify-center">
           <QueryProvider>
             <ToastProvider>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider>
+                <MSWComponent>{children}</MSWComponent>
+              </AuthProvider>
             </ToastProvider>
           </QueryProvider>
         </div>

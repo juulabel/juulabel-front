@@ -187,7 +187,7 @@ function NewPostPage() {
     <>
       <HeaderWithButton
         title="일상생활 작성하기"
-        buttonType="action"
+        buttonType="newpost"
         buttonName="등록"
         isActiveButton={isValid}
         onClick={handleSubmit(onSubmit)}

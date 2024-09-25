@@ -83,13 +83,17 @@ export default function page() {
         registerStore.marketingAgree,
       ],
     };
-    const response = await instance.post(requests.postSignUp, data);
-    if (response.status === 200) {
-      registerStore.setMemberId(response.data.result.memberId);
-      setCookie("accessToken", response.data.result.token.accessToken, {
-        path: "/",
-      });
-      router.push("/share/notes");
+    try {
+      const response = await instance.post(requests.postSignUp, data);      
+      if (response.status === 200) {
+        registerStore.setMemberId(response.data.result.memberId);
+        setCookie("accessToken", response.data.result.token.accessToken, {
+          path: "/",
+        });
+        router.push("/share/notes");
+      }
+    } catch (error) {
+      console.error(error);      
     }
   };
 
