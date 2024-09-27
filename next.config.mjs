@@ -17,7 +17,6 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
   },
-
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,

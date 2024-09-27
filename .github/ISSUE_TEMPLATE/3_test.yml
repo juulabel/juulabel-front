@@ -1,0 +1,28 @@
+name: "Write Test"
+title: 'TEST: '
+labels: ["[TEST]"]
+
+description: |
+  테스트 코드 작성 또는 수정
+body:
+  - type: textarea
+    attributes:
+      label: 어떤 테스트인가요?
+      description: 작성하거나 수정하려는 테스트에 대해 간결하게 설명해주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 작업 상세 내용
+      description: .
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 참고할만한 자료
+      description: 참고할만한 자료 및 파일을 첨부해주세요
+    

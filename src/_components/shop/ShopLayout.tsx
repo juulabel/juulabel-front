@@ -5,20 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 
-export default function ShareLayout({ children }: { children: ReactNode }) {
+export default function ShopLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className="fixed top-0 z-20 w-full max-w-[560px] bg-white">
+      <div className="fixed top-0 z-20 w-full max-w-[560px] border-b border-cool-grayscale-300">
         <header className="flex h-16 items-center justify-between p-4">
           <h1 className="text-2xl font-bold text-cool-grayscale-800 lg:text-3xl">
-            공유 공간
+            장터
           </h1>
           <div className="flex space-x-3">
             {/* <Link href="#">
               <Image
                 src="/icons/header/add-people.png"
                 width="24"
-                height="24"
+            height="24"
                 alt="add people"
                 className="w-[24px] lg:w-[32px]"
               />
@@ -37,12 +37,8 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
             </Link>
           </div>
         </header>
-        <ShareTabButton />
       </div>
-
-      <div className="h-full overflow-y-auto pb-[65px] pt-[108px] scrollbar-hide">
-        {children}
-      </div>
+      <div className="h-full overflow-y-auto scrollbar-hide">{children}</div>
       <FloatingBtn />
       <Navigation />
     </>
