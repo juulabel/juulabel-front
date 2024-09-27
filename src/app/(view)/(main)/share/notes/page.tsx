@@ -1,10 +1,10 @@
 "use client";
 
 import NoteThumbnail from "@/_common/NoteThumbnail";
+import ShareLayout from "@/_components/share/ShareLayout";
 import { INoteThumbnail } from "@/_types/share";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import ShareLayout from "@/_components/share/ShareLayout";
 import { useCookies } from "react-cookie";
 
 export default function Notes() {
@@ -20,7 +20,7 @@ export default function Notes() {
         `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/shared-space/tasting-notes?pageSize=10`,
         {
           withCredentials: true,
-          headers: {            
+          headers: {
             Authorization: `Bearer ${cookies.accessToken}`,
           },
         },
@@ -35,8 +35,10 @@ export default function Notes() {
 
   return (
     <ShareLayout>
-      <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">      
-        {notes?.map((note) => <NoteThumbnail {...note} />)}
+      <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
+        {notes?.map((note) => (
+          <NoteThumbnail key={note.TastingNoteId} {...note} />
+        ))}
       </div>
     </ShareLayout>
   );

@@ -1,17 +1,17 @@
 "use client";
 
 import RecentSearchList from "@/_common/RecentSearchList";
+import SearchData from "@/_common/SearchData";
+import OfficialDataSearchResult from "@/_components/tasting-note/OfficalDataSearchResult";
 import RelatedSearchResult from "@/_components/tasting-note/RelatedSearchResult";
 import TastingNoteSearchHeader from "@/_components/tasting-note/TastingNoteSearchHeader";
 import TraditionalDrinkInformationComponent from "@/_components/tasting-note/TraditionalDrinkInformationComponent";
-import SearchData from "@/_common/SearchData";
+import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import { useDebounce } from "@/_utils/useDebounce";
-import { useEffect, useState } from "react";
-import OfficialDataSearchResult from "@/_components/tasting-note/OfficalDataSearchResult";
-import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
 import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
-import { IOfficialData } from "@/_types/tasting-note/officialData";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -68,7 +68,7 @@ export default function Page() {
   return (
     <>
       {!openOfficialSearchDataList && !openUnOfficialSearchDataList && (
-        <div className="w-full max-w-[560px]">
+        <div className="h-full w-full max-w-[560px]">
           <TastingNoteSearchHeader title="시음노트 작성하기" />
           <SearchData
             searchQuery={searchQuery}
