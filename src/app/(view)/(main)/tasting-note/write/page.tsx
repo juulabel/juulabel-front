@@ -1,11 +1,12 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import Loading from "@/_common/Loading";
 import TopHeader from "@/_common/TopHeader";
+import CommonBasicInformationForm from "@/_components/tasting-note/CommonBasicInformationForm";
 import OfficialBasicInformationForm from "@/_components/tasting-note/OfficialBasicInformationForm";
 import UnOfficialBasicInformationForm from "@/_components/tasting-note/UnOfficialBasicInformationForm";
 import { useSearchParams } from "next/navigation";
-import Loading from "@/_common/Loading";
+import { Suspense, useState } from "react";
 
 function WriteTastingNote() {
   const searchParams = useSearchParams();
@@ -27,14 +28,6 @@ function WriteTastingNote() {
   return (
     <div className="h-full w-full max-w-[560px]">
       <TopHeader title="전통주 기본 정보" step={step} rest={rest} />
-      <div className="mx-[4%] mt-6">
-        <p className="text-xl font-bold text-cool-grayscale-800">
-          전통주 기본 정보
-        </p>
-        <p className="text-sm font-medium text-cool-grayscale-500">
-          기록하실 전통주의 기본 정보를 입력해주세요.
-        </p>
-      </div>
       {step === 1 && productName ? (
         <OfficialBasicInformationForm
           productName={productName}
@@ -42,9 +35,12 @@ function WriteTastingNote() {
           alcoholType={alcoholType}
           brewery={brewery}
           breweryLocation={breweryLocation}
+          handleStep={handleStep}
         />
-      ) : (
+      ) : step === 1 ? (
         <UnOfficialBasicInformationForm handleStep={handleStep} />
+      ) : (
+        <CommonBasicInformationForm handleStep={handleStep} />
       )}
     </div>
   );
