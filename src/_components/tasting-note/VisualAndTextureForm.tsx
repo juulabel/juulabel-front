@@ -1,5 +1,3 @@
-"use client";
-
 import BottomButton from "@/_common/BottomButton";
 import Checkbox from "@/_common/Checkbox";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
@@ -7,7 +5,7 @@ import { cn } from "@/_utils/commons";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 
-interface ICommonInformationForm {
+interface IVisualAndTextureForm {
   handleStep: () => void;
 }
 
@@ -19,9 +17,9 @@ const CheckIcon = () => {
   );
 };
 
-export default function CommonBasicInformationForm({
+export default function VisualAndTextureForm({
   handleStep,
-}: ICommonInformationForm) {
+}: IVisualAndTextureForm) {
   const [productName, setProductName] = useState("탁100 내추럴");
   const [selectedColor, setSelectedColor] = useState<string | undefined>(
     undefined,
@@ -90,6 +88,7 @@ export default function CommonBasicInformationForm({
   };
   const handleNextBotton = () => {
     saveInformation();
+    handleStep();
   };
 
   return (
@@ -100,9 +99,10 @@ export default function CommonBasicInformationForm({
           <span className="text-primary-700">{productName}</span>은 어떤가요?
         </p>
       </div>
+      {/* 본문: 입력 항목들 */}
       <div className="mx-[4%] mt-[4.5vh] flex flex-col">
         {/* 전통주 색상 */}
-        <div className="">
+        <div>
           <span className="text-base font-bold text-cool-grayscale-800">
             술 색
           </span>
@@ -194,7 +194,6 @@ export default function CommonBasicInformationForm({
           다음
         </BottomButton>
       </div>
-
       {/* 기타 색상 고르는 바텀 시트 */}
       {showBottomSheet && (
         <>
