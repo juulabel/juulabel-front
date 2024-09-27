@@ -1,5 +1,5 @@
 name: "Update Document"
-title: 'DOCS: '
+title: "DOCS: "
 labels: ["[DOCS]"]
 
 description: |
@@ -25,4 +25,3 @@ body:
     attributes:
       label: 참고할만한 자료
       description: 참고할만한 자료 및 파일을 첨부해주세요
-    

@@ -84,7 +84,7 @@ export default function Page() {
       ],
     };
     try {
-      const response = await instance.post(requests.postSignUp, data);      
+      const response = await instance.post(requests.postSignUp, data);
       if (response.status === 200) {
         registerStore.setMemberId(response.data.result.memberId);
         setCookie("accessToken", response.data.result.token.accessToken, {
@@ -93,7 +93,7 @@ export default function Page() {
         router.push("/share/notes");
       }
     } catch (error) {
-      console.error(error);      
+      console.error(error);
     }
   };
 

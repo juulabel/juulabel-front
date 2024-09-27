@@ -10,7 +10,6 @@
   top: 7rem !important; /* Ensure top toast has a gap */
 }
 
-
 .checkbox-custom {
   @apply relative m-[3px] h-[18px] w-[18px] min-w-[18px] cursor-pointer appearance-none rounded bg-cool-grayscale-300;
 }

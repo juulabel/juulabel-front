@@ -95,7 +95,9 @@ export default function Navigation() {
       </footer>
       {modalOpen && (
         <ModalWithoutCancel
-          modalTitle={"라벨 스캔 기능은 현재 준비중이에요. \n 빠른 시일 내에 찾아뵐게요."}
+          modalTitle={
+            "라벨 스캔 기능은 현재 준비중이에요. \n 빠른 시일 내에 찾아뵐게요."
+          }
           primaryBtnText={"닫기"}
           handlePrimaryBtn={() => {
             setModalOpen(false);

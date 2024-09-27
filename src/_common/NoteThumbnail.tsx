@@ -22,14 +22,17 @@ export const placeholderThumbnailProvider = (alcoholType: string) => {
 export default function NoteThumbnail({
   TastingNoteId,
   alcoholicDrinksName,
-  memberInfo: {memberId, nickname, profileImage},
+  memberInfo: { memberId, nickname, profileImage },
   thumbnailPath,
   alcoholTypeName,
   createdAt,
-  hasMultipleImages,  
+  hasMultipleImages,
 }: INoteThumbnail) {
   return (
-    <Link href={`/share/notes/${TastingNoteId}`} className="flex w-full flex-col">
+    <Link
+      href={`/share/notes/${TastingNoteId}`}
+      className="flex w-full flex-col"
+    >
       <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
@@ -72,7 +75,9 @@ export default function NoteThumbnail({
           {nickname}
         </div>
       </div>
-      <div className="text-xs text-cool-grayscale-500">{dateViewKoreanFull(createdAt)}</div>
+      <div className="text-xs text-cool-grayscale-500">
+        {dateViewKoreanFull(createdAt)}
+      </div>
     </Link>
   );
 }
