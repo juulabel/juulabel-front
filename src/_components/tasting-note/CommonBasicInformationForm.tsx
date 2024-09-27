@@ -4,7 +4,7 @@ import BottomButton from "@/_common/BottomButton";
 import Checkbox from "@/_common/Checkbox";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
 import { cn } from "@/_utils/commons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 
 interface ICommonInformationForm {
@@ -23,17 +23,17 @@ export default function CommonBasicInformationForm({
   handleStep,
 }: ICommonInformationForm) {
   const [productName, setProductName] = useState("탁100 내추럴");
-  const [selectedColor, setSelectedColor] = useState<string | null | undefined>(
+  const [selectedColor, setSelectedColor] = useState<string | undefined>(
     undefined,
   );
-  const [tmpSelectedColor, setTmpSelectedColor] = useState<
-    string | null | undefined
-  >(undefined);
-  const [checkedNoColor, setCheckedNoColor] = useState(false);
+  const [tmpSelectedColor, setTmpSelectedColor] = useState<string | undefined>(
+    undefined,
+  ); // selectedColor 값과 분리하여 바텀시트에서 선택했을 때 UI를 바로 업데이트하지 않기 위한 변수
+  const [checkedNoColor, setCheckedNoColor] = useState(false); // '찾는색이없어요' 체크 여부
   const tastingNoteInformationStore = useTastingNoteInformationStore();
-  const [enableButton, setEnableButton] = useState(false);
+  const [enableButton, setEnableButton] = useState(false); // '다음' 버튼 활성화 여부
   const [enableCheckConfirmButton, setEnableCheckConfirmButton] =
-    useState(false);
+    useState(false); // 바텀시트의 '선택완료' 버튼 활성화 여부
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   const mainColorCodes = [
@@ -45,26 +45,32 @@ export default function CommonBasicInformationForm({
   ];
   const additionalColorCodes = ["#E5E5E9", "#F0A8A4", "#EB6A63"];
 
+  useEffect(() => {
+    // 사용자가 색상 또는 '찾는색이없어요'를 선택한 경우 '다음' 버튼 활성화
+    if (selectedColor !== undefined) setEnableButton(true);
+  }, [selectedColor]);
+
   // 메인 색상을 선택했을 때 호출되는 함수
   const handleColorClick = (colorCode: string) => {
     setSelectedColor(colorCode);
-    setEnableButton(true);
     setCheckedNoColor(false);
+    setTmpSelectedColor(undefined);
   };
 
   // 바텀시트의 기타 색상을 선택했을 때 호출되는 함수
   const handleAdditionalColorClick = (colorCode: string) => {
-    setTmpSelectedColor(colorCode);
-    setEnableButton(true);
-    setCheckedNoColor(false);
-    setEnableCheckConfirmButton(true);
+    setTmpSelectedColor(colorCode); // 임시색상값 업데이트
+    setCheckedNoColor(false); // '찾는색이없어요' 체크 해제
+    setEnableCheckConfirmButton(true); // '선택완료' 버튼 활성화
   };
 
-  // '찾는색이없어요' 체크박스를 선택했을 때 호출되는 함수
+  // 바텀시트의 '찾는색이없어요' 체크박스를 선택했을 때 호출되는 함수
   const handleCheckboxChange = () => {
-    setTmpSelectedColor(!checkedNoColor ? null : undefined);
-    setCheckedNoColor(!checkedNoColor);
-    setEnableCheckConfirmButton(!checkedNoColor || !!selectedColor);
+    const newCheckedState = !checkedNoColor; // 현재 체크박스 상태
+    setTmpSelectedColor(newCheckedState ? "찾는색이없어요" : undefined); // 임시색상값 업데이트
+    setCheckedNoColor(newCheckedState);
+    setEnableCheckConfirmButton(newCheckedState);
+    setEnableButton(newCheckedState);
   };
   const handleShowBottomSheet = () => {
     setShowBottomSheet(true);
@@ -75,8 +81,10 @@ export default function CommonBasicInformationForm({
     setSelectedColor(tmpSelectedColor); // 임시 값을 UI에 반영함
     setShowBottomSheet(false); // 바텀 시트 닫기
   };
+
+  // 선택한 색상을 로컬스토리지에 저장하는 함수
   const saveInformation = () => {
-    if (selectedColor !== null && selectedColor != undefined) {
+    if (selectedColor !== undefined) {
       tastingNoteInformationStore.setRgbColor(selectedColor);
     }
   };
@@ -96,7 +104,7 @@ export default function CommonBasicInformationForm({
         {/* 전통주 색상 */}
         <div className="">
           <span className="text-base font-bold text-cool-grayscale-800">
-            색상
+            술 색
           </span>
           <span className="ml-[3%] text-sm font-normal text-cool-grayscale-500">
             전통주의 색은 어떤가요?
@@ -131,9 +139,9 @@ export default function CommonBasicInformationForm({
               }}
               onClick={handleShowBottomSheet}
             >
-              {selectedColor === null ? (
+              {selectedColor === "찾는색이없어요" ? (
+                // '찾는 색이 없어요'를 선택한 경우
                 <>
-                  {/* '찾는 색이 없어요'를 선택한 경우 */}
                   <CheckIcon />
                   <span className="ml-[7px] text-xs text-cool-grayscale-500">
                     기타
@@ -141,10 +149,12 @@ export default function CommonBasicInformationForm({
                 </>
               ) : selectedColor &&
                 additionalColorCodes.includes(selectedColor) ? (
+                // 기타 색상을 선택한 경우
                 <div>
                   <CheckIcon />
                 </div>
               ) : (
+                // 바텀 시트에서 아무것도 선택하지 않은 경우 (초기 상태)
                 <span className="w-full text-xs text-cool-grayscale-500">
                   기타 색
                 </span>
