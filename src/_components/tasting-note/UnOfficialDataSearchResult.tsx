@@ -1,6 +1,7 @@
 "use client";
 
 import TraditionalDrinkInformationComponent from "@/_components/tasting-note/TraditionalDrinkInformationComponent";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
@@ -29,8 +30,10 @@ export default function UnOfficialDataSearchResult({
           <GoChevronLeft size={24} onClick={() => router.back()} />
         </div>
         <div className="flex h-11 w-full flex-row items-center rounded-[6px] bg-cool-grayscale-100">
-          <img
-            className="mx-[4%] h-[18px] w-[18px]"
+          <Image
+            width={18}
+            height={18}
+            className="mx-[4%]"
             src="/svg/search_icon.svg"
             alt="검색 아이콘"
           />
@@ -44,8 +47,10 @@ export default function UnOfficialDataSearchResult({
               value={searchQuery}
             />
           </div>
-          <img
-            className="mx-3 h-6 w-6 cursor-pointer"
+          <Image
+            width={24}
+            height={24}
+            className="mx-3 cursor-pointer"
             src="/svg/cancel_icon.svg"
             alt="취소 아이콘"
             onClick={() => {
@@ -56,9 +61,10 @@ export default function UnOfficialDataSearchResult({
         </div>
       </div>
       <div className="mt-[24vh] flex flex-col items-center justify-center">
-        <img
+        <Image
+          width={92}
+          height={123}
           src="/tasting-note/unoffical_page_icon.png"
-          className="h-[123px] w-[92px]"
           alt="비공식 데이터 사진"
         />
         <p className="my-6 text-lg font-medium text-cool-grayscale-600">

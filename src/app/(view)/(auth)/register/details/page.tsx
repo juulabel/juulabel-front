@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 
-export default function page() {
+export default function Page() {
   const registerStore = useRegisterStore();
   const router = useRouter();
   const [cookies, setCookie] = useCookies(["accessToken"]);
@@ -27,7 +27,7 @@ export default function page() {
     useState<boolean>(false);
   const [registerCancelModalOpen, setRegisterCancelModalOpen] =
     useState<boolean>(false);
-  let enableRegisterButton =
+  const enableRegisterButton =
     (gender || genderCheck) && alcoholTypes.length ? true : false;
   let maleClicked = false;
   let femaleClicked = false;

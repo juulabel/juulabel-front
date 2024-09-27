@@ -52,7 +52,7 @@ export default function Page() {
     };
     if (debouncedSearchQuery) getRelatedSearchDataList();
     else setRelatedSearchDataList([]);
-  }, [debouncedSearchQuery]);
+  }, [searchQuery, debouncedSearchQuery]);
 
   useEffect(() => {
     console.log("SearchResult : ", searchResult);

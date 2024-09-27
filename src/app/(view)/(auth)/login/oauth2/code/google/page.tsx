@@ -46,7 +46,7 @@ function GoogleLoginHandlerComponent() {
       };
       loginHandler();
     }
-  }, []);
+  });
   return <div>구글 소셜 로그인</div>;
 }
 

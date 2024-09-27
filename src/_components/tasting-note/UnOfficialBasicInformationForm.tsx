@@ -9,6 +9,7 @@ import {
 } from "@/_types/yup/yupTastingNote";
 import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
 
@@ -33,11 +34,11 @@ export default function UnOfficialBasicInformationForm({
     queryKey: ["alcoholType"],
     queryFn: getAlcoholType,
   });
-  let formProductName = watch("productName");
-  let formAlcoholContent = watch("alcoholContent");
-  let formAlcoholType = watch("alcoholType");
-  let formBrewery = watch("brewery");
-  let enableButton = !!(
+  const formProductName = watch("productName");
+  const formAlcoholContent = watch("alcoholContent");
+  const formAlcoholType = watch("alcoholType");
+  const formBrewery = watch("brewery");
+  const enableButton = !!(
     formProductName &&
     formAlcoholContent &&
     formAlcoholType &&
@@ -147,10 +148,11 @@ export default function UnOfficialBasicInformationForm({
             </select>
             {/* 커스텀 화살표 */}
             <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-              <img
+              <Image
+                width={24}
+                height={24}
                 src="/svg/down_arrow.svg"
                 alt="Dropdown Icon"
-                className="h-6 w-6"
               />
             </div>
           </div>

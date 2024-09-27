@@ -2,6 +2,7 @@
 
 import { IOfficialData } from "@/_types/tasting-note/officialData";
 import { getOfficialDataList } from "@/app/api/tasting-note/getOfficialDataList";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface IRecentSearchList {
@@ -26,7 +27,7 @@ export default function RecentSearchList({
       ? JSON.parse(localStorageRecentSearchList)
       : [];
     setRecentSearchList(parsedRecentSearchList);
-  }, []);
+  }, [localStorageKey]);
 
   const handleDeleteRecentSearch = (value: string) => {
     const updatedRecentSearchList = recentSearchList.filter(
@@ -80,9 +81,11 @@ export default function RecentSearchList({
                 >
                   {recentSearch}
                 </p>
-                <img
+                <Image
+                  width={16}
+                  height={16}
                   src="/icons/addingBtn/cancel.png"
-                  className="h-[4%] w-[4%] cursor-pointer"
+                  className="cursor-pointer"
                   alt="취소 버튼"
                   onClick={() => handleDeleteRecentSearch(recentSearch)}
                 />

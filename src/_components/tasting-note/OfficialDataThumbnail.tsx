@@ -53,10 +53,12 @@ export default function OfficialDataThumbnail({
         {productName}
       </div>
       <div className="flex flex-row items-center">
-        <img
+        <Image
+          width={16}
+          height={16}
           src="/svg/pin_icon.svg"
           alt="위치 아이콘"
-          className="mr-[1%] h-4 w-4"
+          className="mr-[1%]"
         />
         <p className="text-sm font-normal text-cool-grayscale-500">{brewery}</p>
       </div>

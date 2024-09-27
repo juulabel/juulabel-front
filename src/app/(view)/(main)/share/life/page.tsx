@@ -37,6 +37,8 @@ export default function Life() {
   }
 
   return (
-    <ShareLayout>{life?.map((post) => <LifeList {...post} />)}</ShareLayout>
+    <ShareLayout>
+      {life?.map((post) => <LifeList key={post.dailyLifeId} {...post} />)}
+    </ShareLayout>
   );
 }

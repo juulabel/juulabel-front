@@ -7,6 +7,7 @@ import UserHeaderModal from "./UserHeaderModal";
 import ConfirmModal from "@/_common/ConfirmModal";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface IUserHeader {
   id: number;
@@ -46,7 +47,9 @@ export default function UserHeader({ id, nickname, title }: IUserHeader) {
         </div>
         <div className="text-lg font-bold">{title}</div>
         <button>
-          <img
+          <Image
+            width={32}
+            height={32}
             src="/svg/menu_icon.svg"
             alt="Menu Icon"
             onClick={() => setIsUserOptionModalOpen(true)}

@@ -5,6 +5,7 @@ import Checkbox from "@/_common/Checkbox";
 import Loading from "@/_common/Loading";
 import { getReportList } from "@/app/api/user/getReportList";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -74,9 +75,10 @@ export default function Page() {
         <div />
         <div className="text-lg font-bold">사용자 신고하기</div>
         <button>
-          <img
+          <Image
+            width={32}
+            height={32}
             src="/svg/close_icon.svg"
-            className="h-8 w-8"
             alt="닫기 아이콘"
             onClick={() => router.back()}
           />
