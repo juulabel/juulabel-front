@@ -84,7 +84,7 @@ export default function RecentSearchList({
                 <Image
                   width={16}
                   height={16}
-                  src="/icons/addingBtn/cancel.png"
+                  src="/images/icons/addingBtn/cancel.png"
                   className="cursor-pointer"
                   alt="취소 버튼"
                   onClick={() => handleDeleteRecentSearch(recentSearch)}

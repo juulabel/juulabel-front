@@ -42,7 +42,7 @@ export default function OfficialDataThumbnail({
         <Image
           src={
             alcoholThumbnail ??
-            `/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType)}.png`
+            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType)}.png`
           }
           alt="시음노트 썸네일"
           fill

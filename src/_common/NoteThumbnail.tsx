@@ -40,7 +40,7 @@ export default function NoteThumbnail({
         {hasMultipleImages && (
           <Image
             className="absolute right-2 top-2 z-10"
-            src="/icons/pictures.png"
+            src="/images/icons/pictures.png"
             alt="복수 이미지 아이콘"
             width={24}
             height={24}
@@ -49,7 +49,7 @@ export default function NoteThumbnail({
         <Image
           src={
             // thumbnailPath ??
-            `/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
+            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
           }
           alt="시음노트 썸네일"
           sizes="50vw"
