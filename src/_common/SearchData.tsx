@@ -4,6 +4,8 @@ interface ISearchData {
   handleClearSearchQuery: () => void;
   handleChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleQuerySearch?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  handleFocus?: () => void; // New prop for focus
+  handleBlur?: () => void; // New prop for blur
 }
 //handleQuerySearch를 optional로 한 이유는 handleQuerySearch는 최근 검색어를 저장하는 함수인데 해당 함수를 사용하지 않는 페이지가 있어서 이렇게 처리했습니다
 
@@ -13,6 +15,8 @@ export default function SearchData({
   handleChangeQuery,
   handleClearSearchQuery,
   handleQuerySearch,
+  handleFocus,
+  handleBlur,
 }: ISearchData) {
   return (
     <div className="mx-[4%] my-3 flex h-11 flex-row items-center rounded-[6px] bg-cool-grayscale-100">
@@ -32,6 +36,8 @@ export default function SearchData({
           handleQuerySearch ? handleQuerySearch(event) : null
         }
         placeholder={placeholder}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
       {searchQuery && (
         <img
