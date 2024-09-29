@@ -47,7 +47,7 @@ function KakaoLoginHandlerComponent() {
       };
       loginHandler();
     }
-  }, []);
+  });
 
   return <div>카카오 소셜 로그인</div>;
 }

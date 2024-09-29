@@ -16,7 +16,7 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
           <div className="flex space-x-3">
             {/* <Link href="#">
               <Image
-                src="/icons/header/add-people.png"
+                src="/images/icons/header/add-people.png"
                 width="24"
             height="24"
                 alt="add people"
@@ -25,7 +25,7 @@ export default function ShopLayout({ children }: { children: ReactNode }) {
             </Link> */}
             <Link href="/notification" className="relative">
               <Image
-                src="/icons/header/notification.png"
+                src="/images/icons/header/notification.png"
                 width="24"
                 height="24"
                 alt="notification"

@@ -11,7 +11,7 @@ export default function SearchHeader() {
         <div className="flex space-x-3">
           <Link href="/notification" className="relative">
             <Image
-              src="/icons/header/notification.png"
+              src="/images/icons/header/notification.png"
               width="32"
               height="32"
               alt="notification"

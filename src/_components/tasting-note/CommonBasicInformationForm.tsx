@@ -6,6 +6,7 @@ import { useTastingNoteInformationStore } from "@/_store/tastingNote";
 import { cn } from "@/_utils/commons";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
+import Image from "next/image";
 
 interface ICommonInformationForm {
   handleStep: () => void;
@@ -215,8 +216,10 @@ export default function CommonBasicInformationForm({
                 showBottomSheet && "opacity-100",
               )}
             >
-              <img
-                className="absolute right-4 top-4 h-8 w-8 cursor-pointer"
+              <Image
+                width={32}
+                height={32}
+                className="absolute right-4 top-4 cursor-pointer"
                 src="/svg/close_icon.svg"
                 alt="취소 아이콘"
                 onClick={() => setShowBottomSheet((prev) => !prev)}

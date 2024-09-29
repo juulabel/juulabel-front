@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
 import OfficialData from "./OfficialData";
 import { IOfficialData } from "@/_types/tasting-note/officialData";
+import Image from "next/image";
 
 interface IOfficialDataSearchResult {
   query: string;
@@ -32,8 +33,10 @@ export default function OfficialDataSearchResult({
           <GoChevronLeft size={24} onClick={handleCloseSearchList} />
         </div>
         <div className="flex h-11 w-full flex-row items-center rounded-[6px] bg-cool-grayscale-100">
-          <img
-            className="mx-[4%] h-[18px] w-[18px]"
+          <Image
+            width={18}
+            height={18}
+            className="mx-[4%]"
             src="/svg/search_icon.svg"
             alt="검색 아이콘"
           />
@@ -47,8 +50,10 @@ export default function OfficialDataSearchResult({
               value={searchQuery}
             />
           </div>
-          <img
-            className="mx-3 h-6 w-6 cursor-pointer"
+          <Image
+            width={24}
+            height={24}
+            className="mx-3 cursor-pointer"
             src="/svg/cancel_icon.svg"
             alt="취소 아이콘"
             onClick={() => {

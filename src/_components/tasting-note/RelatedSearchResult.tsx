@@ -3,6 +3,7 @@
 import { IOfficialData } from "@/_types/tasting-note/officialData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import { getOfficialDataList } from "@/app/api/tasting-note/getOfficialDataList";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface IRelatedSearchResult {
@@ -27,7 +28,7 @@ export default function RelatedSearchResult({
   const [filteredSearchQuery, setFilteredSearchQuery] = useState<string>("");
   useEffect(() => {
     setFilteredSearchQuery(searchedData.replace(searchQuery, ""));
-  }, [searchQuery]);
+  }, [searchedData, searchQuery]);
 
   const onClickRelatedSearchData = async () => {
     saveRecentSearchDataToLocalStorage({
@@ -46,9 +47,11 @@ export default function RelatedSearchResult({
   };
   return (
     <div className="mx-[5%] my-2 flex h-6 items-center">
-      <img
+      <Image
+        width={18}
+        height={18}
         src="/svg/search_icon.svg"
-        className="mr-[3px] h-[18px] w-[18px]"
+        className="mr-[3px]"
         alt="검색 아이콘"
       />
       <div

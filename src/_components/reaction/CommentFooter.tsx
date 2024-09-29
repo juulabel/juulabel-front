@@ -33,7 +33,7 @@ export default function CommentFooter({
 
         <div className="flex items-center space-x-2">
           <Image
-            src="/icons/comment.png"
+            src="/images/icons/comment.png"
             alt="댓글 아이콘"
             width={26}
             height={22}

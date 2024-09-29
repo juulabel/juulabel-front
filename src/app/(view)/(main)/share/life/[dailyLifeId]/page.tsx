@@ -29,7 +29,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
         headers: {
           Authorization: `Bearer ${cookie.accessToken}`,
         },
-      });      
+      });
       return res.data.result;
     },
   });
@@ -38,7 +38,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
     if (posted === "true") {
       toast("일상생활 작성이 완료되었어요.");
     }
-  }, []);
+  });
 
   // 임시 에러 및 로딩 컴포넌트
   if (isLoading) {

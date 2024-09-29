@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GoChevronLeft } from "react-icons/go";
@@ -20,7 +21,9 @@ export default function FollowHeader({ title }: IFollowHeader) {
         </div>
         <div className="text-lg font-bold">{title}</div>
         <button>
-          <img
+          <Image
+            width={18}
+            height={18}
             src="/svg/search_icon.svg"
             alt="Search Icon"
             onClick={() => router.push("/user/search")}

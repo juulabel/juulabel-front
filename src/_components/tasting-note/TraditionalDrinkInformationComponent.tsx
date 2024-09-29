@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function TraditionalDrinkInformationComponent() {
@@ -16,9 +17,11 @@ export default function TraditionalDrinkInformationComponent() {
         className="mt-4 flex h-[37px] cursor-pointer items-center justify-center rounded-[4px] bg-black px-3 py-2"
         onClick={() => router.push("/tasting-note/write")}
       >
-        <img
+        <Image
+          width={16}
+          height={16}
           src="/svg/add_icon.svg"
-          className="mr-[3px] h-4 w-4"
+          className="mr-[3px]"
           alt="추가 버튼"
         />
         <p className="text-sm font-bold text-white">

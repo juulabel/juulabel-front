@@ -54,6 +54,7 @@ export default function Page() {
     else setRelatedSearchDataList([]);
   }, [debouncedSearchQuery]);
 
+
   useEffect(() => {
     console.log("SearchResult : ", searchResult);
   }, [searchResult]);

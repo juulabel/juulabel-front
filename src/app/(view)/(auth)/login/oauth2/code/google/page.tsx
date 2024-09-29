@@ -18,7 +18,7 @@ function GoogleLoginHandlerComponent() {
     const authCode = searchParams.get("code");
     if (authCode) {
       const loginHandler = async () => {
-        try {          
+        try {
           const response = await instance.post(requests.postGoogleLogin, {
             code: authCode,
             provider: "GOOGLE",
@@ -29,7 +29,7 @@ function GoogleLoginHandlerComponent() {
             setEmail(data.email);
             setProvider(data.provider);
             setProviderId(data.providerId);
-            localStorage.setItem("recentLogin", "google");                                    
+            localStorage.setItem("recentLogin", "google");
             if (response.data.result.isNewMember) {
               router.push("/register/agreement");
             } else {
@@ -46,7 +46,7 @@ function GoogleLoginHandlerComponent() {
       };
       loginHandler();
     }
-  }, []);
+  });
   return <div>구글 소셜 로그인</div>;
 }
 

@@ -37,7 +37,7 @@ export default function LifeCarousel({ imageUrlList }: ILifeCarousel) {
             className="mySwiper relative aspect-square overflow-hidden rounded-xl py-8"
           >
             {imageUrlList.map((imageUrl, index) => (
-              <SwiperSlide>
+              <SwiperSlide key={index}>
                 <Image
                   priority={index === 0}
                   src={imageUrl}

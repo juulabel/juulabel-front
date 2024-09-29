@@ -23,7 +23,11 @@ export default function OfficialData({ officialDataList }: OfficialDataProps) {
       </div>
       <div className="gay-y-5 grid grid-cols-2 gap-x-2 overflow-y-auto px-4 py-6">
         {officialDataList?.map((officialData: IOfficialData) => (
-          <OfficialDataThumbnail {...officialData} />
+          // OfiicialData의 현재 id가 없어서 unique한 필드중 임시로 thumnail 추후 수정 필요
+          <OfficialDataThumbnail
+            key={officialData.alcoholThumbnail}
+            {...officialData}
+          />
         ))}
       </div>
     </>

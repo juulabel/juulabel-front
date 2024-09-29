@@ -38,13 +38,13 @@ export interface ILifeDetail {
 
 export interface INoteThumbnail {
   TastingNoteId: string;
-  alcoholicDrinksName: string;    
+  alcoholicDrinksName: string;
   memberInfo: {
     memberId: number;
     nickname: string;
     profileImage: null | string;
   };
-  thumbnailPath: null | string,
+  thumbnailPath: null | string;
   alcoholTypeName: string;
   createdAt: string;
   hasMultipleImages: boolean;

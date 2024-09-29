@@ -2,9 +2,9 @@ export interface Alarm {
   id: number;
   type: string;
   image: string | null;
-  createdAt: string;  
+  createdAt: string;
   content: string;
-  isRead: boolean
+  isRead: boolean;
 }
 
 export interface AlarmList {
