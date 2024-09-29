@@ -1,6 +1,6 @@
-### 주라벨 프론트
+# 주라벨 프론트
 
-#### 라우트구조
+## 라우트 구조
 
 ```
 [view]
@@ -8,10 +8,10 @@
 카카오, 구글 로그인: /
 회원가입: register/agreement -> name -> detail
 
-시음노트: share/note
-시음노트 검색: share/note/search
-시음노트 작성: share/note/write
-시음노트 상세페이지 share/note/[id]
+시음노트: /share/note
+시음노트 검색: /share/note/search
+시음노트 작성: /share/note/write
+시음노트 상세페이지 /share/note/[id]
 
 일상생활: /share/life
 일상생활 작성: /share/life/newpost
@@ -24,10 +24,23 @@
 알림: /notification
 ```
 
-#### publuc 경로
+## public 경로
 
 ```
 public(png -> images, svg -> svg)
 Images, svg
-
 ```
+
+## 기술 스택
+
+| 역할                   | 종류
+| --------------------- | ------------------------ | 
+| **Node**              | `22.4.0`                 | 
+| **Typescript**        | `5.5.4`                  | 
+| **framework**         | `Next.js 14`             | 
+| **package manager**   | `pnpm`                   |
+| **styling**           | `tailwindcss`            | 
+| **fetching**          | `tanstack query, axios`  | 
+| **formatting**        | `eslint, prettier`       | 
+| **deploy**            | `vercel`                 | 
+| **test**              | `jest, playwright`       | 
