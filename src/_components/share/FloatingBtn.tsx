@@ -39,7 +39,7 @@ export default function FloatingBtn() {
             </div>
           </Link>
           <Link
-            href="/share/life/newpost"
+            href="/share/life/write"
             className="flex h-1/2 items-center justify-center"
           >
             <Image

@@ -37,7 +37,7 @@ function GoogleLoginHandlerComponent() {
                 path: "/",
                 expires: new Date(response.data.result.token.accessExpiredAt),
               });
-              router.push("/share/notes"); //추후 수정 예정
+              router.push("/share/note"); //추후 수정 예정
             }
           }
         } catch (error) {

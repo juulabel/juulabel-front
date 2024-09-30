@@ -30,7 +30,7 @@ export default function NoteThumbnail({
 }: INoteThumbnail) {
   return (
     <Link
-      href={`/share/notes/${TastingNoteId}`}
+      href={`/share/note/${TastingNoteId}`}
       className="flex w-full flex-col"
     >
       <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">

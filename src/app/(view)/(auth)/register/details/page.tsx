@@ -90,7 +90,7 @@ export default function Page() {
         setCookie("accessToken", response.data.result.token.accessToken, {
           path: "/",
         });
-        router.push("/share/notes");
+        router.push("/share/note");
       }
     } catch (error) {
       console.error(error);

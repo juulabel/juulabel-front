@@ -24,7 +24,7 @@ export default function Navigation() {
     <>
       <footer className="fixed bottom-0 z-10 flex h-[66px] w-full max-w-[560px] items-center justify-between space-x-2 border-t border-cool-grayscale-200 bg-white px-4 py-2">
         <Link
-          href="/share/notes"
+          href="/share/note"
           className={cn(
             "flex w-1/5 flex-col items-center justify-center text-cool-grayscale-500",
             pathname.startsWith("/share") && "text-cool-grayscale-800",
