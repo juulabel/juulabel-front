@@ -18,7 +18,7 @@ export default function OfficialDataThumbnail({
 
   const handleClick = () => {
     router.push(
-      `/tasting-note/write?productName=${encodeURIComponent(
+      `/note/write?productName=${encodeURIComponent(
         productName,
       )}&alcoholContent=${encodeURIComponent(
         alcoholContent,

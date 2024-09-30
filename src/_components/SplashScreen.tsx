@@ -24,7 +24,7 @@ export default function SplashScreen() {
 
     // Check for access token and handle redirection
     if (cookies.accessToken) {
-      router.push("/share/notes");
+      router.push("/share/note");
     } else {
       setIsCheckingAuth(false); // Done checking auth, can show the login form
     }

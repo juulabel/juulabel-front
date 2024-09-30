@@ -14,7 +14,7 @@
 시음노트 상세페이지 /share/note/[id]
 
 일상생활: /share/life
-일상생활 작성: /share/life/newpost
+일상생활 작성: /share/life/write
 일상생활 상세 페이지: /share/life/[dailylifeId]
 
 전통주 검색: /search

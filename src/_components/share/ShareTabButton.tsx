@@ -12,7 +12,7 @@ export default function ShareTabButton() {
         href="notes"
         className={cn(
           "flex w-1/2 items-center justify-center border-b border-cool-grayscale-300 px-2 py-2.5 font-medium text-cool-grayscale-500",
-          pathname === "/share/notes" && "border-b-2 border-black text-black",
+          pathname === "/share/note" && "border-b-2 border-black text-black",
         )}
       >
         전통주 시음노트
