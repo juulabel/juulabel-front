@@ -8,12 +8,14 @@ interface ITastingNoteInformation {
   brewery: string;
   breweryLocation: string;
   rgbColor: string;
+  scents: string[];
   setProductName: (value: string) => void;
   setAlcoholContent: (value: string) => void;
   setAlcoholType: (value: string) => void;
   setBrewery: (value: string) => void;
   setBreweryLocation: (value: string) => void;
   setRgbColor: (value: string) => void;
+  setScents: (scents: string[]) => void;
 }
 
 export const useTastingNoteInformationStore = create(
@@ -25,6 +27,7 @@ export const useTastingNoteInformationStore = create(
       brewery: "",
       breweryLocation: "",
       rgbColor: "",
+      scents: [],
       setProductName: (value: string) =>
         set((state) => ({ ...state, productName: value })),
       setAlcoholContent: (value: string) =>
@@ -37,6 +40,7 @@ export const useTastingNoteInformationStore = create(
         set((state) => ({ ...state, breweryLocation: value })),
       setRgbColor: (value: string) =>
         set((state) => ({ ...state, rgbColor: value })),
+      setScents: (scents: string[]) => set(() => ({ scents })),
     }),
     { name: "TastingNoteInformationStorage" },
   ),
