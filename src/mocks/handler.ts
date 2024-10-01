@@ -46,7 +46,7 @@ export const handlers = [
     });
   }),
 
-  http.get("https://api.example.com/v1/api/share/notes", () => {
+  http.get("https://api.example.com/v1/api/share/note", () => {
     return HttpResponse.json({
       notes: shareNotesDummyData,
     });
@@ -57,25 +57,19 @@ export const handlers = [
       life: shareLifesDummyData,
     });
   }),
-  http.get(
-    "https://api.example.com/v1/api/tasting-note/search/related-data",
-    () => {
-      return HttpResponse.json({
-        relatedData: relatedDummyData,
-      });
-    },
-  ),
-  http.get(
-    `https://api.example.com/v1/api/tasting-note/basic`,
-    ({ request }) => {
-      const url = new URL(request.url);
-      const id = url.searchParams.get("id");
-      return HttpResponse.json({
-        information: tastingNoteBasicInformationDummyData,
-      });
-    },
-  ),
-  http.get("https://api.example.com/v1/api/tasting-note/official-data", () => {
+  http.get("https://api.example.com/v1/api/note/search/related-data", () => {
+    return HttpResponse.json({
+      relatedData: relatedDummyData,
+    });
+  }),
+  http.get(`https://api.example.com/v1/api/note/basic`, ({ request }) => {
+    const url = new URL(request.url);
+    const id = url.searchParams.get("id");
+    return HttpResponse.json({
+      information: tastingNoteBasicInformationDummyData,
+    });
+  }),
+  http.get("https://api.example.com/v1/api/note/official-data", () => {
     return HttpResponse.json({
       data: officialDataDummyData,
     });

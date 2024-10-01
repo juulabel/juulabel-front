@@ -75,7 +75,7 @@ export default function LifeList({
           />
           <div className="mr-1.5">{likeCount}</div>
           <Image
-            src="/icons/comment.png"
+            src="/images/icons/comment.png"
             alt="댓글 아이콘"
             className="mr-0.5"
             width={18}

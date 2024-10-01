@@ -29,7 +29,7 @@ export default function FloatingBtn() {
         >
           <Link href="#" className="flex h-1/2 items-center justify-center">
             <Image
-              src="/icons/addingBtn/tasting.png"
+              src="/images/icons/addingBtn/tasting.png"
               alt="시음노트 작성 아이콘"
               width={24}
               height={24}
@@ -39,11 +39,11 @@ export default function FloatingBtn() {
             </div>
           </Link>
           <Link
-            href="/share/life/newpost"
+            href="/share/life/write"
             className="flex h-1/2 items-center justify-center"
           >
             <Image
-              src="/icons/addingBtn/dailyfeed.png"
+              src="/images/icons/addingBtn/dailyfeed.png"
               alt="일상생활 작성 아이콘"
               width={24}
               height={24}
@@ -61,7 +61,7 @@ export default function FloatingBtn() {
           onClick={() => setClicked((prev) => !prev)}
         >
           <Image
-            src={`/icons/addingBtn/${clicked ? "cancel" : "add"}.png`}
+            src={`/images/icons/addingBtn/${clicked ? "cancel" : "add"}.png`}
             alt="글 추가 아이콘"
             width={clicked ? 34 : 24}
             height={clicked ? 34 : 24}

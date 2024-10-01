@@ -5,15 +5,14 @@ import { GoChevronRight } from "react-icons/go";
 import { Controller, useForm } from "react-hook-form";
 import Image from "next/image";
 import { cn } from "@/_utils/commons";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState, useCallback } from "react";
 import { IoClose } from "react-icons/io5";
 import ImageIcon from "@/icons/image_icon.svg";
-import ConfirmModal from "@/_common/ConfirmModal";
 import Modal from "@/_common/Modal";
-import { formInstance, instance } from "@/app/api/axios";
+import { formInstance } from "@/app/api/axios";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { useRouter } from "next/navigation";
 
 interface Inputs {
@@ -35,7 +34,7 @@ interface ErrorResponse {
 }
 
 function NewPostPage() {
-  const [cookie, setCookie] = useCookies(["accessToken"]);
+  const [cookie] = useCookies(["accessToken"]);
   const router = useRouter();
   const {
     register,
@@ -53,57 +52,63 @@ function NewPostPage() {
     },
   });
 
-  const onSubmit = async (data: Inputs) => {
-    if (data.isPrivate && !confirm) {
-      setModalOpen(true);
-      return;
-    }
-
-    const { title, content, isPrivate, files } = data;
-    const request = {
-      title,
-      content,
-      isPrivate,
-    };
-
-    const requestBlob = new Blob([JSON.stringify(request)], {
-      type: "application/json",
-    });
-
-    const formData = new FormData();
-    formData.append("request", requestBlob);
-    files.forEach((image) => {
-      formData.append("files", image);
-    });
-
-    try {
-      const response = await formInstance.post(
-        "/v1/api/daily-lives",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${cookie.accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-      if (response.data.success) {
-        router.replace(
-          `/share/life/${response.data.result.dailyLifeId}?posted=true`,
-        );
-      }
-    } catch (error) {
-      if (axios.isAxiosError<ErrorResponse, any>(error)) {
-        toast(error.response?.data.result);
-      }
-    }
-
-    setConfirm(false);
-  };
-
-  const [images, setImages] = useState<FileInfo[]>([]);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  // Declare confirm before using it in onSubmit
   const [confirm, setConfirm] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [images, setImages] = useState<FileInfo[]>([]);
+
+  // Wrap onSubmit in useCallback and include dependencies
+  const onSubmit = useCallback(
+    async (data: Inputs) => {
+      if (data.isPrivate && !confirm) {
+        setModalOpen(true);
+        return;
+      }
+
+      const { title, content, isPrivate, files } = data;
+      const request = {
+        title,
+        content,
+        isPrivate,
+      };
+
+      const requestBlob = new Blob([JSON.stringify(request)], {
+        type: "application/json",
+      });
+
+      const formData = new FormData();
+      formData.append("request", requestBlob);
+      files.forEach((image) => {
+        formData.append("files", image);
+      });
+
+      try {
+        const response = await formInstance.post(
+          "/v1/api/daily-lives",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${cookie.accessToken}`,
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+        if (response.data.success) {
+          router.replace(
+            `/share/life/${response.data.result.dailyLifeId}?posted=true`,
+          );
+        }
+      } catch (error) {
+        if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
+          toast(error.response?.data.result);
+        }
+      }
+
+      setConfirm(false);
+    },
+    [confirm, cookie.accessToken, router],
+  ); // Add confirm and router to the dependencies
+
   const watchTitle = watch("title");
   const watchContent = watch("content");
   const watchIsPrivate = watch("isPrivate");
@@ -113,26 +118,21 @@ function NewPostPage() {
       "files",
       images.map((image) => image.file),
     );
-  }, [images]);
+  }, [images, setValue]);
 
   useEffect(() => {
     if (confirm) {
       handleSubmit(onSubmit)();
     }
-  }, [confirm]);
+  }, [confirm, onSubmit, handleSubmit]);
 
-  // 이미지 선택 이벤트 핸들러
+  // Image selection event handler
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files
       ? Array.from(event.target.files)
       : null;
     if (selectedFiles) {
-      let totalImages = 0;
-      totalImages += images.length;
-
-      if (selectedFiles) {
-        totalImages += selectedFiles.length;
-      }
+      const totalImages = images.length + selectedFiles.length;
       if (totalImages > 9) {
         alert("최대 9개의 이미지만 업로드할 수 있습니다.");
         return;
@@ -142,19 +142,13 @@ function NewPostPage() {
         id: crypto.randomUUID(),
       }));
 
-      setImages((prev) => {
-        if (prev) {
-          return [...prev, ...newImagesWithId];
-        } else {
-          return [...newImagesWithId];
-        }
-      });
+      setImages((prev) => [...(prev || []), ...newImagesWithId]);
     } else {
       setImages([]);
     }
   };
 
-  // 이미지 삭제 이벤트 핸들러
+  // Image removal event handler
   const removeHandler = (event: MouseEvent) => {
     const clickedImageId = event.currentTarget.id;
     setImages((prev) => prev.filter((image) => image.id !== clickedImageId));
@@ -193,7 +187,7 @@ function NewPostPage() {
         onClick={handleSubmit(onSubmit)}
       />
 
-      <form className="flex h-full flex-col pt-16">
+      <form className="flex h-full flex-col">
         <div className="flex cursor-pointer items-center justify-between bg-cool-grayscale-50 px-4 py-2 text-sm font-medium text-cool-grayscale-700">
           <div>일상생활 작성 시 안내사항 안내</div>
           <GoChevronRight size={18} className="text-cool-grayscale-500" />
@@ -252,9 +246,11 @@ function NewPostPage() {
             {images.map((image) => (
               <div className="relative shrink-0" key={image.id}>
                 <div className="h-14 w-14 md:h-16 md:w-16">
-                  <img
+                  <Image
                     alt="일상생활 내용 이미지"
                     src={URL.createObjectURL(image.file)}
+                    width={1920}
+                    height={1080}
                     className="h-full w-full rounded-lg object-cover"
                   />
                 </div>

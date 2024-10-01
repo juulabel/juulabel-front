@@ -1,0 +1,43 @@
+import Image from "next/image";
+import Link from "next/link";
+import { alcoholType } from "@/_config/alcoholType";
+
+export default function AlcoholSlider() {
+  return (
+    <div className="flex w-full flex-col px-4 pt-2">
+      <div className="flex">
+        <p className="text-base font-medium leading-normal text-slate-800">
+          전통주 주종별
+        </p>
+        <p className="text-base font-normal leading-normal text-slate-600">
+          로 찾아보세요.
+        </p>
+      </div>
+      <div className="flex w-full items-center space-x-3 overflow-x-scroll pt-4 scrollbar-hide">
+        {alcoholType.map((drink) => (
+          <div
+            key={drink.key}
+            className="flex flex-col items-center justify-center"
+          >
+            <Link
+              href={"#"}
+              className={`flex h-[74px] w-[74px] items-center justify-center rounded-full bg-cool-grayscale-100`}
+            >
+              <button>
+                <Image
+                  src={drink.image}
+                  width={44}
+                  height={52}
+                  alt={drink.value}
+                />
+              </button>
+            </Link>
+            <p className="whitespace-nowrap pt-2 text-center text-sm font-medium leading-[21px] text-slate-700">
+              {drink.value}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

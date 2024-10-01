@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname(); // Get the current pathname
 
-
   useEffect(() => {
     const checkCookieExpiration = () => {
       if (pathname.startsWith("/share")) {
@@ -27,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const interval = setInterval(checkCookieExpiration, 1000);
 
     return () => clearInterval(interval); // Clean up interval on unmount
-  }, [cookies, router]);
+  }, [pathname, cookies, router]);
 
   return <>{children}</>;
 };

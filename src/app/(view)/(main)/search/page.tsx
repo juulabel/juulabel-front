@@ -1,20 +1,22 @@
 "use client";
 
 import RecentSearchList from "@/_common/RecentSearchList";
-import SearchData from "@/_common/SearchData";
-import OfficialDataSearchResult from "@/_components/tasting-note/OfficalDataSearchResult";
 import RelatedSearchResult from "@/_components/tasting-note/RelatedSearchResult";
-import TastingNoteSearchHeader from "@/_components/tasting-note/TastingNoteSearchHeader";
 import TraditionalDrinkInformationComponent from "@/_components/tasting-note/TraditionalDrinkInformationComponent";
-import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
-import { IOfficialData } from "@/_types/tasting-note/officialData";
+import SearchData from "@/_common/SearchData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import { useDebounce } from "@/_utils/useDebounce";
-import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
 import { useEffect, useState } from "react";
+import OfficialDataSearchResult from "@/_components/tasting-note/OfficalDataSearchResult";
+import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
+import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
+import AlcoholSlider from "@/_components/search/AlcoholSlider";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
+
   const [relatedSearchDataList, setRelatedSearchDataList] = useState<
     string[] | null
   >([]);
@@ -30,6 +32,14 @@ export default function Page() {
   };
   const handleClearSearchQuery = () => {
     setSearchQuery("");
+  };
+
+  const handleFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsInputFocused(false);
   };
 
   const debouncedSearchQuery = useDebounce(searchQuery, 1000);
@@ -68,14 +78,15 @@ export default function Page() {
   return (
     <>
       {!openOfficialSearchDataList && !openUnOfficialSearchDataList && (
-        <div className="h-full w-full max-w-[560px]">
-          <TastingNoteSearchHeader title="시음노트 작성하기" />
+        <div>
           <SearchData
             searchQuery={searchQuery}
             placeholder="전통주 또는 양조장 이름으로 검색해보세요."
             handleChangeQuery={handleChangeSearchQuery}
             handleClearSearchQuery={handleClearSearchQuery}
             handleQuerySearch={handleQuerySearch}
+            handleFocus={handleFocus}
+            handleBlur={handleBlur}
           />
           <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
           {relatedSearchDataList &&
@@ -98,8 +109,9 @@ export default function Page() {
                 }
               />
             ))}
-          {relatedSearchDataList?.length === 0 && (
-            <>
+
+          {relatedSearchDataList?.length === 0 &&
+            (isInputFocused ? (
               <RecentSearchList
                 localStorageKey="TastingNoteRecentSearchList"
                 setSearchQuery={(recentSearch: string) =>
@@ -115,32 +127,10 @@ export default function Page() {
                   setOpenUnOfficialSearchDataList
                 }
               />
-              <div className="absolute bottom-[21%] left-1/2 translate-x-[-50%]">
-                <TraditionalDrinkInformationComponent />
-              </div>
-            </>
-          )}
+            ) : (
+              <AlcoholSlider />
+            ))}
         </div>
-      )}
-      {openOfficialSearchDataList && (
-        <OfficialDataSearchResult
-          officialDataList={searchResult}
-          query={searchQuery}
-          closeOfficialDataSearchResult={() =>
-            setOpenOfficialSearchDataList(false)
-          }
-          handleClearSearchQuery={handleClearSearchQuery}
-          handleCloseSearchList={handleCloseSearchList}
-        />
-      )}
-      {openUnOfficialSearchDataList && (
-        <UnOfficialDataSearchResult
-          query={searchQuery}
-          closeUnOfficialDataSearchResult={() =>
-            setOpenUnOfficialSearchDataList(false)
-          }
-          handleClearSearchQuery={handleClearSearchQuery}
-        />
       )}
     </>
   );

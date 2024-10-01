@@ -2,6 +2,7 @@
 
 import { Alarm } from "@/_types/user/alarm";
 import { dateViewKoreanFull } from "@/_utils/time";
+import Image from "next/image";
 
 interface INotificationList {
   alarmList: Alarm[];
@@ -21,12 +22,14 @@ export default function NotificationList({
           key={index}
           className="flex cursor-pointer items-center justify-start gap-2 p-4 transition hover:bg-cool-grayscale-100"
         >
-          <img
-            className={`h-10 w-10 rounded-full ${notification.isRead && "grayscale"}`}
+          <Image
+            width={40}
+            height={40}
+            className={`rounded-full ${notification.isRead && "grayscale"}`}
             src={
               notification.type == "공지사항"
                 ? "/svg/announcement_alarm.svg"
-                : "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/a348614bd66d440dimage"            
+                : "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/a348614bd66d440dimage"
             }
             alt="알림 프로필 사진"
           />
@@ -40,7 +43,12 @@ export default function NotificationList({
               >
                 {notification.type}
               </div>
-              <img src="/svg/stroke.svg" alt="| 아이콘" />
+              <Image
+                width={2}
+                height={9}
+                src="/svg/stroke.svg"
+                alt="| 아이콘"
+              />
               <div
                 className={`font-['Pretendard'] text-sm font-normal leading-[21px] ${
                   notification.isRead ? "text-slate-300" : "text-slate-500"
@@ -62,9 +70,10 @@ export default function NotificationList({
               className="flex h-6 w-6 items-center justify-center rounded-3xl bg-cool-grayscale-500 p-[3px] shadow"
               onClick={() => onDelete(notification.id)} // Call the delete handler
             >
-              <img
+              <Image
+                width={18}
+                height={18}
                 src="/svg/white_close_icon.svg"
-                className="h-[18px] w-[18px]"
                 alt="닫기 아이콘"
               />
             </button>

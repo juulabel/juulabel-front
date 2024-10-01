@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 주라벨 프론트
 
-## Getting Started
+## 라우트 구조
 
-First, run the development server:
+```
+[view]
+(auth)
+카카오, 구글 로그인: /
+회원가입: register/agreement -> name -> detail
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+시음노트: /share/note
+시음노트 검색: /share/note/search
+시음노트 작성: /share/note/write
+시음노트 상세페이지 /share/note/[id]
+
+일상생활: /share/life
+일상생활 작성: /share/life/write
+일상생활 상세 페이지: /share/life/[dailylifeId]
+
+전통주 검색: /search
+내 공간: /user/profile/[id]
+다른 유저 검색: /user/search
+장터: /shop
+알림: /notification
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## public 경로
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+public(png -> images, svg -> svg)
+Images, svg
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 기술 스택
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| 역할                   | 종류
+| --------------------- | ------------------------ | 
+| **Node**              | `22.4.0`                 | 
+| **Typescript**        | `5.5.4`                  | 
+| **framework**         | `Next.js 14`             | 
+| **package manager**   | `pnpm`                   |
+| **styling**           | `tailwindcss`            | 
+| **fetching**          | `tanstack query, axios`  | 
+| **formatting**        | `eslint, prettier`       | 
+| **deploy**            | `vercel`                 | 
+| **test**              | `jest, playwright`       | 

@@ -50,7 +50,7 @@ export default function HeaderWithButton({
             className={`${cn("cursor-pointer font-medium text-cool-grayscale-500")}`}
             onClick={onClick}
           >
-          {buttonName}
+            {buttonName}
           </div>
         );
 

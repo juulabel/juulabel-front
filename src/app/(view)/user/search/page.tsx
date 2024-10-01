@@ -6,6 +6,7 @@ import { useDebounce } from "@/_utils/useDebounce";
 import { getSearchUser } from "@/app/api/user/getSearchUser";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface ISearchUser {
   id: string;
@@ -76,10 +77,12 @@ export default function Page() {
                 >
                   <div className="flex">
                     <div>
-                      <img
+                      <Image
+                        width={44}
+                        height={44}
                         src={user.image ? user.image : "/images/kakao_icon.png"}
                         alt="유저 이미지"
-                        className="h-12 w-12 rounded-full"
+                        className="rounded-full"
                       />
                     </div>
                     <div>

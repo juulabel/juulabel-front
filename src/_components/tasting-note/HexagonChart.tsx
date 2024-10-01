@@ -5,42 +5,58 @@ import {
   PointElement,
   LineElement,
   Filler,
+  ChartData,
+  ChartOptions,
+  Plugin,
+  ScriptableScaleContext,
 } from "chart.js";
 
 // Register the required components
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler);
 
-const roundCornersPlugin = {
-  id: "roundCorners",
-  afterDraw(chart: any) {
-    const ctx = chart.ctx;
-    const { datasets } = chart.data;
+// Define the type for chart points
+interface ChartPoint {
+  x: number;
+  y: number;
+}
 
-    datasets.forEach((dataset: any, datasetIndex: any) => {
+const roundCornersPlugin: Plugin = {
+  id: "roundCorners",
+  afterDraw(chart) {
+    const ctx = chart.ctx;
+    const { datasets } = chart.data as ChartData<"radar">;
+
+    datasets.forEach((dataset) => {
+      if (!dataset || !dataset.data) return;
+
       ctx.save();
       ctx.beginPath();
 
-      const { points } = dataset;
+      // Cast dataset.data to number[]
+      const points = dataset.data as unknown as ChartPoint[]; // Cast data to the correct type
 
       // Draw the rounded corners
-      points.forEach((point: any, index: any) => {
+      points.forEach((point: ChartPoint, index: number) => {
         const nextPoint = points[(index + 1) % points.length];
-
         const radius = 10; // Adjust this for corner radius
         ctx.moveTo(point.x, point.y);
         ctx.arcTo(nextPoint.x, nextPoint.y, nextPoint.x, nextPoint.y, radius);
       });
 
       ctx.closePath();
-      ctx.fillStyle = dataset.backgroundColor;
+      ctx.fillStyle = dataset.backgroundColor as string;
       ctx.fill();
       ctx.restore();
     });
   },
 };
 
-const RadarChart = ({ data }: any) => {
-  const chartData = {
+interface RadarChartProps {
+  data: number[];
+}
+
+const RadarChart = ({ data }: RadarChartProps) => {
+  const chartData: ChartData<"radar"> = {
     labels: ["단맛", "신맛", "쓴맛", "감칠맛", "여운", "무게감"],
     datasets: [
       {
@@ -52,7 +68,7 @@ const RadarChart = ({ data }: any) => {
     ],
   };
 
-  const options = {
+  const options: ChartOptions<"radar"> = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
@@ -71,12 +87,8 @@ const RadarChart = ({ data }: any) => {
         grid: {
           circular: false,
           lineWidth: 2,
-          color: (ctx: any) => {
-            if (ctx.index == 6) {
-              return "#FFB78E";
-            } else {
-              return "#E2E8F0";
-            }
+          color: (ctx: ScriptableScaleContext) => {
+            return ctx.index === 6 ? "#FFB78E" : "#E2E8F0";
           },
         },
         angleLines: {

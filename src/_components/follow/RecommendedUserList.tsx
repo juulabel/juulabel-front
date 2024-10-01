@@ -6,6 +6,7 @@ import {
   RecommendUserList,
 } from "@/_types/user/recommendedUser";
 import { followUser } from "@/app/api/user/followUser";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -52,18 +53,22 @@ export default function RecommendedUserList({
             className="mx-[4%] my-2 flex items-center"
             onClick={() => router.push(`/user/profile/${user.id}`)}
           >
-            <img
+            <Image
               src={
                 user.image ? user.image : "https://via.placeholder.com/72x72"
               }
+              width={48}
+              height={48}
               alt="유저 이미지"
-              className="mr-4 flex h-12 w-12 rounded-full"
+              className="mr-4 flex rounded-full"
             />
             <div>
               <p className="font-bold">{user.nickname}</p>
               <div className="flex">
                 {user.badge.map((index) => (
-                  <img
+                  <Image
+                    width={20}
+                    height={20}
                     src="https:via.placeholder.com/20x20"
                     key={index}
                     alt="배지"

@@ -15,6 +15,7 @@ import {
 import NotificationDeleteAll from "@/_components/notification/NotificationDeleteAllModal";
 import NotificationEditModal from "@/_components/notification/NotificationEditModal";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 export default function Page() {
   const queryClient = useQueryClient();
@@ -149,7 +150,9 @@ export default function Page() {
           />
         ) : (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <img
+            <Image
+              width={56}
+              height={56}
               className="pb-[8px]"
               src="/svg/zero_notification.svg"
               alt="알림 없음 표시 아이콘"

@@ -4,120 +4,120 @@ export const notificationDummyData = [
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는여우님이 내 게시물에 좋아요를 눌렀어요.",    
-    isRead: false
+    content: "웃는여우님이 내 게시물에 좋아요를 눌렀어요.",
+    isRead: false,
   },
   {
     id: 2,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는여우님이 내 게시물에 댓글을 남겼어요.",    
-    isRead: true
+    content: "웃는여우님이 내 게시물에 댓글을 남겼어요.",
+    isRead: true,
   },
   {
     id: 3,
     type: "공지사항",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "2024년 9월 28일에 주라벨 회식이 예정되어 있습니다.",    
-    isRead: false
+    content: "2024년 9월 28일에 주라벨 회식이 예정되어 있습니다.",
+    isRead: false,
   },
   {
     id: 4,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는김이동님이 나를 팔로우 했어요.",    
-    isRead: false
+    content: "웃는김이동님이 나를 팔로우 했어요.",
+    isRead: false,
   },
   {
     id: 5,
     type: "전통주 추천",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "물렁바구님! 비오는날 파전에 나루생막걸리 어떠세요?",    
-    isRead: true
+    content: "물렁바구님! 비오는날 파전에 나루생막걸리 어떠세요?",
+    isRead: true,
   },
   {
     id: 6,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는여우님이 내 게시물에 좋아요를 눌렀어요.",    
-    isRead: true
+    content: "웃는여우님이 내 게시물에 좋아요를 눌렀어요.",
+    isRead: true,
   },
   {
     id: 7,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는여우님이 내 게시물에 댓글을 남겼어요.",    
-    isRead: false
+    content: "웃는여우님이 내 게시물에 댓글을 남겼어요.",
+    isRead: false,
   },
   {
     id: 8,
     type: "공지사항",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "2024년 9월 28일에 주라벨 회식이 예정되어 있습니다.",    
-    isRead: true
+    content: "2024년 9월 28일에 주라벨 회식이 예정되어 있습니다.",
+    isRead: true,
   },
   {
     id: 9,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는김이동님이 나를 팔로우 했어요.",    
-    isRead: false
+    content: "웃는김이동님이 나를 팔로우 했어요.",
+    isRead: false,
   },
   {
     id: 10,
     type: "전통주 추천",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "물렁바구님! 비오는날 파전에 나루생막걸리 어떠세요?",    
-    isRead: false
+    content: "물렁바구님! 비오는날 파전에 나루생막걸리 어떠세요?",
+    isRead: false,
   },
   {
     id: 11,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는여우님이 내 게시물에 좋아요를 눌렀어요.",    
-    isRead: true
+    content: "웃는여우님이 내 게시물에 좋아요를 눌렀어요.",
+    isRead: true,
   },
   {
     id: 12,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는여우님이 내 게시물에 댓글을 남겼어요.",    
-    isRead: true
+    content: "웃는여우님이 내 게시물에 댓글을 남겼어요.",
+    isRead: true,
   },
   {
     id: 13,
     type: "공지사항",
     image: null,
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "2024년 9월 28일에 주라벨 회식이 예정되어 있습니다.",    
-    isRead: true
+    content: "2024년 9월 28일에 주라벨 회식이 예정되어 있습니다.",
+    isRead: true,
   },
   {
     id: 14,
     type: "공유공간",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "웃는김이동님이 나를 팔로우 했어요.",    
-    isRead: true
+    content: "웃는김이동님이 나를 팔로우 했어요.",
+    isRead: true,
   },
   {
     id: 15,
     type: "전통주 추천",
     image: "",
     createdAt: "2024-07-24T11:25:01.512Z",
-    content: "물렁바구님! 비오는날 파전에 나루생막걸리 어떠세요?",    
-    isRead: true
+    content: "물렁바구님! 비오는날 파전에 나루생막걸리 어떠세요?",
+    isRead: true,
   },
 ];
 export const searchDummyData = [

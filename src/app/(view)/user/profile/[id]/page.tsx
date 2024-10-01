@@ -5,6 +5,7 @@ import Loading from "@/_common/Loading";
 import UserHeader from "@/_components/user/UserHeader";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -56,16 +57,20 @@ export default function Page({ params }: { params: { id: string } }) {
           <div className="mx-[4%] flex flex-row justify-between">
             <div className="flex flex-row items-center">
               {user.image ? (
-                <img
-                  className="h-[72px] w-[72px] rounded-full"
+                <Image
+                  width={72}
+                  height={72}
+                  className="rounded-full"
                   src={user.image}
                   alt="유저 이미지"
                 />
               ) : (
-                <img
+                <Image
+                  width={72}
+                  height={72}
                   src="https://via.placeholder.com/72x72"
                   alt="유저 이미지"
-                  className="h-[72px] w-[72px] rounded-full"
+                  className="rounded-full"
                 />
               )}
               <p className="ml-2 text-lg font-bold leading-7">
@@ -74,11 +79,13 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
             <div className="mx-[4%] flex flex-row flex-wrap items-center">
               {user.badge.map((badge: string, badgeIndex: number) => (
-                <img
+                <Image
+                  width={24}
+                  height={24}
                   key={badgeIndex}
                   src="https://via.placeholder.com/24x24"
                   alt={`배지 이미지${badge}`}
-                  className="mx-1 h-6 w-6 rounded-full"
+                  className="mx-1 rounded-full"
                 />
               ))}
             </div>
@@ -132,8 +139,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 시음노트
               </p>
               <p className="ml-1 text-sm text-cool-grayscale-600">
-                3
-                {/* {user.tastingNote.length}개 */}
+                3{/* {user.tastingNote.length}개 */}
               </p>
             </button>
             <button
@@ -146,8 +152,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 일상생활
               </p>
               <p className="ml-1 text-sm text-cool-grayscale-600">
-                5
-                {/* {user.dailyLife.length}개 */}
+                5{/* {user.dailyLife.length}개 */}
               </p>
             </button>
           </div>
