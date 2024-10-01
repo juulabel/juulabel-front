@@ -123,7 +123,7 @@ export default function ScentForm({ handleStep }: IScentForm) {
   return (
     <>
       {/* 타이틀 */}
-      <div className="mx-[4%] mt-6">
+      <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
           <span className="text-primary-700">{productName}</span>의 향은
           어떤가요?
@@ -133,7 +133,7 @@ export default function ScentForm({ handleStep }: IScentForm) {
         </p>
       </div>
       {/* 본문: 입력 항목들 */}
-      <div className="mx-[4%] mt-10 flex flex-col gap-y-8 pb-[102px]">
+      <div className="flex flex-col gap-y-8">
         {scentCategories.map((category) => (
           <ScentCategory
             key={category.name}

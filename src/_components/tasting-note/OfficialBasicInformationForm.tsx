@@ -35,7 +35,7 @@ export default function OfficialBasicInformationForm({
   };
   return (
     <>
-      <div className="mx-[4%] mt-6">
+      <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
           전통주 기본 정보
         </p>
@@ -44,7 +44,7 @@ export default function OfficialBasicInformationForm({
         </p>
       </div>
       <div>
-        <div className="mx-[4%] mt-[5vh]">
+        <div>
           <div className="my-[2%] flex items-center justify-between">
             <p className="text-base font-normal text-cool-grayscale-500">
               제품명

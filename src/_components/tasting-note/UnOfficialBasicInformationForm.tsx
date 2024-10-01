@@ -62,7 +62,7 @@ export default function UnOfficialBasicInformationForm({
   if (isLoadingAlcoholType) return <Loading />;
   return (
     <>
-      <div className="mx-[4%] mt-6">
+      <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
           전통주 기본 정보
         </p>
@@ -70,7 +70,7 @@ export default function UnOfficialBasicInformationForm({
           기록하실 전통주의 기본 정보를 입력해주세요.
         </p>
       </div>
-      <form className="mx-[4%] mt-[4.5vh] flex flex-col">
+      <form>
         <div className="mb-6 flex flex-col justify-center">
           <label
             htmlFor="productName"

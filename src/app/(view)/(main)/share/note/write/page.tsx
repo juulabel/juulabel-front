@@ -11,6 +11,18 @@ import VisualAndTextureForm from "@/_components/tasting-note/VisualAndTextureFor
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
+interface IWriteTastingNoteFormLayout {
+  children: React.ReactNode;
+}
+
+function WriteTastingNoteFormLayout({ children }: IWriteTastingNoteFormLayout) {
+  return (
+    <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
+      {children}
+    </div>
+  );
+}
+
 function WriteTastingNote() {
   const searchParams = useSearchParams();
   const productName = searchParams.get("productName") ?? "";
@@ -74,7 +86,9 @@ function WriteTastingNote() {
         rest={rest}
         onClick={step === 1 ? undefined : handleStepBack}
       />
-      {renderStepComponent()}
+      <WriteTastingNoteFormLayout>
+        {renderStepComponent()}
+      </WriteTastingNoteFormLayout>
     </div>
   );
 }

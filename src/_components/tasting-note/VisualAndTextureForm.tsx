@@ -2,9 +2,9 @@ import BottomButton from "@/_common/BottomButton";
 import Checkbox from "@/_common/Checkbox";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
 import { cn } from "@/_utils/commons";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
-import Image from "next/image";
 
 interface IVisualAndTextureForm {
   handleStep: () => void;
@@ -95,13 +95,13 @@ export default function VisualAndTextureForm({
   return (
     <>
       {/* 타이틀 */}
-      <div className="mx-[4%] mt-6">
+      <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
           <span className="text-primary-700">{productName}</span>은 어떤가요?
         </p>
       </div>
       {/* 본문: 입력 항목들 */}
-      <div className="mx-[4%] mt-[4.5vh] flex flex-col">
+      <div>
         {/* 전통주 색상 */}
         <div>
           <span className="text-base font-bold text-cool-grayscale-800">
