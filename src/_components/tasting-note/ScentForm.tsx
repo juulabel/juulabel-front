@@ -1,6 +1,6 @@
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface IScentChip {
   name: string;
@@ -12,7 +12,7 @@ function ScentChip({ name, selected, onSelect }: IScentChip) {
   return (
     <div
       onClick={onSelect}
-      className={`w-max rounded-full border-[1px] border-cool-grayscale-300 px-[12px] py-[6px] ${selected ? "border-cool-grayscale-700 bg-cool-grayscale-700 text-white" : ""} `}
+      className={`w-max cursor-pointer rounded-full border-[1px] border-cool-grayscale-300 px-[12px] py-[6px] ${selected ? "border-cool-grayscale-700 bg-cool-grayscale-700 text-white" : ""} `}
     >
       <span className="text-sm">{name}</span>
     </div>
@@ -101,10 +101,6 @@ export default function ScentForm({ handleStep }: IScentForm) {
       ],
     },
   ];
-
-  useEffect(() => {
-    console.log("selectedScents", selectedScents);
-  }, [selectedScents]);
 
   // 향 Chip을 선택했을 때 호출되는 함수
   const onSelectScent = (scent: string) => {
