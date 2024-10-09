@@ -11,18 +11,6 @@ import VisualAndTextureForm from "@/_components/tasting-note/VisualAndTextureFor
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
-interface IWriteTastingNoteFormLayout {
-  children: React.ReactNode;
-}
-
-function WriteTastingNoteFormLayout({ children }: IWriteTastingNoteFormLayout) {
-  return (
-    <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
-      {children}
-    </div>
-  );
-}
-
 function WriteTastingNote() {
   const searchParams = useSearchParams();
   const productName = searchParams.get("productName") ?? "";
@@ -41,11 +29,28 @@ function WriteTastingNote() {
       setRest((prev) => prev - 1);
     }
   };
+
   // step을 1 감소시키는 함수
   const handleStepBack = () => {
     if (1 < step) {
       setStep((prev) => prev - 1);
       setRest((prev) => prev + 1);
+    }
+  };
+
+  const renderHeaderComponent = () => {
+    switch (step) {
+      case 5:
+        return null;
+      default:
+        return (
+          <TopHeader
+            title="시음노트 작성하기"
+            step={step}
+            rest={rest}
+            onClick={step === 1 ? undefined : handleStepBack}
+          />
+        );
     }
   };
 
@@ -72,7 +77,7 @@ function WriteTastingNote() {
       case 4:
         return <FlavorForm handleStep={handleStepNext} />;
       case 5:
-        return <CommentAndRatingForm handleStep={handleStepNext} />;
+        return <CommentAndRatingForm handleStepBack={handleStepBack} />;
       default:
         return null;
     }
@@ -80,15 +85,8 @@ function WriteTastingNote() {
 
   return (
     <div className="h-full w-full max-w-[560px]">
-      <TopHeader
-        title="전통주 기본 정보"
-        step={step}
-        rest={rest}
-        onClick={step === 1 ? undefined : handleStepBack}
-      />
-      <WriteTastingNoteFormLayout>
-        {renderStepComponent()}
-      </WriteTastingNoteFormLayout>
+      {renderHeaderComponent()}
+      {renderStepComponent()}
     </div>
   );
 }
