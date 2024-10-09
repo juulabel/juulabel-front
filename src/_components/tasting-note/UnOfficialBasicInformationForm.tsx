@@ -3,15 +3,17 @@
 import BottomButton from "@/_common/BottomButton";
 import Loading from "@/_common/Loading";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
-import {
-  basicInformationDefaultValues,
-  BasicInformationFormValues,
-} from "@/_types/yup/yupTastingNote";
 import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+
+interface AlcoholTypeResponse {
+  id: number;
+  name: string;
+  image: string;
+}
 
 interface IUnOfficialBasicInformationForm {
   handleStep: () => void;
@@ -21,39 +23,66 @@ export default function UnOfficialBasicInformationForm({
   handleStep,
 }: IUnOfficialBasicInformationForm) {
   const tastingNoteInformationStore = useTastingNoteInformationStore();
+  const { alcoholTypeId } = tastingNoteInformationStore;
   const {
     register,
     watch,
+    setValue,
     formState: { errors, isValid },
-  } = useForm<BasicInformationFormValues>({
+  } = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
-    defaultValues: basicInformationDefaultValues,
+    defaultValues: {
+      alcoholicDrinksName: "",
+      alcoholContent: "",
+      alcoholTypeName: "",
+      alcoholTypeId: 0,
+      breweryName: "",
+    },
   });
+  const [formAlcoholTypeId, setFormAlcoholTypeId] = useState(alcoholTypeId);
+  const formAlcoholicDrinksName = watch("alcoholicDrinksName");
+  const formAlcoholContent = watch("alcoholContent");
+  const formAlcoholTypeName = watch("alcoholTypeName");
+  const formBreweryName = watch("breweryName");
+  const enableButton = !!(
+    formAlcoholicDrinksName &&
+    formAlcoholContent &&
+    formAlcoholTypeName &&
+    isValid
+  );
+
   const { data: alcoholType, isLoading: isLoadingAlcoholType } = useQuery({
     queryKey: ["alcoholType"],
     queryFn: getAlcoholType,
   });
-  const formProductName = watch("productName");
-  const formAlcoholContent = watch("alcoholContent");
-  const formAlcoholType = watch("alcoholType");
-  const formBrewery = watch("brewery");
-  const enableButton = !!(
-    formProductName &&
-    formAlcoholContent &&
-    formAlcoholType &&
-    isValid
-  );
 
-  const validateAlcoholContent = (value: string) => {
+  const validateAlcoholContent = (value: string | number) => {
+    const stringValue = String(value);
     const regex = /^(0|[1-9]\d*)(\.\d{1})?$/;
-    return regex.test(value);
+    return regex.test(stringValue);
   };
+
+  const handleAlcoholTypeChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const selectedAlcoholType = alcoholType.alcoholTypeInfos.find(
+      (alcohol: AlcoholTypeResponse) => alcohol.name === event.target.value,
+    );
+    if (selectedAlcoholType) {
+      setFormAlcoholTypeId(selectedAlcoholType.id);
+      setValue("alcoholTypeName", selectedAlcoholType.name);
+    }
+  };
+
   const saveBasicInformation = () => {
-    tastingNoteInformationStore.setProductName(formProductName);
-    tastingNoteInformationStore.setAlcoholContent(formAlcoholContent);
-    tastingNoteInformationStore.setAlcoholType(formAlcoholType);
-    tastingNoteInformationStore.setBrewery(formBrewery ? formBrewery : "");
+    tastingNoteInformationStore.setAlcoholicDrinksName(formAlcoholicDrinksName);
+    tastingNoteInformationStore.setAlcoholContent(Number(formAlcoholContent));
+    tastingNoteInformationStore.setAlcoholTypeName(formAlcoholTypeName);
+    tastingNoteInformationStore.setAlcoholTypeId(formAlcoholTypeId);
+    tastingNoteInformationStore.setBreweryName(
+      formBreweryName ? formBreweryName : "",
+    );
   };
   const handleNextButton = () => {
     saveBasicInformation();
@@ -61,7 +90,7 @@ export default function UnOfficialBasicInformationForm({
   };
   if (isLoadingAlcoholType) return <Loading />;
   return (
-    <>
+    <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
       <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
           전통주 기본 정보
@@ -73,7 +102,7 @@ export default function UnOfficialBasicInformationForm({
       <form>
         <div className="mb-6 flex flex-col justify-center">
           <label
-            htmlFor="productName"
+            htmlFor="alcoholicDrinksName"
             className="text-base font-bold text-cool-grayscale-800"
           >
             제품명
@@ -81,7 +110,7 @@ export default function UnOfficialBasicInformationForm({
           <input
             className="mt-[1%] h-11 w-full rounded-[6px] border-[1px] border-cool-grayscale-300 px-[10px] py-4"
             placeholder="전통주의 이름을 띄어쓰기 없이 입력해주세요."
-            {...register("productName")}
+            {...register("alcoholicDrinksName")}
             onInput={(event: FormEvent<HTMLInputElement>) => {
               const value = event.currentTarget.value;
               event.currentTarget.value = value.replace(/\s+/g, "");
@@ -125,11 +154,12 @@ export default function UnOfficialBasicInformationForm({
           </label>
           <div className="relative mt-[1%] h-11 w-full rounded-[6px] border-[1px] border-cool-grayscale-300">
             <select
-              {...register("alcoholType", {
+              {...register("alcoholTypeName", {
                 required: "주종을 선택하여 주세요",
               })}
               className="h-full w-full appearance-none rounded-[6px] bg-cool-grayscale-50 px-[4%]"
               defaultValue="" // 기본값 설정
+              onChange={handleAlcoholTypeChange}
             >
               <option value="" disabled hidden>
                 주종을 선택하여 주세요
@@ -170,6 +200,7 @@ export default function UnOfficialBasicInformationForm({
           <input
             className="mr-[3%] mt-[1%] h-11 w-full rounded-[6px] border-[1px] border-cool-grayscale-300 px-[10px] py-4"
             placeholder="양조장의 이름을 띄어쓰기 없이 입력해주세요."
+            {...register("breweryName")}
             onInput={(event: FormEvent<HTMLInputElement>) => {
               const value = event.currentTarget.value;
               event.currentTarget.value = value.replace(/\s+/g, "");
@@ -180,6 +211,6 @@ export default function UnOfficialBasicInformationForm({
           다음
         </BottomButton>
       </form>
-    </>
+    </div>
   );
 }
