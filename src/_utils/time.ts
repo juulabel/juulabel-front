@@ -6,7 +6,7 @@ import "dayjs/locale/ko";
 import timezone from "dayjs/plugin/timezone";
 
 // 시간 처리 함수
-export function dateView(date: string) {
+export function dateView(date: string) {  
   dayjs.extend(utc);
   dayjs.locale("ko");
   dayjs.extend(relativeTime);

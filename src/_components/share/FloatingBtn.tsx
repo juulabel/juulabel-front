@@ -2,7 +2,6 @@
 import { cn } from "@/_utils/commons";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function FloatingBtn() {
@@ -27,7 +26,10 @@ export default function FloatingBtn() {
           )}
           onClick={() => setClicked((prev) => !prev)}
         >
-          <Link href="#" className="flex h-1/2 items-center justify-center">
+          <Link
+            href="/share/note/search"
+            className="flex h-1/2 items-center justify-center"
+          >
             <Image
               src="/images/icons/addingBtn/tasting.png"
               alt="시음노트 작성 아이콘"

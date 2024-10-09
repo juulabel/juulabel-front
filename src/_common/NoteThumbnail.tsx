@@ -1,8 +1,8 @@
-import Image from "next/image";
-import Caption from "./Caption";
 import { INoteThumbnail } from "@/_types/share";
-import Link from "next/link";
 import { dateViewKoreanFull } from "@/_utils/time";
+import Image from "next/image";
+import Link from "next/link";
+import Caption from "./Caption";
 
 export const placeholderThumbnailProvider = (alcoholType: string) => {
   switch (alcoholType) {

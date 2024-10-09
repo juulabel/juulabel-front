@@ -1,0 +1,14 @@
+<svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon/32px/moonpoint">
+<circle id="Ellipse 2837" cx="24.5" cy="24" r="21" fill="#F5F9FC"/>
+<g id="Ellipse 2838">
+<mask id="path-2-inside-1_2638_12167" fill="white">
+<path d="M24.5 45C18.9305 45 13.589 42.7875 9.65076 38.8492C5.7125 34.911 3.5 29.5695 3.5 24C3.5 18.4305 5.71249 13.089 9.65075 9.15076C13.589 5.2125 18.9304 3 24.5 3L24.5 24V45Z"/>
+</mask>
+<path d="M24.5 45C18.9305 45 13.589 42.7875 9.65076 38.8492C5.7125 34.911 3.5 29.5695 3.5 24C3.5 18.4305 5.71249 13.089 9.65075 9.15076C13.589 5.2125 18.9304 3 24.5 3L24.5 24V45Z" fill="#FFB78F" stroke="#FF823C" stroke-width="2" mask="url(#path-2-inside-1_2638_12167)"/>
+</g>
+<ellipse id="Ellipse 2839" cx="15.9233" cy="13.9724" rx="5.25" ry="3.87183" transform="rotate(-46.4552 15.9233 13.9724)" fill="#FF823C"/>
+<ellipse id="Ellipse 2840" cx="10.7338" cy="22.6197" rx="2.59946" ry="1.91708" transform="rotate(-68.5871 10.7338 22.6197)" fill="#FF823C"/>
+<ellipse id="Ellipse 2841" cx="18.2338" cy="22.6197" rx="2.59946" ry="1.91708" transform="rotate(-68.5871 18.2338 22.6197)" fill="#FF823C"/>
+</g>
+</svg>

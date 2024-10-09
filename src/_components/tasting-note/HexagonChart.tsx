@@ -1,15 +1,15 @@
-import { Radar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
   ChartData,
+  Chart as ChartJS,
   ChartOptions,
+  Filler,
+  LineElement,
   Plugin,
+  PointElement,
+  RadialLinearScale,
   ScriptableScaleContext,
 } from "chart.js";
+import { Radar } from "react-chartjs-2";
 
 // Register the required components
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler);
@@ -51,19 +51,29 @@ const roundCornersPlugin: Plugin = {
   },
 };
 
-interface RadarChartProps {
-  data: number[];
+interface DataPoint {
+  label: string;
+  data: number;
 }
 
-const RadarChart = ({ data }: RadarChartProps) => {
+interface RadarChartProps {
+  dataPoints: DataPoint[];
+}
+
+const RadarChart = ({ dataPoints }: RadarChartProps) => {
+  const labels = dataPoints.map((point) => point.label);
+  const data = dataPoints.map((point) => point.data);
+
   const chartData: ChartData<"radar"> = {
-    labels: ["단맛", "신맛", "쓴맛", "감칠맛", "여운", "무게감"],
+    labels: labels,
     datasets: [
       {
         data: data, // Pass the dynamic data here
         backgroundColor: "#FF823C", // Custom background with transparency
+        borderColor: "#FF823C",
         borderWidth: 2,
-        pointRadius: 0,
+        pointRadius: 0, // Adjust this for rounded data points
+        tension: 0.05, // Adjust this for curved lines
       },
     ],
   };
@@ -77,7 +87,7 @@ const RadarChart = ({ data }: RadarChartProps) => {
         max: 6, // Scale range
         pointLabels: {
           font: {
-            size: 15,
+            size: 14,
           },
         },
         ticks: {
@@ -99,7 +109,7 @@ const RadarChart = ({ data }: RadarChartProps) => {
   };
 
   return (
-    <div style={{ width: "230px", height: "230px" }}>
+    <div style={{ width: "195px", height: "190px" }}>
       <Radar data={chartData} options={options} />
     </div>
   );

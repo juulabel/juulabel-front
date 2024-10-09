@@ -1,11 +1,11 @@
-import QueryProvider from "@/_lib/Provider/QueryProvider";
-import localFont from "next/font/local";
-import type { Metadata } from "next";
-import "./globals.css";
-import ToastProvider from "@/_lib/Provider/ToastProvider";
-import "react-toastify/dist/ReactToastify.css";
 import { MSWComponent } from "@/_components/MSWComponent";
 import { AuthProvider } from "@/_lib/Provider/AuthProvider";
+import QueryProvider from "@/_lib/Provider/QueryProvider";
+import ToastProvider from "@/_lib/Provider/ToastProvider";
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
 
 const pretendard = localFont({
   src: "fonts/PretendardVariable.woff2",
