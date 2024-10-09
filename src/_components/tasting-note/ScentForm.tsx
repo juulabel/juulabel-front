@@ -1,5 +1,7 @@
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { getScents } from "@/app/api/tasting-note/getTastingNoteFormInformation";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface IScentChip {
@@ -21,16 +23,16 @@ function ScentChip({ name, selected, onSelect }: IScentChip) {
 
 interface IScentCategory {
   title: string;
-  scents: string[];
-  selectedScents: string[];
-  onSelectScent: (scent: string) => void;
+  scents: IScent[];
+  selectedScentIds: number[];
+  onSelectScentChip: (scentId: number) => void;
 }
 
 function ScentCategory({
   title,
   scents,
-  selectedScents,
-  onSelectScent,
+  selectedScentIds,
+  onSelectScentChip,
 }: IScentCategory) {
   return (
     <div>
@@ -40,10 +42,10 @@ function ScentCategory({
       <div className="mt-[8px] flex flex-wrap justify-start gap-[6px]">
         {scents.map((scent) => (
           <ScentChip
-            key={scent}
-            name={scent}
-            selected={selectedScents.includes(scent)}
-            onSelect={() => onSelectScent(scent)}
+            key={scent.id}
+            name={scent.name}
+            selected={selectedScentIds.includes(scent.id)}
+            onSelect={() => onSelectScentChip(scent.id)}
           />
         ))}
       </div>
@@ -55,73 +57,59 @@ interface IScentForm {
   handleStep: () => void;
 }
 
+interface IScent {
+  id: number;
+  name: string;
+}
+
+interface ICategoryResponse {
+  id: number;
+  code: string;
+  name: string;
+  scents: IScent[];
+}
+
 export default function ScentForm({ handleStep }: IScentForm) {
   const tastingNoteInformationStore = useTastingNoteInformationStore();
-  const [productName, setProductName] = useState("탁100 내추럴");
-  const [selectedScents, setSelectedScents] = useState<string[]>([]);
-  const isButtonEnabled = selectedScents.length > 0;
+  const {
+    alcoholicDrinksDetails: { alcoholicDrinksName },
+    alcoholTypeId,
+  } = tastingNoteInformationStore;
+  const [selectedScentIds, setSelectedScentIds] = useState<number[]>([]);
+  const isButtonEnabled = selectedScentIds.length > 0;
+
+  // 향 정보 조회
+  const { data: scents } = useQuery<ICategoryResponse[]>({
+    queryKey: ["tastingNoteScents", alcoholTypeId],
+    queryFn: () => getScents(alcoholTypeId),
+  });
 
   const handleNextButton = () => {
     // localStorage에 선택된 향들 저장
-    tastingNoteInformationStore.setScents(selectedScents);
+    tastingNoteInformationStore.setScentIds(selectedScentIds);
     handleStep(); // 다음 단계로 이동
   };
 
-  const scentCategories = [
-    { name: "자연", scents: ["꽃", "허브", "풀/나무", "흙", "스모크"] },
-    {
-      name: "과일/채소",
-      scents: [
-        "사과",
-        "귤/오렌지",
-        "레몬/라임",
-        "딸기",
-        "복숭아",
-        "체리",
-        "메론",
-        "망고",
-        "참외",
-      ],
-    },
-    {
-      name: "곡류",
-      scents: ["보리", "밀", "생쌀", "옥수수", "갓지은밥", "엿길금"],
-    },
-    {
-      name: "향신료, 기타",
-      scents: [
-        "향신료",
-        "계피",
-        "꿀",
-        "팔각",
-        "누룩향",
-        "버터",
-        "바닐라",
-        "초콜릿",
-      ],
-    },
-  ];
-
   // 향 Chip을 선택했을 때 호출되는 함수
-  const onSelectScent = (scent: string) => {
-    setSelectedScents((prev) => {
-      if (prev.includes(scent)) {
+  const onSelectScentChip = (scentId: number) => {
+    setSelectedScentIds((prev) => {
+      if (prev.includes(scentId)) {
         // 이미 선택된 향이라면 제거
-        return prev.filter((s) => s !== scent);
+        return prev.filter((s) => s !== scentId);
       } else if (prev.length < 3) {
         // 3개 미만인 경우 추가
-        return [...prev, scent];
+        return [...prev, scentId];
       }
       return prev;
     });
   };
 
   return (
-    <>
+    <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
       {/* 타이틀 */}
       <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
-          <span className="text-primary-700">{productName}</span>의 향은
+          <span className="text-primary-700">{alcoholicDrinksName}</span>의 향은
           어떤가요?
         </p>
         <p className="text-sm font-normal text-cool-grayscale-500">
@@ -130,19 +118,20 @@ export default function ScentForm({ handleStep }: IScentForm) {
       </div>
       {/* 본문: 입력 항목들 */}
       <div className="flex flex-col gap-y-8">
-        {scentCategories.map((category) => (
-          <ScentCategory
-            key={category.name}
-            title={category.name}
-            scents={category.scents}
-            selectedScents={selectedScents}
-            onSelectScent={onSelectScent}
-          />
-        ))}
+        {scents &&
+          scents.map((category) => (
+            <ScentCategory
+              key={category.name}
+              title={category.name}
+              scents={category.scents}
+              selectedScentIds={selectedScentIds}
+              onSelectScentChip={onSelectScentChip}
+            />
+          ))}
       </div>
       <BottomButton enableButton={isButtonEnabled} onClick={handleNextButton}>
         다음
       </BottomButton>
-    </>
+    </div>
   );
 }
