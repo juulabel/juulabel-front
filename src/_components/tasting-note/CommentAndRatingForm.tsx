@@ -1,9 +1,393 @@
+"use client";
+
+import Checkbox from "@/_common/Checkbox";
+import Modal from "@/_common/Modal";
+import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { cn } from "@/_utils/commons";
+import { formInstance } from "@/app/api/axios";
+import ImageIcon from "@/icons/image_icon.svg";
+import axios, { AxiosRequestConfig } from "axios";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useCookies } from "react-cookie";
+import { Controller, useForm } from "react-hook-form";
+import { IoClose } from "react-icons/io5";
+import { toast } from "react-toastify";
+import TopHeaderWithButton from "./TopHeaderWithButton";
+
+interface Inputs {
+  files: File[];
+}
+
+interface FileInfo {
+  file: File;
+  id: string;
+}
+
+interface ErrorResponse {
+  message: string;
+  result: string;
+  success: boolean;
+}
+
 interface ICommentAndRatingForm {
-  handleStep: () => void;
+  handleStepBack: () => void;
 }
 
 export default function CommentAndRatingForm({
-  handleStep,
+  handleStepBack,
 }: ICommentAndRatingForm) {
-  return <div>This is Comment and rating form.</div>;
+  const tastingNoteInformationStore = useTastingNoteInformationStore();
+  const {
+    alcoholicDrinksDetails,
+    alcoholicDrinksDetails: { alcoholicDrinksName },
+    alcoholTypeId,
+    scentIds,
+    colorId,
+    sensoryLevelIds,
+    flavorLevelIds,
+  } = tastingNoteInformationStore;
+
+  const router = useRouter();
+  const [cookie] = useCookies(["accessToken"]);
+  const [content, setContent] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [images, setImages] = useState<FileInfo[]>([]);
+  const [isActiveButton, setIsActiveButton] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    setValue,
+    formState: { errors, isValid },
+  } = useForm<Inputs>({
+    defaultValues: {
+      files: [],
+    },
+  });
+
+  useEffect(() => {
+    setValue(
+      "files",
+      images.map((image) => image.file),
+    );
+  }, [images, setValue]);
+
+  // 부연설명 입력폼 크기 조절
+  const handleResizeHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  // 부연설명 입력 시 실행되는 함수
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+    handleResizeHeight();
+  };
+
+  const handleCheckboxChange = () => {
+    const newCheckedState = !isPrivate;
+    setIsPrivate(newCheckedState);
+  };
+
+  // Image selection event handler
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = event.target.files
+      ? Array.from(event.target.files)
+      : null;
+    if (selectedFiles) {
+      const totalImages = images.length + selectedFiles.length;
+      if (totalImages > 9) {
+        alert("최대 9개의 이미지만 업로드할 수 있습니다.");
+        return;
+      }
+      const newImagesWithId = selectedFiles.map((file) => ({
+        file,
+        id: crypto.randomUUID(),
+      }));
+
+      setImages((prev) => [...(prev || []), ...newImagesWithId]);
+    } else {
+      setImages([]);
+    }
+  };
+
+  // Image removal event handler
+  const removeHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+    const clickedImageId = event.currentTarget.id;
+    setImages((prev) => prev.filter((image) => image.id !== clickedImageId));
+  };
+
+  // 등록 버튼 클릭 시 실행되는 함수
+  const handleSubmitButton = () => {
+    // 부연설명, 달점, 비공개 여부 localStorage에 저장
+    tastingNoteInformationStore.setContent(content);
+    tastingNoteInformationStore.setRating(rating);
+    tastingNoteInformationStore.setIsPrivate(isPrivate);
+
+    // 모달 띄움
+    setModalOpen(true);
+  };
+
+  const onSubmit = async (data: Inputs) => {
+    const { files } = data;
+    const request = {
+      alcoholicDrinksDetails,
+      alcoholTypeId,
+      scentIds,
+      colorId,
+      sensoryLevelIds,
+      flavorLevelIds,
+      isPrivate,
+      rating,
+      content,
+    };
+    const reqeustBlob = new Blob([JSON.stringify(request)], {
+      type: "application/json",
+    });
+    const formData = new FormData();
+    formData.append("request", reqeustBlob);
+    files.forEach((image) => {
+      formData.append("files", image);
+    });
+
+    // API POST
+    try {
+      const response = await formInstance.post(
+        "/v1/api/shared-space/tasting-notes",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie.accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      // 로컬스토리지 비우기
+
+      // POST 성공 시에 상세페이지로 redirect
+      if (response.data.success) {
+        router.replace(`/share/note/${response.data.result.id}`);
+      }
+    } catch (error) {
+      if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
+        toast(error.response?.data.result);
+      }
+    }
+  };
+
+  return (
+    <>
+      <TopHeaderWithButton
+        title="시음노트 작성하기"
+        buttonType="text"
+        buttonName="등록"
+        isActiveButton={isActiveButton}
+        onClickBackButton={handleStepBack}
+        onClickButton={handleSubmitButton}
+        haveSteps={true}
+        currentStep={5}
+        remainStep={0}
+      />
+      <div className="mx-[18px] mt-6 flex flex-col gap-y-10">
+        {/* 타이틀 */}
+        <div>
+          <p className="text-xl font-bold text-cool-grayscale-800">
+            마지막 단계에요!
+          </p>
+          <p className="text-xl font-bold text-cool-grayscale-800">
+            <span className="text-primary-700">{alcoholicDrinksName}</span>에
+            대해 어떻게 생각하시나요?
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-x-3">
+                <span className="text-base font-bold text-cool-grayscale-700">
+                  부연설명(최대 1,200자)
+                </span>
+                <span className="text-sm font-normal text-cool-grayscale-500">
+                  선택사항
+                </span>
+              </div>
+              <div className="flex items-center">
+                <span className="text-sm font-normal text-cool-grayscale-400">
+                  {content.length.toLocaleString()}
+                </span>
+                <span className="text-sm font-normal text-cool-grayscale-700">
+                  /1,200
+                </span>
+              </div>
+            </div>
+            <textarea
+              value={content}
+              onChange={handleContentChange}
+              className="mt-4 min-h-72 w-full resize-none pb-4 text-cool-grayscale-700 placeholder-cool-grayscale-400 !outline-none focus:placeholder-transparent focus:ring-0"
+              placeholder="술에 대한 부연설명을 자유롭게 적어보세요."
+              maxLength={1200}
+              ref={textareaRef}
+            />
+          </div>
+          {/* divide 라인 */}
+          <div className="relative">
+            <hr className="absolute left-1/2 h-1 w-screen -translate-x-1/2 transform border-0 bg-cool-grayscale-50" />
+          </div>
+          <div className="mt-4 text-center text-base font-bold text-cool-grayscale-800">
+            술에 대한 달점을 매겨주세요!
+          </div>
+          <div className="mt-[2px] flex items-center justify-center">
+            <span className="text-2xl font-bold text-primary-700">0</span>
+            <span className="ml-[5px] text-base text-cool-grayscale-500">
+              /5
+            </span>
+            <span className="ml-[4px] text-base text-cool-grayscale-500">
+              점
+            </span>
+          </div>
+          <div className="mb-6 mt-2 flex justify-center gap-x-3">
+            <Image
+              width={48}
+              height={48}
+              src="/svg/moonpoint_default.svg"
+              alt="달점"
+            />
+            <Image
+              width={48}
+              height={48}
+              src="/svg/moonpoint_default.svg"
+              alt="달점"
+            />
+            <Image
+              width={48}
+              height={48}
+              src="/svg/moonpoint_default.svg"
+              alt="달점"
+            />
+            <Image
+              width={48}
+              height={48}
+              src="/svg/moonpoint_default.svg"
+              alt="달점"
+            />
+            <Image
+              width={48}
+              height={48}
+              src="/svg/moonpoint_default.svg"
+              alt="달점"
+            />
+          </div>
+          {/* 아래부터는 스크롤 고정 부분 */}
+          <div className="sticky bottom-0 bg-white">
+            {/* 이미지 미리보기  UI*/}
+            {images.length !== 0 && (
+              <div className="flex w-full items-center space-x-4 overflow-x-scroll px-4 pb-3 pt-2 scrollbar-hide">
+                {images.map((image) => (
+                  <div className="relative shrink-0" key={image.id}>
+                    <div className="h-14 w-14 md:h-16 md:w-16">
+                      <Image
+                        alt="일상생활 내용 이미지"
+                        src={URL.createObjectURL(image.file)}
+                        width={1920}
+                        height={1080}
+                        className="h-full w-full rounded-lg object-cover"
+                      />
+                    </div>
+                    <div
+                      id={image.id}
+                      className="absolute -right-[0.45rem] -top-[0.45rem] z-30 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-cool-grayscale-500 md:h-[20px] md:w-[20px]"
+                      onClick={removeHandler}
+                    >
+                      <IoClose className="text-white" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* divide 라인 */}
+            <div className="relative">
+              <hr className="absolute left-1/2 h-[1px] w-screen -translate-x-1/2 transform border-0 bg-cool-grayscale-200" />
+            </div>
+            <div className="my-2 flex">
+              <div className="flex flex-col justify-start">
+                <Checkbox checked={isPrivate} onChange={handleCheckboxChange} />
+              </div>
+              <div>
+                <div className="text-xs text-cool-grayscale-800">
+                  게시물을 비공개 처리할게요
+                </div>
+                <div className="text-xs text-cool-grayscale-500">
+                  비공개 처리 시 다른 사람들에게 해당 게시물이 보이지 않아요.
+                </div>
+              </div>
+            </div>
+            {/* divide 라인 */}
+            <div className="relative">
+              <hr className="absolute left-1/2 h-[1px] w-screen -translate-x-1/2 transform border-0 bg-cool-grayscale-200" />
+            </div>
+            <label
+              className={cn(
+                "flex cursor-pointer items-center border-t text-cool-grayscale-800",
+                (!images || images.length >= 9) && "text-cool-grayscale-400",
+              )}
+              htmlFor="image-files"
+            >
+              {/* <div className="flex items-center justify-start"> */}
+              <div className="max-h-fit max-w-fit p-[3px]">
+                <ImageIcon
+                  width={24}
+                  height={24}
+                  className={cn(
+                    "fill-cool-grayscale-800",
+                    (!images || images.length >= 9) &&
+                      "fill-cool-grayscale-400",
+                  )}
+                />
+              </div>
+              <div className="my-3 ml-1">이미지 추가하기(최대 9장)</div>
+              <Controller
+                name="files"
+                control={control}
+                defaultValue={[]}
+                render={({ field: { onChange, value } }) => (
+                  <input
+                    type="file"
+                    id="image-files"
+                    multiple
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageChange} // 파일 선택 시 이벤트 핸들러
+                    disabled={!images || images.length >= 9} // 최대 이미지 개수 체크
+                  />
+                )}
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+      {modalOpen && (
+        <Modal
+          modalTitle={"비공개로 게시물을 등록하시겠어요?"}
+          primaryBtnText={"등록하기"}
+          handlePrimaryBtn={() => {
+            setModalOpen(false);
+            handleSubmit(onSubmit)();
+          }}
+          cancelText="닫기"
+          handleCancel={() => {
+            setModalOpen(false);
+          }}
+        />
+      )}
+    </>
+  );
 }
