@@ -74,7 +74,7 @@ const RadarChart = ({ data }: RadarChartProps) => {
     scales: {
       r: {
         min: 0,
-        max: 6, // Scale range
+        max: Math.max(...data), // Scale range
         pointLabels: {
           font: {
             size: 15,
