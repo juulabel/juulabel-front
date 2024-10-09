@@ -29,7 +29,7 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
         <button onClick={handleClick} className="absolute left-4 p-1">
           <GoChevronLeft size={24} />
         </button>
-        <div className="text-lg font-bold">{title}</div>
+        <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
       </div>
       <div className="flex">
         <div
