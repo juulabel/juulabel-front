@@ -51,13 +51,21 @@ const roundCornersPlugin: Plugin = {
   },
 };
 
-interface RadarChartProps {
-  data: number[];
+interface DataPoint {
+  label: string;
+  data: number;
 }
 
-const RadarChart = ({ data }: RadarChartProps) => {
+interface RadarChartProps {
+  dataPoints: DataPoint[];
+}
+
+const RadarChart = ({ dataPoints }: RadarChartProps) => {
+  const labels = dataPoints.map((point) => point.label);
+  const data = dataPoints.map((point) => point.data);
+
   const chartData: ChartData<"radar"> = {
-    labels: ["단맛", "신맛", "쓴맛", "감칠맛", "여운", "무게감"],
+    labels: labels,
     datasets: [
       {
         data: data, // Pass the dynamic data here
