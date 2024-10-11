@@ -23,19 +23,20 @@ export default function OfficialBasicInformationForm({
   const tastingNoteInformationStore = useTastingNoteInformationStore();
 
   const handleNextButton = () => {
-    tastingNoteInformationStore.setProductName(productName);
-    tastingNoteInformationStore.setAlcoholContent(alcoholContent);
-    tastingNoteInformationStore.setAlcoholType(alcoholType);
-    tastingNoteInformationStore.setBrewery(brewery ? brewery : "");
-    tastingNoteInformationStore.setBreweryLocation(
+    tastingNoteInformationStore.setAlcoholicDrinksName(productName);
+    tastingNoteInformationStore.setAlcoholContent(parseFloat(alcoholContent));
+    tastingNoteInformationStore.setAlcoholTypeName(alcoholType);
+    tastingNoteInformationStore.setBreweryName(brewery ? brewery : "");
+    tastingNoteInformationStore.setBreweryRegion(
       breweryLocation ? breweryLocation : "",
     );
     //다음 단계로 이동
     handleStep();
   };
+
   return (
-    <>
-      <div className="mx-[4%] mt-6">
+    <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
+      <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
           전통주 기본 정보
         </p>
@@ -44,7 +45,7 @@ export default function OfficialBasicInformationForm({
         </p>
       </div>
       <div>
-        <div className="mx-[4%] mt-[5vh]">
+        <div>
           <div className="my-[2%] flex items-center justify-between">
             <p className="text-base font-normal text-cool-grayscale-500">
               제품명
@@ -90,6 +91,6 @@ export default function OfficialBasicInformationForm({
           다음
         </BottomButton>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { GoChevronLeft } from "react-icons/go";
 
@@ -26,14 +25,11 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
 
   return (
     <div>
-      <div className="mx-7 flex h-16 flex-row items-center justify-between">
-        <div>
-          <button onClick={handleClick}>
-            <GoChevronLeft size={24} />
-          </button>
-        </div>
-        <div className="text-lg font-bold">{title}</div>
-        <div></div>
+      <div className="relative flex h-16 flex-row items-center justify-center p-4">
+        <button onClick={handleClick} className="absolute left-4 p-1">
+          <GoChevronLeft size={24} />
+        </button>
+        <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
       </div>
       <div className="flex">
         <div
