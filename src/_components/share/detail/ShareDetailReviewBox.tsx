@@ -3,7 +3,8 @@ import React, { Fragment, ReactNode, useEffect, useState } from "react";
 import HexagonChart from "../../tasting-note/HexagonChart";
 import MoonRating from "./MoonRating";
 import { ITastingNoteDetailInfo } from "@/_types";
-import { flavorMap, sensoryMap } from "@/_utils/commons";
+import { flavorMap, flavorScoreMap, sensoryMap } from "@/_utils/commons";
+import RadarChart from "../../tasting-note/HexagonChart";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;
@@ -28,6 +29,18 @@ export default function ShareDetailReviewBox({
   const [sensoryFindMap, setSensoryFindMap] = useState<Map<string, string>>(
     new Map(sensoryValues.map(({ value, kind }) => [kind, value])),
   );
+
+  const flavorChartData: { label: string; data: number }[] =
+    flavorLevelIds
+      ?.map((id) => flavorScoreMap.get(id))
+      .filter(
+        (item): item is { label: string; data: number } => item !== undefined,
+      ) || [];
+
+  // const flavorChartData = flavorLevelIds.map(({ flavorName, score }) => ({
+  //   label: flavorName,
+  //   data: score,
+  // }));
 
   useEffect(() => {});
   if (!info) {
@@ -103,7 +116,7 @@ export default function ShareDetailReviewBox({
         </span>
 
         <div className="mt-4 flex w-full justify-center">
-          <HexagonChart data={sensoryLevelIds!} />
+          <RadarChart dataPoints={flavorChartData} />
         </div>
       </div>
       {/* 부연설명 */}

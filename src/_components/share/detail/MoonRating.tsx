@@ -5,7 +5,7 @@ import Image from "next/image";
 type MoonType = "full" | "half" | "empty";
 
 /**
- * @param rating 1.0 ~ 5.0
+ * @param rating 1.0 ~ 5.0  (0.5)
  */
 export default function MoonRating({ rating }: { rating: number }) {
   const moons: string[] = [];
@@ -37,9 +37,9 @@ export default function MoonRating({ rating }: { rating: number }) {
 
 function renderMoon({ length, type }: { length: number; type: MoonType }) {
   const moonTypeToSrc: { [key in MoonType]: string } = {
-    full: "/svg/moon/full-moon.svg",
-    half: "/svg/moon/half-moon.svg",
-    empty: "/svg/moon/empty-moon.svg",
+    full: "/svg/moonpoint_full.svg",
+    half: "/svg/moonpoint_half.svg",
+    empty: "/svg/moonpoint_default.svg",
   };
 
   return Array.from({ length }, (_, index) => (

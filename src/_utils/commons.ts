@@ -80,3 +80,13 @@ export const flavorMap = new Map<number, string>(
     value.flavor,
   ]),
 );
+
+export const flavorScoreMap = new Map<number, { label: string; data: number }>(
+  Object.entries(flavorValue).map(([key, value]) => [
+    Number(key),
+    {
+      data: value.score,
+      label: value.flavor,
+    },
+  ]),
+);
