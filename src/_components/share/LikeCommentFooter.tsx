@@ -80,7 +80,7 @@ export default function LikeCommentFooter({ info }: Props) {
     }
   };
   return (
-    <footer className="fixed bottom-0 z-40 flex h-[82px] w-full max-w-[560px] flex-row items-center justify-between bg-slate-50 p-5 px-6">
+    <footer className="fixed bottom-0 z-40 flex h-[82px] w-full max-w-[560px] flex-row items-center justify-between bg-[#FFFFFF] p-5 px-6 shadow-[0px_-4px_32px_0px_#00000012]">
       <div className="flex items-center gap-3">
         <Image
           src={info?.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}
@@ -96,7 +96,13 @@ export default function LikeCommentFooter({ info }: Props) {
       </div>
 
       <div className="flex items-center gap-3">
-        <RxChatBubble size={30} />
+        <Image
+          src={"/svg/speech_bubble.svg"}
+          width={30}
+          height={30}
+          alt="좋아요"
+          onClick={handleLikeClick}
+        />
         <span className="text-[18px]">{info?.commentCount}</span>
       </div>
     </footer>

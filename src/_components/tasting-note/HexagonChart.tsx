@@ -60,7 +60,7 @@ const RadarChart = ({ data }: RadarChartProps) => {
     labels: ["단맛", "신맛", "쓴맛", "감칠맛", "여운", "무게감"],
     datasets: [
       {
-        data: data, // Pass the dynamic data here
+        data: data.map((value) => (value > 6 ? 6 : value)), // Pass the dynamic data here
         backgroundColor: "#FF823C", // Custom background with transparency
         borderWidth: 2,
         pointRadius: 0,
@@ -74,7 +74,8 @@ const RadarChart = ({ data }: RadarChartProps) => {
     scales: {
       r: {
         min: 0,
-        max: Math.max(...data), // Scale range
+        // max: Math.max(...data), // Scale range
+        max: 6,
         pointLabels: {
           font: {
             size: 15,
