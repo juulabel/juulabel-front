@@ -94,7 +94,7 @@ export default function ShareNoteDetailBody({ id }: Props) {
         sensoryLevelIds={data?.result.sensoryLevelIds}
         flavorLevelIds={data?.result.flavorLevelIds}
       />
-      <LikeCommentFooter info={data?.result.tastingNoteDetailInfo} />
+      <LikeCommentFooter info={data?.result.tastingNoteDetailInfo} id={id} />
     </>
   );
 }

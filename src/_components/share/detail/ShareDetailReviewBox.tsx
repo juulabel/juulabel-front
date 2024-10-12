@@ -62,15 +62,26 @@ export default function ShareDetailReviewBox({
               className={`h-[28px] w-[56px] rounded-md border-[1px] border-secondary bg-[${info.rgbColor}]`}
             ></div>
           </div>
-          <Separator />
-          <div className="flex items-center justify-between">
-            <div>탁도</div>
-            <OrangeText>
-              {sensoryFindMap.get("탁도") || "데이터 없음"}
-            </OrangeText>
-          </div>
+          {/* <Separator /> */}
+
+          {sensoryValues.map(({ value, kind }, index) => {
+            return (
+              <>
+                {index % 2 === 0 && <Separator />}
+                <div className="flex items-center justify-between" key={index}>
+                  <div>{kind}</div>
+                  <OrangeText>
+                    {/* {sensoryFindMap.get("탁도") || "데이터 없음"} */}
+                    {value}
+                  </OrangeText>
+                </div>
+              </>
+            );
+          })}
+
           {/* 두번쨰행 */}
-          <div className="flex items-center justify-between">
+
+          {/* <div className="flex items-center justify-between">
             <div>탄산</div>
             <OrangeText>
               {sensoryFindMap.get("탄산") || "데이터 없음"}
@@ -82,7 +93,7 @@ export default function ShareDetailReviewBox({
             <OrangeText>
               {sensoryFindMap.get("점성도") || "데이터 없음"}
             </OrangeText>
-          </div>
+          </div> */}
         </div>
       </div>
 

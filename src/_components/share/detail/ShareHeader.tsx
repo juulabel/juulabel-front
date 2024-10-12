@@ -5,7 +5,7 @@ import Button from "@/_common/ui/Button";
 import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
 import clsx from "clsx";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -13,6 +13,8 @@ export default function ShareHeader() {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [checkNotToLook, setCheckNotToLook] = useState<boolean>(false);
+  const pathname = usePathname();
+
   const { isAuthor } = useAuthorCheckStore();
   const handleModalClose = () => {
     setModalOpen(false);
@@ -33,6 +35,12 @@ export default function ShareHeader() {
     toast("앞으로 해당 게시물이 보이지 않습니다.");
     router.push("/share/note");
   };
+
+  console.log(pathname);
+
+  if (pathname.endsWith("/comments")) {
+    return null;
+  }
 
   return (
     <>

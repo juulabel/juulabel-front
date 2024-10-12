@@ -9,17 +9,25 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { RxChatBubble } from "react-icons/rx";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;
+  id: number;
 }
 
-export default function LikeCommentFooter({ info }: Props) {
+export default function LikeCommentFooter({ info, id }: Props) {
   const [cookies] = useCookies(["accessToken"]);
   const queryClient = useQueryClient();
+
+  const router = useRouter();
+
+  const handleCommentsPage = () => {
+    router.push(`/share/note/${id}/comments`);
+  };
 
   const { mutate } = useMutation({
     mutationFn: ({ token, id }: { token: string; id: number }) =>
@@ -95,13 +103,15 @@ export default function LikeCommentFooter({ info }: Props) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div
+        className="flex cursor-pointer items-center gap-3"
+        onClick={handleCommentsPage}
+      >
         <Image
           src={"/svg/speech_bubble.svg"}
           width={30}
           height={30}
           alt="좋아요"
-          onClick={handleLikeClick}
         />
         <span className="text-[18px]">{info?.commentCount}</span>
       </div>
