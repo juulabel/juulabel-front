@@ -1,8 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { alcoholType } from "@/_config/alcoholType";
+import { IAlcoholTypeTab } from "@/_types/search/alcoholTypeTab";
 
-export default function AlcoholSlider() {
+interface AlcoholSliderProps {
+  onAlcoholTypeClick: (tab: IAlcoholTypeTab) => void; // Use the type here
+}
+
+export default function AlcoholSlider({
+  onAlcoholTypeClick,
+}: AlcoholSliderProps) {
   return (
     <div className="flex w-full flex-col px-4 pt-2">
       <div className="flex">
@@ -23,7 +30,14 @@ export default function AlcoholSlider() {
               href={"#"}
               className={`flex h-[74px] w-[74px] items-center justify-center rounded-full bg-cool-grayscale-100`}
             >
-              <button>
+              <button
+                onClick={() =>
+                  onAlcoholTypeClick({
+                    id: drink.key,
+                    value: drink.value,
+                  })
+                } // Trigger the handler on click
+              >
                 <Image
                   src={drink.image}
                   width={44}

@@ -33,14 +33,14 @@ Images, svg
 
 ## 기술 스택
 
-| 역할                   | 종류
-| --------------------- | ------------------------ | 
-| **Node**              | `22.4.0`                 | 
-| **Typescript**        | `5.5.4`                  | 
-| **framework**         | `Next.js 14`             | 
-| **package manager**   | `pnpm`                   |
-| **styling**           | `tailwindcss`            | 
-| **fetching**          | `tanstack query, axios`  | 
-| **formatting**        | `eslint, prettier`       | 
-| **deploy**            | `vercel`                 | 
-| **test**              | `jest, playwright`       | 
+| 역할                | 종류                    |
+| ------------------- | ----------------------- |
+| **Node**            | `22.4.0`                |
+| **Typescript**      | `5.5.4`                 |
+| **framework**       | `Next.js 14`            |
+| **package manager** | `pnpm`                  |
+| **styling**         | `tailwindcss`           |
+| **fetching**        | `tanstack query, axios` |
+| **formatting**      | `eslint, prettier`      |
+| **deploy**          | `vercel`                |
+| **test**            | `jest, playwright`      |
