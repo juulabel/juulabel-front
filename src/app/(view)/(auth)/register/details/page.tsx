@@ -101,7 +101,7 @@ export default function Page() {
     setGenderCheck(value);
     if (!genderCheck) {
       setGenderDisable(true);
-      setGender("None");
+      setGender("NONE");
     } else setGenderDisable(false);
   };
   const handleGender = (value: string) => {
