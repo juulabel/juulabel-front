@@ -29,7 +29,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
         headers: {
           Authorization: `Bearer ${cookie.accessToken}`,
         },
-      });      
+      });
       return res.data.result;
     },
   });
