@@ -1,9 +1,10 @@
 import BottomButton from "@/_common/BottomButton";
 import { getFlavors } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTastingNoteInformationStore } from "../../_store/tastingNote";
 import RadarChart from "./HexagonChart";
+import LevelSelector from "./LevelSelector";
 
 interface FlavorInfo {
   id: number;
@@ -27,20 +28,6 @@ interface FlavorScore {
   score: number;
 }
 
-interface IFlavorSelector {
-  flavorInfo: FlavorInfo;
-  levels: Level[];
-  onChange: () => void;
-}
-
-function FlavorSelector({ flavorInfo, levels, onChange }: IFlavorSelector) {
-  return (
-    <div className="flex flex-row">
-      <label className="text-base font-bold">{flavorInfo.name}</label>
-    </div>
-  );
-}
-
 interface IFlavorForm {
   handleStep: () => void;
 }
@@ -53,6 +40,7 @@ export default function FlavorForm({ handleStep }: IFlavorForm) {
   } = tastingNoteInformationStore;
 
   const [flavorScores, setFlavorScores] = useState<FlavorScore[]>([]);
+  const [selectedFlavorIds, setSelectedFlavorIds] = useState<number[]>([]);
 
   // 맛 데이터 포인트 생성
   const flavorChartData = flavorScores.map(({ flavorName, score }) => ({
@@ -77,17 +65,31 @@ export default function FlavorForm({ handleStep }: IFlavorForm) {
     }
   }, [flavorLevels]);
 
+  // `selectedFlavorIds` 변화에 따라 `flavorScores`를 `flavorLevels`을 참고하여 업데이트
   useEffect(() => {
-    console.log("flavorLevels", flavorLevels);
-  }, [flavorLevels]);
+    if (flavorLevels) {
+      setFlavorScores((prevScores) =>
+        prevScores.map((score) => {
+          const matchingLevel = flavorLevels
+            .find((flavorLevel) => flavorLevel.flavor.id === score.flavorId)
+            ?.levels.find((level) => selectedFlavorIds.includes(level.id));
+
+          return matchingLevel
+            ? { ...score, score: matchingLevel.score }
+            : score;
+        }),
+      );
+    }
+  }, [selectedFlavorIds, flavorLevels]);
 
   const handleNextButton = () => {
     // localStorage에 맛 저장
+    tastingNoteInformationStore.setFlavorLevelIds(selectedFlavorIds);
     handleStep(); // 다음 단계로 이동
   };
 
   return (
-    <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
+    <div className="mx-[18px] mt-6 flex flex-col pb-[102px]">
       {/* 타이틀 */}
       <div>
         <p className="text-xl font-bold text-cool-grayscale-800">
@@ -95,17 +97,26 @@ export default function FlavorForm({ handleStep }: IFlavorForm) {
           어떤가요?
         </p>
       </div>
-      <div className="flex justify-center">
+      <div className="mt-[20px] flex justify-center">
         <RadarChart dataPoints={flavorChartData} />
       </div>
-      <div className="flex flex-col gap-y-6">
-        {/* 맛의 정도 선택 */}
+      {/* 맛의 정도 선택 */}
+      <div className="mt-7 grid grid-cols-[auto,1fr] gap-x-[14px] gap-y-6">
+        <div />
+        <div className="flex justify-between px-2">
+          <span className="text-cool-grayscale-500">낮음</span>
+          <span className="text-cool-grayscale-500">높음</span>
+        </div>
         {flavorLevels?.map((flavorLevel) => (
-          <FlavorSelector
-            flavorInfo={flavorLevel.flavor}
-            levels={flavorLevel.levels}
-            onChange={() => {}}
-          />
+          <React.Fragment key={flavorLevel.flavor.id}>
+            <label className="text-base font-bold">
+              {flavorLevel.flavor.name}
+            </label>
+            <LevelSelector
+              levels={flavorLevel.levels}
+              setSelectedIds={setSelectedFlavorIds}
+            />
+          </React.Fragment>
         ))}
       </div>
       <BottomButton enableButton={true} onClick={handleNextButton}>
