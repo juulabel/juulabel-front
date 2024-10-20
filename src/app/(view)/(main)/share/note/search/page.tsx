@@ -7,14 +7,19 @@ import RelatedSearchResult from "@/_components/tasting-note/RelatedSearchResult"
 import TastingNoteSearchHeader from "@/_components/tasting-note/TastingNoteSearchHeader";
 import TraditionalDrinkInformationComponent from "@/_components/tasting-note/TraditionalDrinkInformationComponent";
 import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
+import { IAlcoholSearchResult } from "@/_types/search/alcoholSearchResult";
 import { IOfficialData } from "@/_types/tasting-note/officialData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import { useDebounce } from "@/_utils/useDebounce";
+import { getAlcoholSearchResult } from "@/app/api/search/getAlcoholSearchResult";
 import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 export default function Page() {
+  const [isBottom, setIsBottom] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [cookies] = useCookies(["accessToken"]);
   const [relatedSearchDataList, setRelatedSearchDataList] = useState<
     string[] | null
   >([]);
@@ -23,6 +28,11 @@ export default function Page() {
     useState<boolean>(false);
   const [openUnOfficialSearchDataList, setOpenUnOfficialSearchDataList] =
     useState<boolean>(false);
+  const [lastAlcoholicDrinksName, setLastAlcoholicDrinksName] = useState<
+    string | null | undefined
+  >(null);
+  const [isSearchDataLast, setIsSearchDataLast] = useState(false);
+
   const handleChangeSearchQuery = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -45,8 +55,30 @@ export default function Page() {
   }, [searchQuery, debouncedSearchQuery]);
 
   useEffect(() => {
-    console.log("SearchResult : ", searchResult);
-  }, [searchResult]);
+    const handleScroll = async () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight
+      ) {
+        console.log(isBottom);
+
+        if (!isBottom) {
+          setIsBottom(true);
+          if (openOfficialSearchDataList && !isSearchDataLast) {
+            await fetchAlcoholSearchData();
+          }
+        }
+      } else {
+        setIsBottom(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
 
   const handleCloseSearchList = () => {
     if (openOfficialSearchDataList) setOpenOfficialSearchDataList(false);
@@ -65,6 +97,27 @@ export default function Page() {
       setOpenOfficialSearchDataList(true); //임시 테스트용
     }
   };
+
+  const fetchAlcoholSearchData = async () => {
+    const data = await getAlcoholSearchResult(
+      cookies.accessToken,
+      searchQuery,
+      lastAlcoholicDrinksName,
+    );
+
+    setSearchResult(data?.alcoholicDrinks ?? []);
+    setIsSearchDataLast(data?.isLast ?? false);
+    setLastAlcoholicDrinksName(
+      data?.alcoholicDrinks[data.alcoholicDrinks.length - 1].name,
+    );
+
+    if (data?.alcoholicDrinks.length ?? 0 > 0) {
+      setOpenOfficialSearchDataList(true);
+    } else {
+      setOpenUnOfficialSearchDataList(true);
+    }
+  };
+
   return (
     <>
       {!openOfficialSearchDataList && !openUnOfficialSearchDataList && (
@@ -105,8 +158,8 @@ export default function Page() {
                 setSearchQuery={(recentSearch: string) =>
                   setSearchQuery(recentSearch)
                 }
-                setSearchResult={(searchResult: IOfficialData[]) =>
-                  setSearchResult(searchResult)
+                setSearchResult={(searchResult: IAlcoholSearchResult) =>
+                  setSearchResult(searchResult.alcoholicDrinks)
                 }
                 handleOfficialDataSearchList={() =>
                   setOpenOfficialSearchDataList(true)
@@ -131,6 +184,8 @@ export default function Page() {
           }
           handleClearSearchQuery={handleClearSearchQuery}
           handleCloseSearchList={handleCloseSearchList}
+          isBottom={isBottom}
+          isLast={isSearchDataLast}
         />
       )}
       {openUnOfficialSearchDataList && (

@@ -7,25 +7,24 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function OfficialDataThumbnail({
-  productName,
+  name,
   alcoholContent,
   alcoholType,
-  alcoholThumbnail,
+  thumbnail,
   brewery,
-  breweryLocation,
 }: IOfficialData) {
   const router = useRouter();
 
   const handleClick = () => {
     router.push(
       `/note/write?productName=${encodeURIComponent(
-        productName,
+        name,
       )}&alcoholContent=${encodeURIComponent(
         alcoholContent,
       )}&alcoholType=${encodeURIComponent(
-        alcoholType,
-      )}&brewery=${brewery ? encodeURIComponent(brewery) : ""}&breweryLocation=${
-        breweryLocation ? encodeURIComponent(breweryLocation) : ""
+        alcoholType.name,
+      )}&brewery=${brewery ? encodeURIComponent(brewery.name) : ""}&breweryLocation=${
+        brewery.region ? encodeURIComponent(brewery.region) : ""
       }`,
     );
   };
@@ -37,12 +36,12 @@ export default function OfficialDataThumbnail({
     >
       <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
         <Caption type="primary" className="absolute left-2 top-2 z-10">
-          {alcoholType}
+          {alcoholType.name}
         </Caption>
         <Image
           src={
-            alcoholThumbnail ??
-            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType)}.png`
+            // thumbnail ??
+            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType.name)}.png`
           }
           alt="시음노트 썸네일"
           fill
@@ -50,7 +49,7 @@ export default function OfficialDataThumbnail({
         />
       </div>
       <div className="mb-[1%] text-base font-medium text-cool-grayscale-800">
-        {productName}
+        {name}
       </div>
       <div className="flex flex-row items-center">
         <Image
@@ -60,7 +59,9 @@ export default function OfficialDataThumbnail({
           alt="위치 아이콘"
           className="mr-[1%]"
         />
-        <p className="text-sm font-normal text-cool-grayscale-500">{brewery}</p>
+        <p className="text-sm font-normal text-cool-grayscale-500">
+          {brewery.name}
+        </p>
       </div>
     </div>
   );

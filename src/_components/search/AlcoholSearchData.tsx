@@ -4,6 +4,7 @@ import OfficialDataThumbnail from "./AlcoholSearchDataThumbnailThumbnail";
 import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import { useMemo } from "react";
 import AlcoholTypeLoader from "../search/AlcoholTypeLoader";
+import Spinner from "./Spinner";
 
 interface AlcoholSearchDataProps {
   officialDataList: IAlcoholSearchData[] | [];
@@ -37,7 +38,10 @@ export default function AlcoholSearchData({
           </>
         ))}
       </div>
-      <AlcoholTypeLoader spinnerVisibility={spinnerVisibility} />
+      <div className="relative flex flex-col items-center justify-between pb-10">
+        <Spinner spinnerVisibility={spinnerVisibility} />
+        <AlcoholTypeLoader />
+      </div>
     </>
   );
 }

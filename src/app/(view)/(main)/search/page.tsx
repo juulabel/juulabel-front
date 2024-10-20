@@ -59,6 +59,10 @@ export default function Page() {
       value: "가나다 순",
     });
 
+  const [lastAlcoholicDrinksName, setLastAlcoholicDrinksName] = useState<
+    string | null | undefined
+  >(null);
+
   const [isTypeDataLst, setIsTypeDataLst] = useState(false);
   const [isSearchDataLast, setIsSearchDataLast] = useState(false);
 
@@ -134,6 +138,8 @@ export default function Page() {
     if (openOfficialSearchDataList) setOpenOfficialSearchDataList(false);
     else if (openUnOfficialSearchDataList)
       setOpenUnOfficialSearchDataList(false);
+    setLastAlcoholicDrinksName(null);
+    setIsSearchDataLast(false);
   };
 
   const handleQuerySearch = async (
@@ -160,10 +166,17 @@ export default function Page() {
   };
 
   const fetchAlcoholSearchData = async () => {
-    const data = await getAlcoholSearchResult(cookies.accessToken, searchQuery);
+    const data = await getAlcoholSearchResult(
+      cookies.accessToken,
+      searchQuery,
+      lastAlcoholicDrinksName,
+    );
 
     setSearchResult(data?.alcoholicDrinks ?? []);
     setIsSearchDataLast(data?.isLast ?? false);
+    setLastAlcoholicDrinksName(
+      data?.alcoholicDrinks[data.alcoholicDrinks.length - 1].name,
+    );
 
     if (data?.alcoholicDrinks.length ?? 0 > 0) {
       setOpenOfficialSearchDataList(true);
@@ -268,7 +281,10 @@ export default function Page() {
           onSortedTypeClick={handleSortedType}
           isBottom={isBottom}
           isLast={isTypeDataLst}
-          handleCloseSearchList={() => setOpenAlcoholTypeDataList(false)}
+          handleCloseSearchList={() => {
+            setOpenAlcoholTypeDataList(false);
+            setIsTypeDataLst(false);
+          }}
         />
       )}
 
@@ -282,7 +298,7 @@ export default function Page() {
           handleClearSearchQuery={handleClearSearchQuery}
           handleCloseSearchList={handleCloseSearchList}
           isBottom={isBottom}
-          isLast={true}
+          isLast={isSearchDataLast}
         />
       )}
       {openUnOfficialSearchDataList && searchResult.length == 0 && (
