@@ -3,6 +3,7 @@
 import { IAlcoholSearchResult } from "@/_types/search/alcoholSearchResult";
 import { getAlcoholSearchResult } from "@/app/api/search/getAlcoholSearchResult";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 interface IRecentSearchList {
   localStorageKey: string;
@@ -17,6 +18,7 @@ export default function RecentSearchList({
   setSearchResult,
   handleUnOfficialDataSearchList,
 }: IRecentSearchList) {
+  const [cookies] = useCookies(["accessToken"]);
   const [recentSearchList, setRecentSearchList] = useState<string[]>([]);
   useEffect(() => {
     const localStorageRecentSearchList = localStorage.getItem(localStorageKey);
@@ -24,7 +26,7 @@ export default function RecentSearchList({
       ? JSON.parse(localStorageRecentSearchList)
       : [];
     setRecentSearchList(parsedRecentSearchList);
-  }, []);
+  });
 
   const handleDeleteRecentSearch = (value: string) => {
     const updatedRecentSearchList = recentSearchList.filter(
@@ -43,7 +45,11 @@ export default function RecentSearchList({
   };
 
   const onClickRecentSearchData = async (recentSearch: string) => {
-    const data = await getAlcoholSearchResult("", recentSearch);
+    const data = await getAlcoholSearchResult(
+      cookies.accessToken,
+      recentSearch,
+      null,
+    );
     if (data) {
       setSearchQuery(recentSearch);
       setSearchResult(data);

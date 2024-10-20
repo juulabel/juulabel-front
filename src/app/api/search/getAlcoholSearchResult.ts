@@ -6,11 +6,15 @@ import { IAlcoholSearchResult } from "@/_types/search/alcoholSearchResult";
 export async function getAlcoholSearchResult(
   accessToken: string,
   search: string,
+  lastAlcoholicDrinksName: string | null | undefined,
 ): Promise<IAlcoholSearchResult | null> {
   try {
-    const params = {
+    const params: Record<string, string> = {
       search: search,
       pageSize: "15",
+      ...(lastAlcoholicDrinksName && {
+        lastAlcoholicDrinksName: lastAlcoholicDrinksName,
+      }),
     };
 
     // Create a query string from the params object

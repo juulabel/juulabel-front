@@ -9,6 +9,7 @@ import { GoChevronLeft } from "react-icons/go";
 import { IAlcoholSortedType } from "@/_types/search/alcoholSortedType";
 import AlcoholTypeLoader from "./AlcoholTypeLoader";
 import AlcoholTypeDataThumbnail from "./AlcoholTypeDataThumbnail";
+import Spinner from "./Spinner";
 
 interface AlcoholTypeDataProps {
   AlcoholSearchTypeDataList: IAlcoholTypeData[] | [];
@@ -143,7 +144,10 @@ export default function AlcoholTypeData({
           ),
         )}
       </div>
-      <AlcoholTypeLoader spinnerVisibility={spinnerVisibility} />
+      <div className="relative flex flex-col items-center justify-between pb-10">
+        <Spinner spinnerVisibility={spinnerVisibility} />
+        <AlcoholTypeLoader />
+      </div>
     </div>
   );
 }
