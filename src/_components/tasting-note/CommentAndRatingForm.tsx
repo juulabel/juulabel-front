@@ -14,6 +14,7 @@ import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
+import Rating from "./Rating";
 import TopHeaderWithButton from "./TopHeaderWithButton";
 
 interface Inputs {
@@ -53,9 +54,9 @@ export default function CommentAndRatingForm({
   const [cookie] = useCookies(["accessToken"]);
   const [content, setContent] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState<number>(0);
   const [images, setImages] = useState<FileInfo[]>([]);
-  const [isActiveButton, setIsActiveButton] = useState(true);
+  const [isActiveButton, setIsActiveButton] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -78,6 +79,12 @@ export default function CommentAndRatingForm({
       images.map((image) => image.file),
     );
   }, [images, setValue]);
+
+  useEffect(() => {
+    if (rating > 0) {
+      setIsActiveButton(true);
+    }
+  }, [rating]);
 
   // 부연설명 입력폼 크기 조절
   const handleResizeHeight = () => {
@@ -209,8 +216,10 @@ export default function CommentAndRatingForm({
           </p>
         </div>
         <div className="flex flex-col">
+          {/* 부연설명 파트 */}
           <div>
             <div className="flex items-center justify-between">
+              {/* 부연설명 왼쪽 타이틀 */}
               <div className="flex items-center gap-x-3">
                 <span className="text-base font-bold text-cool-grayscale-700">
                   부연설명(최대 1,200자)
@@ -219,6 +228,7 @@ export default function CommentAndRatingForm({
                   선택사항
                 </span>
               </div>
+              {/* 부연설명 입력된 글자 수 */}
               <div className="flex items-center">
                 <span className="text-sm font-normal text-cool-grayscale-400">
                   {content.length.toLocaleString()}
@@ -228,6 +238,7 @@ export default function CommentAndRatingForm({
                 </span>
               </div>
             </div>
+            {/* 부연설명 입력폼 */}
             <textarea
               value={content}
               onChange={handleContentChange}
@@ -241,11 +252,15 @@ export default function CommentAndRatingForm({
           <div className="relative">
             <hr className="absolute left-1/2 h-1 w-screen -translate-x-1/2 transform border-0 bg-cool-grayscale-50" />
           </div>
+
+          {/* 달점 파트 */}
           <div className="mt-4 text-center text-base font-bold text-cool-grayscale-800">
             술에 대한 달점을 매겨주세요!
           </div>
           <div className="mt-[2px] flex items-center justify-center">
-            <span className="text-2xl font-bold text-primary-700">0</span>
+            <span className="text-2xl font-bold text-primary-700">
+              {rating}
+            </span>
             <span className="ml-[5px] text-base text-cool-grayscale-500">
               /5
             </span>
@@ -253,38 +268,12 @@ export default function CommentAndRatingForm({
               점
             </span>
           </div>
+
+          {/* 달점 입력폼 */}
           <div className="mb-6 mt-2 flex justify-center gap-x-3">
-            <Image
-              width={48}
-              height={48}
-              src="/svg/moonpoint_default.svg"
-              alt="달점"
-            />
-            <Image
-              width={48}
-              height={48}
-              src="/svg/moonpoint_default.svg"
-              alt="달점"
-            />
-            <Image
-              width={48}
-              height={48}
-              src="/svg/moonpoint_default.svg"
-              alt="달점"
-            />
-            <Image
-              width={48}
-              height={48}
-              src="/svg/moonpoint_default.svg"
-              alt="달점"
-            />
-            <Image
-              width={48}
-              height={48}
-              src="/svg/moonpoint_default.svg"
-              alt="달점"
-            />
+            <Rating value={rating} onChange={(value) => setRating(value)} />
           </div>
+
           {/* 아래부터는 스크롤 고정 부분 */}
           <div className="sticky bottom-0 bg-white">
             {/* 이미지 미리보기  UI*/}
@@ -341,7 +330,6 @@ export default function CommentAndRatingForm({
               )}
               htmlFor="image-files"
             >
-              {/* <div className="flex items-center justify-start"> */}
               <div className="max-h-fit max-w-fit p-[3px]">
                 <ImageIcon
                   width={24}
