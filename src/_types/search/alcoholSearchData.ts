@@ -1,4 +1,4 @@
-export interface IOfficialData {
+export interface IAlcoholSearchData {
   id: number;
   name: string;
   alcoholContent: number;

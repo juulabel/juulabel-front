@@ -2,29 +2,31 @@
 
 import Caption from "@/_common/Caption";
 import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
-import { IOfficialData } from "@/_types/tasting-note/officialData";
+import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
+import { cn } from "@/_utils/commons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function OfficialDataThumbnail({
+export default function AlcoholSearchDataThumbnail({
+  id,
   name,
-  alcoholContent,
   alcoholType,
   thumbnail,
+  alcoholContent,
   brewery,
-}: IOfficialData) {
+}: IAlcoholSearchData) {
   const router = useRouter();
 
   const handleClick = () => {
     router.push(
-      `/note/write?productName=${encodeURIComponent(
+      `/tasting-note/write?productName=${encodeURIComponent(
         name,
       )}&alcoholContent=${encodeURIComponent(
-        alcoholContent,
+        "alcoholContent",
       )}&alcoholType=${encodeURIComponent(
         alcoholType.name,
       )}&brewery=${brewery ? encodeURIComponent(brewery.name) : ""}&breweryLocation=${
-        brewery.region ? encodeURIComponent(brewery.region) : ""
+        brewery ? encodeURIComponent(brewery.region) : ""
       }`,
     );
   };
@@ -51,7 +53,7 @@ export default function OfficialDataThumbnail({
       <div className="mb-[1%] text-base font-medium text-cool-grayscale-800">
         {name}
       </div>
-      <div className="flex flex-row items-center">
+      <div className="mb-[2%] flex flex-row items-center">
         <Image
           width={16}
           height={16}
@@ -61,6 +63,27 @@ export default function OfficialDataThumbnail({
         />
         <p className="text-sm font-normal text-cool-grayscale-500">
           {brewery.name}
+        </p>
+      </div>
+      <div className="flex flex-row items-center gap-1">
+        <Image
+          width={16}
+          height={16}
+          src={cn(
+            alcoholContent == 0
+              ? "/svg/gray_moon_score_icon.svg"
+              : "/svg/moon_score_icon.svg",
+          )}
+          alt="위치 아이콘"
+          className="mr-[1%]"
+        />
+        <p
+          className={cn(
+            "text-sm font-normal",
+            alcoholContent == 0 ? "text-slate-400" : "text-slate-800",
+          )}
+        >
+          {alcoholContent}
         </p>
       </div>
     </div>

@@ -6,18 +6,17 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
 
-interface IUnOfficialDataSearchResult {
+interface IDataNotFounded {
   query: string;
   closeUnOfficialDataSearchResult: () => void;
   handleClearSearchQuery: () => void;
 }
 
-export default function UnOfficialDataSearchResult({
+export default function DataNotFounded({
   query,
   closeUnOfficialDataSearchResult,
   handleClearSearchQuery,
-}: IUnOfficialDataSearchResult) {
-  const router = useRouter();
+}: IDataNotFounded) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   useEffect(() => {
     setSearchQuery(query);
@@ -27,7 +26,10 @@ export default function UnOfficialDataSearchResult({
     <div className="h-full w-full max-w-[560px]">
       <div className="mx-[2%] my-2 flex flex-row items-center">
         <div className="mx-[2%] cursor-pointer">
-          <GoChevronLeft size={24} onClick={() => router.back()} />
+          <GoChevronLeft
+            size={24}
+            onClick={() => closeUnOfficialDataSearchResult()}
+          />
         </div>
         <div className="flex h-11 w-full flex-row items-center rounded-[6px] bg-cool-grayscale-100">
           <Image
@@ -42,7 +44,6 @@ export default function UnOfficialDataSearchResult({
             onClick={() => closeUnOfficialDataSearchResult()}
           >
             <input
-              readOnly
               className="w-full bg-cool-grayscale-100 focus:outline-none"
               type="text"
               value={searchQuery}

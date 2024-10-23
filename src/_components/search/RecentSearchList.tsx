@@ -1,10 +1,7 @@
 "use client";
 
 import { IAlcoholSearchResult } from "@/_types/search/alcoholSearchResult";
-import { IOfficialData } from "@/_types/tasting-note/officialData";
 import { getAlcoholSearchResult } from "@/app/api/search/getAlcoholSearchResult";
-import { getOfficialDataList } from "@/app/api/tasting-note/getOfficialDataList";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
@@ -13,7 +10,6 @@ interface IRecentSearchList {
   setSearchQuery: (value: string) => void;
   setSearchResult: (data: IAlcoholSearchResult) => void;
   handleUnOfficialDataSearchList: () => void;
-  handleOfficialDataSearchList: () => void;
 }
 
 export default function RecentSearchList({
@@ -21,7 +17,6 @@ export default function RecentSearchList({
   setSearchQuery,
   setSearchResult,
   handleUnOfficialDataSearchList,
-  handleOfficialDataSearchList,
 }: IRecentSearchList) {
   const [cookies] = useCookies(["accessToken"]);
   const [recentSearchList, setRecentSearchList] = useState<string[]>([]);
@@ -31,7 +26,7 @@ export default function RecentSearchList({
       ? JSON.parse(localStorageRecentSearchList)
       : [];
     setRecentSearchList(parsedRecentSearchList);
-  }, [localStorageKey]);
+  });
 
   const handleDeleteRecentSearch = (value: string) => {
     const updatedRecentSearchList = recentSearchList.filter(
@@ -58,7 +53,6 @@ export default function RecentSearchList({
     if (data) {
       setSearchQuery(recentSearch);
       setSearchResult(data);
-      handleOfficialDataSearchList();
     } else {
       setSearchQuery(recentSearch);
       handleUnOfficialDataSearchList();
@@ -69,19 +63,19 @@ export default function RecentSearchList({
     <div>
       <div className="mx-[4%] my-2 flex justify-between">
         <p className="text-lg font-bold text-cool-grayscale-700">최근 검색어</p>
-        <p
+        <button
           className="cursor-pointer text-base font-medium text-cool-grayscale-500"
           onClick={handleRecentSearchListClear}
         >
           전체 삭제
-        </p>
+        </button>
       </div>
       <div>
         {recentSearchList && recentSearchList.length > 0
           ? recentSearchList.map((recentSearch, index: number) => (
               <div
                 key={index}
-                className="mx-[4%] my-2 flex items-center justify-between"
+                className="mx-[4%] flex items-center justify-between py-1"
               >
                 <p
                   className="cursor-pointer text-base text-cool-grayscale-700"
@@ -89,11 +83,9 @@ export default function RecentSearchList({
                 >
                   {recentSearch}
                 </p>
-                <Image
-                  width={16}
-                  height={16}
+                <img
                   src="/images/icons/addingBtn/cancel.png"
-                  className="cursor-pointer"
+                  className="h-[4%] w-[4%] cursor-pointer"
                   alt="취소 버튼"
                   onClick={() => handleDeleteRecentSearch(recentSearch)}
                 />
