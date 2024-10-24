@@ -63,7 +63,9 @@ export default function NoteThumbnail({
       <div className="mb-1 flex items-center space-x-2">
         <div className="relative h-6 w-6 overflow-hidden rounded-full">
           <Image
-            src={profileImage ?? `/placeholders/profile/default_profile.png`}
+            src={
+              profileImage ?? `/images/placeholders/profile/default_profile.png`
+            }
             alt="작성자 이미지"
             sizes="10vw"
             fill

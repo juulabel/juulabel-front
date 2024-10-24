@@ -98,12 +98,10 @@ export default function Page() {
       const data = await getRelatedSearchData(searchQuery);
       setRelatedSearchDataList(data);
     };
-    console.log(debouncedSearchQuery);
 
     if (debouncedSearchQuery) getRelatedSearchDataList();
     else setRelatedSearchDataList([]);
-    console.log(relatedSearchDataList);
-  }, [debouncedSearchQuery, relatedSearchDataList, searchQuery]);
+  }, [debouncedSearchQuery]);
 
   useEffect(() => {
     const handleScroll = async () => {
@@ -191,8 +189,10 @@ export default function Page() {
       selectedTab.id,
       selectedSortedType.id,
     );
+
     if (isReplacing) {
       setalcoholTypeData(data?.alcoholicDrinks.content ?? []);
+      setIsTypeDataLst(false);
     } else {
       setalcoholTypeData((prevList) => [
         ...prevList,

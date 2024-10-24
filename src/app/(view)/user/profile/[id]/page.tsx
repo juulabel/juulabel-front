@@ -2,7 +2,7 @@
 
 import FollowButton from "@/_common/FollowButton";
 import Loading from "@/_common/Loading";
-import UserHeader from "@/_components/user/UserHeader";
+import UserHeader from "@/_components/user/User2Header";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
