@@ -9,7 +9,7 @@ export default function ShareTabButton() {
   return (
     <div className="flex h-11">
       <Link
-        href="notes"
+        href="note"
         className={cn(
           "flex w-1/2 items-center justify-center border-b border-cool-grayscale-300 px-2 py-2.5 font-medium text-cool-grayscale-500",
           pathname === "/share/note" && "border-b-2 border-black text-black",
