@@ -364,7 +364,11 @@ export default function CommentAndRatingForm({
       </div>
       {modalOpen && (
         <Modal
-          modalTitle={"비공개로 게시물을 등록하시겠어요?"}
+          modalTitle={
+            isPrivate
+              ? "비공개로 게시물을 등록하시겠어요?"
+              : "게시물을 등록하시겠어요?"
+          }
           primaryBtnText={"등록하기"}
           handlePrimaryBtn={() => {
             setModalOpen(false);
