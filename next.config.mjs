@@ -5,7 +5,7 @@ const nextConfig = {
     domains: [
       "via.placeholder.com",
       "juulabel.s3.ap-northeast-2.amazonaws.com",
-      "images.pexels.com"
+      "images.pexels.com",
     ],
     remotePatterns: [
       {

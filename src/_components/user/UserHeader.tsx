@@ -18,7 +18,7 @@ export default function UserHeader({
       <div
         className={cn(
           "mx-[4%] mb-4 flex h-16 flex-row items-center justify-between",
-          bottomBorder && "border-b border-gray-300"
+          bottomBorder && "border-b border-gray-300",
         )}
       >
         <div>

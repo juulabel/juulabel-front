@@ -233,7 +233,7 @@ export default function Page() {
               <>
                 {noteList && noteList.length > 0 ? (
                   noteList.map((note) => (
-                    <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
+                    <div key={note.TastingNoteId} className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
                       <NoteThumbnail key={note.TastingNoteId} {...note} />
                     </div>
                   ))

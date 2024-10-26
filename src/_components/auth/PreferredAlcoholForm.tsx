@@ -34,8 +34,6 @@ export default function PreferredAlcoholForm({
   if (isLoading) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
 
-  
-
   return (
     <div className="mx-[4%] mt-6 flex flex-row flex-wrap">
       {alcoholType.map((drink) => (

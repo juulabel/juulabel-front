@@ -72,7 +72,7 @@ export default function NoteThumbnail({
       </div>
       <div className="mb-1 flex items-center space-x-2">
         <div className="relative h-6 w-6 overflow-hidden rounded-full">
-        <Image
+          <Image
             src={
               profileImage ?? `/images/placeholders/profile/default_profile.png`
             }

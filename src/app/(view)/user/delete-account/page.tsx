@@ -49,7 +49,7 @@ export default function Page() {
             onClick={() => {
               router.push("/share/note");
             }}
-            children={"로그인 화면으로 가기"}
+            children="로그인 화면으로 가기"
           />
         </div>
       ) : (

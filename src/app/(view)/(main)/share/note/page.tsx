@@ -15,8 +15,7 @@ export default function Notes() {
     error,
   } = useQuery<INoteThumbnail[]>({
     queryKey: ["notes"],
-    queryFn: async () => {      
-      
+    queryFn: async () => {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/shared-space/tasting-notes?pageSize=10`,
         {
@@ -28,7 +27,7 @@ export default function Notes() {
       );
 
       console.log(res.data);
-      
+
       return res.data.result.tastingNoteSummaries.content;
     },
   });

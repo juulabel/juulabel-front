@@ -6,8 +6,8 @@ export const checkNickname = async (nickname: string) => {
       `/v1/api/members/nicknames/${nickname}/exists`,
     );
     if (response.data) {
-        console.log(response);
-        
+      console.log(response);
+
       if (response.data.success) {
         return true;
       } else {
