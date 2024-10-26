@@ -8,8 +8,8 @@ import axios from "axios";
 import Image from "next/image";
 
 interface IPreferredAlcohol {
-  alcoholTypes: string[];
-  onChangeAlcoholType: (value: string) => void;
+  alcoholTypes: number[];
+  onChangeAlcoholType: (value: number) => void;
 }
 
 export default function PreferredAlcoholForm({
@@ -26,13 +26,15 @@ export default function PreferredAlcoholForm({
   });
   const handlePreferredAlcohol = (
     event: React.MouseEvent<HTMLButtonElement>,
-    value: string,
+    value: number,
   ) => {
     event.preventDefault();
     onChangeAlcoholType(value);
   };
   if (isLoading) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
+
+  
 
   return (
     <div className="mx-[4%] mt-6 flex flex-row flex-wrap">
@@ -43,13 +45,13 @@ export default function PreferredAlcoholForm({
         >
           <div
             className={`mx-[1%] flex h-28 w-28 items-center justify-center rounded-full ${
-              alcoholTypes && alcoholTypes.includes(drink.value)
+              alcoholTypes && alcoholTypes.includes(drink.key)
                 ? "border-2 border-[#FF823C] bg-[#FF823C] bg-opacity-10"
                 : "bg-cool-grayscale-100"
             }`}
           >
             <button
-              onClick={(event) => handlePreferredAlcohol(event, drink.value)}
+              onClick={(event) => handlePreferredAlcohol(event, drink.key)}
             >
               <Image
                 src={drink.image}

@@ -27,6 +27,7 @@ export default function NoteThumbnail({
   alcoholTypeName,
   createdAt,
   hasMultipleImages,
+  isPrivate,
 }: INoteThumbnail) {
   return (
     <Link
@@ -46,9 +47,18 @@ export default function NoteThumbnail({
             height={24}
           />
         )}
+        {hasMultipleImages && (
+          <Image
+            className="absolute right-9 top-2 z-10"
+            src="/svg/lock.svg"
+            alt="복수 이미지 아이콘"
+            width={24}
+            height={24}
+          />
+        )}
         <Image
           src={
-            // thumbnailPath ??
+            thumbnailPath ??
             `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
           }
           alt="시음노트 썸네일"
@@ -62,7 +72,7 @@ export default function NoteThumbnail({
       </div>
       <div className="mb-1 flex items-center space-x-2">
         <div className="relative h-6 w-6 overflow-hidden rounded-full">
-          <Image
+        <Image
             src={
               profileImage ?? `/images/placeholders/profile/default_profile.png`
             }

@@ -78,13 +78,13 @@ export default function Navigation() {
           <div className="hidden text-xs min-[350px]:block">장터</div>
         </Link>
         <Link
-          href="/mypage"
+          href="/user/my-space"
           className={cn(
             "flex w-1/5 flex-col items-center justify-center text-cool-grayscale-500",
-            pathname.startsWith("/mypage") && "text-cool-grayscale-800",
+            pathname.startsWith("/user/my-space") && "text-cool-grayscale-800",
           )}
         >
-          {pathname.startsWith("/mypage") ? (
+          {pathname.startsWith("/user/my-space") ? (
             <MypageSvg className="mb-1 w-[32px] fill-cool-grayscale-800" />
           ) : (
             <MypageSvg className="mb-1 w-[32px] fill-cool-grayscale-500" />

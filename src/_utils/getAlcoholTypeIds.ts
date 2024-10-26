@@ -1,6 +1,6 @@
 import { alcoholType } from "@/_config/alcoholType";
 
-export const getAlocholTypeIds = (selectedAlcoholTypes: string[]) => {
+export const getAlocholTypeIds = (selectedAlcoholTypes: number[]) => {
   const typeMap = alcoholType.reduce(
     (acc, type) => {
       acc[type.value] = type.key;

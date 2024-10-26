@@ -16,7 +16,7 @@ export default function GenderForm({
   genderDisable,
   onChangeGenderCheck,
   onChangeGender,
-}: IGender) {
+}: IGender) {  
   const handleGender = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onChangeGender(
