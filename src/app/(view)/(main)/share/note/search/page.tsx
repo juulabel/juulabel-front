@@ -1,9 +1,9 @@
 "use client";
 
-import RecentSearchList from "@/_common/RecentSearchList";
+import RecentSearchList from "@/_components/search/RecentSearchList";
 import SearchData from "@/_common/SearchData";
 import OfficialDataSearchResult from "@/_components/tasting-note/OfficalDataSearchResult";
-import RelatedSearchResult from "@/_components/tasting-note/RelatedSearchResult";
+import RelatedSearchResult from "@/_components/search/RelatedSearchResult";
 import TastingNoteSearchHeader from "@/_components/tasting-note/TastingNoteSearchHeader";
 import TraditionalDrinkInformationComponent from "@/_components/tasting-note/TraditionalDrinkInformationComponent";
 import UnOfficialDataSearchResult from "@/_components/tasting-note/UnOfficialDataSearchResult";
@@ -20,9 +20,9 @@ export default function Page() {
   const [isBottom, setIsBottom] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [cookies] = useCookies(["accessToken"]);
-  const [relatedSearchDataList, setRelatedSearchDataList] = useState<
-    string[] | null
-  >([]);
+  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>(
+    [],
+  );
   const [searchResult, setSearchResult] = useState<IOfficialData[] | []>([]);
   const [openOfficialSearchDataList, setOpenOfficialSearchDataList] =
     useState<boolean>(false);
@@ -42,13 +42,12 @@ export default function Page() {
     setSearchQuery("");
   };
 
-  const debouncedSearchQuery = useDebounce(searchQuery, 1000);
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    //작성하는 동작을 1초 이상 멈추면 연관검색어 API 동작
     const getRelatedSearchDataList = async () => {
       const data = await getRelatedSearchData(searchQuery);
-      setRelatedSearchDataList(data);
+      setRelatedSearchDataList(data ?? []);
     };
     if (debouncedSearchQuery) getRelatedSearchDataList();
     else setRelatedSearchDataList([]);
@@ -60,8 +59,6 @@ export default function Page() {
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight
       ) {
-        console.log(isBottom);
-
         if (!isBottom) {
           setIsBottom(true);
           if (openOfficialSearchDataList && !isSearchDataLast) {
@@ -131,8 +128,7 @@ export default function Page() {
             handleQuerySearch={handleQuerySearch}
           />
           <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
-          {relatedSearchDataList &&
-            relatedSearchDataList.length > 0 &&
+          {relatedSearchDataList.length > 0 &&
             relatedSearchDataList.map((data: string, index: number) => (
               <RelatedSearchResult
                 key={index}
@@ -158,12 +154,10 @@ export default function Page() {
                 setSearchQuery={(recentSearch: string) =>
                   setSearchQuery(recentSearch)
                 }
-                setSearchResult={(searchResult: IAlcoholSearchResult) =>
-                  setSearchResult(searchResult.alcoholicDrinks)
-                }
-                handleOfficialDataSearchList={() =>
-                  setOpenOfficialSearchDataList(true)
-                }
+                setSearchResult={(searchResult: IAlcoholSearchResult) => {
+                  setSearchResult(searchResult.alcoholicDrinks);
+                  setOpenOfficialSearchDataList(true);
+                }}
                 handleUnOfficialDataSearchList={() =>
                   setOpenUnOfficialSearchDataList
                 }
