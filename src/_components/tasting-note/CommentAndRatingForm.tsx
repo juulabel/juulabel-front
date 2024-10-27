@@ -191,7 +191,6 @@ export default function CommentAndRatingForm({
       formData.append("files", image);
     });
 
-    // API POST
     try {
       const response = await formInstance({
         method: isEditMode ? "put" : "post",
@@ -206,6 +205,10 @@ export default function CommentAndRatingForm({
 
       // 성공 시에 상세페이지로 redirect
       if (response.data.success) {
+        const successMessage = isEditMode
+          ? "시음노트 수정이 완료되었어요."
+          : "시음노트 작성이 완료되었어요.";
+        toast(successMessage);
         router.push(`/share/note/${response.data.result.id}`);
         router.refresh();
       }

@@ -2,10 +2,12 @@
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
 import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
+import { useDeleteTastingNote } from "@/app/api/tasting-note/deleteTastingNote";
 import clsx from "clsx";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
 export default function ShareHeader() {
@@ -117,14 +119,28 @@ function OwnerModalContent({
 }) {
   const router = useRouter();
   const params = useParams();
+  const [cookie] = useCookies(["accessToken"]);
+  const { deleteTastingNote } = useDeleteTastingNote();
+
   const handleEditButtonClick = () => {
     const postId = params.id; // params에서 id를 가져옴
     if (postId) {
       router.push(`/share/note/${postId}/edit`);
     } else {
-      toast("게시물 ID를 찾을 수 없습니다.");
+      toast("시음노트 ID를 찾을 수 없습니다.");
     }
   };
+
+  const handleDeleteButtonClick = async () => {
+    const tastingNoteId = params.id; // params에서 id를 가져옴
+    if (tastingNoteId) {
+      console.log("tastingNoteId", tastingNoteId);
+      deleteTastingNote(Number(tastingNoteId));
+    } else {
+      toast("시음노트 ID를 찾을 수 없습니다.");
+    }
+  };
+
   return (
     <div className="flex w-full flex-col gap-3.5 px-3">
       <Button
@@ -137,6 +153,7 @@ function OwnerModalContent({
       <Button
         variant="secondary"
         className="h-[40px] w-full rounded text-[14px] text-cool-grayscale-500"
+        onClick={handleDeleteButtonClick}
       >
         게시물 삭제하기
       </Button>
