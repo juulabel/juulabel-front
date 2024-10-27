@@ -26,7 +26,7 @@ export default function RecentSearchList({
       ? JSON.parse(localStorageRecentSearchList)
       : [];
     setRecentSearchList(parsedRecentSearchList);
-  });
+  }, [localStorageKey]);
 
   const handleDeleteRecentSearch = (value: string) => {
     const updatedRecentSearchList = recentSearchList.filter(
