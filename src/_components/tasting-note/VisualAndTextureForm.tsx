@@ -1,5 +1,6 @@
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { cn } from "@/_utils/commons";
 import {
   getColors,
@@ -7,6 +8,7 @@ import {
 } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import LevelSelector from "./LevelSelector";
@@ -83,8 +85,11 @@ export default function VisualAndTextureForm({
   const [enableCheckConfirmButton, setEnableCheckConfirmButton] =
     useState(false); // 바텀시트의 '선택완료' 버튼 활성화 여부
   const [showBottomSheet, setShowBottomSheet] = useState(false);
-
   const [selectedSensoryIds, setSelectedSensoryIds] = useState<number[]>([]); // 선택된 촉각 정보
+
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
+  const { tastingNoteRequest } = useTastingNoteStore();
 
   // 술 색 정보 조회
   const { data: colors } = useQuery({
@@ -97,6 +102,26 @@ export default function VisualAndTextureForm({
     queryKey: ["tastingNoteSensories", alcoholTypeId],
     queryFn: () => getSensories(alcoholTypeId),
   });
+
+  useEffect(() => {}, [alcoholTypeId]);
+
+  // editMode일 때 store에서 colorId와 sensoryLevelIds 불러와 초기값으로 설정
+  useEffect(() => {
+    if (isEditMode && tastingNoteRequest && colors) {
+      if (tastingNoteRequest?.request.alcoholTypeId !== alcoholTypeId) {
+        setSelectedSensoryIds([]);
+      } else {
+        const colorRGB = tastingNoteRequest.request.colorId.toString();
+        const matchedColor = colors.find(
+          (color: ColorInfo) => color.rgb === colorRGB,
+        );
+        if (matchedColor) {
+          setSelectedColor(matchedColor.id);
+        }
+        setSelectedSensoryIds(tastingNoteRequest.request.sensoryLevelIds);
+      }
+    }
+  }, [isEditMode, tastingNoteRequest, colors]);
 
   // 다음버튼 활성화
   useEffect(() => {
@@ -211,6 +236,21 @@ export default function VisualAndTextureForm({
     }
   };
 
+  // Function to match sensory levels with initial IDs in edit mode
+  const getInitialSensoryLevelId = (levels: ILevel[]) => {
+    if (
+      isEditMode &&
+      tastingNoteRequest &&
+      tastingNoteRequest.request.alcoholTypeId === alcoholTypeId
+    ) {
+      const matchingLevel = levels.find((level) =>
+        tastingNoteRequest.request.sensoryLevelIds.includes(level.id),
+      );
+      return matchingLevel ? matchingLevel.id : undefined;
+    }
+    return undefined;
+  };
+
   return (
     <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
       <div>
@@ -279,6 +319,9 @@ export default function VisualAndTextureForm({
                 levels={sensoryLevelInfo.levels}
                 setSelectedIds={setSelectedSensoryIds}
                 showDescriptions={true}
+                defaultSelectedId={getInitialSensoryLevelId(
+                  sensoryLevelInfo.levels,
+                )}
               />
             </div>
           ))}

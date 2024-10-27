@@ -3,10 +3,13 @@
 import BottomButton from "@/_common/BottomButton";
 import Loading from "@/_common/Loading";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useQuery } from "@tanstack/react-query";
+import clsx from "clsx";
 import Image from "next/image";
-import { FormEvent, useState } from "react";
+import { usePathname } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface AlcoholTypeResponse {
@@ -56,6 +59,28 @@ export default function UnOfficialBasicInformationForm({
     queryKey: ["alcoholType"],
     queryFn: getAlcoholType,
   });
+
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
+  const { tastingNoteRequest } = useTastingNoteStore();
+
+  // URL에 /edit이 포함된 경우 초기값 설정 및 비활성화
+  useEffect(() => {
+    if (isEditMode && tastingNoteRequest) {
+      const { alcoholicDrinksDetails, alcoholTypeId } =
+        tastingNoteRequest.request;
+      setValue(
+        "alcoholicDrinksName",
+        alcoholicDrinksDetails.alcoholicDrinksName,
+      );
+      setValue(
+        "alcoholContent",
+        alcoholicDrinksDetails.alcoholContent.toString(),
+      );
+      setValue("alcoholTypeName", alcoholicDrinksDetails.alcoholTypeName);
+      setFormAlcoholTypeId(alcoholTypeId);
+    }
+  }, [pathname, setValue, tastingNoteRequest]);
 
   const validateAlcoholContent = (value: string | number) => {
     const stringValue = String(value);
@@ -108,13 +133,19 @@ export default function UnOfficialBasicInformationForm({
             제품명
           </label>
           <input
-            className="mt-[1%] h-11 w-full rounded-[6px] border-[1px] border-cool-grayscale-300 px-[10px] py-4"
+            className={clsx(
+              "mt-[1%] h-11 w-full rounded-[6px] border-[1px] border-cool-grayscale-300 px-[10px] py-4",
+              {
+                "bg-cool-grayscale-100 text-cool-grayscale-400": isEditMode, // 비활성화 시 흐릿한 스타일
+              },
+            )}
             placeholder="전통주의 이름을 띄어쓰기 없이 입력해주세요."
             {...register("alcoholicDrinksName")}
             onInput={(event: FormEvent<HTMLInputElement>) => {
               const value = event.currentTarget.value;
               event.currentTarget.value = value.replace(/\s+/g, "");
             }}
+            disabled={isEditMode}
           />
         </div>
         <div className="mb-6 flex flex-col justify-center">

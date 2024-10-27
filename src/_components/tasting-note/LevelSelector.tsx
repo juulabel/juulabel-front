@@ -16,19 +16,27 @@ interface ILevelSelector {
   levels: ILevel[];
   setSelectedIds: Dispatch<SetStateAction<number[]>>;
   showDescriptions?: boolean;
+  defaultSelectedId?: number;
 }
 
 export default function LevelSelector({
   levels,
   setSelectedIds,
   showDescriptions = false,
+  defaultSelectedId,
 }: ILevelSelector) {
-  const initialSelectedId = levels[0].id;
+  const initialSelectedId = defaultSelectedId ?? levels[0].id;
   const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
 
   useEffect(() => {
-    setSelectedIds((prev) => [...prev, initialSelectedId]);
-  }, []);
+    // 초기 마운트 시 levels에 있는 모든 값을 제거하고 initialSelectedId만 추가
+    setSelectedIds((prev) => {
+      const filteredIds = prev.filter(
+        (id) => !levels.some((level) => level.id === id),
+      );
+      return [...filteredIds, initialSelectedId];
+    });
+  }, [initialSelectedId, levels, setSelectedIds]);
 
   const handleSliderChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +47,9 @@ export default function LevelSelector({
         // 기존에 선택했던 값을 배열에서 제거하고 새로 선택한 값을 추가
         setSelectedIds((prevIds) => {
           const updatedIds = prevIds.filter((id) => id !== prev); // 이전 값 제거
-          return [...updatedIds, newSelectedId]; // 새로운 값 추가
+          return updatedIds.includes(newSelectedId)
+            ? updatedIds
+            : [...updatedIds, newSelectedId]; // 새로운 값 추가
         });
         return newSelectedId;
       });
