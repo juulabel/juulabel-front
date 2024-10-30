@@ -5,10 +5,11 @@ export async function getRelatedSearchData(
 ): Promise<string[] | null> {
   try {
     const response = await axios.get(
-      "https://api.example.com/v1/api/tasting-note/search/related-data",
+      `https://juulabel.shop/v1/api/alcoholicDrinks/related-search?keyword=` +
+        searchData,
     ); //추후 API 수정 시에 queryString에 searchData 추가
     if (response.status === 200 && response.data)
-      return response.data.relatedData;
+      return response.data.result.relationSearch;
     else
       throw new Error(
         `Unexpected response : ${response.status} ${response.statusText}`,

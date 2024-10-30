@@ -29,9 +29,9 @@ export default function Page() {
   const [cookies] = useCookies(["accessToken"]);
   const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
 
-  const [relatedSearchDataList, setRelatedSearchDataList] = useState<
-    string[] | null
-  >([]);
+  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>(
+    [],
+  );
   const [searchResult, setSearchResult] = useState<IAlcoholSearchData[] | []>(
     [],
   );
@@ -86,22 +86,21 @@ export default function Page() {
     setIsInputFocused(true);
   };
 
-  const handleBlur = () => {
-    // setIsInputFocused(false);
-  };
-
-  const debouncedSearchQuery = useDebounce(searchQuery, 1000);
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
     //작성하는 동작을 1초 이상 멈추면 연관검색어 API 동작
     const getRelatedSearchDataList = async () => {
       const data = await getRelatedSearchData(searchQuery);
-      setRelatedSearchDataList(data);
+      console.log(relatedSearchDataList);
+
+      setRelatedSearchDataList(data ?? []);
     };
 
     if (debouncedSearchQuery) getRelatedSearchDataList();
     else setRelatedSearchDataList([]);
-  }, [debouncedSearchQuery]);
+  }, [searchQuery, debouncedSearchQuery]);
+
 
   useEffect(() => {
     const handleScroll = async () => {
@@ -109,8 +108,6 @@ export default function Page() {
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight
       ) {
-        console.log(isBottom);
-
         if (!isBottom) {
           setIsBottom(true);
           if (openAlcoholTypeDataList && !isTypeDataLst) {
@@ -219,11 +216,10 @@ export default function Page() {
               handleClearSearchQuery={handleClearSearchQuery}
               handleQuerySearch={handleQuerySearch}
               handleFocus={handleFocus}
-              handleBlur={handleBlur}
             />
             <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
-            {relatedSearchDataList &&
-              relatedSearchDataList.length > 0 &&
+            { 
+            relatedSearchDataList.length > 0 &&
               relatedSearchDataList.map((data: string, index: number) => (
                 <RelatedSearchResult
                   key={index}
@@ -245,7 +241,7 @@ export default function Page() {
                 />
               ))}
 
-            {relatedSearchDataList?.length === 0 &&
+            {debouncedSearchQuery?.length === 0 &&
               (isInputFocused ? (
                 <RecentSearchList
                   localStorageKey="TastingNoteRecentSearchList"
@@ -253,8 +249,6 @@ export default function Page() {
                     setSearchQuery(recentSearch)
                   }
                   setSearchResult={(searchResult: IAlcoholSearchResult) => {
-                    console.log("called");
-
                     setIsSearchDataLast(searchResult.isLast);
                     setSearchResult(searchResult.alcoholicDrinks);
                     if (searchResult.alcoholicDrinks.length > 0) {
