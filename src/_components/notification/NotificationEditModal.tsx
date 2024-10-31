@@ -1,16 +1,14 @@
 "use client";
 
-import Image from "next/image";
-
 interface INotificationEditModal {
-  handleMarkAsRead: () => void;
+  handleMarkAllAsRead: () => void;
   handleSelectionDelete: () => void;
   handleOpenDeleteAllModal: () => void;
   handleCancel: () => void;
 }
 
 export default function NotificationEditModal({
-  handleMarkAsRead,
+  handleMarkAllAsRead,
   handleSelectionDelete,
   handleOpenDeleteAllModal,
   handleCancel,
@@ -19,7 +17,7 @@ export default function NotificationEditModal({
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
       <div className="inline-flex h-[223px] w-[91%] max-w-[560px] flex-col items-center justify-center gap-[9px] rounded-2xl bg-white p-6">
         <button
-          onClick={handleMarkAsRead}
+          onClick={handleMarkAllAsRead}
           className="inline-flex cursor-pointer items-center justify-center gap-2.5 self-stretch rounded bg-slate-950 px-3 py-2 text-center text-sm font-bold leading-[21px] text-white"
         >
           모두 읽은 상태로 표시
