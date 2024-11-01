@@ -101,6 +101,7 @@ export default function Page() {
     else setRelatedSearchDataList([]);
   }, [searchQuery, debouncedSearchQuery]);
 
+
   useEffect(() => {
     const handleScroll = async () => {
       if (
@@ -185,8 +186,10 @@ export default function Page() {
       selectedTab.id,
       selectedSortedType.id,
     );
+
     if (isReplacing) {
       setalcoholTypeData(data?.alcoholicDrinks.content ?? []);
+      setIsTypeDataLst(false);
     } else {
       setalcoholTypeData((prevList) => [
         ...prevList,

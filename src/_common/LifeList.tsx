@@ -52,7 +52,7 @@ export default function LifeList({
               src={
                 profileImage
                   ? profileImage
-                  : "/placeholders/profile/default_profile.png"
+                  : "/images/placeholders/profile/default_profile.png"
               }
               alt="작성자 이미지"
               sizes="10vw"

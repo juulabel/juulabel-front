@@ -19,7 +19,7 @@ export default function Page() {
   const registerStore = useRegisterStore();
   const router = useRouter();
   const [cookies, setCookie] = useCookies(["accessToken"]);
-  const [alcoholTypes, setAlcoholTypes] = useState<string[]>([]);
+  const [alcoholTypes, setAlcoholTypes] = useState<number[]>([]);
   const [gender, setGender] = useState<string>("");
   const [genderDisable, setGenderDisable] = useState<boolean>(false);
   const [genderCheck, setGenderCheck] = useState<boolean>(false);
@@ -39,10 +39,10 @@ export default function Page() {
     femaleClicked = true;
   }
 
-  const handleAlcoholType = (value: string) => {
+  const handleAlcoholType = (value: number) => {
     setAlcoholTypes((prevState) =>
       prevState.includes(value)
-        ? prevState.filter((type: string) => type !== value)
+        ? prevState.filter((type: number) => type !== value)
         : [...prevState, value],
     );
   };

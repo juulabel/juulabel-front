@@ -15,7 +15,7 @@ export default function BottomButton({
   onClick,
 }: IBottomButton) {
   return (
-    <div className="fixed bottom-[18px] left-1/2 flex w-full max-w-[560px] -translate-x-1/2 transform justify-center">
+    <div className="flex w-full max-w-[560px] transform justify-center pb-4 pt-8">
       {url ? (
         <Link
           className={`flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-center text-base font-bold text-white ${

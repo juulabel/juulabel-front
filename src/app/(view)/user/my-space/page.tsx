@@ -2,20 +2,22 @@
 
 import LifeList from "@/_common/LifeList";
 import Loading from "@/_common/Loading";
+import Navigation from "@/_common/Navigation";
 import NoteThumbnail from "@/_common/NoteThumbnail";
-import UserHeader from "@/_components/user/UserHeader";
+import MySpaceHeader from "@/_components/user/MySpaceHeader";
 import { ILifeList, INoteThumbnail } from "@/_types/share";
+import { IMySpace } from "@/_types/user/mySpaceData";
 import { cn } from "@/_utils/commons";
-import { getUserProfile } from "@/app/api/user/getUserProfile";
+import { getMySpace } from "@/app/api/user/getMySpace";
+
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
-export default function Page({ params }: { params: { id: string } }) {
-  const router = useRouter();
+export default function Page() {
   const [cookies] = useCookies(["accessToken"]);
   const [lifeList, setlifeList] = useState<ILifeList[]>([]);
   const [lastDailyLifeId, setLastDailyLifeId] = useState(0);
@@ -27,22 +29,21 @@ export default function Page({ params }: { params: { id: string } }) {
     useState<boolean>(true);
   const [isDailyLifeClicked, setIsDailyLifeClicked] = useState<boolean>(false);
   const [isBottom, setIsBottom] = useState(false);
-  const userId = Number(params.id);
 
   const {
     data: user,
     isLoading: isLoadingUser,
     error,
-  } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => getUserProfile(userId, cookies.accessToken),
+  } = useQuery<IMySpace>({
+    queryKey: ["my-space"],
+    queryFn: () => getMySpace(cookies.accessToken),
   });
 
   const { data, isLoading } = useQuery<INoteThumbnail[]>({
-    queryKey: [`${userId}-note`],
+    queryKey: ["my-notes"],
     queryFn: async () => {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${userId}/tasting_notes?pageSize=15`,
+        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/tasting_notes/my?pageSize=15`,
         {
           withCredentials: true,
           headers: {
@@ -50,8 +51,7 @@ export default function Page({ params }: { params: { id: string } }) {
           },
         },
       );
-
-      const notes = res.data.result.tastingNoteSummaries;
+      const notes = res.data.result.myTastingNoteSummaries;
       setNoteList(notes.content ?? []);
       setIsNoteLast(notes.last);
       setLastTastingNoteId(
@@ -72,11 +72,11 @@ export default function Page({ params }: { params: { id: string } }) {
           if (
             isTastingNoteClicked &&
             !isNoteLast &&
-            user!.tastingNoteCount > 0
+            user!.myTastingNoteCount > 0
           ) {
             await fetchTastingNotes();
           }
-          if (isDailyLifeClicked && !isLifeLast && user!.dailyLifeCount > 0) {
+          if (isDailyLifeClicked && !isLifeLast && user!.myDailyLifeCount > 0) {
             await fetchDailyLifes();
           }
         }
@@ -99,14 +99,14 @@ export default function Page({ params }: { params: { id: string } }) {
   const handleDailyLifeClick = () => {
     setIsTastingNoteClicked(false);
     setIsDailyLifeClicked(true);
-    if (!isLifeLast && user!.dailyLifeCount > 0) {
+    if (!isLifeLast && user!.myDailyLifeCount > 0) {
       fetchDailyLifes();
     }
   };
 
   const fetchDailyLifes = async () => {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${userId}/daily-lives?pageSize=15&lastDailyLifeId=${lastDailyLifeId}`,
+      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/daily-lives/my?pageSize=15&lastDailyLifeId=${lastDailyLifeId}`,
       {
         withCredentials: true,
         headers: {
@@ -115,18 +115,18 @@ export default function Page({ params }: { params: { id: string } }) {
       },
     );
 
-    const life = res.data.result.dailyLifeSummaries;
+    const myLife = res.data.result.myDailyLifeSummaries;
 
-    setlifeList(life.content);
-    setIsLifeLast(life.last);
-    if (life.content.length > 0) {
-      setLastDailyLifeId(life.content[life.content.length - 1].dailyLifeId);
+    setlifeList(myLife.content);
+    setIsLifeLast(myLife.last);
+    if (myLife.content.length > 0) {
+      setLastDailyLifeId(myLife.content[myLife.content.length - 1].dailyLifeId);
     }
   };
 
   const fetchTastingNotes = async () => {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${userId}/tasting_notes?pageSize=15&lastTastingNoteId=${lastTastingNoteId}`,
+      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/tasting_notes/my?pageSize=15&lastTastingNoteId=${lastTastingNoteId}`,
       {
         withCredentials: true,
         headers: {
@@ -135,27 +135,26 @@ export default function Page({ params }: { params: { id: string } }) {
       },
     );
 
-    const note = res.data.result.tastingNoteSummaries;
+    const myNote = res.data.result.myTastingNoteSummaries;
 
-    setNoteList(note.content);
-    setIsNoteLast(note.last);
-    if (note.content.length > 0) {
-      setLastTastingNoteId(note.content[note.content.length - 1].TastingNoteId);
+    setNoteList(myNote.content);
+    setIsNoteLast(myNote.last);
+    if (myNote.content.length > 0) {
+      setLastTastingNoteId(
+        myNote.content[myNote.content.length - 1].TastingNoteId,
+      );
     }
   };
 
   if (isLoadingUser) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
+
   return (
     <>
       {user && (
         <div className="relative h-full w-full max-w-[560px]">
           <div className="fixed top-0 z-20 w-full max-w-[560px] bg-white">
-            <UserHeader
-              title="유저 프로필"
-              handleBackButton={() => router.back()}
-              bottomBorder={true}
-            />
+            <MySpaceHeader title="내 공간" />
 
             <div className="mx-[4%] flex flex-row items-center justify-between">
               <div className="flex flex-row items-center">
@@ -175,6 +174,15 @@ export default function Page({ params }: { params: { id: string } }) {
                   {user.nickname}
                 </p>
               </div>
+              <Link href={"/user/my-info"}>
+                <Image
+                  width={24}
+                  height={24}
+                  className="r rounded-full"
+                  src={"/svg/right-arrow.svg"}
+                  alt="내정보"
+                />
+              </Link>
             </div>
             <div
               className={cn(
@@ -202,7 +210,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   시음노트
                 </p>
                 <p className="ml-1 text-sm text-cool-grayscale-600">
-                  {user.tastingNoteCount}개
+                  {user.myTastingNoteCount}개
                 </p>
               </button>
               <button
@@ -215,7 +223,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   일상생활
                 </p>
                 <p className="ml-1 text-sm text-cool-grayscale-600">
-                  {user.dailyLifeCount}개
+                  {user.myDailyLifeCount}개
                 </p>
               </button>
             </div>
@@ -251,6 +259,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
       )}
+      <Navigation />
     </>
   );
 }
