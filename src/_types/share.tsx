@@ -37,7 +37,7 @@ export interface ILifeDetail {
 }
 
 export interface INoteThumbnail {
-  TastingNoteId: string;
+  TastingNoteId: number;
   alcoholicDrinksName: string;
   memberInfo: {
     memberId: number;
@@ -48,4 +48,5 @@ export interface INoteThumbnail {
   alcoholTypeName: string;
   createdAt: string;
   hasMultipleImages: boolean;
+  isPrivate: boolean;
 }

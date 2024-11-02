@@ -1,13 +1,17 @@
 import axios from "axios";
-import { instance } from "../axios";
 
-export async function getUserProfile(id: number, token: string) {
+export async function getMySpace(accessToken: string) {
   try {
-    const response = await instance.get(`/v1/api/members/${id}/profile`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await axios.get(
+      `https://juulabel.shop/v1/api/members/my-space`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
+
     if (response.status === 200 && response.data) return response.data.result;
     else
       throw new Error(

@@ -21,7 +21,7 @@ interface IRegisterUserState {
   providerId: string;
   gender: string;
   genderCheck: boolean;
-  preferredAlcoholType: string[];
+  preferredAlcoholType: number[];
   memberId: number;
   setAllAgree: (value: boolean) => void;
   setServiceAgree: (value: boolean) => void;
@@ -33,7 +33,7 @@ interface IRegisterUserState {
   setProviderId: (value: string) => void;
   setGender: (value: string) => void;
   setGendercheck: (value: boolean) => void;
-  setPreferredAlcoholType: (value: string[]) => void;
+  setPreferredAlcoholType: (value: number[]) => void;
   setMemberId: (value: number) => void;
 }
 
@@ -98,8 +98,8 @@ export const useRegisterStore = create(
         set((state) => ({ ...state, gender: value })),
       setGendercheck: (value: boolean) =>
         set((state) => ({ ...state, genderCheck: value })),
-      setPreferredAlcoholType: (value: string[]) => {
-        set((state) => ({ ...state, preferredAlcoholType: value }));
+      setPreferredAlcoholType: (key: number[]) => {
+        set((state) => ({ ...state, preferredAlcoholType: key }));
       },
       setMemberId: (value: number) => {
         set((state) => ({ ...state, memberId: value }));
