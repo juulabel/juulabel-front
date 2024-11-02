@@ -1,5 +1,6 @@
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { cn } from "@/_utils/commons";
 import {
   getColors,
@@ -7,8 +8,10 @@ import {
 } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
+import LevelSelector from "./LevelSelector";
 
 interface ColorInfo {
   id: number;
@@ -61,7 +64,7 @@ interface ILevel {
 
 interface ISensoryLevelInfo {
   sensory: ISensoryInfo;
-  levels: ILevel;
+  levels: ILevel[];
 }
 
 export default function VisualAndTextureForm({
@@ -82,6 +85,11 @@ export default function VisualAndTextureForm({
   const [enableCheckConfirmButton, setEnableCheckConfirmButton] =
     useState(false); // 바텀시트의 '선택완료' 버튼 활성화 여부
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [selectedSensoryIds, setSelectedSensoryIds] = useState<number[]>([]); // 선택된 촉각 정보
+
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
+  const { tastingNoteRequest } = useTastingNoteStore();
 
   // 술 색 정보 조회
   const { data: colors } = useQuery({
@@ -91,9 +99,29 @@ export default function VisualAndTextureForm({
 
   // 미각(텍스처) 정보 조회
   const { data: sensoryLevelInfos } = useQuery<ISensoryLevelInfo[]>({
-    queryKey: ["tastingNoteSensor", alcoholTypeId],
+    queryKey: ["tastingNoteSensories", alcoholTypeId],
     queryFn: () => getSensories(alcoholTypeId),
   });
+
+  useEffect(() => {}, [alcoholTypeId]);
+
+  // editMode일 때 store에서 colorId와 sensoryLevelIds 불러와 초기값으로 설정
+  useEffect(() => {
+    if (isEditMode && tastingNoteRequest && colors) {
+      if (tastingNoteRequest?.request.alcoholTypeId !== alcoholTypeId) {
+        setSelectedSensoryIds([]);
+      } else {
+        const colorRGB = tastingNoteRequest.request.colorId.toString();
+        const matchedColor = colors.find(
+          (color: ColorInfo) => color.rgb === colorRGB,
+        );
+        if (matchedColor) {
+          setSelectedColor(matchedColor.id);
+        }
+        setSelectedSensoryIds(tastingNoteRequest.request.sensoryLevelIds);
+      }
+    }
+  }, [isEditMode, tastingNoteRequest, colors]);
 
   // 다음버튼 활성화
   useEffect(() => {
@@ -142,6 +170,7 @@ export default function VisualAndTextureForm({
   const handleNextBotton = () => {
     // 색상id값 로컬스토리지에 저장
     tastingNoteInformationStore.setColorId(selectedColor);
+    tastingNoteInformationStore.setSensoryLevelIds(selectedSensoryIds);
 
     // 다음 단계로 이동
     handleStep();
@@ -207,6 +236,21 @@ export default function VisualAndTextureForm({
     }
   };
 
+  // Function to match sensory levels with initial IDs in edit mode
+  const getInitialSensoryLevelId = (levels: ILevel[]) => {
+    if (
+      isEditMode &&
+      tastingNoteRequest &&
+      tastingNoteRequest.request.alcoholTypeId === alcoholTypeId
+    ) {
+      const matchingLevel = levels.find((level) =>
+        tastingNoteRequest.request.sensoryLevelIds.includes(level.id),
+      );
+      return matchingLevel ? matchingLevel.id : undefined;
+    }
+    return undefined;
+  };
+
   return (
     <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
       <div>
@@ -217,7 +261,7 @@ export default function VisualAndTextureForm({
       </div>
       {/* 본문: 입력 항목들 */}
       <div>
-        {/* 전통주 색상 */}
+        {/* 전통주 색상 선택 */}
         <div>
           <span className="text-base font-bold text-cool-grayscale-800">
             술 색
@@ -257,15 +301,28 @@ export default function VisualAndTextureForm({
             </div>
           )}
         </div>
+        {/* 전통주 텍스처 선택 */}
         {sensoryLevelInfos &&
           sensoryLevelInfos.map((sensoryLevelInfo) => (
-            <div className="mt-6">
-              <span className="text-base font-bold text-cool-grayscale-800">
-                {sensoryLevelInfo.sensory.name}
-              </span>
-              <span className="ml-[3%] text-sm font-normal text-cool-grayscale-500">
-                {sensoryLevelInfo.sensory.description}
-              </span>
+            <div className="mt-8" key={sensoryLevelInfo.sensory.id}>
+              {/* 타이틀 */}
+              <div className="mb-[20px]">
+                <span className="text-base font-bold text-cool-grayscale-800">
+                  {sensoryLevelInfo.sensory.name}
+                </span>
+                <span className="ml-[3%] text-sm font-normal text-cool-grayscale-500">
+                  {sensoryLevelInfo.sensory.description}
+                </span>
+              </div>
+              {/* 텍스처 평가 슬라이더 부분 */}
+              <LevelSelector
+                levels={sensoryLevelInfo.levels}
+                setSelectedIds={setSelectedSensoryIds}
+                showDescriptions={true}
+                defaultSelectedId={getInitialSensoryLevelId(
+                  sensoryLevelInfo.levels,
+                )}
+              />
             </div>
           ))}
         <BottomButton enableButton={enableButton} onClick={handleNextBotton}>

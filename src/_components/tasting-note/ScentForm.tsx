@@ -1,8 +1,10 @@
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { getScents } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface IScentChip {
   name: string;
@@ -78,11 +80,22 @@ export default function ScentForm({ handleStep }: IScentForm) {
   const [selectedScentIds, setSelectedScentIds] = useState<number[]>([]);
   const isButtonEnabled = selectedScentIds.length > 0;
 
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
+  const { tastingNoteRequest } = useTastingNoteStore();
+
   // 향 정보 조회
   const { data: scents } = useQuery<ICategoryResponse[]>({
     queryKey: ["tastingNoteScents", alcoholTypeId],
     queryFn: () => getScents(alcoholTypeId),
   });
+
+  // editMode일 때 초기 scent selection 설정
+  useEffect(() => {
+    if (isEditMode && tastingNoteRequest) {
+      setSelectedScentIds(tastingNoteRequest.request.scentIds);
+    }
+  }, [isEditMode, tastingNoteRequest]);
 
   const handleNextButton = () => {
     // localStorage에 선택된 향들 저장

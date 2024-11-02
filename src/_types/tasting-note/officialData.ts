@@ -1,8 +1,15 @@
 export interface IOfficialData {
-  productName: string;
-  alcoholContent: string;
-  alcoholType: string;
-  alcoholThumbnail: string;
-  brewery?: string;
-  breweryLocation?: string;
+  id: number;
+  name: string;
+  alcoholContent: number;
+  alcoholType: {
+    id: number;
+    name: string;
+  };
+  brewery: {
+    id: number;
+    name: string;
+    region: string;
+  };
+  thumbnail?: string;
 }

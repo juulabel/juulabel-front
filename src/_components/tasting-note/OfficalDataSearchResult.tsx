@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
 import OfficialData from "./OfficialData";
 import { IOfficialData } from "@/_types/tasting-note/officialData";
 import Image from "next/image";
+import ScrollUpFloatingBtn from "../search/ScrollUpFloatingBtn";
+import TraditionalDrinkInformationComponent from "./TraditionalDrinkInformationComponent";
+import Spinner from "../search/Spinner";
 
 interface IOfficialDataSearchResult {
   query: string;
@@ -12,6 +15,8 @@ interface IOfficialDataSearchResult {
   closeOfficialDataSearchResult: () => void;
   handleClearSearchQuery: () => void;
   handleCloseSearchList: () => void;
+  isLast: boolean;
+  isBottom: boolean;
 }
 
 export default function OfficialDataSearchResult({
@@ -20,11 +25,18 @@ export default function OfficialDataSearchResult({
   closeOfficialDataSearchResult,
   handleClearSearchQuery,
   handleCloseSearchList,
+  isLast,
+  isBottom,
 }: IOfficialDataSearchResult) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   useEffect(() => {
     setSearchQuery(query);
   }, [query]);
+
+  const spinnerVisibility = useMemo(
+    () => isBottom && !isLast,
+    [isBottom, isLast],
+  );
 
   return (
     <div className="w-full max-w-[560px]">
@@ -64,6 +76,11 @@ export default function OfficialDataSearchResult({
         </div>
       </div>
       <OfficialData officialDataList={officialDataList} />
+      <div className="relative flex flex-col items-center justify-between">
+        <Spinner spinnerVisibility={spinnerVisibility} />
+        <TraditionalDrinkInformationComponent />
+      </div>
+      <ScrollUpFloatingBtn />
     </div>
   );
 }

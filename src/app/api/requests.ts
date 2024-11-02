@@ -5,6 +5,8 @@ const requests = {
   postGoogleLogin: `/v1/api/members/login/google`,
   getTerms: `/v1/api/terms`,
   follow: `/v1/api/follow`,
+  typeSerach: `/v1/api/alcoholicDrinks/typeSearch?`,
+  noteSearch: `/v1/api/shared-space/tasting-notes/search?`,
 };
 
 export default requests;

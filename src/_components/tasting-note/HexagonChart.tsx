@@ -62,7 +62,7 @@ interface RadarChartProps {
 
 const RadarChart = ({ dataPoints }: RadarChartProps) => {
   const labels = dataPoints.map((point) => point.label);
-  const data = dataPoints.map((point) => point.data);
+  const data = dataPoints.map((point) => point.data + 1);
 
   const chartData: ChartData<"radar"> = {
     labels: labels,

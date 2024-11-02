@@ -63,6 +63,33 @@ export interface ITastingNoteResponse {
   imageInfo: IImageInfo;
 }
 
+// 전통주 세부 정보
+interface IAlocoholicDrinksDetails {
+  alcoholicDrinksName: string; // 전통주명
+  alcoholContent: number; //전통주 도수
+  alcoholTypeName: string; // 주종명
+  breweryName: string; //양조장 이름
+  breweryRegion: string; //양조장 지역
+}
+
+export interface ITastingNoteWriteRequest {
+  alcoholicDrinksDetails: IAlocoholicDrinksDetails;
+  alcoholTypeId: number; // 주종 고유 번호
+  alcoholicDrinksId?: number; // 전통주 고유 번호
+  colorId: number; // 색상 고유 번호
+  scentIds: number[]; //향 고유 번호 리스트
+  sensoryLevelIds: number[]; // 촉각 고유 번호 리스트
+  flavorLevelIds: number[]; //맛 고유 번호 리스트
+  content: string; //부연 설명
+  isPrivate: boolean; //비공개 여부
+  rating: number; //달점
+}
+
+export interface ITastingNoteRequest {
+  request: ITastingNoteWriteRequest;
+  files?: File[];
+}
+
 interface IComment {
   content: string;
   commentId: number;

@@ -42,6 +42,7 @@ export default function UnOfficialDataSearchResult({
             onClick={() => closeUnOfficialDataSearchResult()}
           >
             <input
+              readOnly
               className="w-full bg-cool-grayscale-100 focus:outline-none"
               type="text"
               value={searchQuery}
@@ -64,7 +65,7 @@ export default function UnOfficialDataSearchResult({
         <Image
           width={92}
           height={123}
-          src="/tasting-note/unoffical_page_icon.png"
+          src="/images/note/unoffical_page_icon.png"
           alt="비공식 데이터 사진"
         />
         <p className="my-6 text-lg font-medium text-cool-grayscale-600">

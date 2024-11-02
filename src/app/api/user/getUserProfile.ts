@@ -1,9 +1,14 @@
 import axios from "axios";
+import { instance } from "../axios";
 
-export async function getUserProfile(id: number) {
+export async function getUserProfile(id: number, token: string) {
   try {
-    const response = await axios.get(`/v1/api/user/profile/${id}`);
-    if (response.status === 200 && response.data) return response.data.data;
+    const response = await instance.get(`/v1/api/members/${id}/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.status === 200 && response.data) return response.data.result;
     else
       throw new Error(
         `Unexpected response : ${response.status} ${response.statusText}`,
