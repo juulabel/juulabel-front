@@ -50,7 +50,7 @@ export default function ShareDetailReviewBox({
     <section className="flex w-full flex-col px-3 pt-4">
       {/* 술 느낀점 */}
       <div className="flex flex-col gap-4">
-        <div className="h-[28px] text-[20px] font-bold leading-[27.6px] text-cool-grayscale-800">
+        <div className="mb-2 h-[28px] text-[18px] font-bold leading-[27.6px] text-cool-grayscale-800">
           {info.memberInfo.nickname} 님은 이 술에 대해 이렇게 느꼈어요!
         </div>
 
@@ -66,16 +66,16 @@ export default function ShareDetailReviewBox({
 
           {sensoryValues.map(({ value, kind }, index) => {
             return (
-              <>
+              <Fragment key={"s-" + index}>
                 {index % 2 === 0 && <Separator />}
-                <div className="flex items-center justify-between" key={index}>
+                <div className="flex items-center justify-between">
                   <div>{kind}</div>
                   <OrangeText>
                     {/* {sensoryFindMap.get("탁도") || "데이터 없음"} */}
                     {value}
                   </OrangeText>
                 </div>
-              </>
+              </Fragment>
             );
           })}
 

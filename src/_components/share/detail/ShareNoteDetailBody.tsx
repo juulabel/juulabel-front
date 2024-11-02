@@ -10,9 +10,16 @@ import { useCookies } from "react-cookie";
 import ServerToast from "../error/ServerToast";
 import { IApiResponse, ITastingNoteResponse } from "@/_types";
 import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
-import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
+import {
+  useAuthorCheckStore,
+  useCommentCountStore,
+  useCommentStore,
+} from "@/_store/tastingDetailStore";
 import { useRegisterStore } from "@/_store/register";
 import SkeletonUI from "./SkeletonUI";
+import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
+import clsx from "clsx";
+import useMemberStore from "@/_store/memberStore";
 
 interface Props {
   id: number;
@@ -22,6 +29,10 @@ export default function ShareNoteDetailBody({ id }: Props) {
   const [cookies] = useCookies(["accessToken"]);
   const [errorToast, setErrorToast] = useState<boolean>(false);
   const { setIsAuthor } = useAuthorCheckStore();
+  const { setCount } = useCommentCountStore();
+  const { isCommentsPageVisible } = useCommentsPageStore();
+
+  const { setMemberInfo } = useMemberStore();
 
   const [
     { data, isError, isFetching },
@@ -59,6 +70,11 @@ export default function ShareNoteDetailBody({ id }: Props) {
         data?.result.tastingNoteDetailInfo.memberInfo.nickname ===
           userData.result.nickname,
       );
+
+      setMemberInfo(userData.result);
+
+      //댓글 수
+      setCount(data.result.tastingNoteDetailInfo.commentCount);
     }
 
     if (isError && !isFetching) {
@@ -80,7 +96,12 @@ export default function ShareNoteDetailBody({ id }: Props) {
   }
 
   return (
-    <>
+    <section
+      className={clsx("pt-[64px] transition-all duration-700", {
+        "animate-fadeOut scale-90 overflow-hidden opacity-90 blur-lg":
+          isCommentsPageVisible === "Y",
+      })}
+    >
       <ShareDetailNoteImageBox
         info={data?.result?.tastingNoteDetailInfo}
         imageList={data?.result?.imageInfo.imageUrlList || []}
@@ -95,12 +116,12 @@ export default function ShareNoteDetailBody({ id }: Props) {
         flavorLevelIds={data?.result.flavorLevelIds}
       />
       <LikeCommentFooter info={data?.result.tastingNoteDetailInfo} id={id} />
-    </>
+    </section>
   );
 }
 
 function Gap() {
   return (
-    <div className="w-ful mt-6 h-[10px] border-t-2 bg-cool-grayscale-100"></div>
+    <div className="mt-6 h-[10px] w-full border-t-2 bg-cool-grayscale-100"></div>
   );
 }

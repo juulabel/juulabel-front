@@ -11,6 +11,17 @@ export type PolymorphicPropsWithoutRef<C extends ElementType, V> = {
   variant?: V;
 } & ComponentPropsWithoutRef<C>;
 
+export type MemberInfo = IMemberInfo & Partial<IAdditionalMemberInfo>;
+
+export interface IAdditionalMemberInfo {
+  email: string;
+  isNotificationsAllowed: boolean;
+  introduction: string;
+  profileImage: string;
+  gender: string;
+  alcoholTypeIds: number[];
+}
+
 interface IMemberInfo {
   memberId: number;
   nickname: string;
@@ -88,3 +99,16 @@ interface ITastingNoteCommentSummaries {
   last: boolean;
   empty: boolean;
 }
+
+interface IComment {
+  content: string;
+  commentId: number;
+  memberInfo: MemberInfo;
+  createdAt: string; // ISO 날짜 문자열인거 같음 체크필요
+  likeCount: number;
+  replyCount: number;
+  isLiked: boolean;
+  isDeleted: boolean;
+}
+
+type IReply = Omit<IComment, "replyCount">;

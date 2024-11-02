@@ -62,7 +62,7 @@ export default function NicknameForm() {
   };
   useEffect(() => {
     clearErrors("nickname");
-  });
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

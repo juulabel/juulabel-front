@@ -9,6 +9,7 @@ export default function Button<C extends ElementType = "button">({
   children,
   variant = "none",
   className,
+  disabled,
   ...props
 }: PolymorphicPropsWithoutRef<C, ButtonVariant>) {
   const Component = as || "button";
@@ -20,8 +21,24 @@ export default function Button<C extends ElementType = "button">({
     none: "",
   };
 
+  const disabledStyles: Record<ButtonVariant, string> = {
+    primary: "bg-primary-300 text-white",
+    secondary: "",
+    black: "",
+    none: "",
+  };
+
   return (
-    <Component className={clsx(className, variantStyles[variant])} {...props}>
+    <Component
+      className={clsx(
+        "transition-colors duration-300",
+        className,
+        !disabled && variantStyles[variant],
+        disabled && disabledStyles[variant],
+      )}
+      disabled={disabled}
+      {...props}
+    >
       {children}
     </Component>
   );

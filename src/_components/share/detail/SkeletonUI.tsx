@@ -3,7 +3,7 @@ import "react-loading-skeleton/dist/skeleton.css"; // 기본 스타일 추가
 
 export default function SkeletonUI() {
   return (
-    <div className="flex h-full w-full flex-col gap-3 px-5 pt-7">
+    <div className="flex h-full w-full flex-col gap-3 px-5 pt-[68px]">
       <div className="flex w-full justify-between">
         <Skeleton width={170} height={28} borderRadius={8} duration={0.8} />
         <Skeleton width={101} height={28} borderRadius={8} duration={0.8} />

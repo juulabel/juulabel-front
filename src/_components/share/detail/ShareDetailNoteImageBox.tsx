@@ -15,17 +15,13 @@ interface Props {
   imageList: string[];
 }
 
-const images = [
-  "https://via.placeholder.com/600x400?text=Image+1",
-  "https://via.placeholder.com/600x400?text=Image+2",
-  "https://via.placeholder.com/600x400?text=Image+3",
-  "https://via.placeholder.com/600x400?text=Image+4",
-];
+const userDefaultImg =
+  "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage";
 
 export default function ShareDetailNoteImageBox({ info, imageList }: Props) {
   const defaultImage = `/images/placeholders/alcohols/${placeholderThumbnailProvider(info?.alcoholTypeName || "소주")}.png`;
+  const userDefaultImage = info?.memberInfo.profileImage || userDefaultImg;
   const imagesToUse = imageList.length > 0 ? imageList : [defaultImage];
-  useEffect(() => {});
 
   if (!info) {
     return <div></div>;
@@ -38,10 +34,9 @@ export default function ShareDetailNoteImageBox({ info, imageList }: Props) {
         <div className="flex h-full items-center gap-[12px]">
           <div className="relative h-[30px] w-[30px] overflow-hidden rounded-full">
             <Image
-              src="https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage"
+              src={userDefaultImage}
               fill
               alt="User Icon"
-              layout="fixed"
               className="object-cover"
             />
           </div>

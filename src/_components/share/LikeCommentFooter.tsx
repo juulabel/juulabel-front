@@ -1,4 +1,6 @@
 "use client";
+import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
+import { useCommentStore } from "@/_store/tastingDetailStore";
 import {
   IApiResponse,
   ITastingNoteDetailInfo,
@@ -22,11 +24,17 @@ interface Props {
 export default function LikeCommentFooter({ info, id }: Props) {
   const [cookies] = useCookies(["accessToken"]);
   const queryClient = useQueryClient();
-
+  const {
+    isCommentsPageVisible,
+    setCommentsPageVisible,
+    setIsInitialized,
+    isInitialized,
+  } = useCommentsPageStore();
   const router = useRouter();
 
   const handleCommentsPage = () => {
-    router.push(`/share/note/${id}/comments`);
+    // router.push(`/share/note/${id}/comments`);
+    setCommentsPageVisible("Y");
   };
 
   const { mutate } = useMutation({
@@ -87,8 +95,26 @@ export default function LikeCommentFooter({ info, id }: Props) {
       });
     }
   };
+
+  useEffect(() => {}, []);
+
+  if (isCommentsPageVisible === "Y") {
+    return null;
+  }
+
   return (
-    <footer className="fixed bottom-0 z-40 flex h-[82px] w-full max-w-[560px] flex-row items-center justify-between bg-[#FFFFFF] p-5 px-6 shadow-[0px_-4px_32px_0px_#00000012]">
+    <footer
+      className={clsx(
+        "animate-fadeIn-footer fixed bottom-0 left-0 right-0 z-40 flex h-[82px] w-full max-w-[560px] translate-y-0 flex-row items-center justify-between bg-[#FFFFFF] p-5 px-6 shadow-[0px_-4px_32px_0px_#00000012]",
+        // {
+        //   "opacity-0": isCommentsPageVisible === "Y", // Add this if you want to control visibility with opacity
+        //   "opacity-100": isCommentsPageVisible !== "Y", // Full opacity when it should be visible
+        // },
+      )}
+      style={{
+        transition: "opacity 0.7s ease-out",
+      }}
+    >
       <div className="flex items-center gap-3">
         <Image
           src={info?.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}

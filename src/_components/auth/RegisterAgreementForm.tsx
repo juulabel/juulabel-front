@@ -13,6 +13,7 @@ import { GoChevronRight } from "react-icons/go";
 import { useRouter } from "next/navigation";
 import Checkbox from "@/_common/Checkbox";
 import { getTerms } from "@/app/api/auth/register/getTerms";
+import { useEffect } from "react";
 
 export default function RegisterAgreementForm() {
   const router = useRouter();
@@ -56,6 +57,7 @@ export default function RegisterAgreementForm() {
   };
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error : {error.message}</div>;
+
   return (
     <form className="w-full max-w-[560px]">
       <div>
@@ -93,7 +95,7 @@ export default function RegisterAgreementForm() {
                 key={term.id}
                 className="mx-[4%] my-4 flex items-center justify-between"
               >
-                <label>
+                <label className="flex flex-row">
                   <Controller
                     name={termsMapping[termType]}
                     control={control}

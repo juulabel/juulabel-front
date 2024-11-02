@@ -2,7 +2,7 @@
 import ModalLayout from "@/_common/ModalLayout";
 import ModalWithoutCancel from "@/_common/ModalWithoutCancel";
 import Button from "@/_common/ui/Button";
-import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
+import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 import clsx from "clsx";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -36,19 +36,17 @@ export default function ShareHeader() {
     router.push("/share/note");
   };
 
-  console.log(pathname);
-
   if (pathname.endsWith("/comments")) {
     return null;
   }
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex h-[64px] w-full items-center justify-between border-b border-gray-300 bg-white px-3">
+      <div className="fixed top-0 z-10 flex h-[64px] w-full max-w-[560px] items-center justify-between border-b border-gray-300 bg-white px-3">
         <div
           className="cursor-pointer"
           onClick={() => {
-            router.back();
+            router.push("/share/note");
           }}
         >
           <Image
@@ -76,11 +74,11 @@ export default function ShareHeader() {
       </div>
       {modalOpen && (
         <ModalLayout onClose={handleModalClose}>
-          <VisitorsModalContent
+          {/* <VisitorsModalContent
             handleModalClose={handleModalClose}
             handleCheckNotToLookOpen={handleCheckNotToLookOpen}
-          />
-          {/* <OwnerModalContent handleModalClose={handleModalClose} /> */}
+          /> */}
+          <OwnerModalContent handleModalClose={handleModalClose} />
         </ModalLayout>
       )}
 
