@@ -1,11 +1,11 @@
 "use client";
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
-import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
+import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 import { useDeleteTastingNote } from "@/app/api/tasting-note/deleteTastingNote";
 import clsx from "clsx";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
@@ -14,6 +14,8 @@ export default function ShareHeader() {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [checkNotToLook, setCheckNotToLook] = useState<boolean>(false);
+  const pathname = usePathname();
+
   const { isAuthor } = useAuthorCheckStore();
   const handleModalClose = () => {
     setModalOpen(false);
@@ -35,13 +37,17 @@ export default function ShareHeader() {
     router.push("/share/note");
   };
 
+  if (pathname.endsWith("/comments")) {
+    return null;
+  }
+
   return (
     <>
-      <div className="sticky top-0 z-10 flex h-[64px] w-full items-center justify-between border-b border-gray-300 bg-white px-3">
+      <div className="fixed top-0 z-10 flex h-[64px] w-full max-w-[560px] items-center justify-between border-b border-gray-300 bg-white px-3">
         <div
           className="cursor-pointer"
           onClick={() => {
-            router.back();
+            router.push("/share/note");
           }}
         >
           <Image
@@ -69,11 +75,11 @@ export default function ShareHeader() {
       </div>
       {modalOpen && (
         <ModalLayout onClose={handleModalClose}>
-          <OwnerModalContent handleModalClose={handleModalClose} />
           {/* <VisitorsModalContent
             handleModalClose={handleModalClose}
             handleCheckNotToLookOpen={handleCheckNotToLookOpen}
           /> */}
+          <OwnerModalContent handleModalClose={handleModalClose} />
         </ModalLayout>
       )}
     </>

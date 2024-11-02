@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const checkCookieExpiration = () => {
       if (pathname.startsWith("/share")) {
         if (!cookies.accessToken) {
-          router.push("/"); // Redirect to login if cookie is expired or missing
+          // router.push("/"); // Redirect to login if cookie is expired or missing
         }
       }
     };

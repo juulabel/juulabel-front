@@ -6,6 +6,7 @@ interface IBottomButton {
   enableButton: boolean | undefined;
   children: React.ReactNode;
   onClick: () => void;
+  type?: string;
 }
 
 export default function BottomButton({
@@ -13,6 +14,7 @@ export default function BottomButton({
   enableButton,
   children,
   onClick,
+  type,
 }: IBottomButton) {
   return (
     <div className="flex w-full max-w-[560px] transform justify-center pb-4 pt-8">
@@ -25,6 +27,7 @@ export default function BottomButton({
           }`}
           href={url}
           onClick={onClick}
+          {...(type && { type })}
         >
           {children}
         </Link>

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
+<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.98377 11.1057C2.98383 11.1057 2.98389 11.1056 2.98395 11.1055L2.98377 11.1057Z" fill="#64748B" stroke="#64748B"/>
+=======
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="icon/24px/arrow">
 <path id="Vector" d="M18 15L12 9L6 15" stroke="#64748B" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
 </g>
+>>>>>>> 6ecbc465401e4db78db00a3b92dbc79ff36d65d1
 </svg>
