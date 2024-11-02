@@ -1,6 +1,8 @@
 import BottomButton from "@/_common/BottomButton";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { getFlavors } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useTastingNoteInformationStore } from "../../_store/tastingNote";
 import RadarChart from "./HexagonChart";
@@ -33,6 +35,9 @@ interface IFlavorForm {
 }
 
 export default function FlavorForm({ handleStep }: IFlavorForm) {
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
+  const { tastingNoteRequest } = useTastingNoteStore();
   const tastingNoteInformationStore = useTastingNoteInformationStore();
   const {
     alcoholicDrinksDetails: { alcoholicDrinksName },
@@ -88,6 +93,17 @@ export default function FlavorForm({ handleStep }: IFlavorForm) {
     handleStep(); // 다음 단계로 이동
   };
 
+  // Get default level ID based on edit mode data
+  const getInitialLevelId = (levels: Level[]) => {
+    if (isEditMode && tastingNoteRequest) {
+      const matchingLevel = levels.find((level) =>
+        tastingNoteRequest.request.flavorLevelIds.includes(level.id),
+      );
+      return matchingLevel ? matchingLevel.id : undefined;
+    }
+    return undefined;
+  };
+
   return (
     <div className="mx-[18px] mt-6 flex flex-col pb-[102px]">
       {/* 타이틀 */}
@@ -115,6 +131,7 @@ export default function FlavorForm({ handleStep }: IFlavorForm) {
             <LevelSelector
               levels={flavorLevel.levels}
               setSelectedIds={setSelectedFlavorIds}
+              defaultSelectedId={getInitialLevelId(flavorLevel.levels)}
             />
           </React.Fragment>
         ))}

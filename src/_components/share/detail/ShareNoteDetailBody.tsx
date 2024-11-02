@@ -1,17 +1,15 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import ShareDetailNoteImageBox from "./ShareDetailNoteImageBox";
-import ShareNoteInfoBox from "./ShareNoteInfoBox";
-import ShareDetailReviewBox from "./ShareDetailReviewBox";
-import LikeCommentFooter from "../LikeCommentFooter";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
+import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
 import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
+import { useQueries } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import ServerToast from "../error/ServerToast";
-import { IApiResponse, ITastingNoteResponse } from "@/_types";
-import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
-import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
-import { useRegisterStore } from "@/_store/register";
+import LikeCommentFooter from "../LikeCommentFooter";
+import ShareDetailNoteImageBox from "./ShareDetailNoteImageBox";
+import ShareDetailReviewBox from "./ShareDetailReviewBox";
+import ShareNoteInfoBox from "./ShareNoteInfoBox";
 import SkeletonUI from "./SkeletonUI";
 
 interface Props {
@@ -64,7 +62,7 @@ export default function ShareNoteDetailBody({ id }: Props) {
     if (isError && !isFetching) {
       setErrorToast(true);
     }
-  }, [isFetching, isError, userData, userFetching]);
+  }, [data, isFetching, isError, userData, userFetching, setIsAuthor]);
 
   if (isFetching) {
     return <SkeletonUI />;

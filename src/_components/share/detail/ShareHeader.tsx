@@ -1,12 +1,13 @@
 "use client";
 import ModalLayout from "@/_common/ModalLayout";
-import ModalWithoutCancel from "@/_common/ModalWithoutCancel";
 import Button from "@/_common/ui/Button";
 import { useAuthorCheckStore } from "@/_store/tastingDetailAutorCheckStore";
+import { useDeleteTastingNote } from "@/app/api/tasting-note/deleteTastingNote";
 import clsx from "clsx";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
 export default function ShareHeader() {
@@ -68,47 +69,13 @@ export default function ShareHeader() {
       </div>
       {modalOpen && (
         <ModalLayout onClose={handleModalClose}>
-          <VisitorsModalContent
+          <OwnerModalContent handleModalClose={handleModalClose} />
+          {/* <VisitorsModalContent
             handleModalClose={handleModalClose}
             handleCheckNotToLookOpen={handleCheckNotToLookOpen}
-          />
-          {/* <OwnerModalContent handleModalClose={handleModalClose} /> */}
+          /> */}
         </ModalLayout>
       )}
-
-      {/*  1차 MVP에서 안나감
-      {checkNotToLook && (
-        <ModalLayout onClose={handleCheckNotToLookClose}>
-          <section className="flex flex-col gap-1">
-            <div className="flex flex-col items-center gap-2">
-              <Image
-                src={"/svg/warning.svg"}
-                width={40}
-                height={40}
-                alt="경고"
-              />
-
-              <div className="text-center text-[18px] font-semibold text-cool-grayscale-800">
-                정말 해당 게시물을 보지 않으시겠어요?
-              </div>
-
-              <div className="text-center text-[16px] font-normal text-cool-grayscale-600">
-                한번 보지 않기로 한 게시물은 되돌릴 수 없어요.
-              </div>
-            </div>
-            <Button
-              variant="black"
-              className="mt-5 h-[40px] w-full text-[14px]"
-              onClick={handleDontLookAtThePost}
-            >
-              이 게시물 보지 않기
-            </Button>
-            <Button variant="none" className="h-[40px] w-full text-[14px]">
-              취소
-            </Button>
-          </section>
-        </ModalLayout>
-      )} */}
     </>
   );
 }
@@ -122,12 +89,11 @@ function VisitorsModalContent({
 }) {
   return (
     <div className="flex w-full flex-col gap-3.5 px-3">
-      <Button variant="black" className="h-[40px] w-full text-[14px]">
+      <Button className="h-[40px] w-full rounded bg-primary-700 text-[14px] text-white">
         게시물 신고하기
       </Button>
       <Button
-        variant="black"
-        className="h-[40px] w-full text-[14px]"
+        className="h-[40px] w-full rounded bg-cool-grayscale-100 text-[14px] text-cool-grayscale-500"
         onClick={() => {
           handleModalClose(); // 기존 모달 닫고 신고 확인 모달 오픈함
           handleCheckNotToLookOpen();
@@ -151,14 +117,43 @@ function OwnerModalContent({
 }: {
   handleModalClose: () => void;
 }) {
+  const router = useRouter();
+  const params = useParams();
+  const [cookie] = useCookies(["accessToken"]);
+  const { deleteTastingNote } = useDeleteTastingNote();
+
+  const handleEditButtonClick = () => {
+    const postId = params.id; // params에서 id를 가져옴
+    if (postId) {
+      router.push(`/share/note/${postId}/edit`);
+    } else {
+      toast("시음노트 ID를 찾을 수 없습니다.");
+    }
+  };
+
+  const handleDeleteButtonClick = async () => {
+    const tastingNoteId = params.id; // params에서 id를 가져옴
+    if (tastingNoteId) {
+      console.log("tastingNoteId", tastingNoteId);
+      deleteTastingNote(Number(tastingNoteId));
+    } else {
+      toast("시음노트 ID를 찾을 수 없습니다.");
+    }
+  };
+
   return (
     <div className="flex w-full flex-col gap-3.5 px-3">
-      <Button variant="primary" className="h-[40px] w-full text-[14px]">
+      <Button
+        variant="primary"
+        className="h-[40px] w-full rounded text-[14px]"
+        onClick={handleEditButtonClick}
+      >
         게시물 수정하기
       </Button>
       <Button
         variant="secondary"
-        className="h-[40px] w-full text-[14px] text-cool-grayscale-500"
+        className="h-[40px] w-full rounded text-[14px] text-cool-grayscale-500"
+        onClick={handleDeleteButtonClick}
       >
         게시물 삭제하기
       </Button>

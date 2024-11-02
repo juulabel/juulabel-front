@@ -12,6 +12,10 @@ export default function Rating({ value, onChange }: IRating) {
   const maxStars = 5;
 
   useEffect(() => {
+    setRating(value); // value prop 변경 시 rating 상태 업데이트
+  }, [value]);
+
+  useEffect(() => {
     onChange(rating);
   }, [rating]);
 

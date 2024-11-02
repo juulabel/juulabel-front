@@ -3,12 +3,14 @@
 import Checkbox from "@/_common/Checkbox";
 import Modal from "@/_common/Modal";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
+import { ITastingNoteWriteRequest } from "@/_types";
 import { cn } from "@/_utils/commons";
 import { formInstance } from "@/app/api/axios";
 import ImageIcon from "@/icons/image_icon.svg";
 import axios, { AxiosRequestConfig } from "axios";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
@@ -39,10 +41,14 @@ interface ICommentAndRatingForm {
 export default function CommentAndRatingForm({
   handleStepBack,
 }: ICommentAndRatingForm) {
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
+  const { tastingNoteRequest } = useTastingNoteStore();
   const tastingNoteInformationStore = useTastingNoteInformationStore();
   const {
     alcoholicDrinksDetails,
     alcoholicDrinksDetails: { alcoholicDrinksName },
+    alcoholicDrinksId,
     alcoholTypeId,
     scentIds,
     colorId,
@@ -72,6 +78,24 @@ export default function CommentAndRatingForm({
       files: [],
     },
   });
+
+  // URL에서 id 값을 추출
+  const extractIdFromPath = () => {
+    const match = pathname.match(/\/share\/note\/(\d+)\/edit/);
+    return match ? match[1] : null;
+  };
+  const tastingNoteId = extractIdFromPath();
+
+  useEffect(() => {
+    // 편집 모드일 경우 기존 comment와 rating을 초기값으로 설정
+    if (isEditMode && tastingNoteRequest) {
+      const existingComment = tastingNoteRequest.request.content || "";
+      const existingRating = tastingNoteRequest.request.rating || 0;
+
+      setContent(existingComment);
+      setRating(existingRating);
+    }
+  }, [isEditMode, tastingNoteRequest]);
 
   useEffect(() => {
     setValue(
@@ -146,9 +170,10 @@ export default function CommentAndRatingForm({
 
   const onSubmit = async (data: Inputs) => {
     const { files } = data;
-    const request = {
+    const request: ITastingNoteWriteRequest = {
       alcoholicDrinksDetails,
       alcoholTypeId,
+      alcoholicDrinksId,
       scentIds,
       colorId,
       sensoryLevelIds,
@@ -166,23 +191,26 @@ export default function CommentAndRatingForm({
       formData.append("files", image);
     });
 
-    // API POST
     try {
-      const response = await formInstance.post(
-        "/v1/api/shared-space/tasting-notes",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${cookie.accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
+      const response = await formInstance({
+        method: isEditMode ? "put" : "post",
+        url: `/v1/api/shared-space/tasting-notes${isEditMode ? `/${tastingNoteId}` : ""}`,
+        data: formData,
+        headers: {
+          Authorization: `Bearer ${cookie.accessToken}`,
+          "Content-Type": "multipart/form-data",
         },
-      );
+      });
       // 로컬스토리지 비우기
 
-      // POST 성공 시에 상세페이지로 redirect
+      // 성공 시에 상세페이지로 redirect
       if (response.data.success) {
-        router.replace(`/share/note/${response.data.result.id}`);
+        const successMessage = isEditMode
+          ? "시음노트 수정이 완료되었어요."
+          : "시음노트 작성이 완료되었어요.";
+        toast(successMessage);
+        router.push(`/share/note/${response.data.result.id}`);
+        router.refresh();
       }
     } catch (error) {
       if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
@@ -194,7 +222,7 @@ export default function CommentAndRatingForm({
   return (
     <>
       <TopHeaderWithButton
-        title="시음노트 작성하기"
+        title={isEditMode ? "시음노트 수정하기" : "시음노트 작성하기"}
         buttonType="text"
         buttonName="등록"
         isActiveButton={isActiveButton}
@@ -364,7 +392,11 @@ export default function CommentAndRatingForm({
       </div>
       {modalOpen && (
         <Modal
-          modalTitle={"비공개로 게시물을 등록하시겠어요?"}
+          modalTitle={
+            isPrivate
+              ? "비공개로 게시물을 등록하시겠어요?"
+              : "게시물을 등록하시겠어요?"
+          }
           primaryBtnText={"등록하기"}
           handlePrimaryBtn={() => {
             setModalOpen(false);
