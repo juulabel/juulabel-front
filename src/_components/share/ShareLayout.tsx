@@ -1,11 +1,16 @@
 import Navigation from "@/_common/Navigation";
 import FloatingBtn from "@/_components/share/FloatingBtn";
 import ShareTabButton from "@/_components/share/ShareTabButton";
+import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 
 export default function ShareLayout({ children }: { children: ReactNode }) {
+  const { data: notificationCount = 0, isLoading } =
+    useFetchNotificationCount();
+  const displayCount = notificationCount > 99 ? "99+" : notificationCount;
+
   return (
     <>
       <div className="fixed top-0 z-20 w-full max-w-[560px] bg-white">
@@ -31,9 +36,11 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
                 alt="notification"
                 className="w-[24px] lg:w-[32px]"
               />
-              <div className="absolute -right-0.5 -top-0.5 rounded-[8px] bg-primary-700 px-1 py-[1px] text-center text-[9px] font-medium text-white">
-                24
-              </div>
+              {notificationCount > 0 && (
+                <div className="absolute -right-0.5 -top-0.5 rounded-[8px] bg-primary-700 px-1 py-[1px] text-center text-[9px] font-medium text-white">
+                  {displayCount}
+                </div>
+              )}
             </Link>
           </div>
         </header>
