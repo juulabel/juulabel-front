@@ -197,3 +197,18 @@ export const useDeleteAllNotifications = () => {
     },
   });
 };
+
+/**
+ * 알림 개수 반환
+ */
+const fetchNotificationCount = async (): Promise<number> => {
+  const notifications = await fetchNotifications();
+  return notifications.length;
+};
+
+export const useFetchNotificationCount = () => {
+  return useQuery({
+    queryKey: ["notificationCount"],
+    queryFn: fetchNotificationCount,
+  });
+};
