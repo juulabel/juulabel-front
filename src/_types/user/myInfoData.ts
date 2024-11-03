@@ -1,4 +1,5 @@
 export interface IMyInfo {
+  memberId: number;
   nickname: string;
   email: string;
   isNotificationsAllowed: boolean;

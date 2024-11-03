@@ -13,18 +13,20 @@ import { formInstance } from "@/app/api/axios";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import axios, { AxiosRequestConfig } from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { urlToFile } from "@/app/api/life/urlToFile";
 
-interface Inputs {
+export interface Inputs {
   title: string;
   content: string;
   isPrivate: boolean;
   files: File[];
+  imageUrls?: string[];
 }
 
 interface FileInfo {
-  file: File;
   id: string;
+  file: File;
 }
 
 interface ErrorResponse {
@@ -34,6 +36,8 @@ interface ErrorResponse {
 }
 
 function NewPostPage() {
+  const searchParams = useSearchParams();
+  const editMode = searchParams.get("dailyLifeId");
   const [cookie] = useCookies(["accessToken"]);
   const router = useRouter();
   const {
@@ -57,6 +61,33 @@ function NewPostPage() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [images, setImages] = useState<FileInfo[]>([]);
 
+  useEffect(() => {
+    initEditMode();
+  }, []);
+
+  const initEditMode = async () => {
+    const storedData = sessionStorage.getItem("editLifeData");
+    if (editMode && storedData) {
+      const inputData: Inputs = JSON.parse(storedData);
+      setValue("title", inputData.title);
+      setValue("content", inputData.content);
+      setValue("isPrivate", inputData.isPrivate);
+
+      const files = await Promise.all(
+        inputData.imageUrls!.map((url) =>
+          urlToFile({ url: url, filename: crypto.randomUUID() }),
+        ), // Set the filename and mimeType as needed
+      );
+
+      const newImagesWithId: FileInfo[] = files.map((file) => ({
+        file,
+        id: crypto.randomUUID(),
+      }));
+
+      setImages(newImagesWithId);
+    }
+  };
+
   // Wrap onSubmit in useCallback and include dependencies
   const onSubmit = useCallback(
     async (data: Inputs) => {
@@ -64,6 +95,11 @@ function NewPostPage() {
         setModalOpen(true);
         return;
       }
+
+      const headers = {
+        Authorization: `Bearer ${cookie.accessToken}`,
+        "Content-Type": "multipart/form-data",
+      };
 
       const { title, content, isPrivate, files } = data;
       const request = {
@@ -83,19 +119,20 @@ function NewPostPage() {
       });
 
       try {
-        const response = await formInstance.post(
-          "/v1/api/daily-lives",
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${cookie.accessToken}`,
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
+        const response = !editMode
+          ? await formInstance.post("/v1/api/daily-lives", formData, {
+              headers: headers,
+            })
+          : await formInstance.patch(
+              `/v1/api/daily-lives/${editMode}`,
+              formData,
+              {
+                headers: headers,
+              },
+            );
         if (response.data.success) {
           router.replace(
-            `/share/life/${response.data.result.dailyLifeId}?posted=true`,
+            `/share/life/${response.data.result.dailyLifeId}?posted=true&editMode=${editMode != null}`,
           );
         }
       } catch (error) {
@@ -153,29 +190,6 @@ function NewPostPage() {
     const clickedImageId = event.currentTarget.id;
     setImages((prev) => prev.filter((image) => image.id !== clickedImageId));
   };
-
-  // const {
-  //   data: lifeDetail,
-  //   isLoading,
-  //   error,
-  // } = useQuery<ILifeDetail>({
-  //   queryKey: ["lifeDetail"],
-  //   queryFn: async () => {
-  //     const res = await axios.get(
-  //       `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/daily-lives/${dailyLifeId}`,
-  //     );
-  //     return res.data.life;
-  //   },
-  // });
-
-  // 임시 에러 및 로딩 컴포넌트
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (error) return <div>An error occurred : {error.message}</div>;
-  // if (!lifeDetail) {
-  //   return null;
-  // }
 
   return (
     <>
@@ -240,31 +254,30 @@ function NewPostPage() {
           placeholder="전통주와 관련한 질문, 시음회 후기, 정보 공유 등 자유롭게 적어보세요."
           maxLength={1200}
         />
-        {/* 이미지 미리보기  UI*/}
-        {images.length !== 0 && (
-          <div className="flex w-full items-center space-x-4 overflow-x-scroll px-4 pb-3 pt-2 scrollbar-hide">
-            {images.map((image) => (
-              <div className="relative shrink-0" key={image.id}>
-                <div className="h-14 w-14 md:h-16 md:w-16">
-                  <Image
-                    alt="일상생활 내용 이미지"
-                    src={URL.createObjectURL(image.file)}
-                    width={1920}
-                    height={1080}
-                    className="h-full w-full rounded-lg object-cover"
-                  />
-                </div>
-                <div
-                  id={image.id}
-                  className="absolute -right-[0.45rem] -top-[0.45rem] z-30 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-cool-grayscale-500 md:h-[20px] md:w-[20px]"
-                  onClick={removeHandler}
-                >
-                  <IoClose className="text-white" />
-                </div>
+
+        <div className="flex w-full items-center space-x-4 overflow-x-scroll px-4 pb-3 pt-2 scrollbar-hide">
+          {images.map((image) => (
+            <div className="relative shrink-0" key={image.id}>
+              <div className="h-14 w-14 md:h-16 md:w-16">
+                <Image
+                  alt="일상생활 내용 이미지"
+                  src={URL.createObjectURL(image.file)}
+                  width={1920}
+                  height={1080}
+                  className="h-full w-full rounded-lg object-cover"
+                />
               </div>
-            ))}
-          </div>
-        )}
+              <div
+                id={image.id}
+                className="absolute -right-[0.45rem] -top-[0.45rem] z-30 flex h-[18px] w-[18px] cursor-pointer items-center justify-center rounded-full bg-cool-grayscale-500 md:h-[20px] md:w-[20px]"
+                onClick={removeHandler}
+              >
+                <IoClose className="text-white" />
+              </div>
+            </div>
+          ))}
+        </div>
+
         <Controller
           name="isPrivate"
           control={control}

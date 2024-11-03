@@ -43,7 +43,7 @@ export default function MyInfoBody({ user, setIsEditMode }: IMyInfoBody) {
 
       <button
         onClick={() => setIsEditMode(true)}
-        className="my-4 inline-flex h-[37px] w-[361px] items-center justify-center gap-2.5 rounded bg-slate-100 px-3 py-2"
+        className="my-4 inline-flex h-[37px] w-full items-center justify-center gap-2.5 rounded bg-slate-100 px-3 py-2"
       >
         <p className="text-center text-sm font-bold leading-[21px] text-slate-500">
           내 정보 수정하기
