@@ -45,7 +45,6 @@ export default function Page() {
   };
 
   console.log(user);
-  
 
   if (isLoadingUser) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;

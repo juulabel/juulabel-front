@@ -7,19 +7,17 @@ import LifeViewer from "@/_components/share/life/LifeViewer";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
 import { getLifeDetail } from "@/app/api/life/getLifeDetail";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import { Inputs } from "../write/page";
+import { Inputs } from "../../../write/page";
+import { SearchParamProps } from "@/_types";
 
-interface ILifeDetailPage {
-  params: { dailyLifeId: string };
-}
-
-function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
+function LifeDetailPage({ params }: SearchParamProps) {
   const router = useRouter();
+  const id = params.id;
   const searchParams = useSearchParams();
   const posted = searchParams.get("posted");
   const editMode = searchParams.get("editMode");
@@ -28,17 +26,21 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const [
+    { data, isFetching: isLoadingLife, error },
     { data: user, isFetching: isLoadingUser, error: userError },
-    { data: lifeDetail, isFetching: isLoadingLife, error: lifeError },
   ] = useQueries({
     queries: [
       {
-        queryKey: ["my-info"],
-        queryFn: () => getMyInfo(cookie.accessToken),
+        queryKey: ["lifeDetail", id],
+        queryFn: () => getLifeDetail(cookie.accessToken, id),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 5,
       },
       {
-        queryKey: ["lifeDetail", dailyLifeId],
-        queryFn: async () => getLifeDetail(cookie.accessToken, dailyLifeId),
+        queryKey: ["my-info"],
+        queryFn: () => getMyInfo(cookie.accessToken),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 5,
       },
     ],
   });
@@ -54,7 +56,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
   });
 
   const handleDeleteConfirm = async () => {
-    const isSuccess = await deleteDailyLife(cookie.accessToken, dailyLifeId);
+    const isSuccess = await deleteDailyLife(cookie.accessToken, id);
     if (isSuccess) {
       setDeleteModalOpen(false);
       router.back();
@@ -66,27 +68,24 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
   };
   const handleEditBtn = () => {
     const input: Inputs = {
-      title: lifeDetail.dailyLifeDetailInfo.title,
-      content: lifeDetail.dailyLifeDetailInfo.content,
+      title: data.result.dailyLifeDetailInfo.title,
+      content: data.result.dailyLifeDetailInfo.content,
       isPrivate: false,
       files: [],
-      imageUrls: lifeDetail.imageInfo.imageUrlList,
+      imageUrls: data.imageInfo.imageUrlList,
     };
 
     sessionStorage.setItem("editLifeData", JSON.stringify(input));
 
-    router.push(`/share/life/write?dailyLifeId=${dailyLifeId}`);
+    router.push(`/share/life/write?dailyLifeId=${id}`);
   };
 
   // 임시 에러 및 로딩 컴포넌트
   if (isLoadingUser || isLoadingLife) {
     return <div>Loading...</div>;
   }
-  if (userError || lifeError)
-    return (
-      <div>An error occurred : {userError?.message ?? lifeError?.message}</div>
-    );
-  if (!lifeDetail) {
+  if (userError || error) return toast(userError?.message ?? error?.message);
+  if (!data) {
     return null;
   }
 
@@ -98,9 +97,10 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
       createdAt,
       likeCount,
       commentCount,
+      isLiked,
     },
     imageInfo: { imageUrlList, imageCount },
-  } = lifeDetail;
+  } = data.result;
 
   return (
     <>
@@ -124,7 +124,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
           imageCount={imageCount}
         />
       </div>
-      <CommentFooter likeCount={likeCount} commentCount={commentCount} />
+      <CommentFooter info={data.result.dailyLifeDetailInfo} dailyLifeId={id} />
       {editModalOpen && (
         <EditModal
           handleEdit={handleEditBtn}

@@ -16,24 +16,26 @@ export interface ILifeList {
 }
 
 export interface ILifeDetail {
-  dailyLifeDetailInfo: {
-    title: string;
-    content: string;
-    dailyLifeId: number;
-    memberInfo: {
-      memberId: number;
-      nickname: string;
-      profileImage: string;
-    };
-    createdAt: string;
-    commentCount: number;
-    likeCount: number;
-    isLiked: boolean;
-  };
+  dailyLifeDetailInfo: ILifeDetailInfo;
   imageInfo: {
     imageUrlList: string[];
     imageCount: number;
   };
+}
+
+export interface ILifeDetailInfo {
+  title: string;
+  content: string;
+  dailyLifeId: number;
+  memberInfo: {
+    memberId: number;
+    nickname: string;
+    profileImage: string;
+  };
+  createdAt: string;
+  commentCount: number;
+  likeCount: number;
+  isLiked: boolean;
 }
 
 export interface INoteThumbnail {
