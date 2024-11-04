@@ -48,6 +48,7 @@ export default function LikeCommentFooter({ info, id }: Props) {
         queryKey: ["noteDetail", id],
       });
       const previousNoteData = queryClient.getQueryData(["noteDetail", id]);
+      console.log(previousNoteData);
 
       queryClient.setQueryData(
         ["noteDetail", id],

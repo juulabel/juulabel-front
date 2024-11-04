@@ -34,7 +34,7 @@ export default function NicknameForm() {
   const nicknameLength = nicknameWatch.length;
 
   const onSubmit = async (data: NicknameUserFormValues) => {
-    try {
+    try {      
       const response = await instance.get(
         `/v1/api/members/nicknames/${data.nickname}/exists`,
       );

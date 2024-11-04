@@ -97,7 +97,7 @@ export default function CommentsBody({ id }: Props) {
   // }
 
   if (isError) {
-    return <ServerToast text="에러가 발생했습니다" redirectPath="/" />;
+    // return <ServerToast text="에러가 발생했습니다" redirectPath="/" />;
   }
   return (
     <>

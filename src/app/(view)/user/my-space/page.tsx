@@ -4,6 +4,7 @@ import LifeList from "@/_common/LifeList";
 import Loading from "@/_common/Loading";
 import Navigation from "@/_common/Navigation";
 import NoteThumbnail from "@/_common/NoteThumbnail";
+import ServerToast from "@/_components/share/error/ServerToast";
 import MySpaceHeader from "@/_components/user/MySpaceHeader";
 import { ILifeList, INoteThumbnail } from "@/_types/share";
 import { IMySpace } from "@/_types/user/mySpaceData";
@@ -48,7 +49,6 @@ export default function Page() {
     isError,
     refetch,
     status,
-    error: noteError,
   } = useInfiniteQuery({
     queryKey: ["my-note"],
     queryFn: ({ pageParam }) =>
@@ -67,8 +67,7 @@ export default function Page() {
       return data.pages.flatMap((page) => page.content);
     },
     gcTime: 0,
-    staleTime
-    : 0,
+    staleTime: 0,
   });
 
   const observerRef = useInfiniteScroll({
@@ -106,8 +105,8 @@ export default function Page() {
   };
 
   if (isFetchingNextPage || isLoadingUser) return <Loading />;
-  if (userError || noteError)
-    return <div>Error : {userError?.message ?? noteError!.message}</div>;
+  if (userError || isError)
+    return <ServerToast text="에러가 발생했습니다" redirectPath="/" />;
 
   return (
     <>
@@ -211,7 +210,7 @@ export default function Page() {
                   ) : hasNextPage ? (
                     <p>Loading more...</p>
                   ) : (
-                    <br/>
+                    <br />
                   )}
                 </div>
               </>

@@ -76,7 +76,7 @@ export default function Page() {
       gender: registerStore.gender,
       provider: registerStore.provider,
       providerId: registerStore.providerId,
-      alcoholTypeIds: getAlocholTypeIds(registerStore.preferredAlcoholType),
+      alcoholTypeIds: registerStore.preferredAlcoholType,
       termsAgreements: [
         registerStore.serviceAgree,
         registerStore.privateInformationAgree,
@@ -84,6 +84,9 @@ export default function Page() {
       ],
     };
     try {
+        console.log(data);
+        console.log(registerStore.preferredAlcoholType);
+        
       const response = await instance.post(requests.postSignUp, data);
       if (response.status === 200) {
         registerStore.setMemberId(response.data.result.memberId);
