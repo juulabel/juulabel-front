@@ -1,50 +1,91 @@
 "use client";
+import WarningModal from "@/_components/notification/\bWarningModal";
 import CommentFooter from "@/_components/reaction/CommentFooter";
+import EditModal from "@/_components/share/EditModal";
 import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
 import LifeViewer from "@/_components/share/life/LifeViewer";
-import { ILifeDetail } from "@/_types/share";
-import { instance } from "@/app/api/axios";
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import getMyInfo from "@/app/api/auth/getMyInfo";
+import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
+import { getLifeDetail } from "@/app/api/life/getLifeDetail";
+import { useQueries } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { Inputs } from "../write/page";
 
 interface ILifeDetailPage {
   params: { dailyLifeId: string };
 }
 
 function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const posted = searchParams.get("posted");
-  const [cookie, setCookie] = useCookies(["accessToken"]);
-  const {
-    data: lifeDetail,
-    isLoading,
-    error,
-  } = useQuery<ILifeDetail>({
-    queryKey: ["lifeDetail", dailyLifeId],
-    queryFn: async () => {
-      const res = await instance.get(`/v1/api/daily-lives/${dailyLifeId}`, {
-        headers: {
-          Authorization: `Bearer ${cookie.accessToken}`,
-        },
-      });
-      return res.data.result;
-    },
+  const editMode = searchParams.get("editMode");
+  const [cookie] = useCookies(["accessToken"]);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const [
+    { data: user, isFetching: isLoadingUser, error: userError },
+    { data: lifeDetail, isFetching: isLoadingLife, error: lifeError },
+  ] = useQueries({
+    queries: [
+      {
+        queryKey: ["my-info"],
+        queryFn: () => getMyInfo(cookie.accessToken),
+      },
+      {
+        queryKey: ["lifeDetail", dailyLifeId],
+        queryFn: async () => getLifeDetail(cookie.accessToken, dailyLifeId),
+      },
+    ],
   });
 
   useEffect(() => {
     if (posted === "true") {
-      toast("일상생활 작성이 완료되었어요.");
+      if (editMode) {
+        toast("일상생활 수정이 완료되었어요.");
+      } else {
+        toast("일상생활 작성이 완료되었어요.");
+      }
     }
   });
 
+  const handleDeleteConfirm = async () => {
+    const isSuccess = await deleteDailyLife(cookie.accessToken, dailyLifeId);
+    if (isSuccess) {
+      setDeleteModalOpen(false);
+      router.back();
+      toast("일상생활 게시물이 삭제되었어요.");
+    } else {
+      setDeleteModalOpen(false);
+      toast("내부 서버 오류");
+    }
+  };
+  const handleEditBtn = () => {
+    const input: Inputs = {
+      title: lifeDetail.dailyLifeDetailInfo.title,
+      content: lifeDetail.dailyLifeDetailInfo.content,
+      isPrivate: false,
+      files: [],
+      imageUrls: lifeDetail.imageInfo.imageUrlList,
+    };
+
+    sessionStorage.setItem("editLifeData", JSON.stringify(input));
+
+    router.push(`/share/life/write?dailyLifeId=${dailyLifeId}`);
+  };
+
   // 임시 에러 및 로딩 컴포넌트
-  if (isLoading) {
+  if (isLoadingUser || isLoadingLife) {
     return <div>Loading...</div>;
   }
-  if (error) return <div>An error occurred : {error.message}</div>;
+  if (userError || lifeError)
+    return (
+      <div>An error occurred : {userError?.message ?? lifeError?.message}</div>
+    );
   if (!lifeDetail) {
     return null;
   }
@@ -53,7 +94,7 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
     dailyLifeDetailInfo: {
       title,
       content,
-      memberInfo: { nickname, profileImage },
+      memberInfo: { memberId, nickname, profileImage },
       createdAt,
       likeCount,
       commentCount,
@@ -67,8 +108,12 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
         title="전통주 일상생활"
         buttonType="meatballs"
         titleLink="/share/life"
+        isActiveButton={user.memberId == memberId}
+        onClick={() => {
+          setEditModalOpen(true);
+        }}
       />
-      <div className="h-dvh overflow-y-scroll pb-[62px] pt-16 scrollbar-hide">
+      <div className="h-dvh overflow-y-scroll pb-[62px] scrollbar-hide">
         <LifeViewer
           title={title}
           content={content}
@@ -80,6 +125,25 @@ function LifeDetailPage({ params: { dailyLifeId } }: ILifeDetailPage) {
         />
       </div>
       <CommentFooter likeCount={likeCount} commentCount={commentCount} />
+      {editModalOpen && (
+        <EditModal
+          handleEdit={handleEditBtn}
+          handleDelete={() => {
+            setEditModalOpen(false);
+            setDeleteModalOpen(true);
+          }}
+          handleCancel={() => setEditModalOpen(false)}
+        />
+      )}
+      {deleteModalOpen && (
+        <WarningModal
+          modalTitle="게시물을 삭제하시겠어요?"
+          confirmText="삭제하기"
+          cancelText="닫기"
+          handleConfirm={handleDeleteConfirm}
+          handleCancel={() => setDeleteModalOpen(false)}
+        />
+      )}
     </>
   );
 }
