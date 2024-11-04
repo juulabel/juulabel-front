@@ -10,11 +10,9 @@ import postNoteLike from "@/app/api/tasting-note/postNoteLike";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { RxChatBubble } from "react-icons/rx";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;

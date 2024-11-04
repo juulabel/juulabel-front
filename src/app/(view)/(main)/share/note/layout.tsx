@@ -12,16 +12,6 @@ const TastingNoteContext = createContext<TastingNoteContextProps | undefined>(
   undefined,
 );
 
-export const useTastingNoteContext = () => {
-  const context = useContext(TastingNoteContext);
-  if (!context) {
-    throw new Error(
-      "useTastingNoteContext must be used within a TastingNoteContext.Provider",
-    );
-  }
-  return context;
-};
-
 export default function Layout({ children }: { children: ReactNode }) {
   const [tastingNoteData, setTastingNoteData] =
     useState<ITastingNoteResponse | null>(null);

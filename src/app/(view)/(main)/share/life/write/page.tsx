@@ -5,7 +5,7 @@ import { GoChevronRight } from "react-icons/go";
 import { Controller, useForm } from "react-hook-form";
 import Image from "next/image";
 import { cn } from "@/_utils/commons";
-import { MouseEvent, useEffect, useState, useCallback } from "react";
+import { MouseEvent, useEffect, useState, useCallback, Suspense } from "react";
 import { IoClose } from "react-icons/io5";
 import ImageIcon from "@/icons/image_icon.svg";
 import Modal from "@/_common/Modal";
@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import axios, { AxiosRequestConfig } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { urlToFile } from "@/app/api/life/urlToFile";
+import Loading from "@/_common/Loading";
 
 export interface Inputs {
   title: string;
@@ -352,4 +353,11 @@ function NewPostPage() {
     </>
   );
 }
-export default NewPostPage;
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <NewPostPage />
+    </Suspense>
+  );
+}

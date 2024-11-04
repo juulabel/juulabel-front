@@ -49,8 +49,9 @@ export default function Page() {
             onClick={() => {
               router.push("/share/note");
             }}
-            children="로그인 화면으로 가기"
-          />
+          >
+            로그인 화면으로 가기
+          </BottomButton>
         </div>
       ) : (
         <div className="h-full w-full max-w-[560px]">

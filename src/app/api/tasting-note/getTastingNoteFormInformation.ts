@@ -13,7 +13,7 @@ export async function getColors(alcoholTypeId: number) {
       );
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 }
@@ -30,7 +30,10 @@ export async function getScents(alcoholTypeId: number) {
         `Unexpected response : ${response.status} ${response.statusText}`,
       );
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    
+  }
 }
 
 export async function getSensories(alcoholTypeId: number) {
@@ -45,7 +48,9 @@ export async function getSensories(alcoholTypeId: number) {
         `Unexpected response : ${response.status} ${response.statusText}`,
       );
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function getFlavors(alcoholTypeId: number) {
@@ -60,5 +65,7 @@ export async function getFlavors(alcoholTypeId: number) {
         `Unexpected response : ${response.status} ${response.statusText}`,
       );
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 }
