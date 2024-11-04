@@ -34,7 +34,7 @@ export default function LifeViewer({
               }
               alt="작성자 이미지"
               width={24}
-              height={24}              
+              height={24}
               className="object-cover"
             />
           </div>

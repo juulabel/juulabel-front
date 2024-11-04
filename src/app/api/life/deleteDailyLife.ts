@@ -6,7 +6,6 @@ export async function deleteDailyLife(
   id: string,
 ): Promise<boolean> {
   try {
-    
     const response = await instance.delete(`${requests.lifeDelete}${id}`, {
       withCredentials: true,
       headers: {

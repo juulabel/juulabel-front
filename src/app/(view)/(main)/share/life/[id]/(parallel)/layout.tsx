@@ -19,7 +19,7 @@ export default function LifeDetailLayout({
     <div className="w-full overflow-hidden pb-[100px]">
       <ShareHeader />
       {life}
-      {comments}      
+      {comments}
     </div>
   );
 }

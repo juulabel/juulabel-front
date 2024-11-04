@@ -7,17 +7,14 @@ export const getMyNote = async ({
   accessToken: string;
   lastNoteId: number | null;
 }) => {
-  const res = await instance.get(
-    `/v1/api/members/tasting_notes/my`,
-    {
-      params: {
-        lastTastingNoteId: lastNoteId,
-        pageSize: 10,
-      },
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+  const res = await instance.get(`/v1/api/members/tasting_notes/my`, {
+    params: {
+      lastTastingNoteId: lastNoteId,
+      pageSize: 10,
     },
-  );
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return res.data.result.myTastingNoteSummaries;
 };

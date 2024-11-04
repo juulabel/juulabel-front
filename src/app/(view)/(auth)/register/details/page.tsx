@@ -84,9 +84,9 @@ export default function Page() {
       ],
     };
     try {
-        console.log(data);
-        console.log(registerStore.preferredAlcoholType);
-        
+      console.log(data);
+      console.log(registerStore.preferredAlcoholType);
+
       const response = await instance.post(requests.postSignUp, data);
       if (response.status === 200) {
         registerStore.setMemberId(response.data.result.memberId);

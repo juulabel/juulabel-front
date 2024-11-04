@@ -12,7 +12,7 @@ export default function EditModal({
   handleCancel,
 }: IEditModal) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
       <div className="inline-flex h-[179px] w-[91%] max-w-[560px] flex-col items-center justify-center gap-2 rounded-2xl bg-white p-6">
         <Button
           variant="primary"
