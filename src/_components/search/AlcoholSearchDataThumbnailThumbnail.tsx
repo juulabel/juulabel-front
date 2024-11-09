@@ -32,20 +32,6 @@ export default function AlcoholSearchDataThumbnail({
       }`,
     );
   };
-  // const handleClick = () => {
-  //   router.push(
-  //     `/share/note/write?productName=${encodeURIComponent(
-  //       name,
-  //     )}&alcoholContent=${encodeURIComponent(
-  //       "alcoholContent",
-  //     )}&alcoholType=${encodeURIComponent(
-  //       alcoholType.name,
-  //     )}&brewery=${brewery ? encodeURIComponent(brewery.name) : ""}&breweryLocation=${
-  //       brewery ? encodeURIComponent(brewery.region) : ""
-  //     }`,
-  //   );
-  // };
-
   return (
     <div
       className="mb-[5%] flex w-full cursor-pointer flex-col"

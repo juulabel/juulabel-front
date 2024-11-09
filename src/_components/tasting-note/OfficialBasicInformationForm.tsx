@@ -2,6 +2,8 @@
 
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
+import { usePathname } from "next/navigation";
 
 interface IOfficialBasicInformationForm {
   alcoholicDrinksId: string;
@@ -25,6 +27,9 @@ export default function OfficialBasicInformationForm({
   handleStep,
 }: IOfficialBasicInformationForm) {
   const tastingNoteInformationStore = useTastingNoteInformationStore();
+  const { tastingNoteRequest } = useTastingNoteStore();
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
 
   const handleNextButton = () => {
     tastingNoteInformationStore.setAlcoholicDrinksId(Number(alcoholicDrinksId));
