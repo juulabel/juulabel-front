@@ -2,13 +2,22 @@
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
 import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
+import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useDeleteTastingNote } from "@/app/api/tasting-note/deleteTastingNote";
+import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
+import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+
+interface IAlcoholType {
+  id: number;
+  name: string;
+  image: string | null;
+}
 
 export default function ShareHeader() {
   const router = useRouter();
@@ -128,10 +137,68 @@ function OwnerModalContent({
   const [cookie] = useCookies(["accessToken"]);
   const { deleteTastingNote } = useDeleteTastingNote();
 
-  const handleEditButtonClick = () => {
-    const postId = params.id; // params에서 id를 가져옴
-    if (postId) {
-      router.push(`/share/note/${postId}/edit`);
+  const postId = params.id;
+
+  const {
+    data: tastingNoteDetail,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["tastingNote", postId],
+    queryFn: () =>
+      getNoteDetail({
+        token: cookie.accessToken,
+        id: Number(postId),
+      }),
+  });
+
+  const { data: alcoholTypeData } = useQuery({
+    queryKey: ["alcoholType"],
+    queryFn: getAlcoholType,
+    select: (data) => data.alcoholTypeInfos,
+  });
+
+  const handleEditButtonClick = async () => {
+    if (tastingNoteDetail) {
+      // Official 데이터인 경우
+      if (tastingNoteDetail.result.alcoholicDrinksInfo.isOfficialData) {
+        const matchedType = alcoholTypeData.find(
+          (type: IAlcoholType) =>
+            type.name ===
+            tastingNoteDetail.result.tastingNoteDetailInfo.alcoholTypeName,
+        );
+
+        const alcoholicDrinksId =
+          tastingNoteDetail.result.alcoholicDrinksInfo.alcoholicDrinksId;
+        const name =
+          tastingNoteDetail.result.tastingNoteDetailInfo.alcoholicDrinksName;
+        const alcoholContent =
+          tastingNoteDetail.result.tastingNoteDetailInfo.alcoholContent;
+        const alcoholTypeId = matchedType ? matchedType.id : 0;
+        const alcoholTypeName =
+          tastingNoteDetail.result.tastingNoteDetailInfo.alcoholTypeName;
+        const brewery =
+          tastingNoteDetail.result.tastingNoteDetailInfo.breweryName;
+        const breweryLocation =
+          tastingNoteDetail.result.tastingNoteDetailInfo.breweryRegion;
+
+        router.push(
+          `/share/note/${postId}/edit?alcoholicDrinksId=${alcoholicDrinksId}&productName=${encodeURIComponent(
+            name,
+          )}&alcoholContent=${encodeURIComponent(
+            alcoholContent,
+          )}&alcoholTypeId=${encodeURIComponent(
+            alcoholTypeId,
+          )}&alcoholTypeName=${encodeURIComponent(alcoholTypeName)}&brewery=${
+            brewery ? encodeURIComponent(brewery) : ""
+          }&breweryLocation=${
+            breweryLocation ? encodeURIComponent(breweryLocation) : ""
+          }`,
+        );
+      } else {
+        // Unofficial 데이터인 경우
+        router.push(`/share/note/${postId}/edit`);
+      }
     } else {
       toast("시음노트 ID를 찾을 수 없습니다.");
     }

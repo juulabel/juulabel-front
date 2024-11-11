@@ -103,8 +103,6 @@ export default function VisualAndTextureForm({
     queryFn: () => getSensories(alcoholTypeId),
   });
 
-  useEffect(() => {}, [alcoholTypeId]);
-
   // editMode일 때 store에서 colorId와 sensoryLevelIds 불러와 초기값으로 설정
   useEffect(() => {
     if (isEditMode && tastingNoteRequest && colors) {

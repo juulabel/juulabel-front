@@ -2,30 +2,41 @@
 
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
+import { usePathname } from "next/navigation";
 
 interface IOfficialBasicInformationForm {
+  alcoholicDrinksId: string;
   productName: string;
   alcoholContent: string;
-  alcoholType: string;
+  alcoholTypeId: string;
+  alcoholTypeName: string;
   brewery?: string;
   breweryLocation?: string;
   handleStep: () => void;
 }
 
 export default function OfficialBasicInformationForm({
+  alcoholicDrinksId,
   productName,
   alcoholContent,
-  alcoholType,
+  alcoholTypeId,
+  alcoholTypeName,
   brewery,
   breweryLocation,
   handleStep,
 }: IOfficialBasicInformationForm) {
   const tastingNoteInformationStore = useTastingNoteInformationStore();
+  const { tastingNoteRequest } = useTastingNoteStore();
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
 
   const handleNextButton = () => {
+    tastingNoteInformationStore.setAlcoholicDrinksId(Number(alcoholicDrinksId));
     tastingNoteInformationStore.setAlcoholicDrinksName(productName);
     tastingNoteInformationStore.setAlcoholContent(parseFloat(alcoholContent));
-    tastingNoteInformationStore.setAlcoholTypeName(alcoholType);
+    tastingNoteInformationStore.setAlcoholTypeId(Number(alcoholTypeId));
+    tastingNoteInformationStore.setAlcoholTypeName(alcoholTypeName);
     tastingNoteInformationStore.setBreweryName(brewery ? brewery : "");
     tastingNoteInformationStore.setBreweryRegion(
       breweryLocation ? breweryLocation : "",
@@ -67,7 +78,7 @@ export default function OfficialBasicInformationForm({
               주종
             </p>
             <p className="text-base font-medium text-cool-grayscale-700">
-              {alcoholType}
+              {alcoholTypeName}
             </p>
           </div>
           <div className="my-[2%] flex items-center justify-between">
