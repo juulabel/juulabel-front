@@ -32,7 +32,6 @@ export async function getScents(alcoholTypeId: number) {
     }
   } catch (error) {
     console.error(error);
-    
   }
 }
 

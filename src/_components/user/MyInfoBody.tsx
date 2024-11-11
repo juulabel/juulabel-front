@@ -104,7 +104,7 @@ export default function MyInfoBody({ user, setIsEditMode }: IMyInfoBody) {
           modalTitle="정말로 로그아웃 하시겠어요?"
           primaryBtnText="확인"
           handlePrimaryBtn={() => {
-            removeCookie(cookies.accessToken);
+            removeCookie("accessToken", { path: "/" });
             setSignOutModalOpen(false);
             router.push("/");
           }}

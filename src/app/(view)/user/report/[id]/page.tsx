@@ -90,7 +90,7 @@ export default function Page() {
         </p>
         <div className="my-4 h-[1px] w-full bg-cool-grayscale-100" />
         <div className="flex flex-col">
-          {reportList?.data.map((report: string) => (
+          {reportList?.data.map((index: number, report: string) => (
             <>
               <div key={report} className="my-2 flex max-h-[56px] flex-row">
                 <Checkbox

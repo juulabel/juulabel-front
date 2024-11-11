@@ -73,7 +73,7 @@ export default function HeaderWithButton({
         >
           {title}
         </Link>
-    ) : (
+      ) : (
         <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
       )}
 
