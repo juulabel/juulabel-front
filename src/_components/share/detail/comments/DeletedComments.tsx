@@ -8,11 +8,11 @@ import Image from "next/image";
 
 interface Props {
   commentInfo: IComment;
-  tastingNoteId: number;
+  postId: number;
 }
 
-export default function DeletedComments({ commentInfo, tastingNoteId }: Props) {
-  const { onOpen, setCommentInfo, setTastingNoteId } = useReplyComponentStore();
+export default function DeletedComments({ commentInfo, postId }: Props) {
+  const { onOpen, setCommentInfo, setPostId } = useReplyComponentStore();
 
   return (
     <div
@@ -22,7 +22,7 @@ export default function DeletedComments({ commentInfo, tastingNoteId }: Props) {
         e.stopPropagation();
 
         setCommentInfo(commentInfo);
-        setTastingNoteId(tastingNoteId);
+        setPostId(postId);
         onOpen();
       }}
     >

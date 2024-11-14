@@ -50,9 +50,10 @@ export default function LifeList({
           <div className="relative h-6 w-6 overflow-hidden rounded-full">
             <Image
               src={
-                profileImage
-                  ? profileImage
-                  : "/images/placeholders/profile/default_profile.png"
+                // profileImage
+                //   ? profileImage
+                //   :
+                   "/images/placeholders/profile/default_profile.png"
               }
               alt="작성자 이미지"
               sizes="10vw"

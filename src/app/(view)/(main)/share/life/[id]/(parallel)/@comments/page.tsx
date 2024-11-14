@@ -11,7 +11,7 @@ export default function CommentsPageServer({ params }: SearchParamProps) {
 
   return (
     <div className="w-full max-w-[560px]">
-      <CommentsPage id={numberTypeId} />
+      <CommentsPage id={numberTypeId} isLife={true} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import useReplyComponentStore from "@/_store/replyComponentStore";
 import { IComment } from "@/_types";
+import postDailyLifeComments from "@/app/api/life/postLifeComments";
 import postNoteComments from "@/app/api/tasting-note/postNoteComments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, RefObject, SetStateAction } from "react";
@@ -7,17 +8,21 @@ import { toast } from "react-toastify";
 
 interface Params {
   setIsSubmitting: Dispatch<SetStateAction<boolean>>;
-  tastingNoteId: number;
+  postId: number;
   textRef: RefObject<HTMLTextAreaElement>;
   setBtnDisabled: Dispatch<SetStateAction<boolean>>;
+  isLife?: boolean;
 }
 
 export default function useCommentsPOST({
   setIsSubmitting,
-  tastingNoteId,
+  postId,
   setBtnDisabled,
   textRef,
+  isLife,
 }: Params) {
+  console.log(isLife == true);
+  
   const queryClient = useQueryClient();
   const {
     isOpen: replyComponentIsOpen,
@@ -34,11 +39,17 @@ export default function useCommentsPOST({
       content: string;
       parentCommentId?: number;
     }) => {
-      await postNoteComments({
-        id: id,
-        content: content,
-        parentCommentId: parentCommentId,
-      });
+      isLife
+        ? await postDailyLifeComments({
+            id: id,
+            content: content,
+            parentCommentId: parentCommentId,
+          })
+        : await postNoteComments({
+            id: id,
+            content: content,
+            parentCommentId: parentCommentId,
+          });
 
       return { parentCommentId };
     },
@@ -46,12 +57,12 @@ export default function useCommentsPOST({
       toast("댓글을 추가했어요.");
 
       queryClient.invalidateQueries({
-        queryKey: ["noteComments", Number(tastingNoteId)],
+        queryKey: [isLife ? "lifeComments" : "noteComments", Number(postId)],
         refetchType: "all",
       });
 
       queryClient.refetchQueries({
-        queryKey: ["noteDetail", Number(tastingNoteId)],
+        queryKey: [isLife ? "lifeDetail" : "noteDetail", Number(postId)],
       });
 
       setIsSubmitting(false);
@@ -71,11 +82,13 @@ export default function useCommentsPOST({
         }
 
         queryClient.invalidateQueries({
-          queryKey: ["getReply", tastingNoteId, parentCommentId],
+          queryKey: ["getReply", postId, parentCommentId],
         });
       }
     },
     onError: (error) => {
+      console.log(error);
+      
       toast("댓글 추가를 실패했어요.");
       setIsSubmitting(false);
     },

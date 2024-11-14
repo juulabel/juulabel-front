@@ -4,11 +4,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 interface ICommonProps {
-  tastingNoteId: number;
+  postId: number;
   commentId: number;
 }
 
-export default function useOptimisticUpdate() {
+export default function useOptimisticUpdate(isLife: boolean) {
   const queryClient = useQueryClient();
   const {
     isOpen: replyComponentIsOpen,
@@ -17,23 +17,23 @@ export default function useOptimisticUpdate() {
   } = useReplyComponentStore();
 
   const replyOptimisticUpdate = async ({
-    tastingNoteId,
+    postId,
     commentId, //대댓글의 id
   }: ICommonProps) => {
     await queryClient.cancelQueries({
-      queryKey: ["getReply", tastingNoteId, commentInfo?.commentId],
+      queryKey: ["getReply", postId, commentInfo?.commentId],
     });
 
     const previousNoteCommentsData = queryClient.getQueryData([
       "getReply",
-      tastingNoteId,
+      postId,
       commentId,
     ]);
 
     queryClient.setQueryData(
-      ["getReply", tastingNoteId, commentInfo?.commentId],
+      ["getReply", postId, commentInfo?.commentId],
       (oldData: any) => {
-        if (!oldData) return oldData;
+        if (!oldData || !Array.isArray(oldData.pages)) return oldData; // Ensure pages exists and is an array
 
         return {
           ...oldData,
@@ -70,27 +70,27 @@ export default function useOptimisticUpdate() {
 
     return { previousNoteCommentsData };
   };
+
   const commentsOptimisticUpdate = async ({
-    tastingNoteId,
+    postId,
     commentId,
   }: ICommonProps) => {
     await queryClient.cancelQueries({
-      queryKey: ["noteComments", tastingNoteId],
+      queryKey: [isLife ? "lifeComments" : "noteComments", postId],
     });
 
     const previousNoteCommentsData = queryClient.getQueryData([
-      "noteComments",
-      tastingNoteId,
+      isLife ? "lifeComments" : "noteComments",
+      postId,
     ]);
 
     queryClient.setQueryData(
-      ["noteComments", tastingNoteId],
+      [isLife ? "lifeComments" : "noteComments", postId],
       (oldData: any) => {
-        if (!oldData) return oldData;
+        if (!oldData || !oldData.pages) return oldData; // Ensure pages exists
 
         return {
           ...oldData,
-          // pages 구조를 유지하면서 각 페이지에서 특정 댓글을 찾아 업데이트
           pages: oldData.pages.map((page: any) => {
             return {
               ...page,

@@ -12,14 +12,14 @@ import Image from "next/image";
 import useCommentsModify from "@/_utils/hooks/useCommentsModify";
 import ServerToast from "../../error/ServerToast";
 import useReplyComponentStore from "@/_store/replyComponentStore";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
 
 export default function ModifyBody() {
   const MAX_LENGTH = 600;
 
-  const { isOpen, commentId, tastingNoteId, content, closeModal } =
+  const { isOpen, commentId, postId, content, closeModal } =
     useCommentsModalStore();
 
   const { id } = useParams();
@@ -28,6 +28,9 @@ export default function ModifyBody() {
 
   const textRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isLife = pathname.includes("life");
 
   const { mutate } = useCommentsModify();
 
@@ -54,7 +57,7 @@ export default function ModifyBody() {
   };
 
   const backPush = () => {
-    router.push(`/share/note/${tastingNoteId}`);
+    router.push(isLife ? `/share/life/${postId}` : `/share/note/${postId}`);
   };
 
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function ModifyBody() {
     }
   }, []);
 
-  if (!tastingNoteId || !commentId) {
+  if (!postId || !commentId) {
     return null;
   }
 
@@ -94,9 +97,10 @@ export default function ModifyBody() {
             if (isOpen) closeModal();
 
             mutate({
-              tastingNoteId,
+              postId,
               commentId,
               content: textRef.current?.value || "",
+              isLife: isLife,
             });
           }}
         >

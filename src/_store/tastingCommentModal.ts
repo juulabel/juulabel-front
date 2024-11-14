@@ -1,35 +1,35 @@
 import { create } from "zustand";
 
 interface Params {
-  tastingNoteId: number;
+  postId: number;
   commmentId: number;
   content?: string;
 }
 
 interface ModalState {
   isOpen: boolean;
-  tastingNoteId: number | null;
+  postId: number | null;
   commentId: number | null;
   content?: string;
-  openModal: ({ tastingNoteId, commmentId, content }: Params) => void;
+  openModal: ({ postId, commmentId, content }: Params) => void;
   closeModal: () => void;
 }
 
 const useCommentsModalStore = create<ModalState>((set) => ({
   isOpen: false,
-  tastingNoteId: null,
+  postId: null,
   commentId: null,
-  openModal: ({ tastingNoteId, commmentId, content = "" }: Params) =>
+  openModal: ({ postId, commmentId, content = "" }: Params) =>
     set({
       isOpen: true,
-      tastingNoteId: tastingNoteId,
+      postId: postId,
       commentId: commmentId,
       content: content,
     }),
   closeModal: () => {
     set({
       isOpen: false,
-      tastingNoteId: null,
+      postId: null,
       commentId: null,
     });
   },

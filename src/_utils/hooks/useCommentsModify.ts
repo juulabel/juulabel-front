@@ -1,4 +1,5 @@
 import useReplyComponentStore from "@/_store/replyComponentStore";
+import patchDailyLifeComments from "@/app/api/life/patchLifeComments";
 import patchNoteComments from "@/app/api/tasting-note/patchNoteComments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -12,28 +13,42 @@ export default function useCommentsModify() {
 
   const mutate = useMutation({
     mutationFn: async ({
-      tastingNoteId,
+      postId,
       commentId,
       content,
+      isLife,
     }: {
-      tastingNoteId: number;
+      postId: number;
       commentId: number;
       content: string;
+      isLife: boolean;
     }) => {
       onClose();
-
-      await patchNoteComments({
-        tastingNoteId: tastingNoteId,
-        commentId: commentId,
-        content: content,
-      });
-      return { tastingNoteId, commentId, content };
+      isLife
+        ? await patchDailyLifeComments({
+            dailyLifeId: postId,
+            commentId: commentId,
+            content: content,
+          })
+        : await patchNoteComments({
+            tastingNoteId: postId,
+            commentId: commentId,
+            content: content,
+          });
+      return { postId, commentId, content };
     },
     onSuccess: (data, variables) => {
-      router.push(`/share/note/${variables.tastingNoteId}`);
+      router.push(
+        variables.isLife
+          ? `/share/life/${variables.postId}`
+          : `/share/note/${variables.postId}`,
+      );
 
       queryClient.invalidateQueries({
-        queryKey: ["noteDetail", variables.tastingNoteId],
+        queryKey: [
+          variables.isLife ? "lifeDetail" : "noteDetail",
+          variables.postId,
+        ],
       });
       toast("댓글 내용을 수정했습니다.");
     },

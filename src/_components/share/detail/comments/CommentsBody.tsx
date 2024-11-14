@@ -28,17 +28,18 @@ import DeletedComments from "./DeletedComments";
 import ModifyDeleteSelectModalForComments from "./ModifyDeleteSelectModalForComments";
 import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
 import useMemberStore from "@/_store/memberStore";
+import getLifeComments from "@/app/api/life/getLifeComment";
 
 interface Props {
   id: number;
+  isLife?: boolean;
 }
 
-export default function CommentsBody({ id }: Props) {
+export default function CommentsBody({ id, isLife }: Props) {
   const [cookies] = useCookies(["accessToken"]);
 
   const queryClient = useQueryClient();
-  const { isOpen, closeModal, tastingNoteId, commentId } =
-    useCommentsModalStore();
+  const { isOpen, closeModal, postId, commentId } = useCommentsModalStore();
 
   const { isOpen: replyComponentIsOpen } = useReplyComponentStore();
 
@@ -57,13 +58,19 @@ export default function CommentsBody({ id }: Props) {
     refetch,
     status,
   } = useInfiniteQuery({
-    queryKey: ["noteComments", Number(id)],
+    queryKey: [isLife ? "lifeComments" : "noteComments", Number(id)],
     queryFn: ({ pageParam }) =>
-      getNoteComments({
-        token: cookies.accessToken,
-        id: pageParam.id,
-        lastCommentId: pageParam.lastCommentId,
-      }),
+      isLife
+        ? getLifeComments({
+            token: cookies.accessToken,
+            id: pageParam.id,
+            lastCommentId: pageParam.lastCommentId,
+          })
+        : getNoteComments({
+            token: cookies.accessToken,
+            id: pageParam.id,
+            lastCommentId: pageParam.lastCommentId,
+          }),
     getNextPageParam: (lastPage) => {
       if (!lastPage.data.length) return null;
       return lastPage.last
@@ -97,8 +104,9 @@ export default function CommentsBody({ id }: Props) {
   // }
 
   if (isError) {
-    // return <ServerToast text="에러가 발생했습니다" redirectPath="/" />;
+    return <ServerToast text="에러가 발생했습니다" redirectPath="/" />;
   }
+
   return (
     <>
       <div
@@ -120,7 +128,7 @@ export default function CommentsBody({ id }: Props) {
               <DeletedComments
                 key={"d" + index}
                 commentInfo={comment}
-                tastingNoteId={id}
+                postId={id}
               />
             );
           } else {
@@ -129,7 +137,7 @@ export default function CommentsBody({ id }: Props) {
                 commentInfo={comment}
                 isAuthor={comment.memberInfo.memberId === memberInfo?.memberId}
                 key={"c" + index}
-                tastingNoteId={id}
+                postId={id}
               />
             );
           }
@@ -138,13 +146,14 @@ export default function CommentsBody({ id }: Props) {
       </div>
       <ReplyWithComment />
 
-      <CommentsFooter id={id} />
+      <CommentsFooter id={id} isLife={isLife} />
 
       {isOpen && (
         <ModifyDeleteSelectModalForComments
-          tastingNoteId={tastingNoteId!}
+          postId={postId!}
           commentId={commentId!}
           closeModal={closeModal}
+          isLife={isLife}
         />
       )}
     </>

@@ -9,7 +9,7 @@ import useReplyComponentStore from "@/_store/replyComponentStore";
 
 interface Props {
   commentInfo: IComment;
-  tastingNoteId: number;
+  postId: number;
   isAuthor: boolean;
 }
 const defaultUserImageURL =
@@ -18,7 +18,7 @@ const defaultUserImageURL =
 export default function Comments({
   commentInfo,
   isAuthor,
-  tastingNoteId,
+  postId,
 }: Props) {
   const { isOpen, openModal } = useCommentsModalStore();
   const userImageURL =
@@ -29,7 +29,7 @@ export default function Comments({
   return (
     <CommentsWithReplyWrapper
       commentInfo={commentInfo}
-      tastingNoteId={tastingNoteId}
+      postId={postId}
     >
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
@@ -71,7 +71,7 @@ export default function Comments({
 
                 openModal({
                   commmentId: commentInfo.commentId,
-                  tastingNoteId: tastingNoteId,
+                  postId: postId,
                   content: commentInfo.content,
                 });
               }}

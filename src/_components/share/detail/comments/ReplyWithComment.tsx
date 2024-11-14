@@ -15,7 +15,7 @@ export default function ReplyWithComment() {
     isOpen: replyComponentIsOpen,
     onClose,
     commentInfo,
-    tastingNoteId,
+    postId,
   } = useReplyComponentStore();
   // const {} = useCommentsPageStore();
   // 애니메이션 첫 교화때문에 놔둠
@@ -32,7 +32,7 @@ export default function ReplyWithComment() {
   }, []);
 
   // 데이
-  if (!commentInfo || !tastingNoteId) {
+  if (!commentInfo || !postId) {
     return null;
   }
 
@@ -49,13 +49,10 @@ export default function ReplyWithComment() {
     >
       <div className="border-b-[2px] border-cool-grayscale-200">
         {commentInfo.isDeleted ? (
-          <DeletedComments
-            tastingNoteId={tastingNoteId}
-            commentInfo={commentInfo}
-          />
+          <DeletedComments postId={postId} commentInfo={commentInfo} />
         ) : (
           <Comments
-            tastingNoteId={tastingNoteId}
+            postId={postId}
             commentInfo={commentInfo}
             isAuthor={memberInfo?.memberId === commentInfo.memberInfo.memberId}
           />
@@ -63,10 +60,7 @@ export default function ReplyWithComment() {
       </div>
       <Gap />
 
-      <ReplyList
-        parentCommentId={commentInfo.commentId}
-        tastingNoteId={tastingNoteId}
-      />
+      <ReplyList parentCommentId={commentInfo.commentId} postId={postId} />
     </section>
   );
 }

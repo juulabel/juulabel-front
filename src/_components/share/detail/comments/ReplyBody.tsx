@@ -8,7 +8,7 @@ import clsx from "clsx";
 interface Props {
   replyOpen: boolean;
   handleReplyClose: () => void;
-  tastingNoteId: number;
+  postId: number;
   parentCommentId: number;
 }
 
@@ -16,7 +16,7 @@ export default function ReplyBody({
   replyOpen,
   handleReplyClose,
   parentCommentId,
-  tastingNoteId,
+  postId,
 }: Props) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<string>("0px");
@@ -57,11 +57,11 @@ export default function ReplyBody({
       <div ref={contentRef} className="w-full">
         <ReplyInput
           parentCommentId={parentCommentId}
-          tastingNoteId={tastingNoteId}
+          postId={postId}
         />
         <ReplyList
           parentCommentId={parentCommentId}
-          tastingNoteId={tastingNoteId}
+          postId={postId}
         />
       </div>
     </section>
