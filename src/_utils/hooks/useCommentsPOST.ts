@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import useReplyComponentStore from "@/_store/replyComponentStore";
 import { IComment } from "@/_types";
 import postDailyLifeComments from "@/app/api/life/postLifeComments";
@@ -21,8 +23,6 @@ export default function useCommentsPOST({
   textRef,
   isLife,
 }: Params) {
-  console.log(isLife == true);
-  
   const queryClient = useQueryClient();
   const {
     isOpen: replyComponentIsOpen,
@@ -88,7 +88,7 @@ export default function useCommentsPOST({
     },
     onError: (error) => {
       console.log(error);
-      
+
       toast("댓글 추가를 실패했어요.");
       setIsSubmitting(false);
     },

@@ -15,11 +15,7 @@ interface Props {
 const defaultUserImageURL =
   "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage";
 
-export default function Comments({
-  commentInfo,
-  isAuthor,
-  postId,
-}: Props) {
+export default function Comments({ commentInfo, isAuthor, postId }: Props) {
   const { isOpen, openModal } = useCommentsModalStore();
   const userImageURL =
     commentInfo.memberInfo.profileImage || defaultUserImageURL;
@@ -27,10 +23,7 @@ export default function Comments({
   const { onOpen } = useReplyComponentStore();
 
   return (
-    <CommentsWithReplyWrapper
-      commentInfo={commentInfo}
-      postId={postId}
-    >
+    <CommentsWithReplyWrapper commentInfo={commentInfo} postId={postId}>
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <div className="relative h-[30px] w-[30px] overflow-hidden rounded-full">

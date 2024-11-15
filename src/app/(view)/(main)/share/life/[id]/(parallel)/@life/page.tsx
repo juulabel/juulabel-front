@@ -14,6 +14,7 @@ import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { Inputs } from "../../../write/page";
 import { SearchParamProps } from "@/_types";
+import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 
 function LifeDetailPage({ params }: SearchParamProps) {
   const router = useRouter();
@@ -22,12 +23,13 @@ function LifeDetailPage({ params }: SearchParamProps) {
   const posted = searchParams.get("posted");
   const editMode = searchParams.get("editMode");
   const [cookie] = useCookies(["accessToken"]);
+  const { setIsAuthor } = useAuthorCheckStore();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const [
     { data, isFetching: isLoadingLife, error },
-    { data: user, isFetching: isLoadingUser, error: userError },
+    { data: userData, isFetching: isLoadingUser, error: userError },
   ] = useQueries({
     queries: [
       {
@@ -37,7 +39,7 @@ function LifeDetailPage({ params }: SearchParamProps) {
         gcTime: 1000 * 60 * 5,
       },
       {
-        queryKey: ["my-info"],
+        queryKey: ["currentUserInfo"],
         queryFn: () => getMyInfo(cookie.accessToken),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 5,
@@ -46,6 +48,12 @@ function LifeDetailPage({ params }: SearchParamProps) {
   });
 
   useEffect(() => {
+    if (data && userData) {
+      setIsAuthor(
+        data?.result.dailyLifeDetailInfo.memberInfo.nickname ===
+          userData.nickname,
+      );
+    }
     if (posted === "true") {
       if (editMode) {
         toast("일상생활 수정이 완료되었어요.");
@@ -53,7 +61,15 @@ function LifeDetailPage({ params }: SearchParamProps) {
         toast("일상생활 작성이 완료되었어요.");
       }
     }
-  });
+  }, [
+    data,
+    isLoadingLife,
+    error,
+    userData,
+    isLoadingUser,
+    userError,
+    setIsAuthor,
+  ]);
 
   const handleDeleteConfirm = async () => {
     const isSuccess = await deleteDailyLife(cookie.accessToken, id);
@@ -67,12 +83,14 @@ function LifeDetailPage({ params }: SearchParamProps) {
     }
   };
   const handleEditBtn = () => {
+    console.log(data);
+
     const input: Inputs = {
       title: data.result.dailyLifeDetailInfo.title,
       content: data.result.dailyLifeDetailInfo.content,
       isPrivate: false,
       files: [],
-      imageUrls: data.imageInfo.imageUrlList,
+      imageUrls: data.result.imageInfo.imageUrlList,
     };
 
     sessionStorage.setItem("editLifeData", JSON.stringify(input));
@@ -108,12 +126,12 @@ function LifeDetailPage({ params }: SearchParamProps) {
         title="전통주 일상생활"
         buttonType="meatballs"
         titleLink="/share/life"
-        isActiveButton={user.memberId == memberId}
+        isActiveButton={userData.memberId == memberId}
         onClick={() => {
           setEditModalOpen(true);
         }}
       />
-      <div className="h-dvh overflow-y-scroll pb-[62px] scrollbar-hide">
+      <div className="h-dvh overflow-y-scroll scrollbar-hide">
         <LifeViewer
           title={title}
           content={content}

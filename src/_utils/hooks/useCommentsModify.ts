@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import useReplyComponentStore from "@/_store/replyComponentStore";
 import patchDailyLifeComments from "@/app/api/life/patchLifeComments";
 import patchNoteComments from "@/app/api/tasting-note/patchNoteComments";

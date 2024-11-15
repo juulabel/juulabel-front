@@ -55,14 +55,8 @@ export default function ReplyBody({
       </div>
 
       <div ref={contentRef} className="w-full">
-        <ReplyInput
-          parentCommentId={parentCommentId}
-          postId={postId}
-        />
-        <ReplyList
-          parentCommentId={parentCommentId}
-          postId={postId}
-        />
+        <ReplyInput parentCommentId={parentCommentId} postId={postId} />
+        <ReplyList parentCommentId={parentCommentId} postId={postId} />
       </div>
     </section>
   );

@@ -18,7 +18,7 @@ export default function ModifyDeleteSelectModalForComments({
   postId,
   commentId,
   closeModal,
-  isLife
+  isLife,
 }: Props) {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
@@ -41,7 +41,11 @@ export default function ModifyDeleteSelectModalForComments({
           variant="black"
           className="h-[37px] w-full rounded-[4px] text-[14px]"
           onClick={() => {
-            router.push(isLife ? `/share/life/${postId}/comments` : `/share/note/${postId}/comments`);
+            router.push(
+              isLife
+                ? `/share/life/${postId}/comments`
+                : `/share/note/${postId}/comments`,
+            );
           }}
         >
           수정하기

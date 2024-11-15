@@ -1,5 +1,6 @@
+/* eslint-disable */
+
 import useReplyComponentStore from "@/_store/replyComponentStore";
-import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
 import deleteDailyLifeComments from "@/app/api/life/deleteLifeComments";
 import deleteNoteComments from "@/app/api/tasting-note/deleteNoteComments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
 import { useCookies } from "react-cookie";
 import useCommentsModalStore from "@/_store/tastingCommentModal";
+import { usePathname } from "next/navigation";
 
 interface Props {
   tastingNoteId: number;
@@ -20,7 +21,8 @@ const defaultUserImageURL =
   "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage";
 
 export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
-  const { mutate } = useCommentsLike();
+  const pathanem = usePathname();
+  const { mutate } = useCommentsLike(pathanem.includes("life"));
   const { isOpen, openModal } = useCommentsModalStore();
 
   return (
@@ -58,7 +60,7 @@ export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
             onClick={() => {
               openModal({
                 commmentId: replyInfo.commentId,
-                tastingNoteId: tastingNoteId,
+                postId: tastingNoteId,
                 content: replyInfo.content,
               });
             }}
@@ -85,7 +87,7 @@ export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
             e.preventDefault();
 
             mutate({
-              tastingNoteId: tastingNoteId,
+              postId: tastingNoteId,
               commentId: replyInfo.commentId,
               replyFlag: true,
             });

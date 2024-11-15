@@ -22,7 +22,7 @@ export default function LifeViewer({
   imageCount,
 }: ILifeViewer) {
   return (
-    <div className="p-4">
+    <div className="w-full p-4">
       <div className="mb-2 flex items-center justify-between space-x-1 py-2">
         <div className="flex space-x-2">
           <div className="relative h-6 w-6 overflow-hidden rounded-full">
