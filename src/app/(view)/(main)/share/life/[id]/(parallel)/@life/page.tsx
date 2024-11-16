@@ -119,7 +119,7 @@ function LifeDetailPage({ params }: SearchParamProps) {
     },
     imageInfo: { imageUrlList, imageCount },
   } = data.result;
-
+  
   return (
     <>
       <HeaderWithButton

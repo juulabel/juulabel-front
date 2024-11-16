@@ -40,7 +40,7 @@ export default function NicknameForm() {
       );
 
       if (response.data) {
-        if (response.data.success) {
+        if (!response.data.result) {
           setEnableButton(true);
           clearErrors("nickname");
           setNicknamePass("사용 가능한 닉네임이에요.");

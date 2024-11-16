@@ -19,10 +19,10 @@ export default function LifeList({
     <Link href={`/share/life/${dailyLifeId}`} className="block px-4 pt-5">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex-1">
-          <div className="mb-1 font-medium text-cool-grayscale-800">
+          <div className="mb-1 line-clamp-1 font-medium text-cool-grayscale-800">
             {title}
           </div>
-          <div className="mb-4 line-clamp-2 text-ellipsis text-sm text-cool-grayscale-700">
+          <div className="mb-4 line-clamp-3 text-ellipsis text-sm text-cool-grayscale-700">
             {content}
           </div>
         </div>
