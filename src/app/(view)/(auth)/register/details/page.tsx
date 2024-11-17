@@ -86,6 +86,7 @@ export default function Page() {
     try {
       const response = await instance.post(requests.postSignUp, data);
       if (response.status === 200) {
+        localStorage.setItem("recentLogin", registerStore.provider);
         registerStore.setMemberId(response.data.result.memberId);
         setCookie("accessToken", response.data.result.token.accessToken, {
           path: "/",

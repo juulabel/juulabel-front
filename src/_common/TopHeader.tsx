@@ -19,16 +19,22 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
       event.preventDefault();
       onClick(event);
     } else {
-      step == 1 ? router.replace("/") : router.back(); // onClick이 없을 때만 router.back() 호출
+      if (step === 1) {
+        router.replace("/");
+      } else {
+        router.back();
+      }
     }
   };
 
   return (
     <div>
       <div className="relative flex h-16 flex-row items-center justify-center p-4">
-        <button onClick={handleClick} className="absolute left-4 p-1">
-          <GoChevronLeft size={24} />
-        </button>
+        {step != 0 && (
+          <button onClick={handleClick} className="absolute left-4 p-1">
+            <GoChevronLeft size={24} />
+          </button>
+        )}
         <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
       </div>
       <div className="flex">
