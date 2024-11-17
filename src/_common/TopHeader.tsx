@@ -19,7 +19,7 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
       event.preventDefault();
       onClick(event);
     } else {
-      router.back(); // onClick이 없을 때만 router.back() 호출
+      step == 1 ? router.replace("/") : router.back(); // onClick이 없을 때만 router.back() 호출
     }
   };
 

@@ -21,7 +21,6 @@ export default function LifeViewer({
   imageUrlList,
   imageCount,
 }: ILifeViewer) {
-  
   return (
     <div className="w-full p-4">
       <div className="mb-2 flex items-center justify-between space-x-1 py-2">
@@ -44,14 +43,14 @@ export default function LifeViewer({
         <div className="text-cool-grayscale-500">
           {dateViewKoreanFull(createdAt)}
         </div>
-      </div>      
+      </div>
       <LifeCarousel imageUrlList={imageUrlList} />
 
-      <div className="py-5 text-2xl font-bold text-cool-grayscale-800">
+      <div className="break-words py-5 text-2xl font-bold text-cool-grayscale-800">
         {title}
       </div>
       <hr className="mb-4 h-1 border-none bg-cool-grayscale-50" />
-      <p className="whitespace-pre text-wrap text-cool-grayscale-700">
+      <p className="whitespace-pre text-wrap break-words text-cool-grayscale-700">
         {content}
       </p>
     </div>
