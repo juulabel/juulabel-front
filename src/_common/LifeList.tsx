@@ -15,6 +15,14 @@ export default function LifeList({
   commentCount,
   isLiked,
 }: ILifeList) {
+  function isValidUrl(url: string) {
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
   return (
     <Link href={`/share/life/${dailyLifeId}`} className="block px-4 pt-5">
       <div className="mb-4 flex items-center justify-between">
@@ -35,7 +43,11 @@ export default function LifeList({
               </div>
             )}
             <Image
-              src={thumbnailPath}
+              src={
+                thumbnailPath && isValidUrl(thumbnailPath)
+                  ? thumbnailPath
+                  : "/images/placeholders/life/default_life_thumbnail.png"
+              }
               alt="일상생활 썸네일 이미지"
               sizes="30vw"
               fill
@@ -50,7 +62,7 @@ export default function LifeList({
           <div className="relative h-6 w-6 overflow-hidden rounded-full">
             <Image
               src={
-                profileImage
+                profileImage && isValidUrl(profileImage)
                   ? profileImage
                   : "/images/placeholders/profile/default_profile.png"
               }
