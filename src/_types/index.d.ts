@@ -50,6 +50,11 @@ export interface ITastingNoteDetailInfo {
   isLiked: boolean;
 }
 
+export interface IAlchoholicDrinksInfo {
+  alcoholicDrinksId: number;
+  isOfficialData: boolean;
+}
+
 export interface IImageInfo {
   imageUrlList: string[];
   imageCount: number;

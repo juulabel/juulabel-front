@@ -105,14 +105,10 @@ export default function LikeCommentFooter({ info, id }: Props) {
   return (
     <footer
       className={clsx(
-        "animate-fadeIn-footer fixed bottom-0 left-0 right-0 z-40 flex h-[82px] w-full max-w-[560px] translate-y-0 flex-row items-center justify-between bg-[#FFFFFF] p-5 px-6 shadow-[0px_-4px_32px_0px_#00000012]",
-        // {
-        //   "opacity-0": isCommentsPageVisible === "Y", // Add this if you want to control visibility with opacity
-        //   "opacity-100": isCommentsPageVisible !== "Y", // Full opacity when it should be visible
-        // },
+        "animate-fadeIn-footer fixed bottom-0 z-40 flex h-[82px] w-full max-w-[560px] translate-y-0 flex-row items-center justify-between bg-[#FFFFFF] p-5 px-6 shadow-[0px_-4px_32px_0px_#00000012]",
       )}
       style={{
-        transition: "opacity 0.7s ease-out",
+        transition: "opacity 0.4s ease-out",
       }}
     >
       <div className="flex items-center gap-3">
@@ -122,6 +118,7 @@ export default function LikeCommentFooter({ info, id }: Props) {
           height={30}
           alt="좋아요"
           onClick={handleLikeClick}
+          className="cursor-pointer"
         />
 
         <div className="text-[21px] font-bold">

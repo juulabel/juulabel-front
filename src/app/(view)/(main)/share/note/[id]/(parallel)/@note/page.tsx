@@ -12,7 +12,7 @@ export default function NoteDetailPage({ params }: SearchParamProps) {
   }
 
   return (
-    <div className="w-full pb-[100px]">
+    <div className="w-full">
       <ShareHeader />
       <ShareNoteDetailBody id={numberTypeId} />{" "}
     </div>

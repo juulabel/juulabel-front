@@ -5,6 +5,7 @@ import MoonRating from "./MoonRating";
 import { ITastingNoteDetailInfo } from "@/_types";
 import { flavorMap, flavorScoreMap, sensoryMap } from "@/_utils/commons";
 import RadarChart from "../../tasting-note/HexagonChart";
+import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;
@@ -37,11 +38,6 @@ export default function ShareDetailReviewBox({
         (item): item is { label: string; data: number } => item !== undefined,
       ) || [];
 
-  // const flavorChartData = flavorLevelIds.map(({ flavorName, score }) => ({
-  //   label: flavorName,
-  //   data: score,
-  // }));
-
   useEffect(() => {});
   if (!info) {
     return <div></div>;
@@ -54,47 +50,10 @@ export default function ShareDetailReviewBox({
           {info.memberInfo.nickname} 님은 이 술에 대해 이렇게 느꼈어요!
         </div>
 
-        <div className="grid w-full grid-cols-[5fr_1fr_5fr] grid-rows-2 items-center gap-y-3">
-          {/* 첫행 */}
-          <div className="flex items-center justify-between">
-            <div>술색</div>
-            <div
-              className={`h-[28px] w-[56px] rounded-md border-[1px] border-secondary bg-[${info.rgbColor}]`}
-            ></div>
-          </div>
-          {/* <Separator /> */}
-
-          {sensoryValues.map(({ value, kind }, index) => {
-            return (
-              <Fragment key={"s-" + index}>
-                {index % 2 === 0 && <Separator />}
-                <div className="flex items-center justify-between">
-                  <div>{kind}</div>
-                  <OrangeText>
-                    {/* {sensoryFindMap.get("탁도") || "데이터 없음"} */}
-                    {value}
-                  </OrangeText>
-                </div>
-              </Fragment>
-            );
-          })}
-
-          {/* 두번쨰행 */}
-
-          {/* <div className="flex items-center justify-between">
-            <div>탄산</div>
-            <OrangeText>
-              {sensoryFindMap.get("탄산") || "데이터 없음"}
-            </OrangeText>
-          </div>
-          <Separator />
-          <div className="flex items-center justify-between">
-            <div>점성도</div>
-            <OrangeText>
-              {sensoryFindMap.get("점성도") || "데이터 없음"}
-            </OrangeText>
-          </div> */}
-        </div>
+        <ShareAboutAlcoholReview
+          sensoryLevelIds={sensoryLevelIds}
+          alcoholColor={info.rgbColor}
+        />
       </div>
 
       <Gap />

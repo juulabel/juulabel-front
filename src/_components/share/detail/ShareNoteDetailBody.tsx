@@ -103,7 +103,10 @@ export default function ShareNoteDetailBody({ id }: Props) {
         info={data?.result?.tastingNoteDetailInfo}
         imageList={data?.result?.imageInfo.imageUrlList || []}
       />
-      <ShareNoteInfoBox info={data?.result?.tastingNoteDetailInfo} />
+      <ShareNoteInfoBox
+        info={data?.result?.tastingNoteDetailInfo}
+        alcoholicDrinksInfo={data?.result?.alcoholicDrinksInfo}
+      />
 
       <Gap />
 
