@@ -15,8 +15,7 @@ interface Props {
   imageList: string[];
 }
 
-const userDefaultImg =
-  "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage";
+const userDefaultImg = "/images/placeholders/profile/default_profile.png";
 
 export default function ShareDetailNoteImageBox({ info, imageList }: Props) {
   const defaultImage = `/images/placeholders/alcohols/${placeholderThumbnailProvider(info?.alcoholTypeName || "소주")}.png`;

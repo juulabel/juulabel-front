@@ -173,17 +173,21 @@ export default function ShareTraditionalLiquor({ id }: Props) {
           </div>
 
           <div className="flex flex-row items-center gap-2 text-cool-grayscale-700">
-            {rawMaterials.map((text, index) => {
+            {data?.result.ingredientSummary?.map((ingredient, index) => {
               return (
                 <Fragment key={"liquor" + index}>
-                  <span className="text-[16px] font-semibold">{text}</span>
-                  <Separator />
+                  <span className="text-[16px] font-semibold">
+                    {ingredient.name}
+                  </span>
+                  {data?.result.ingredientSummary.length - 1 !== index && (
+                    <Separator />
+                  )}
                 </Fragment>
               );
             })}
           </div>
         </div>
-        <div className="mt-6 flex h-fit min-h-[91px] w-full flex-col justify-center rounded-[8px] bg-cool-grayscale-100 px-3 py-3">
+        <div className="mt-6 flex h-fit min-h-[91px] w-full flex-col items-center justify-center gap-2 rounded-[8px] bg-cool-grayscale-100 px-3 py-3">
           <span className="text-[14px] font-bold text-cool-grayscale-800">
             "양조장 대표님의 한마디"
           </span>
