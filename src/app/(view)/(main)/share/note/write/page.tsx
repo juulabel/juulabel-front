@@ -13,9 +13,11 @@ import { Suspense, useState } from "react";
 
 function WriteTastingNote() {
   const searchParams = useSearchParams();
+  const alcoholicDrinksId = searchParams.get("alcoholicDrinksId") ?? "";
   const productName = searchParams.get("productName") ?? "";
   const alcoholContent = searchParams.get("alcoholContent") ?? "";
-  const alcoholType = searchParams.get("alcoholType") ?? "";
+  const alcoholTypeId = searchParams.get("alcoholTypeId") ?? "";
+  const alcoholTypeName = searchParams.get("alcoholTypeName") ?? "";
   const brewery = searchParams.get("brewery") ?? "";
   const breweryLocation = searchParams.get("breweryLocation") ?? "";
 
@@ -60,9 +62,11 @@ function WriteTastingNote() {
       case 1:
         return productName ? (
           <OfficialBasicInformationForm
+            alcoholicDrinksId={alcoholicDrinksId}
             productName={productName}
             alcoholContent={alcoholContent}
-            alcoholType={alcoholType}
+            alcoholTypeId={alcoholTypeId}
+            alcoholTypeName={alcoholTypeName}
             brewery={brewery}
             breweryLocation={breweryLocation}
             handleStep={handleStepNext}

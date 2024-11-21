@@ -7,6 +7,8 @@ const requests = {
   follow: `/v1/api/follow`,
   typeSerach: `/v1/api/alcoholicDrinks/typeSearch?`,
   noteSearch: `/v1/api/shared-space/tasting-notes/search?`,
+  lifeDelete: `/v1/api/daily-lives/`,
+  deleteMe: `/v1/api/memebers/me`,
 };
 
 export default requests;

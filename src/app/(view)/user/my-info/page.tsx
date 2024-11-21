@@ -5,7 +5,7 @@ import Modal from "@/_common/Modal";
 import UserHeader from "@/_components/user/UserHeader";
 import { IMyInfo } from "@/_types/user/myInfoData";
 import { cn } from "@/_utils/commons";
-import getMyInfo from "@/app/api/user/getMyInfo";
+import getMyInfo from "@/app/api/auth/getMyInfo";
 import { useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
@@ -21,7 +21,7 @@ export default function Page() {
     isLoading: isLoadingUser,
     error,
   } = useQuery<IMyInfo>({
-    queryKey: ["user"],
+    queryKey: ["my-ifno"],
     queryFn: () => getMyInfo(cookies.accessToken),
   });
 
@@ -43,6 +43,8 @@ export default function Page() {
       router.back();
     }
   };
+
+  console.log(user);
 
   if (isLoadingUser) return <Loading />;
   if (error) return <div>Error: {error.message}</div>;

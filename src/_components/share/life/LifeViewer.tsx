@@ -33,8 +33,8 @@ export default function LifeViewer({
                   : "/images/placeholders/profile/default_profile.png"
               }
               alt="작성자 이미지"
-              sizes="10vw"
-              fill
+              width={24}
+              height={24}
               className="object-cover"
             />
           </div>

@@ -87,7 +87,7 @@ export default function RegisterAgreementForm() {
             id: number;
             title: string;
             type: string;
-            is_required: boolean;
+            isRequired: boolean;
           }) => {
             const termType = term.type as keyof typeof termsMapping;
             return (
@@ -105,7 +105,7 @@ export default function RegisterAgreementForm() {
                     )}
                   />
                   <span className="text-base font-medium text-[#1E293B]">
-                    {term.title} {term.is_required ? "(필수)" : "(선택)"}
+                    {term.title} {term.isRequired ? "(필수)" : "(선택)"}
                   </span>
                 </label>
                 <GoChevronRight

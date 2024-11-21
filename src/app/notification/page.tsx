@@ -1,94 +1,67 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import Loading from "@/_common/Loading";
+import NotificationDeleteAll from "@/_components/notification/NotificationDeleteAllModal";
+import NotificationEditModal from "@/_components/notification/NotificationEditModal";
 import NotificationList from "@/_components/notification/NotificationList";
 import NotificationTabButton from "@/_components/notification/NotificationTabButton";
 import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
-import { Alarm } from "@/_types/user/alarm";
-import { getNotificationList } from "@/app/api/notification/getNotificationList";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  deleteNotification,
-  deleteAllNotification,
-} from "../api/notification/deleteNotification";
-import NotificationDeleteAll from "@/_components/notification/NotificationDeleteAllModal";
-import NotificationEditModal from "@/_components/notification/NotificationEditModal";
-import { toast } from "react-toastify";
 import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import {
+  subscribeToNotifications,
+  useDeleteAllNotifications,
+  useDeleteNotification,
+  useFetchNotifications,
+  useMarkAllNotificationsAsRead,
+  useMarkNotificationAsRead,
+} from "../api/notification/useNotifications";
 
 export default function Page() {
-  const queryClient = useQueryClient();
-
-  const {
-    data: alarmList = [],
-    isLoading,
-    error,
-  } = useQuery<Alarm[]>({
-    queryKey: ["alarmList"],
-    queryFn: getNotificationList,
-  });
-
   const [selectedTab, setSelectedTab] = useState<string>("전체");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteAllNotiModalOpen, setDeleteAllNotiModalOpen] = useState(false);
 
-  // Optimized callback with memoization
-  const handleTabClick = useCallback(
-    (tabName: string) => {
-      if (tabName === selectedTab) return;
-      setSelectedTab(tabName);
-      queryClient.setQueryData(
-        ["alarmList"],
-        (prev: Alarm[] | undefined) =>
-          prev?.filter((notification) => notification.type === tabName) || [],
-      );
-    },
-    [selectedTab, queryClient],
-  );
+  const {
+    data: allNotifications = [],
+    isLoading,
+    error,
+  } = useFetchNotifications();
+  const { mutate: deleteAllNotifications } = useDeleteAllNotifications();
+  const { mutate: deleteNotificationById } = useDeleteNotification();
+  const { mutate: markAllAsRead } = useMarkAllNotificationsAsRead();
+  const { mutate: markNotificationAsRead } = useMarkNotificationAsRead();
 
-  const selectionDeleteMutation = useMutation({
-    mutationFn: deleteNotification,
-    onMutate: (id) => {
-      // Update the alarmList directly without refetching
-      // Move this login to onSuccess in production
-      try {
-        const previousAlarms = queryClient.getQueryData<Alarm[]>(["alarmList"]);
-        if (previousAlarms) {
-          queryClient.setQueryData(
-            ["alarmList"],
-            previousAlarms.filter(
-              (notification: Alarm) => notification.id !== id,
-            ),
-          );
-        }
-        return { previousAlarms };
-      } catch (error) {
-        console.error("Error in optimistic update:", error);
-      }
-    },
-    onSuccess: (data, id) => {},
-    onError: (error, id, context) => {
-      console.error("Error in API:", error);
-      if (context?.previousAlarms) {
-        queryClient.setQueryData(["alarmList"], context.previousAlarms);
-      }
-    },
-  });
+  const filteredNotifications =
+    selectedTab === "전체"
+      ? allNotifications
+      : allNotifications.filter((notification) => {
+          switch (selectedTab) {
+            case "공유공간":
+              return ["POST_LIKE", "COMMENT_LIKE", "COMMENT"].includes(
+                notification.notificationType,
+              );
+            case "전통주 추천":
+              return notification.notificationType === "RECOMMENDATION";
+            case "공지사항":
+              return notification.notificationType === "ADMIN_NOTIFY";
+            default:
+              return true;
+          }
+        });
 
-  const allDeleteMutation = useMutation({
-    mutationFn: deleteAllNotification,
-    onMutate: () => {
-      // Update the alarmList directly without refetching
-      // Move this login to onSuccess in production
-      queryClient.setQueryData(["alarmList"], []);
-    },
-    onSuccess: (data) => {},
-    onError: (error) => {
-      console.error("Error in API:", error);
-    },
-  });
+  useEffect(() => {
+    const unsubscribe = subscribeToNotifications();
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const handleTabClick = useCallback((tabName: string) => {
+    setSelectedTab(tabName);
+  }, []);
 
   const handleEditButton = () => {
     if (!isEditing) {
@@ -112,18 +85,20 @@ export default function Page() {
     setDeleteAllNotiModalOpen(true);
   };
 
-  const handleDeleteAlarmById = useCallback(
-    (id: number) => selectionDeleteMutation.mutate(id),
-    [selectionDeleteMutation],
+  const handleDeleteNotificationById = useCallback(
+    (id: number) => deleteNotificationById(id),
+    [deleteNotificationById],
   );
 
-  const handleDeleteAllNotification = () => {
-    allDeleteMutation.mutate();
+  const handleDeleteAllNotifications = () => {
+    deleteAllNotifications();
     handleCloseDeleteAllNotiModal();
     toast("모든 알림이 삭제되었어요.");
   };
 
-  const handleMarkAsRead = () => {};
+  const handleMarkAllNotificationsAsRead = () => {
+    markAllAsRead();
+  };
 
   if (isLoading) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
@@ -142,11 +117,11 @@ export default function Page() {
           selectedTab={selectedTab}
           onTabClick={handleTabClick}
         />
-        {alarmList?.length > 0 ? (
+        {allNotifications?.length > 0 ? (
           <NotificationList
-            alarmList={alarmList}
+            alarmList={filteredNotifications}
             isEditing={isEditing}
-            onDelete={handleDeleteAlarmById}
+            onDelete={handleDeleteNotificationById}
           />
         ) : (
           <div className="flex h-full flex-col items-center justify-center text-center">
@@ -168,7 +143,7 @@ export default function Page() {
           handleSelectionDelete={handleSelectionDelete}
           handleOpenDeleteAllModal={handleOpenDeleteAllModal}
           handleCancel={handleCloseModal}
-          handleMarkAsRead={handleMarkAsRead}
+          handleMarkAllAsRead={handleMarkAllNotificationsAsRead}
         />
       )}
       {deleteAllNotiModalOpen && (
@@ -176,7 +151,7 @@ export default function Page() {
           modalTitle="모든 알림을 삭제하시겠어요?"
           confirmText="삭제하기"
           cancelText="닫기"
-          handleConfirm={handleDeleteAllNotification}
+          handleConfirm={handleDeleteAllNotifications}
           handleCancel={handleCloseDeleteAllNotiModal}
         />
       )}

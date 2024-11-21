@@ -2,55 +2,92 @@
 
 import BottomButton from "@/_common/BottomButton";
 import Checkbox from "@/_common/Checkbox";
+import ConfirmModal from "@/_common/ConfirmModal";
 import UserHeader from "@/_components/user/UserHeader";
 import { cn } from "@/_utils/commons";
+import { deleteUser } from "@/app/api/user/deleteUser";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const [cookies] = useCookies(["accessToken"]);
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [etcReport, setEtcReport] = useState<string>("");
   const [isChecked, setIsChecked] = useState(false);
   const [isFinal, setIsFinal] = useState(false);
+  const [selectedReason, setSelectedReason] = useState(
+    "제공되는 정보가 기대에 미치지 않음",
+  );
   const router = useRouter();
 
   const handleEtcReport = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEtcReport(event.target.value);
   };
 
-  const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFinalCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(!isChecked);
+  };
+
+  const deleteList = [
+    "제공되는 정보가 기대에 미치지 않음",
+    "이용이 불편하고 비번한 버그나 오류 발생",
+    "타사이트에서 더 나은 서비스를 제공",
+    "피드백을 제공했으나 반영되지 않음",
+    "탈퇴 후 재가입",
+    "이용빈도 낮음",
+    "기타(직접 입력)",
+  ];
+
+  const handleCheckboxChange = (report: string) => {
+    setSelectedReason(report);
+  };
+
+  const handleDeleteBtn = async () => {
+    const data = await deleteUser({
+      accessToken: cookies.accessToken,
+      reason: etcReport,
+    });
+    if (!data.success) {
+      toast("내부 서버 오류 입니다." + data.message);
+      return;
+    }
+    setIsFinal(true);
   };
 
   return (
     <>
       {isFinal ? (
-        <div className="flex flex-col items-center">
-          <div className="mb-4 flex justify-center">
-            <Image
-              width={64}
-              height={64}
-              src={"/svg/green_check_mark.svg"}
-              alt={""}
-            />
+        <div className="flex min-h-screen w-full flex-col items-center justify-between">
+          <div className="flex flex-grow flex-col items-center justify-center">
+            <div className="mb-4 flex">
+              <Image
+                width={64}
+                height={64}
+                src={"/svg/green_check_mark.svg"}
+                alt={"회원 탈퇴 완료"}
+              />
+            </div>
+            <div className="text-center text-lg font-bold text-slate-950">
+              탈퇴가 완료되었습니다.
+            </div>
+            <div className="text-center text-base font-normal text-slate-700">
+              주라벨을 이용해주셔서 감사드리며,
+              <br />더 좋은 서비스로 찾아뵙겠습니다.
+            </div>
           </div>
-          <div className="text-center text-lg font-bold text-slate-950">
-            탈퇴가 완료되었습니다.
-          </div>
-          <div className="text-center text-base font-normal text-slate-700">
-            주라벨을 이용해주셔서 감사드리며,
-            <br />더 좋은 서비스로 찾아뵙겠습니다.
-          </div>
+
           <BottomButton
             enableButton={true}
             onClick={() => {
-              router.push("/share/note");
+              router.push("/");
             }}
-            children="로그인 화면으로 가기"
-          />
+          >
+            로그인 화면으로 가기
+          </BottomButton>
         </div>
       ) : (
         <div className="h-full w-full max-w-[560px]">
@@ -64,43 +101,35 @@ export default function Page() {
               탈퇴 사유 선택
             </div>
 
-            <div className="mb-2 flex items-center justify-start gap-1 py-1">
-              <div className="relative h-6 w-6 bg-white">
-                <div className="absolute left-[3px] top-[3px] h-[18px] w-[18px] rounded-full border border-slate-500 bg-white" />
-                <div className="absolute left-[8px] top-[8px] h-2 w-2 rounded-full bg-slate-500" />
-              </div>
-              <div className="shrink grow basis-0 text-base font-normal text-slate-800">
-                제공되는 기능이 기대에 미치지 않음
-              </div>
-            </div>
-            <div className="mb-2 flex items-center justify-start gap-1 py-1">
-              <div className="relative h-6 w-6 bg-white">
-                <div className="absolute left-[3px] top-[3px] h-[18px] w-[18px] rounded-full border border-slate-300 bg-white" />
-              </div>
-              <div className="shrink grow basis-0 text-base font-normal text-slate-800">
-                제공되는 기능이 기대에 미치지 않음
-              </div>
-            </div>
-            <div className="mb-2 flex items-center justify-start gap-1 py-1">
-              <div className="relative h-6 w-6 bg-white">
-                <div className="absolute left-[3px] top-[3px] h-[18px] w-[18px] rounded-full border border-slate-300 bg-white" />
-              </div>
-              <div className="shrink grow basis-0 text-base font-normal text-slate-800">
-                제공되는 기능이 기대에 미치지 않음
-              </div>
-            </div>
-            <div className="mb-2 flex items-center justify-start gap-1 py-1">
-              <div className="relative h-6 w-6 bg-white">
-                <div className="absolute left-[3px] top-[3px] h-[18px] w-[18px] rounded-full border border-slate-300 bg-white" />
-              </div>
-              <div className="shrink grow basis-0 text-base font-normal text-slate-800">
-                제공되는 기능이 기대에 미치지 않음
-              </div>
-            </div>
+            {deleteList.map((e: string) => (
+              <>
+                <div
+                  key={e}
+                  className="mb-2 flex items-center justify-start gap-1 py-1"
+                >
+                  <button
+                    onClick={() => handleCheckboxChange(e)}
+                    className="relative h-6 w-6 bg-white"
+                  >
+                    <div className="absolute left-[3px] top-[3px] h-[18px] w-[18px] rounded-full border border-slate-500 bg-white" />
+                    <div
+                      className={cn(
+                        "absolute left-[8px] top-[8px] h-2 w-2 rounded-full bg-slate-500",
+                        selectedReason != e && "invisible",
+                      )}
+                    />
+                  </button>
+                  <div className="shrink grow basis-0 text-base font-normal text-slate-800">
+                    {e}
+                  </div>
+                </div>
+              </>
+            ))}
 
             <textarea
               className="my-2 h-[136px] w-full resize-none rounded-[6px] border-[1px] border-cool-grayscale-300 p-2"
               value={etcReport}
+              readOnly={selectedReason != "기타(직접 입력)"}
               placeholder="불편사항을 입력해주세요."
               maxLength={100}
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -134,7 +163,7 @@ export default function Page() {
               <Checkbox
                 checked={isChecked}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  handleCheckBox(event)
+                  handleFinalCheckBox(event)
                 }
               />
               <div className="text-base font-normal text-slate-800">
@@ -151,6 +180,9 @@ export default function Page() {
                 </div>
               </button>
               <button
+                onClick={() => {
+                  if (isChecked) setDeleteModalOpen(true);
+                }}
                 className={cn(
                   "flex h-[37px] shrink grow items-center justify-center rounded",
                   isChecked ? "bg-slate-950" : "bg-[#c4c4c4]",
@@ -162,6 +194,19 @@ export default function Page() {
               </button>
             </div>
           </div>
+          {deleteModalOpen && (
+            <ConfirmModal
+              modalTitle="탈퇴 시 동일한 이메일로 재가입이 불가능해요."
+              modalDescription="정말 탈퇴하시겠어요?"
+              confirmText="탈퇴하기"
+              cancelText="닫기"
+              handleConfirm={() => {
+                setDeleteModalOpen(false);
+                handleDeleteBtn();
+              }}
+              handleCancel={() => setDeleteModalOpen(false)}
+            />
+          )}
         </div>
       )}
     </>

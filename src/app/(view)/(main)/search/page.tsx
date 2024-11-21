@@ -101,7 +101,6 @@ export default function Page() {
     else setRelatedSearchDataList([]);
   }, [searchQuery, debouncedSearchQuery]);
 
-
   useEffect(() => {
     const handleScroll = async () => {
       if (
@@ -218,8 +217,7 @@ export default function Page() {
               handleFocus={handleFocus}
             />
             <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
-            { 
-            relatedSearchDataList.length > 0 &&
+            {relatedSearchDataList.length > 0 &&
               relatedSearchDataList.map((data: string, index: number) => (
                 <RelatedSearchResult
                   key={index}

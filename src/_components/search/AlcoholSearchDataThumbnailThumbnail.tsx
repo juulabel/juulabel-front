@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function AlcoholSearchDataThumbnail({
-  id,
+  id: alcoholicDrinksId,
   name,
   alcoholType,
   thumbnail,
@@ -19,18 +19,19 @@ export default function AlcoholSearchDataThumbnail({
 
   const handleClick = () => {
     router.push(
-      `/tasting-note/write?productName=${encodeURIComponent(
+      `/share/note/write?alcoholicDrinksId=${alcoholicDrinksId}&productName=${encodeURIComponent(
         name,
       )}&alcoholContent=${encodeURIComponent(
-        "alcoholContent",
-      )}&alcoholType=${encodeURIComponent(
+        alcoholContent,
+      )}&alcoholTypeId=${encodeURIComponent(
+        alcoholType.id,
+      )}&alcoholTypeName=${encodeURIComponent(
         alcoholType.name,
       )}&brewery=${brewery ? encodeURIComponent(brewery.name) : ""}&breweryLocation=${
         brewery ? encodeURIComponent(brewery.region) : ""
       }`,
     );
   };
-
   return (
     <div
       className="mb-[5%] flex w-full cursor-pointer flex-col"
