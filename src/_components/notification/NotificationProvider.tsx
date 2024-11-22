@@ -1,3 +1,5 @@
+"use client";
+
 import { subscribeToNotifications } from "@/app/api/notification/useNotifications";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -14,6 +16,10 @@ export default function NotificationProvider({
       toast.info(message, {
         position: "top-right",
         autoClose: 5000,
+        onClick: () => {
+          window.focus();
+          window.location.href = "/notifications";
+        },
       });
     };
 
