@@ -109,7 +109,7 @@ export function parseNumberOfDefault({
   value,
   defaultValue = 0,
 }: {
-  value: any;
+  value: number | undefined;
   defaultValue?: number;
 }) {
   if (!value) return defaultValue;

@@ -61,7 +61,9 @@ export interface ITastingNoteSensorSummary {
 
 export interface IResponseTranditionalLiquor {
   alcoholicDrinksDetailInfo: IAlcoholicDrinksDetailInfo;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ingredientSummary: any[]; //무슨값인지 모르겠음
   tastingNoteSensorSummary: ITastingNoteSensorSummary;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tastingNoteSummary: any[]; //무슨값인지 모르겠음
 }
