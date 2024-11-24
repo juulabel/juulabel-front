@@ -11,8 +11,6 @@ export default function NoteDetailLayout({
 }: {
   note: ReactNode;
   comments: ReactNode;
-
-  // children: ReactNode;
 }) {
   const { showComments } = useCommentStore();
   return (
@@ -20,7 +18,6 @@ export default function NoteDetailLayout({
       <ShareHeader />
       {note}
       {comments}
-      {/* {comments} */}
     </div>
   );
 }

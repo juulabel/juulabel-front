@@ -5,6 +5,7 @@ const nextConfig = {
     domains: [
       "via.placeholder.com",
       "juulabel.s3.ap-northeast-2.amazonaws.com",
+      "picsum.photos",
       "drive.google.com",
     ],
     remotePatterns: [

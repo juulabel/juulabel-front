@@ -64,8 +64,8 @@ export default function ShareNoteDetailBody({ id }: Props) {
     if (data && userData) {
       // 헤더 컴포넌트에서 현재 글 작성자인지 체크함
       setIsAuthor(
-        data?.result.tastingNoteDetailInfo.memberInfo.nickname ===
-          userData.result.nickname,
+        data?.result.tastingNoteDetailInfo.memberInfo.memberId ===
+          userData?.result.memberId,
       );
 
       setMemberInfo(userData.result);
@@ -103,7 +103,10 @@ export default function ShareNoteDetailBody({ id }: Props) {
         info={data?.result?.tastingNoteDetailInfo}
         imageList={data?.result?.imageInfo.imageUrlList || []}
       />
-      <ShareNoteInfoBox info={data?.result?.tastingNoteDetailInfo} />
+      <ShareNoteInfoBox
+        info={data?.result?.tastingNoteDetailInfo}
+        alcoholicDrinksInfo={data?.result?.alcoholicDrinksInfo}
+      />
 
       <Gap />
 
