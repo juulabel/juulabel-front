@@ -5,15 +5,17 @@ import useReplyComponentStore from "@/_store/replyComponentStore";
 import useDeleteNoteComment from "@/_utils/hooks/useDeleteNoteComment";
 
 interface Props {
-  tastingNoteId: number;
+  postId: number;
   commentId: number;
   closeModal: () => void;
+  isLife?: boolean;
 }
 
 export default function CommentsDeleteModal({
-  tastingNoteId,
+  postId,
   commentId,
   closeModal,
+  isLife,
 }: Props) {
   const { mutate } = useDeleteNoteComment();
 
@@ -28,8 +30,9 @@ export default function CommentsDeleteModal({
           className="h-[37px] w-full rounded-[4px] text-[14px]"
           onClick={() => {
             mutate({
-              tastingNoteId: tastingNoteId,
+              postId: postId,
               commentId: commentId,
+              isLife: isLife,
             });
             closeModal();
           }}

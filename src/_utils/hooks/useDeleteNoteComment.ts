@@ -1,4 +1,7 @@
+/* eslint-disable */
+
 import useReplyComponentStore from "@/_store/replyComponentStore";
+import deleteDailyLifeComments from "@/app/api/life/deleteLifeComments";
 import deleteNoteComments from "@/app/api/tasting-note/deleteNoteComments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -9,30 +12,37 @@ export default function useDeleteNoteComment() {
 
   const mutate = useMutation({
     mutationFn: async ({
-      tastingNoteId,
+      postId,
       commentId,
+      isLife,
     }: {
-      tastingNoteId: number;
+      postId: number;
       commentId: number;
+      isLife?: boolean;
     }) => {
-      await deleteNoteComments({
-        tastingNoteId: tastingNoteId,
-        commentId: commentId,
-      });
+      isLife
+        ? await deleteDailyLifeComments({
+            dailyLifeId: postId,
+            commentId: commentId,
+          })
+        : await deleteNoteComments({
+            postId: postId,
+            commentId: commentId,
+          });
     },
-    onSuccess: (_, { tastingNoteId, commentId }) => {
+    onSuccess: (_, { postId, commentId, isLife }) => {
       toast("댓글이 삭제되었습니다.");
       queryClient.invalidateQueries({
-        queryKey: ["note", Number(tastingNoteId)],
+        queryKey: [isLife ? "life" : "note", Number(postId)],
       });
 
       if (isOpen) {
         queryClient.invalidateQueries({
-          queryKey: ["getReply", tastingNoteId, commentInfo?.commentId],
+          queryKey: ["getReply", postId, commentInfo?.commentId],
         });
       } else {
         queryClient.invalidateQueries({
-          queryKey: ["noteComments", Number(tastingNoteId)],
+          queryKey: [isLife ? "lifeComments" : "noteComments", Number(postId)],
         });
       }
     },

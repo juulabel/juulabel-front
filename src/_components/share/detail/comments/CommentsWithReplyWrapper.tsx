@@ -6,22 +6,25 @@ import Image from "next/image";
 import { IComment } from "@/_types";
 import ReplyBody from "./ReplyBody";
 import useCommentsLike from "@/_utils/hooks/useCommentsLike";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import clsx from "clsx";
 import useReplyComponentStore from "@/_store/replyComponentStore";
 
 interface Props {
   commentInfo: IComment;
-  tastingNoteId: number;
+  postId: number;
 }
 
 export default function CommentsWithReplyWrapper({
   children,
   commentInfo,
-  tastingNoteId,
+  postId,
 }: PropsWithChildren<Props>) {
-  const { mutate } = useCommentsLike();
-  const { onOpen, setCommentInfo, setTastingNoteId } = useReplyComponentStore();
+  const { onOpen, setCommentInfo, setPostId } = useReplyComponentStore();
+  const pathname = usePathname();
+  const isLife = pathname.includes("life");
+  const { mutate } = useCommentsLike(isLife);
+
   // commentId, tastingNotdId,
 
   useEffect(() => {}, []);
@@ -32,9 +35,9 @@ export default function CommentsWithReplyWrapper({
           "flex w-full flex-col gap-3 border-b border-cool-grayscale-200 px-5 py-5",
         )}
         onClick={() => {
-          if (!!commentInfo && !!tastingNoteId) {
+          if (!!commentInfo && !!postId) {
             setCommentInfo(commentInfo);
-            setTastingNoteId(tastingNoteId);
+            setPostId(postId);
             onOpen();
           }
         }}
@@ -53,7 +56,7 @@ export default function CommentsWithReplyWrapper({
                 e.stopPropagation();
 
                 mutate({
-                  tastingNoteId: tastingNoteId,
+                  postId: postId,
                   commentId: commentInfo.commentId,
                 });
               }}
@@ -86,7 +89,7 @@ export default function CommentsWithReplyWrapper({
       {/* <ReplyBody
         replyOpen={replyOpen}
         handleReplyClose={handleReplyClose}
-        tastingNoteId={tastingNoteId}
+        postId={postId}
         parentCommentId={commentInfo.commentId}
       /> */}
     </>

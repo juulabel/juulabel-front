@@ -62,22 +62,23 @@ export default function HeaderWithButton({
   };
 
   return (
-    <div className="border-cool-grayscale flex h-16 w-full max-w-[560px] items-center justify-between border-b p-4">
-      <button onClick={() => router.back()}>
+    <div className="border-cool-grayscale relative flex h-16 w-full max-w-[560px] items-center border-b p-4">
+      <button onClick={() => router.back()} className="absolute left-4">
         <GoChevronLeft size={24} className="text-cool-grayscale-500" />
       </button>
       {titleLink ? (
         <Link
           href={titleLink}
-          className="text-lg font-bold text-cool-grayscale-700"
+          className="mx-auto text-center text-lg font-bold text-cool-grayscale-700"
         >
           {title}
         </Link>
       ) : (
-        <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
+        <div className="mx-auto text-center text-lg font-bold text-cool-grayscale-700">
+          {title}
+        </div>
       )}
-
-      {renderButton()}
+      <div className="absolute right-4">{renderButton()}</div>
     </div>
   );
 }

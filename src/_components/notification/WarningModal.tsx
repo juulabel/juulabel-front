@@ -18,7 +18,7 @@ export default function WarningModal({
   handleCancel,
 }: IWarningModal) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
       <div className="inline-flex h-[233px] w-[91%] max-w-[560px] flex-col items-center justify-center gap-6 rounded-2xl bg-white p-6">
         <div className="flex h-[79px] flex-col items-center justify-center gap-3 self-stretch">
           <Image

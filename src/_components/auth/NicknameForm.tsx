@@ -35,12 +35,19 @@ export default function NicknameForm() {
 
   const onSubmit = async (data: NicknameUserFormValues) => {
     try {
+      const regex = /[^\w\u00C0-\uFFFF]/g;
+      if (regex.test(data.nickname)) {
+        setError("nickname", {
+          message: "띄어쓰기 및 특수문자를 사용할수 없어요.",
+        });
+        return;
+      }
       const response = await instance.get(
         `/v1/api/members/nicknames/${data.nickname}/exists`,
       );
 
       if (response.data) {
-        if (response.data.success) {
+        if (!response.data.result) {
           setEnableButton(true);
           clearErrors("nickname");
           setNicknamePass("사용 가능한 닉네임이에요.");

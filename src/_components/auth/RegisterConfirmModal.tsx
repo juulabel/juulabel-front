@@ -1,5 +1,6 @@
 "use client";
 
+import { alcoholType } from "@/_config/alcoholType";
 import { useRegisterStore } from "@/_store/register";
 
 interface IRegisterConfirm {
@@ -19,6 +20,11 @@ export default function RegisterConfirmModal({
     genderCheck,
     preferredAlcoholType,
   } = useRegisterStore();
+
+  const preferredAlcoholValues = preferredAlcoholType
+    .map((key) => alcoholType.find((type) => type.key === key)?.value)
+    .filter((value) => value !== undefined);
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
       <div className="inline-flex h-[443px] w-[361px] flex-col items-center justify-start gap-4 rounded-2xl bg-white p-6">
@@ -65,7 +71,7 @@ export default function RegisterConfirmModal({
             선호 전통주
           </div>
           <div className="self-stretch text-center text-base font-medium leading-normal text-orange-400">
-            {preferredAlcoholType.join(", ")}
+            {preferredAlcoholValues.join(", ")}
           </div>
         </div>
         <div className="inline-flex h-[0px] w-[313px] items-center justify-center"></div>

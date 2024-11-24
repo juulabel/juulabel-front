@@ -29,7 +29,6 @@ function GoogleLoginHandlerComponent() {
             setEmail(data.email);
             setProvider(data.provider);
             setProviderId(data.providerId);
-            localStorage.setItem("recentLogin", "google");
             if (response.data.result.isNewMember) {
               router.push("/register/agreement");
             } else {

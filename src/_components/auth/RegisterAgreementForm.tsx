@@ -26,6 +26,7 @@ export default function RegisterAgreementForm() {
     queryKey: ["terms"],
     queryFn: getTerms,
   });
+
   const { control, watch, setValue, getValues } =
     useForm<AgreementUserFormValues>({
       mode: "onSubmit",
@@ -34,6 +35,7 @@ export default function RegisterAgreementForm() {
     });
 
   const handleAllAgree = (value: boolean) => {
+    setValue("allAgree", value); // Update allAgree state
     setValue("serviceAgree", value);
     setValue("privateInformationAgree", value);
     setValue("marketingAgree", value);
@@ -46,6 +48,7 @@ export default function RegisterAgreementForm() {
   const allAgreeWatch = watch("allAgree");
   const serviceAgreeWatch = watch("serviceAgree");
   const privateInformationAgreeWatch = watch("privateInformationAgree");
+  const marketingAgreeWatch = watch("marketingAgree");
 
   const saveAgreementData = () => {
     registerStore.setAllAgree(getValues("allAgree"));
@@ -55,6 +58,19 @@ export default function RegisterAgreementForm() {
     );
     registerStore.setMarketingAgree(getValues("marketingAgree"));
   };
+
+  // Automatically update "allAgree" if any checkbox is unchecked
+  useEffect(() => {
+    const allTermsAgreed =
+      serviceAgreeWatch && privateInformationAgreeWatch && marketingAgreeWatch;
+    setValue("allAgree", allTermsAgreed);
+  }, [
+    serviceAgreeWatch,
+    privateInformationAgreeWatch,
+    marketingAgreeWatch,
+    setValue,
+  ]);
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error : {error.message}</div>;
 

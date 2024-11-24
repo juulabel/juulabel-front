@@ -20,7 +20,7 @@ export default function GenderForm({
   const handleGender = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onChangeGender(
-      event.currentTarget.textContent === "남성" ? "MALE" : "FEMALE",
+      event.currentTarget.textContent === "남성" ? "남성" : "여성",
     );
   };
   return (

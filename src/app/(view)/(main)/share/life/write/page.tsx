@@ -28,6 +28,7 @@ export interface Inputs {
 interface FileInfo {
   id: string;
   file: File;
+  preview: string;
 }
 
 interface ErrorResponse {
@@ -83,6 +84,7 @@ function NewPostPage() {
       const newImagesWithId: FileInfo[] = files.map((file) => ({
         file,
         id: crypto.randomUUID(),
+        preview: URL.createObjectURL(file),
       }));
 
       setImages(newImagesWithId);
@@ -133,7 +135,7 @@ function NewPostPage() {
             );
         if (response.data.success) {
           router.replace(
-            `/share/life/${response.data.result.dailyLifeId}?posted=true&editMode=${editMode != null}`,
+            `/share/life/${response.data.result.dailyLifeId}?posted=true&editMode=${editMode == null}`,
           );
         }
       } catch (error) {
@@ -156,7 +158,7 @@ function NewPostPage() {
       "files",
       images.map((image) => image.file),
     );
-  }, [images, setValue]);
+  }, [images]);
 
   useEffect(() => {
     if (confirm) {
@@ -178,6 +180,7 @@ function NewPostPage() {
       const newImagesWithId = selectedFiles.map((file) => ({
         file,
         id: crypto.randomUUID(),
+        preview: URL.createObjectURL(file), // Store the preview URL
       }));
 
       setImages((prev) => [...(prev || []), ...newImagesWithId]);
@@ -262,7 +265,7 @@ function NewPostPage() {
               <div className="h-14 w-14 md:h-16 md:w-16">
                 <Image
                   alt="일상생활 내용 이미지"
-                  src={URL.createObjectURL(image.file)}
+                  src={image.preview}
                   width={1920}
                   height={1080}
                   className="h-full w-full rounded-lg object-cover"

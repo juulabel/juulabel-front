@@ -1,17 +1,16 @@
 import axios from "axios";
 import { Cookies } from "react-cookie";
 
-export default async function postNoteCommentsLike({
-  postId,
+export default async function deleteDailyLifeComments({
+  dailyLifeId,
   commentId,
 }: {
-  postId: number;
+  dailyLifeId: number;
   commentId: number;
 }) {
   const cookies = new Cookies();
-  const response = await axios.post(
-    `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/shared-space/tasting-notes/${postId}/comments/${commentId}/likes`,
-    {},
+  const response = await axios.delete(
+    `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/daily-lives/${dailyLifeId}/comments/${commentId}`,
     {
       headers: {
         Authorization: `Bearer ${cookies.get("accessToken")}`,

@@ -19,11 +19,12 @@ import { toast } from "react-toastify";
 const MAX_LENGTH = 600;
 
 interface Props {
-  tastingNoteId: number;
+  postId: number;
   parentCommentId: number;
+  isLife?: boolean;
 }
 
-export default function ReplyInput({ tastingNoteId, parentCommentId }: Props) {
+export default function ReplyInput({ postId, parentCommentId, isLife }: Props) {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
   const [cookies] = useCookies(["accessToken"]);
@@ -46,7 +47,7 @@ export default function ReplyInput({ tastingNoteId, parentCommentId }: Props) {
       if (isSubmitting) return;
       mutate({
         token: cookies.accessToken,
-        id: tastingNoteId,
+        id: postId,
         content: textRef.current?.value || "",
         parentCommentId: parentCommentId,
       });
@@ -94,12 +95,12 @@ export default function ReplyInput({ tastingNoteId, parentCommentId }: Props) {
       setIsSubmitting(false);
 
       queryClient.invalidateQueries({
-        queryKey: ["noteComments", Number(tastingNoteId)],
+        queryKey: [isLife ? "lifeComments" : "noteComments", Number(postId)],
         refetchType: "all",
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["getReply", tastingNoteId, parentCommentId],
+        queryKey: ["getReply", postId, parentCommentId],
       });
       if (textRef.current) {
         textRef.current.value = "";
@@ -139,7 +140,7 @@ export default function ReplyInput({ tastingNoteId, parentCommentId }: Props) {
               } else {
                 mutate({
                   token: cookies.accessToken,
-                  id: tastingNoteId,
+                  id: postId,
                   content: textValue,
                   parentCommentId: parentCommentId,
                 });

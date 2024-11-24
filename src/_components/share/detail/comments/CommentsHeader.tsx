@@ -5,13 +5,18 @@ import {
   useCommentCountStore,
   useCommentStore,
 } from "@/_store/tastingDetailStore";
+import { getLifeDetail } from "@/app/api/life/getLifeDetail";
 import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function CommentsHeader() {
+interface Props {
+  isLife?: boolean;
+}
+
+export default function CommentsHeader({ isLife }: Props) {
   const router = useRouter();
 
   const { count } = useCommentCountStore();
@@ -24,11 +29,15 @@ export default function CommentsHeader() {
   const { isCommentsPageVisible, setCommentsPageVisible, setIsInitialized } =
     useCommentsPageStore();
   const { data, isFetching } = useQuery({
-    queryKey: ["noteDetail", Number(id)],
+    queryKey: [isLife ? "lifeDetail" : "noteDetail", Number(id)],
     queryFn: () =>
-      getNoteDetail({
-        id: Number(id),
-      }),
+      isLife
+        ? getLifeDetail({
+            id: Number(id),
+          })
+        : getNoteDetail({
+            id: Number(id),
+          }),
     staleTime: 1000 * 60 * 5, // 5분 동안 데이터를 신선하다고 판단
     gcTime: 1000 * 60 * 5, // 5분 동안 캐시 보관
     enabled: !!id,
@@ -60,7 +69,10 @@ export default function CommentsHeader() {
             댓글
           </div>
           <div className="text-[16px] font-normal text-cool-grayscale-500">
-            {data?.result.tastingNoteDetailInfo.commentCount}개
+            {isLife
+              ? data?.result.dailyLifeDetailInfo.commentCount
+              : data?.result.tastingNoteDetailInfo.commentCount}
+            개
           </div>
         </>
       )}
