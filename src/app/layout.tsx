@@ -1,4 +1,5 @@
 import { MSWComponent } from "@/_components/MSWComponent";
+import NotificationProvider from "@/_components/notification/NotificationProvider";
 import { AuthProvider } from "@/_lib/Provider/AuthProvider";
 import QueryProvider from "@/_lib/Provider/QueryProvider";
 import ToastProvider from "@/_lib/Provider/ToastProvider";
@@ -31,7 +32,9 @@ export default function RootLayout({
           <QueryProvider>
             <ToastProvider>
               <AuthProvider>
-                <MSWComponent>{children}</MSWComponent>
+                <NotificationProvider>
+                  <MSWComponent>{children}</MSWComponent>
+                </NotificationProvider>
               </AuthProvider>
             </ToastProvider>
           </QueryProvider>
