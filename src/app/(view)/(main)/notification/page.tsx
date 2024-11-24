@@ -10,13 +10,12 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
-  subscribeToNotifications,
   useDeleteAllNotifications,
   useDeleteNotification,
   useFetchNotifications,
   useMarkAllNotificationsAsRead,
   useMarkNotificationAsRead,
-} from "../api/notification/useNotifications";
+} from "../../../api/notification/useNotifications";
 
 export default function Page() {
   const [selectedTab, setSelectedTab] = useState<string>("전체");
@@ -51,13 +50,6 @@ export default function Page() {
               return true;
           }
         });
-
-  useEffect(() => {
-    const unsubscribe = subscribeToNotifications();
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   const handleTabClick = useCallback((tabName: string) => {
     setSelectedTab(tabName);
@@ -99,6 +91,10 @@ export default function Page() {
   const handleMarkAllNotificationsAsRead = () => {
     markAllAsRead();
   };
+
+  useEffect(() => {
+    console.log("allNotifications", allNotifications);
+  }, [allNotifications]);
 
   if (isLoading) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;

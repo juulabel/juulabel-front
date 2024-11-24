@@ -54,6 +54,9 @@ function LifeDetailPage({ params }: SearchParamProps) {
           userData.nickname,
       );
     }
+  }, [data, userData]);
+
+  useEffect(() => {
     if (posted === "true") {
       if (editMode) {
         toast("일상생활 수정이 완료되었어요.");
@@ -61,15 +64,7 @@ function LifeDetailPage({ params }: SearchParamProps) {
         toast("일상생활 작성이 완료되었어요.");
       }
     }
-  }, [
-    data,
-    isLoadingLife,
-    error,
-    userData,
-    isLoadingUser,
-    userError,
-    setIsAuthor,
-  ]);
+  });
 
   const handleDeleteConfirm = async () => {
     const isSuccess = await deleteDailyLife(cookie.accessToken, id);
@@ -83,8 +78,6 @@ function LifeDetailPage({ params }: SearchParamProps) {
     }
   };
   const handleEditBtn = () => {
-    console.log(data);
-
     const input: Inputs = {
       title: data.result.dailyLifeDetailInfo.title,
       content: data.result.dailyLifeDetailInfo.content,
@@ -97,6 +90,8 @@ function LifeDetailPage({ params }: SearchParamProps) {
 
     router.push(`/share/life/write?dailyLifeId=${id}`);
   };
+
+  console.log(error);
 
   // 임시 에러 및 로딩 컴포넌트
   if (isLoadingUser || isLoadingLife) {
@@ -119,7 +114,7 @@ function LifeDetailPage({ params }: SearchParamProps) {
     },
     imageInfo: { imageUrlList, imageCount },
   } = data.result;
-  
+
   return (
     <>
       <HeaderWithButton

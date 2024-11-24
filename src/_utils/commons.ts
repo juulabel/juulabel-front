@@ -90,3 +90,32 @@ export const flavorScoreMap = new Map<number, { label: string; data: number }>(
     },
   ]),
 );
+
+export function mapImageUrl({
+  url,
+  defaultUrl = "https://picsum.photos/id/237/200/300",
+}: {
+  url: string | null | undefined;
+  defaultUrl?: string;
+}) {
+  if (!url || !url.startsWith("https://")) {
+    return defaultUrl;
+  }
+
+  return url;
+}
+
+export function parseNumberOfDefault({
+  value,
+  defaultValue = 0,
+}: {
+  value: number | undefined;
+  defaultValue?: number;
+}) {
+  if (!value) return defaultValue;
+  const parsedNumber = Number(value);
+  if (!isNaN(parsedNumber)) {
+    return parsedNumber;
+  }
+  return defaultValue;
+}

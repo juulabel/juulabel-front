@@ -71,7 +71,6 @@ export default function useCommentsPOST({
         textRef.current.value = "";
         setBtnDisabled(true);
       }
-      console.log(commentInfo);
       //대댓글인 경우
       if (replyComponentIsOpen && commentInfo) {
         if (commentInfo && commentInfo.commentId === parentCommentId) {

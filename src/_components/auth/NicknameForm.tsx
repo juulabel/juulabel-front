@@ -64,8 +64,6 @@ export default function NicknameForm() {
     }
   };
 
-
-
   const saveNicknameData = () => {
     setNickname(getValues("nickname"));
   };

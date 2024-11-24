@@ -21,14 +21,9 @@ export default function RegisterConfirmModal({
     preferredAlcoholType,
   } = useRegisterStore();
 
-
-  
-const preferredAlcoholValues = preferredAlcoholType
-.map((key) => alcoholType.find((type) => type.key === key)?.value)
-.filter((value) => value !== undefined);
-
-
-  
+  const preferredAlcoholValues = preferredAlcoholType
+    .map((key) => alcoholType.find((type) => type.key === key)?.value)
+    .filter((value) => value !== undefined);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
@@ -75,7 +70,7 @@ const preferredAlcoholValues = preferredAlcoholType
           <div className="self-stretch text-center text-base font-normal leading-normal text-slate-500">
             선호 전통주
           </div>
-          <div className="self-stretch text-center text-base font-medium leading-normal text-orange-400">            
+          <div className="self-stretch text-center text-base font-medium leading-normal text-orange-400">
             {preferredAlcoholValues.join(", ")}
           </div>
         </div>

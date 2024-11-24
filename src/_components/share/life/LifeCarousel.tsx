@@ -20,7 +20,7 @@ export default function LifeCarousel({ imageUrlList }: ILifeCarousel) {
     bulletClass: "w-2 h-2 inline-block bg-cool-grayscale-400 rounded-full",
     bulletActiveClass:
       "!bg-secondary w-[34px] transition-colors duration-700 ease-out",
-    renderBullet: function (index: number, className: string) {      
+    renderBullet: function (index: number, className: string) {
       return '<div class="' + className + '">' + "</div>";
     },
   };

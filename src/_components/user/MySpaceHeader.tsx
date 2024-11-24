@@ -1,19 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { GoChevronLeft } from "react-icons/go";
-import UserHeaderModal from "./UserHeaderModal";
-import ConfirmModal from "@/_common/ConfirmModal";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 import Image from "next/image";
+import Link from "next/link";
 
 interface IMySpaceHeader {
   title: string;
 }
 
 export default function MySpaceHeader({ title }: IMySpaceHeader) {
+  const { data: notificationCount = 0, isLoading } =
+    useFetchNotificationCount();
+  const displayCount = notificationCount > 99 ? "99+" : notificationCount;
   return (
     <div>
       <div className="mx-[4%] mb-4 flex h-16 flex-row items-center justify-between border-b-[1px] border-cool-grayscale-300">
@@ -27,9 +25,11 @@ export default function MySpaceHeader({ title }: IMySpaceHeader) {
               alt="notification"
               className="w-[28px] lg:w-[28px]"
             />
-            <div className="absolute -right-0.5 -top-0.5 rounded-[8px] bg-primary-700 px-1 py-[1px] text-center text-[9px] font-medium text-white">
-              24
-            </div>
+            {notificationCount > 0 && (
+              <div className="absolute -right-0.5 -top-0.5 rounded-[8px] bg-primary-700 px-1 py-[1px] text-center text-[9px] font-medium text-white">
+                {displayCount}
+              </div>
+            )}
           </Link>
         </div>
       </div>

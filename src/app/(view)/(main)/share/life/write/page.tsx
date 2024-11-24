@@ -135,7 +135,7 @@ function NewPostPage() {
             );
         if (response.data.success) {
           router.replace(
-            `/share/life/${response.data.result.dailyLifeId}?posted=true&editMode=${editMode != null}`,
+            `/share/life/${response.data.result.dailyLifeId}?posted=true&editMode=${editMode == null}`,
           );
         }
       } catch (error) {

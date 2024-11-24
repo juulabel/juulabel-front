@@ -27,6 +27,7 @@ export interface INotificationSummary {
   notificationType: string; // Eunm
   isRead: boolean;
   createdAt: string;
+  profileImageUrl: string;
 }
 
 interface ISortInfo {

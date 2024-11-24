@@ -7,7 +7,9 @@ import { instance } from "../axios";
 /**
  * 알림 구독 - SSE
  */
-export const subscribeToNotifications = () => {
+export const subscribeToNotifications = (
+  onNewNotification: (notification: string) => void,
+) => {
   const cookies = nookies.get();
   const accessToken = cookies.accessToken;
 
@@ -25,6 +27,7 @@ export const subscribeToNotifications = () => {
     try {
       const newNotification = JSON.parse(event.data);
       console.log("새로운 알림 수신:", newNotification);
+      onNewNotification(newNotification);
     } catch (err) {
       console.error("Error parsing event data:", err);
     }
@@ -33,6 +36,11 @@ export const subscribeToNotifications = () => {
   eventSource.onerror = function (err) {
     console.error("EventSource failed:", err);
     eventSource.close();
+
+    // 3초 후 재연결 시도
+    setTimeout(() => {
+      subscribeToNotifications(onNewNotification);
+    }, 3000);
   };
 
   return () => {

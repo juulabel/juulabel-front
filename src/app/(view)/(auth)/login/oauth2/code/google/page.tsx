@@ -28,7 +28,7 @@ function GoogleLoginHandlerComponent() {
             const data = response.data.result.oAuthUserInfo;
             setEmail(data.email);
             setProvider(data.provider);
-            setProviderId(data.providerId);            
+            setProviderId(data.providerId);
             if (response.data.result.isNewMember) {
               router.push("/register/agreement");
             } else {
