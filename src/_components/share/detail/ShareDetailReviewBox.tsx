@@ -3,7 +3,12 @@ import React, { Fragment, ReactNode, useEffect, useState } from "react";
 import HexagonChart from "../../tasting-note/HexagonChart";
 import MoonRating from "./MoonRating";
 import { ITastingNoteDetailInfo } from "@/_types";
-import { flavorMap, flavorScoreMap, sensoryMap } from "@/_utils/commons";
+import {
+  flavorMap,
+  flavorScoreMap,
+  scentMap,
+  sensoryMap,
+} from "@/_utils/commons";
 import RadarChart from "../../tasting-note/HexagonChart";
 import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
 
@@ -11,12 +16,14 @@ interface Props {
   info: ITastingNoteDetailInfo | undefined;
   sensoryLevelIds: number[] | undefined;
   flavorLevelIds: number[] | undefined;
+  scentIds: number[] | undefined;
 }
 
 export default function ShareDetailReviewBox({
   info,
   sensoryLevelIds,
   flavorLevelIds,
+  scentIds,
 }: Props) {
   // id 값들을 실제 맛으로 변경
   const sensoryValues: { value: string; kind: string }[] =
@@ -65,13 +72,13 @@ export default function ShareDetailReviewBox({
         </div>
 
         <div className="flex w-fit flex-shrink-0 items-center gap-2">
-          {flavorLevelIds?.map((id, index) => {
+          {scentIds?.map((id, index) => {
             return (
               <Fragment key={index + "key"}>
                 <span className="text-[16px] font-bold leading-[24px] text-cool-grayscale-700">
-                  {flavorMap.get(id)}
+                  {scentMap.get(id)}
                 </span>
-                {flavorLevelIds.length - 1 !== index && <Separator />}
+                {scentIds?.length - 1 !== index && <Separator />}
               </Fragment>
             );
           })}
@@ -95,7 +102,10 @@ export default function ShareDetailReviewBox({
           부연설명
         </span>
 
-        <div className="h-[79px] w-full overflow-auto rounded-lg border-[1px] border-cool-grayscale-200 p-2 text-[14px] font-normal text-cool-grayscale-700">
+        <div
+          className="h-[79px] w-full overflow-auto rounded-lg border-[1px] border-cool-grayscale-200 p-2 text-[14px] font-normal text-cool-grayscale-700"
+          style={{ whiteSpace: "pre-wrap" }}
+        >
           {info.content}
         </div>
       </div>
