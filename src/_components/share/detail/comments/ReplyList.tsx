@@ -20,13 +20,13 @@ import useMemberStore from "@/_store/memberStore";
 
 interface Props {
   parentCommentId: number;
-  tastingNoteId: number;
+  postId: number;
 }
 
 /**
  * @note 답글 컴포넌트
  */
-export default function ReplyList({ tastingNoteId, parentCommentId }: Props) {
+export default function ReplyList({ postId, parentCommentId }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { memberInfo } = useMemberStore();
   const [cookies] = useCookies(["accessToken"]);
@@ -40,7 +40,7 @@ export default function ReplyList({ tastingNoteId, parentCommentId }: Props) {
     isError,
     status,
   } = useInfiniteQuery({
-    queryKey: ["getReply", tastingNoteId, parentCommentId],
+    queryKey: ["getReply", postId, parentCommentId],
     queryFn: ({ pageParam }) =>
       getReply({
         tastingNoteCommentId: pageParam.tastingNoteCommentId,
@@ -56,12 +56,12 @@ export default function ReplyList({ tastingNoteId, parentCommentId }: Props) {
         : {
             lastReplyId: lastPage.data.slice(-1)[0].commentId || null,
             tastingNoteCommentId: parentCommentId,
-            tastingNoteId: tastingNoteId,
+            tastingNoteId: postId,
           };
     },
     initialPageParam: {
       tastingNoteCommentId: parentCommentId,
-      tastingNoteId: tastingNoteId,
+      tastingNoteId: postId,
       lastReplyId: null,
     },
     select: (data) => {
@@ -100,7 +100,7 @@ export default function ReplyList({ tastingNoteId, parentCommentId }: Props) {
                 <li key={index} className="">
                   <Reply
                     replyInfo={reply}
-                    tastingNoteId={tastingNoteId}
+                    tastingNoteId={postId}
                     isAuthor={
                       memberInfo?.memberId === reply.memberInfo.memberId
                     }

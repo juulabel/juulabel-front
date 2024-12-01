@@ -2,7 +2,9 @@
 
 import { INotificationSummary } from "@/_types/notification";
 import { dateViewKoreanFull } from "@/_utils/time";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const NotificationTypeLabels: { [key: string]: string } = {
   POST_LIKE: "공유공간",
@@ -17,6 +19,27 @@ const getNotificationTypeLabel = (type: string): string => {
   return NotificationTypeLabels[type] || "알림";
 };
 
+const handleRedirect = (relatedUrl: string, router: AppRouterInstance) => {
+  if (!relatedUrl) return;
+
+  const urlParts = relatedUrl.split("/"); // URL을 '/'로 분리
+  const id = urlParts[urlParts.length - 1]; // ID 값 추출
+  const type = urlParts[urlParts.length - 2]; // 타입 추출
+
+  // URL 타입에 따른 리디렉션 경로
+  switch (type) {
+    case "tasting-notes":
+      router.push(`/share/note/${id}`);
+      break;
+    case "daily-lives":
+      router.push(`/share/life/${id}`);
+      break;
+    default:
+      console.warn("Unhandled relatedUrl type:", type);
+      break;
+  }
+};
+
 interface INotificationList {
   alarmList: INotificationSummary[];
   isEditing: boolean;
@@ -28,12 +51,18 @@ export default function NotificationList({
   isEditing,
   onDelete, // Destructure onDelete
 }: INotificationList) {
+  const router = useRouter();
   return (
     <>
       {alarmList.map((notification: INotificationSummary, index: number) => (
         <div
           key={index}
           className="flex cursor-pointer items-center justify-start gap-2 p-4 transition hover:bg-cool-grayscale-100"
+          onClick={() => {
+            if (!isEditing && notification.relatedUrl) {
+              handleRedirect(notification.relatedUrl, router);
+            }
+          }}
         >
           <Image
             width={40}
@@ -42,7 +71,7 @@ export default function NotificationList({
             src={
               notification.notificationType == "ADMIN_NOTIFY"
                 ? "/svg/announcement_alarm.svg"
-                : "/svg/announcement_alarm.svg" // 유저 프로필 사진으로 변경해야 함
+                : notification.profileImageUrl || "/svg/announcement_alarm.svg"
             }
             alt="알림 프로필 사진"
           />

@@ -21,7 +21,6 @@ export default function LifeCarousel({ imageUrlList }: ILifeCarousel) {
     bulletActiveClass:
       "!bg-secondary w-[34px] transition-colors duration-700 ease-out",
     renderBullet: function (index: number, className: string) {
-      console.log(className);
       return '<div class="' + className + '">' + "</div>";
     },
   };

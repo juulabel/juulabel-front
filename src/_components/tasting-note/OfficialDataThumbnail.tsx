@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function OfficialDataThumbnail({
+  id: alcoholicDrinksId,
   name,
   alcoholContent,
   alcoholType,
@@ -17,14 +18,16 @@ export default function OfficialDataThumbnail({
 
   const handleClick = () => {
     router.push(
-      `/note/write?productName=${encodeURIComponent(
+      `/share/note/write?alcoholicDrinksId=${alcoholicDrinksId}&productName=${encodeURIComponent(
         name,
       )}&alcoholContent=${encodeURIComponent(
         alcoholContent,
-      )}&alcoholType=${encodeURIComponent(
+      )}&alcoholTypeId=${encodeURIComponent(
+        alcoholType.id,
+      )}&alcoholTypeName=${encodeURIComponent(
         alcoholType.name,
       )}&brewery=${brewery ? encodeURIComponent(brewery.name) : ""}&breweryLocation=${
-        brewery.region ? encodeURIComponent(brewery.region) : ""
+        brewery ? encodeURIComponent(brewery.region) : ""
       }`,
     );
   };

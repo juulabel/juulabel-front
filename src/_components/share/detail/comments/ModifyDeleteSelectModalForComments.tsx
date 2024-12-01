@@ -8,15 +8,17 @@ import { useRouter } from "next/navigation";
 import useReplyComponentStore from "@/_store/replyComponentStore";
 
 interface Props {
-  tastingNoteId: number;
+  postId: number;
   commentId: number;
   closeModal: () => void;
+  isLife?: boolean;
 }
 
 export default function ModifyDeleteSelectModalForComments({
-  tastingNoteId,
+  postId,
   commentId,
   closeModal,
+  isLife,
 }: Props) {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
@@ -24,9 +26,10 @@ export default function ModifyDeleteSelectModalForComments({
   if (deleteModalOpen) {
     return (
       <CommentsDeleteModal
-        tastingNoteId={tastingNoteId}
+        postId={postId}
         commentId={commentId}
         closeModal={closeModal}
+        isLife={isLife}
       />
     );
   }
@@ -38,7 +41,11 @@ export default function ModifyDeleteSelectModalForComments({
           variant="black"
           className="h-[37px] w-full rounded-[4px] text-[14px]"
           onClick={() => {
-            router.push(`/share/note/${tastingNoteId}/comments`);
+            router.push(
+              isLife
+                ? `/share/life/${postId}/comments`
+                : `/share/note/${postId}/comments`,
+            );
           }}
         >
           수정하기

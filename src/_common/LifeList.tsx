@@ -26,8 +26,8 @@ export default function LifeList({
   return (
     <Link href={`/share/life/${dailyLifeId}`} className="block px-4 pt-5">
       <div className="mb-4 flex items-center justify-between">
-        <div>
-          <div className="mb-1 font-medium text-cool-grayscale-800">
+        <div className="flex-1">
+          <div className="mb-1 line-clamp-1 font-medium text-cool-grayscale-800">
             {title}
           </div>
           <div className="mb-4 line-clamp-2 text-ellipsis text-sm text-cool-grayscale-700">
@@ -36,7 +36,7 @@ export default function LifeList({
         </div>
 
         {thumbnailPath && (
-          <div className="relative h-[76px] w-[76px] shrink-0 overflow-hidden rounded-lg">
+          <div className="relative ml-4 h-[76px] w-[76px] shrink-0 overflow-hidden rounded-lg">
             {imageCount && imageCount > 1 && (
               <div className="absolute left-0 top-0 z-10 bg-black bg-opacity-60 px-2 py-0.5 text-sm text-white">
                 {imageCount}
@@ -62,7 +62,7 @@ export default function LifeList({
           <div className="relative h-6 w-6 overflow-hidden rounded-full">
             <Image
               src={
-                profileImage && isValidUrl(profileImage)
+                profileImage
                   ? profileImage
                   : "/images/placeholders/profile/default_profile.png"
               }

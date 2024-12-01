@@ -35,6 +35,7 @@ export default function EditMyInfo({
   const [cookies] = useCookies(["accessToken"]);
   const [gender, setGender] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
+  const [errorNameMsg, seterrorNameMsg] = useState("");
   const [introduction, setIntroduction] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -70,13 +71,46 @@ export default function EditMyInfo({
   };
 
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-    setHasEdited(true);
+    const newNickname = e.target.value;
+    setNickname(newNickname);
+    checkIfAnyValuesAreEdited({ newNickname });
   };
 
   const handleIntroductionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setIntroduction(e.target.value);
-    setHasEdited(true);
+    const newIntroduction = e.target.value;
+    setIntroduction(newIntroduction);
+    checkIfAnyValuesAreEdited({ newIntroduction });
+  };
+
+  const arraysAreEqual = (arr1: number[] = [], arr2: number[] = []) => {
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every((value, index) => value === arr2[index]);
+  };
+
+  const checkIfAnyValuesAreEdited = ({
+    newNickname = nickname,
+    newIntroduction = introduction,
+    newImage = image,
+    newGenderDisable = genderDisable,
+    newGender = gender,
+    newAlcoholTypeIds = alcoholTypeIds,
+  }: {
+    newNickname?: string;
+    newIntroduction?: string;
+    newImage?: string | null;
+    newGenderDisable?: boolean;
+    newGender?: string;
+    newAlcoholTypeIds?: number[];
+  }) => {
+    const isEdited =
+      user?.nickname == newNickname &&
+      user?.introduction == newIntroduction &&
+      user?.profileImage == newImage &&
+      (user?.gender === "NONE") == newGenderDisable &&
+      user?.gender == newGender &&
+      arraysAreEqual(user?.alcoholTypeIds, newAlcoholTypeIds);
+
+    setHasEdited(!isEdited);
   };
 
   useEffect(() => {
@@ -90,22 +124,26 @@ export default function EditMyInfo({
     }
   }, [user]);
 
-  const handleGenderCheck = (value: boolean) => {
-    setGenderCheck(value);
+  const handleGenderCheck = (newGenderDisable: boolean) => {
+    setGenderCheck(newGenderDisable);
     if (!genderCheck) {
       setGenderDisable(true);
       setGender("NONE");
     } else setGenderDisable(false);
-    setHasEdited(true);
+    checkIfAnyValuesAreEdited({ newGenderDisable });
   };
-  const handleGender = (value: string) => {
-    if (value != gender) {
-      setGender(value);
-      setHasEdited(true);
-    }
+  const handleGender = (newGender: string) => {
+    setGender(newGender);
+    checkIfAnyValuesAreEdited({ newGender });
   };
 
   const onSubmit = async () => {
+    const regex = /[\s\W_]/;
+    if (regex.test(nickname)) {
+      seterrorNameMsg("띄어쓰기 및 특수문자를 사용할수 없어요.");
+      return;
+    }
+
     if (user?.nickname != nickname && !(await checkNickname(nickname))) {
       setDoesNameAlreadyExist(true);
       return;
@@ -203,6 +241,13 @@ export default function EditMyInfo({
             </p>
           </div>
         )}
+
+        {errorNameMsg.length > 0 && (
+          <div className="mt-1 flex flex-row items-center">
+            <AiFillExclamationCircle className="mr-[2px] text-error" />
+            <p className="text-[13px] font-medium text-error">{errorNameMsg}</p>
+          </div>
+        )}
         <label className="mb-2 mt-6 text-base font-medium text-slate-800">
           자기소개(최대 150자)
         </label>
@@ -242,11 +287,16 @@ export default function EditMyInfo({
       <PreferredAlcoholForm
         alcoholTypes={alcoholTypeIds}
         onChangeAlcoholType={(value: number) => {
-          setAlcoholTypes((prevState) =>
-            prevState.includes(value)
-              ? prevState.filter((type: number) => type !== value)
-              : [...prevState, value],
-          );
+          // Compute the new state for alcoholTypeIds
+          const newAlcoholTypeIds = alcoholTypeIds.includes(value)
+            ? alcoholTypeIds.filter((type: number) => type !== value)
+            : [...alcoholTypeIds, value];
+
+          // Update the state
+          setAlcoholTypes(newAlcoholTypeIds);
+
+          // Check if any values are edited
+          checkIfAnyValuesAreEdited({ newAlcoholTypeIds });
         }}
       />
       <BottomButton enableButton={hasEdited} onClick={onSubmit}>

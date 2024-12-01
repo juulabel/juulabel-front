@@ -8,7 +8,6 @@ import GenderForm from "@/_components/auth/GenderForm";
 import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
 import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
 import { useRegisterStore } from "@/_store/register";
-import { getAlocholTypeIds } from "@/_utils/getAlcoholTypeIds";
 import { instance } from "@/app/api/axios";
 import requests from "@/app/api/requests";
 import { useRouter } from "next/navigation";
@@ -27,14 +26,15 @@ export default function Page() {
     useState<boolean>(false);
   const [registerCancelModalOpen, setRegisterCancelModalOpen] =
     useState<boolean>(false);
+
   const enableRegisterButton =
     (gender || genderCheck) && alcoholTypes.length ? true : false;
   let maleClicked = false;
   let femaleClicked = false;
-  if (gender === "MALE") {
+  if (gender === "남성") {
     maleClicked = true;
     femaleClicked = false;
-  } else if (gender === "FEMALE") {
+  } else if (gender === "여성") {
     maleClicked = false;
     femaleClicked = true;
   }
@@ -84,11 +84,9 @@ export default function Page() {
       ],
     };
     try {
-      console.log(data);
-      console.log(registerStore.preferredAlcoholType);
-
       const response = await instance.post(requests.postSignUp, data);
       if (response.status === 200) {
+        localStorage.setItem("recentLogin", registerStore.provider);
         registerStore.setMemberId(response.data.result.memberId);
         setCookie("accessToken", response.data.result.token.accessToken, {
           path: "/",
@@ -105,7 +103,10 @@ export default function Page() {
     if (!genderCheck) {
       setGenderDisable(true);
       setGender("NONE");
-    } else setGenderDisable(false);
+    } else {
+      setGenderDisable(false);
+      setGender("");
+    }
   };
   const handleGender = (value: string) => {
     if (value == gender) setGender("");

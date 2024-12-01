@@ -23,9 +23,10 @@ import { toast } from "react-toastify";
 
 interface Props {
   id: number;
+  isLife?: boolean;
 }
 
-export default function CommentsFooter({ id }: Props) {
+export default function CommentsFooter({ id, isLife }: Props) {
   const MAX_LENGTH = 600;
   const textRef = useRef<HTMLTextAreaElement>(null);
 
@@ -70,9 +71,10 @@ export default function CommentsFooter({ id }: Props) {
 
   const { mutate } = useCommentsPOST({
     setIsSubmitting: setIsSubmitting,
-    tastingNoteId: id,
+    postId: id,
     textRef: textRef,
     setBtnDisabled: setBtnDisabled,
+    isLife: isLife,
   });
 
   const submit = () => {

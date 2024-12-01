@@ -30,7 +30,6 @@ function KakaoLoginHandlerComponent() {
             setEmail(data.email);
             setProvider(data.provider);
             setProviderId(data.providerId);
-            localStorage.setItem("recentLogin", "kakao");
             if (response.data.result.isNewMember) {
               router.push("/register/agreement");
             } else {

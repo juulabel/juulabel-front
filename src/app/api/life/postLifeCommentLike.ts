@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Cookies } from "react-cookie";
 
-export default async function postNoteCommentsLike({
+export default async function postLifeCommentsLike({
   postId,
   commentId,
 }: {
@@ -10,7 +10,7 @@ export default async function postNoteCommentsLike({
 }) {
   const cookies = new Cookies();
   const response = await axios.post(
-    `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/shared-space/tasting-notes/${postId}/comments/${commentId}/likes`,
+    `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/daily-lives/${postId}/comments/${commentId}/likes`,
     {},
     {
       headers: {

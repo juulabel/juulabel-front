@@ -20,9 +20,9 @@ export default function LoginForm() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("recentLogin") === "kakao")
+    if (localStorage.getItem("recentLogin") === "KAKAO")
       setKakaoRecentLogin(true);
-    else if (localStorage.getItem("recentLogin") === "google")
+    else if (localStorage.getItem("recentLogin") === "GOOGLE")
       setGoogleRecentLogin(true);
   }, []);
 

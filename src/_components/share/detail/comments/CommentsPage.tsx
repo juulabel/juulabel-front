@@ -8,9 +8,10 @@ import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
 
 interface Props {
   id: number;
+  isLife?: boolean;
 }
 
-export default function CommentsPage({ id }: Props) {
+export default function CommentsPage({ id, isLife }: Props) {
   const { isCommentsPageVisible } = useCommentsPageStore();
   useEffect(() => {
     if (isCommentsPageVisible === "Y") {
@@ -23,9 +24,9 @@ export default function CommentsPage({ id }: Props) {
 
   return (
     <section className={clsx("z-50 h-full w-full bg-white", {})}>
-      {isCommentsPageVisible === "Y" && <CommentsHeader />}
+      {isCommentsPageVisible === "Y" && <CommentsHeader isLife={isLife} />}
 
-      <CommentsBody id={id} />
+      <CommentsBody id={id} isLife={isLife} />
     </section>
   );
 }
