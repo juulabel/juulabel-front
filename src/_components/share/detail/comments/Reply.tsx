@@ -21,8 +21,8 @@ const defaultUserImageURL =
   "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage";
 
 export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
-  const pathanem = usePathname();
-  const { mutate } = useCommentsLike(pathanem.includes("life"));
+  const pathname = usePathname();
+  const { mutate } = useCommentsLike(pathname.includes("life"));
   const { isOpen, openModal } = useCommentsModalStore();
 
   return (

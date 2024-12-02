@@ -62,7 +62,8 @@ export default function ShareNoteDetailBody({ id }: Props) {
 
   useEffect(() => {
     if (data && userData) {
-      // 헤더 컴포넌트에서 현재 글 작성자인지 체크함
+      // 헤더 컴포넌트에서 현재 글 작성자인지 체크함            
+      
       setIsAuthor(
         data?.result.tastingNoteDetailInfo.memberInfo.memberId ===
           userData?.result.memberId,

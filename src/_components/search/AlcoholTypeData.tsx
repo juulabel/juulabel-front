@@ -12,6 +12,7 @@ import AlcoholTypeDataThumbnail from "./AlcoholTypeDataThumbnail";
 import Spinner from "./Spinner";
 
 interface AlcoholTypeDataProps {
+  totalCount: number;
   AlcoholSearchTypeDataList: IAlcoholTypeData[] | [];
   selectedTab: IAlcoholTypeTab;
   sortedType: IAlcoholSortedType;
@@ -23,6 +24,7 @@ interface AlcoholTypeDataProps {
 }
 
 export default function AlcoholTypeData({
+  totalCount,
   AlcoholSearchTypeDataList,
   selectedTab,
   sortedType,
@@ -90,7 +92,7 @@ export default function AlcoholTypeData({
         <div className="flex flex-row items-center">
           <p className="px-1 text-base font-bold text-cool-grayscale-500">총</p>
           <p className="text-base font-bold text-[#ff823b]">
-            {AlcoholSearchTypeDataList?.length}개
+            {totalCount}개
           </p>
           <p className="text-base font-normal text-cool-grayscale-600">
             의 리스트가 있어요.
@@ -104,7 +106,7 @@ export default function AlcoholTypeData({
             {sortedType.value}
           </div>
           <Image
-            src={isFilterOpen ? "/svg/up_arrow.svg" : "/svg/down_arrow.svg"}
+            src={isFilterOpen ? "/svg/up_arrow.svg" : "/svg/under.svg"}
             alt="정렬 아이콘"
             width={16}
             height={16}

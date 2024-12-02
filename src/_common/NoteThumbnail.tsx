@@ -30,10 +30,7 @@ export default function NoteThumbnail({
   isPrivate,
 }: INoteThumbnail) {
   return (
-    <Link
-      href={`/share/note/${TastingNoteId}`}
-      className="flex w-full flex-col"
-    >
+    <div className="flex w-full h-full flex-col">
       <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
@@ -56,22 +53,27 @@ export default function NoteThumbnail({
             height={24}
           />
         )}
-        <Image
-          src={
-            thumbnailPath ??
-            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
-          }
-          alt="시음노트 썸네일"
-          sizes="50vw"
-          fill
-          className="object-cover"
-        />
+        <Link href={`/share/note/${TastingNoteId}`}>
+          <Image
+            src={
+              thumbnailPath ??
+              `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
+            }
+            alt="시음노트 썸네일"
+            sizes="50vw"
+            fill
+            className="object-cover"
+          />
+        </Link>
       </div>
       <div className="mb-0.5 font-medium text-cool-grayscale-800">
         {alcoholicDrinksName}
-      </div>
+    </div>
       <div className="mb-1 flex items-center space-x-2">
-        <div className="relative h-6 w-6 overflow-hidden rounded-full">
+        <Link
+          href={`/user/profile/${memberId}`}
+          className="relative h-6 w-6 overflow-hidden rounded-full"
+        >
           <Image
             src={
               profileImage ?? `/images/placeholders/profile/default_profile.png`
@@ -81,7 +83,7 @@ export default function NoteThumbnail({
             fill
             className="object-cover"
           />
-        </div>
+        </Link>
 
         <div className="text-xs font-medium text-cool-grayscale-500">
           {nickname}
@@ -90,6 +92,6 @@ export default function NoteThumbnail({
       <div className="text-xs text-cool-grayscale-500">
         {dateViewKoreanFull(createdAt)}
       </div>
-    </Link>
+    </div>
   );
 }

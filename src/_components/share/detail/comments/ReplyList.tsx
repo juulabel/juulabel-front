@@ -17,6 +17,8 @@ import { useCookies } from "react-cookie";
 import DeletedComments from "./DeletedComments";
 import DeletedCommentsForReply from "./DeletedCommentsForReply";
 import useMemberStore from "@/_store/memberStore";
+import { usePathname } from "next/navigation";
+import getDailyLifeReply from "@/app/api/life/getDailyLifeReply";
 
 interface Props {
   parentCommentId: number;
@@ -27,6 +29,8 @@ interface Props {
  * @note 답글 컴포넌트
  */
 export default function ReplyList({ postId, parentCommentId }: Props) {
+  const pathname = usePathname();
+  const isLife = pathname.includes("life");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { memberInfo } = useMemberStore();
   const [cookies] = useCookies(["accessToken"]);
@@ -42,11 +46,17 @@ export default function ReplyList({ postId, parentCommentId }: Props) {
   } = useInfiniteQuery({
     queryKey: ["getReply", postId, parentCommentId],
     queryFn: ({ pageParam }) =>
-      getReply({
-        tastingNoteCommentId: pageParam.tastingNoteCommentId,
-        tastingNoteId: pageParam.tastingNoteId,
-        lastReplyId: pageParam.lastReplyId,
-      }),
+      isLife
+        ? getDailyLifeReply({
+            dailyLifeCommentId: pageParam.parentCommentId,
+            dailyLifeId: pageParam.postId,
+            lastReplyId: pageParam.lastReplyId,
+          })
+        : getReply({
+            tastingNoteCommentId: pageParam.parentCommentId,
+            tastingNoteId: pageParam.postId,
+            lastReplyId: pageParam.lastReplyId,
+          }),
 
     getNextPageParam: (lastPage) => {
       if (!lastPage.data.length) return null;
@@ -55,13 +65,13 @@ export default function ReplyList({ postId, parentCommentId }: Props) {
         ? null
         : {
             lastReplyId: lastPage.data.slice(-1)[0].commentId || null,
-            tastingNoteCommentId: parentCommentId,
-            tastingNoteId: postId,
+            parentCommentId: parentCommentId,
+            postId: postId,
           };
     },
     initialPageParam: {
-      tastingNoteCommentId: parentCommentId,
-      tastingNoteId: postId,
+      parentCommentId: parentCommentId,
+      postId: postId,
       lastReplyId: null,
     },
     select: (data) => {
@@ -82,6 +92,11 @@ export default function ReplyList({ postId, parentCommentId }: Props) {
       setIsOpen(true);
     }, 3000);
   });
+
+  console.log(memberInfo?.memberId);
+  console.log(replyList?.at(0).memberInfo.memberId);
+  
+  
 
   return (
     <>

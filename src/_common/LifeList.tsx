@@ -7,7 +7,7 @@ export default function LifeList({
   title,
   content,
   dailyLifeId,
-  memberInfo: { nickname, profileImage },
+  memberInfo: { memberId, nickname, profileImage },
   thumbnailPath,
   imageCount,
   createdAt,
@@ -58,7 +58,10 @@ export default function LifeList({
       </div>
 
       <div className="flex items-center justify-between text-sm text-cool-grayscale-600">
-        <div className="flex items-center space-x-1">
+        <Link
+          href={`/user/profile/${memberId}`}
+          className="flex items-center space-x-1"
+        >
           <div className="relative h-6 w-6 overflow-hidden rounded-full">
             <Image
               src={
@@ -76,7 +79,7 @@ export default function LifeList({
           <div>{nickname}</div>
           <div className="text-cool-grayscale-400">&#183;</div>
           <div>{dateView(createdAt)}</div>
-        </div>
+        </Link>
         <div className="flex items-center">
           <Image
             src="/svg/like.svg"
