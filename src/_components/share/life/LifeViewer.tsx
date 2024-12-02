@@ -1,10 +1,12 @@
 import { dateViewKoreanFull } from "@/_utils/time";
 import Image from "next/image";
 import LifeCarousel from "./LifeCarousel";
+import Link from "next/link";
 
 interface ILifeViewer {
   title: string;
   content: string;
+  authorId: number;
   nickname: string;
   profileImage: string | null;
   createdAt: string;
@@ -15,6 +17,7 @@ interface ILifeViewer {
 export default function LifeViewer({
   title,
   content,
+  authorId,
   nickname,
   profileImage,
   createdAt,
@@ -23,7 +26,10 @@ export default function LifeViewer({
 }: ILifeViewer) {
   return (
     <div className="w-full p-4">
-      <div className="mb-2 flex items-center justify-between space-x-1 py-2">
+      <Link
+        href={`/user/profile/${authorId}`}
+        className="mb-2 flex items-center justify-between space-x-1 py-2"
+      >
         <div className="flex space-x-2">
           <div className="relative h-6 w-6 overflow-hidden rounded-full">
             <Image
@@ -43,7 +49,7 @@ export default function LifeViewer({
         <div className="text-cool-grayscale-500">
           {dateViewKoreanFull(createdAt)}
         </div>
-      </div>
+      </Link>
       <LifeCarousel imageUrlList={imageUrlList} />
 
       <div className="break-words py-5 text-2xl font-bold text-cool-grayscale-800">

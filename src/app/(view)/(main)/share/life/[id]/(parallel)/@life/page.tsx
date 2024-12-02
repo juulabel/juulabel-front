@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { Inputs } from "../../../write/page";
 import { SearchParamProps } from "@/_types";
 import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
+import useMemberStore from "@/_store/memberStore";
 
 function LifeDetailPage({ params }: SearchParamProps) {
   const router = useRouter();
@@ -26,6 +27,8 @@ function LifeDetailPage({ params }: SearchParamProps) {
   const { setIsAuthor } = useAuthorCheckStore();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const { setMemberInfo } = useMemberStore();
 
   const [
     { data, isFetching: isLoadingLife, error },
@@ -53,6 +56,8 @@ function LifeDetailPage({ params }: SearchParamProps) {
         data?.result.dailyLifeDetailInfo.memberInfo.nickname ===
           userData.nickname,
       );
+
+      setMemberInfo(userData);
     }
   }, [data, userData]);
 
@@ -131,6 +136,7 @@ function LifeDetailPage({ params }: SearchParamProps) {
           title={title}
           content={content}
           nickname={nickname}
+          authorId={memberId}
           profileImage={profileImage}
           createdAt={createdAt}
           imageUrlList={imageUrlList}

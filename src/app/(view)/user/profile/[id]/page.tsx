@@ -84,7 +84,6 @@ export default function Page({ params }: { params: { id: string } }) {
         setIsBottom(false);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
 
     return () => {
@@ -220,24 +219,19 @@ export default function Page({ params }: { params: { id: string } }) {
               </button>
             </div>
           </div>
-          <div className="h-full overflow-y-auto pt-[238px] scrollbar-hide">
+          <div className="h-full overflow-y-auto px-4 pt-[270px] scrollbar-hide">
             {isTastingNoteClicked ? (
-              <>
+              <div className="grid grid-cols-2 gap-x-2 gap-y-5">
                 {noteList && noteList.length > 0 ? (
                   noteList.map((note) => (
-                    <div
-                      key={note.TastingNoteId}
-                      className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6"
-                    >
-                      <NoteThumbnail key={note.TastingNoteId} {...note} />
-                    </div>
+                    <NoteThumbnail key={note.TastingNoteId} {...note} />
                   ))
                 ) : (
                   <p className="flex h-full items-center justify-center text-base font-medium text-slate-500">
                     작성된 시음노트가 없어요
                   </p>
                 )}
-              </>
+              </div>
             ) : (
               <>
                 {lifeList && lifeList.length > 0 ? (

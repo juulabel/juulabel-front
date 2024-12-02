@@ -8,6 +8,7 @@ import Image from "next/image";
 
 interface IAlcoholSearchDataSearchResult {
   query: string;
+  totalCount: number;
   officialDataList: IAlcoholSearchData[] | []; //임시 데이터 타입
   closeOfficialDataSearchResult: () => void;
   handleClearSearchQuery: () => void;
@@ -18,6 +19,7 @@ interface IAlcoholSearchDataSearchResult {
 
 export default function AlcoholSearchDataSearchResult({
   query,
+  totalCount,
   officialDataList,
   closeOfficialDataSearchResult,
   handleClearSearchQuery,
@@ -68,6 +70,7 @@ export default function AlcoholSearchDataSearchResult({
         </div>
       </div>
       <AlcoholSearchData
+        totalCount={totalCount}
         officialDataList={officialDataList}
         isBottom={isBottom}
         isLast={isLast}

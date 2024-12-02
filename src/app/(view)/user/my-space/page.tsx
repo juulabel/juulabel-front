@@ -26,7 +26,6 @@ export default function Page() {
   const [lifeList, setlifeList] = useState<ILifeList[]>([]);
   const [lastDailyLifeId, setLastDailyLifeId] = useState(null);
   const [isLifeLast, setIsLifeLast] = useState(false);
-  const [lastTastingNoteId, setLastTastingNoteId] = useState(0);
   const [isTastingNoteClicked, setIsTastingNoteClicked] =
     useState<boolean>(true);
   const [isDailyLifeClicked, setIsDailyLifeClicked] = useState<boolean>(false);

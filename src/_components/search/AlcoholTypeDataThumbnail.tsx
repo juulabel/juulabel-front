@@ -1,6 +1,7 @@
 import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
 import { IAlcoholTypeData } from "@/_types/search/alcoholTypeData";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function AlcohoTypeDataThumbnail({
@@ -13,14 +14,12 @@ export default function AlcohoTypeDataThumbnail({
   const router = useRouter();
 
   return (
-    <div className="mb-[5%] flex w-full cursor-pointer flex-col">
-      <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
+    <Link className="mb-[5%] flex w-full cursor-pointer flex-col" href={`/share/liquor/${id}`}>
+      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg">
         <Image
-          src={
-            // thumbnail ??
-            `/images/placeholders/alcohols/${placeholderThumbnailProvider("탁주")}.png`
-          }
-          alt="시음노트 썸네일"
+          src={thumbnail}
+          alt="전통주 썸네일"
+          sizes="50vw"
           fill
           className="object-cover"
         />
@@ -40,6 +39,6 @@ export default function AlcohoTypeDataThumbnail({
           {breweryName}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

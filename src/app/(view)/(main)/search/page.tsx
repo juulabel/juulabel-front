@@ -32,6 +32,9 @@ export default function Page() {
   const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>(
     [],
   );
+
+  const [searchResultCount, setsearchResultCount] = useState(0);
+
   const [searchResult, setSearchResult] = useState<IAlcoholSearchData[] | []>(
     [],
   );
@@ -43,6 +46,8 @@ export default function Page() {
 
   const [openAlcoholTypeDataList, setOpenAlcoholTypeDataList] =
     useState<boolean>(false);
+
+  const [alcoholTypeDataCount, setAlcoholTypeDataCount] = useState(0);
 
   const [alcoholTypeData, setalcoholTypeData] = useState<
     IAlcoholTypeData[] | []
@@ -67,9 +72,8 @@ export default function Page() {
   const [isSearchDataLast, setIsSearchDataLast] = useState(false);
 
   const handleAlcoholTypeClick = async (tab: IAlcoholTypeTab) => {
-    setSelectedTab(tab);
+    handleTab(tab);
     setOpenAlcoholTypeDataList(true);
-
     fetchAlcoholTypeData(true);
   };
 
@@ -92,7 +96,6 @@ export default function Page() {
     //작성하는 동작을 1초 이상 멈추면 연관검색어 API 동작
     const getRelatedSearchDataList = async () => {
       const data = await getRelatedSearchData(searchQuery);
-      console.log(relatedSearchDataList);
 
       setRelatedSearchDataList(data ?? []);
     };
@@ -112,7 +115,13 @@ export default function Page() {
           if (openAlcoholTypeDataList && !isTypeDataLst) {
             await fetchAlcoholTypeData(false);
           }
-          if (openOfficialSearchDataList && !isSearchDataLast) {
+          if (
+            openOfficialSearchDataList &&
+            !isSearchDataLast &&
+            searchResult.length > 0
+          ) {
+            console.log("loaded");
+
             await fetchAlcoholSearchData();
           }
         }
@@ -151,12 +160,13 @@ export default function Page() {
 
   const handleTab = async (tab: IAlcoholTypeTab) => {
     setSelectedTab(tab);
-    await fetchAlcoholTypeData(true);
+
+    await fetchAlcoholTypeData(true, tab, undefined);
   };
 
   const handleSortedType = async (sortedType: IAlcoholSortedType) => {
     setSelectedSortedType(sortedType);
-    await fetchAlcoholTypeData(true);
+    await fetchAlcoholTypeData(true, undefined, sortedType);
   };
 
   const fetchAlcoholSearchData = async () => {
@@ -167,6 +177,7 @@ export default function Page() {
     );
 
     setSearchResult(data?.alcoholicDrinks ?? []);
+    setsearchResultCount(0);
     setIsSearchDataLast(data?.isLast ?? false);
     setLastAlcoholicDrinksName(
       data?.alcoholicDrinks[data.alcoholicDrinks.length - 1].name,
@@ -179,11 +190,17 @@ export default function Page() {
     }
   };
 
-  const fetchAlcoholTypeData = async (isReplacing: boolean) => {
+  const fetchAlcoholTypeData = async (
+    isReplacing: boolean,
+    tab?: IAlcoholTypeTab,
+    sortedType?: IAlcoholSortedType,
+    lastId?: number,
+  ) => {
     const data = await getAlcoholTypeResult(
       cookies.accessToken,
-      selectedTab.id,
-      selectedSortedType.id,
+      tab?.id ?? selectedTab.id,
+      sortedType?.id ?? selectedSortedType.id,
+      lastId,
     );
 
     if (isReplacing) {
@@ -195,6 +212,7 @@ export default function Page() {
         ...(data?.alcoholicDrinks.content ?? []),
       ]);
     }
+    setAlcoholTypeDataCount(data?.totalCount ?? 0);
     setIsTypeDataLst(data?.isLast ?? false);
   };
 
@@ -266,6 +284,7 @@ export default function Page() {
         )}
       {openAlcoholTypeDataList && (
         <AlcoholTypeData
+          totalCount={alcoholTypeDataCount}
           AlcoholSearchTypeDataList={alcoholTypeData}
           selectedTab={selectedTab}
           onTabClick={handleTab}
@@ -282,6 +301,7 @@ export default function Page() {
 
       {openOfficialSearchDataList && searchResult.length > 0 && (
         <AlcoholSearchDataSearchResult
+          totalCount={searchResultCount}
           officialDataList={searchResult}
           query={searchQuery}
           closeOfficialDataSearchResult={() =>

@@ -13,7 +13,7 @@ import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
 export default function Page() {
-  const [cookies] = useCookies(["accessToken"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [etcReport, setEtcReport] = useState<string>("");
@@ -56,6 +56,7 @@ export default function Page() {
       return;
     }
     setIsFinal(true);
+    removeCookie("accessToken", { path: "/" });
   };
 
   return (

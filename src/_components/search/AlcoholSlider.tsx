@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { alcoholType } from "@/_config/alcoholType";
 import { IAlcoholTypeTab } from "@/_types/search/alcoholTypeTab";
 
@@ -26,8 +25,8 @@ export default function AlcoholSlider({
             key={drink.key}
             className="flex flex-col items-center justify-center"
           >
-            <Link
-              href={"#"}
+            <div
+              
               className={`flex h-[74px] w-[74px] items-center justify-center rounded-full bg-cool-grayscale-100`}
             >
               <button
@@ -45,7 +44,7 @@ export default function AlcoholSlider({
                   alt={drink.value}
                 />
               </button>
-            </Link>
+            </div>
             <p className="whitespace-nowrap pt-2 text-center text-sm font-medium leading-[21px] text-slate-700">
               {drink.value}
             </p>
