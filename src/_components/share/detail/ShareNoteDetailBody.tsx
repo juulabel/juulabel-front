@@ -114,6 +114,7 @@ export default function ShareNoteDetailBody({ id }: Props) {
         info={data?.result?.tastingNoteDetailInfo}
         sensoryLevelIds={data?.result.sensoryLevelIds}
         flavorLevelIds={data?.result.flavorLevelIds}
+        scentIds={data?.result.scentIds}
       />
       <LikeCommentFooter info={data?.result.tastingNoteDetailInfo} id={id} />
     </section>

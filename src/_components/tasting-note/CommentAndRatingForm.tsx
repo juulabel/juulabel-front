@@ -170,6 +170,8 @@ export default function CommentAndRatingForm({
 
   const onSubmit = async (data: Inputs) => {
     const { files } = data;
+
+    console.log(content);
     const request: ITastingNoteWriteRequest = {
       alcoholicDrinksDetails,
       alcoholTypeId,

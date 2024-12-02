@@ -73,7 +73,10 @@ export default function Comments({ commentInfo, isAuthor, postId }: Props) {
         )}
       </div>
 
-      <div className="text-[14px] text-cool-grayscale-700">
+      <div
+        className="min-h-[10px] overflow-auto text-[14px] text-cool-grayscale-700"
+        style={{ whiteSpace: "pre-wrap" }}
+      >
         {commentInfo.content}
       </div>
     </CommentsWithReplyWrapper>

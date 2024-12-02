@@ -75,7 +75,10 @@ export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
         )}
       </div>
 
-      <div className="text-[14px] text-cool-grayscale-700">
+      <div
+        className="text-[14px] text-cool-grayscale-700"
+        style={{ whiteSpace: "pre-wrap" }}
+      >
         {replyInfo.content}
       </div>
 
