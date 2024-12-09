@@ -7,7 +7,7 @@ import NotificationList from "@/_components/notification/NotificationList";
 import NotificationTabButton from "@/_components/notification/NotificationTabButton";
 import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import {
   useDeleteAllNotifications,
@@ -91,10 +91,6 @@ export default function Page() {
   const handleMarkAllNotificationsAsRead = () => {
     markAllAsRead();
   };
-
-  useEffect(() => {
-    console.log("allNotifications", allNotifications);
-  }, [allNotifications]);
 
   if (isLoading) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
