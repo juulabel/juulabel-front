@@ -25,7 +25,6 @@ export const subscribeToNotifications = (
   );
 
   eventSource.onmessage = function (event) {
-    console.log("Tetetwertneqwkjrnkjenra");
     try {
       const newNotification = JSON.parse(event.data);
       console.log("새로운 알림 수신:", newNotification);
@@ -36,7 +35,6 @@ export const subscribeToNotifications = (
   };
 
   eventSource.onerror = function (err) {
-    console.log(JSON.stringify(err));
     console.error("EventSource failed:", err);
     eventSource.close();
 
