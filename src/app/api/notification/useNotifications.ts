@@ -19,11 +19,13 @@ export const subscribeToNotifications = (
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-      withCredentials: true,
+      // withCredentials: true,
+      heartbeatTimeout: 180 * 1000,
     },
   );
 
   eventSource.onmessage = function (event) {
+    console.log("Tetetwertneqwkjrnkjenra");
     try {
       const newNotification = JSON.parse(event.data);
       console.log("새로운 알림 수신:", newNotification);
@@ -34,10 +36,10 @@ export const subscribeToNotifications = (
   };
 
   eventSource.onerror = function (err) {
+    console.log(JSON.stringify(err));
     console.error("EventSource failed:", err);
     eventSource.close();
 
-    // 3초 후 재연결 시도
     setTimeout(() => {
       subscribeToNotifications(onNewNotification);
     }, 3000);

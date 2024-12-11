@@ -15,6 +15,11 @@ import { IApiResponse } from "@/_types";
 import { IResponseTranditionalLiquor } from "@/_types/tasting-note/officialData";
 import { useRouter } from "next/navigation";
 import ShareTraditionalLiquorSkeletonUI from "./ShareTraditionalLiquorSkeletonUI";
+import TraditionalLiquorCapacityCell from "@/_components/share/detail/TraditionalLiquorCapacityCell";
+import useVolumePriceStore from "@/_store/volumePriceStore";
+import TraditionalLiquorDetailPrice from "@/_components/share/detail/TraditionalLiquorDetailPrice";
+import useTraditionalLiquorList from "@/_utils/hooks/useTraditionalLiquorList";
+import TraditionalLiquorBackground from "@/_components/share/detail/TraditionalLiquorBackground";
 
 interface Props {
   id: number;
@@ -30,23 +35,7 @@ export default function ShareTraditionalLiquor({ id }: Props) {
   const mediumTextStyle = "text-[16px] font-normal text-cool-grayscale-700";
 
   const router = useRouter();
-
-  const { data, isFetching, isError, isFetched } = useQuery<
-    IApiResponse<IResponseTranditionalLiquor>
-  >({
-    queryKey: ["tranditional", id],
-    queryFn: () => getTraditionalLiquor({ alcoholicDrinksId: id }),
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 5,
-  });
-
-  useEffect(() => {
-    const sensoryIds = data?.result.tastingNoteSensorSummary.sensory.map(
-      (sensory) => {
-        return sensory.id;
-      },
-    );
-  }, [isFetching]);
+  const { data, isFetching, isError, isFetched } = useTraditionalLiquorList(id);
 
   if (isFetching) {
     return <ShareTraditionalLiquorSkeletonUI />;
@@ -54,14 +43,7 @@ export default function ShareTraditionalLiquor({ id }: Props) {
   return (
     <>
       <div className="relative h-[216px] w-full">
-        <Image
-          src={bgImages[Math.floor(Math.random() * bgImages.length)]}
-          fill
-          className="object-cover"
-          alt="Landscape"
-          quality={50}
-          priority
-        />
+        <TraditionalLiquorBackground />
 
         <Image
           src={"/svg/left_arrow_white.svg"}
@@ -88,7 +70,6 @@ export default function ShareTraditionalLiquor({ id }: Props) {
             <div className="col-span-3 text-start text-[18px] font-bold text-cool-grayscale-800">
               {data?.result.alcoholicDrinksDetailInfo.name}
             </div>
-
             <div className={clsx("text-start", mediumTextStyle)}>주종</div>
             <div className="flex h-full items-center justify-center border-cool-grayscale-300">
               <div className="h-[8px] border-l border-cool-grayscale-300"></div>
@@ -96,21 +77,23 @@ export default function ShareTraditionalLiquor({ id }: Props) {
             <div className={clsx("text-start", mediumTextStyle)}>
               {data?.result.alcoholicDrinksDetailInfo?.alcoholType?.name}
             </div>
-
             <div className={clsx("text-start", mediumTextStyle)}>용량</div>
             <div className="flex h-full items-center justify-center border-cool-grayscale-300">
               <div className="h-[8px] border-l border-cool-grayscale-300"></div>
             </div>
-            <div className={clsx("text-start", mediumTextStyle)}>
-              {data?.result.alcoholicDrinksDetailInfo?.alcoholicVolume}ml
-            </div>
-
+            <TraditionalLiquorCapacityCell
+              alcoholicVolume={
+                data?.result.alcoholicDrinksDetailInfo.alcoholicVolume
+              }
+              mediumTextStyle={mediumTextStyle}
+            />
             <div className={clsx("text-start", mediumTextStyle)}>알코울</div>
             <div className="flex h-full items-center justify-center border-cool-grayscale-300">
               <div className="h-[8px] border-l border-cool-grayscale-300"></div>
             </div>
-            <div className={clsx("text-start", mediumTextStyle)}>10.5%</div>
-
+            <div className={clsx("text-start", mediumTextStyle)}>
+              {data?.result.alcoholicDrinksDetailInfo.alcoholContent || 10.5}%
+            </div>
             <div className={clsx("text-start", mediumTextStyle)}>양조장</div>
             <div className="flex h-full items-center justify-center border-cool-grayscale-300">
               <div className="h-[8px] border-l border-cool-grayscale-300"></div>
@@ -118,21 +101,15 @@ export default function ShareTraditionalLiquor({ id }: Props) {
             <div className={clsx("text-start", mediumTextStyle)}>
               {data?.result.alcoholicDrinksDetailInfo?.brewery?.name}
             </div>
-
             <div className={clsx("text-start", mediumTextStyle)}>가격</div>
             <div className="flex h-full items-center justify-center border-cool-grayscale-300">
               <div className="h-[8px] border-l border-cool-grayscale-300"></div>
             </div>
-            <div
-              className={clsx(
-                "text-start text-[16px] font-semibold text-cool-grayscale-700",
-              )}
-            >
-              {parseNumberOfDefault({
-                value: data?.result.alcoholicDrinksDetailInfo?.regularPrice,
-              }).toLocaleString()}
-              원
-            </div>
+            <TraditionalLiquorDetailPrice
+              regularPrice={
+                data?.result.alcoholicDrinksDetailInfo?.regularPrice
+              }
+            />
           </div>
           <div className="relative z-20 h-[187px] w-[140px] overflow-hidden rounded-[8px]">
             <Image
