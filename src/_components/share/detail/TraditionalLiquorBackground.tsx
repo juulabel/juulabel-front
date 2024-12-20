@@ -10,14 +10,17 @@ const bgImages = [
 
 const TraditionalLiquorBackground = React.memo(() => {
   return (
-    <Image
-      src={bgImages[Math.floor(Math.random() * bgImages.length)]}
-      fill
-      className="object-cover"
-      alt="Landscape"
-      quality={50}
-      priority
-    />
+    <>
+      <Image
+        src={bgImages[Math.floor(Math.random() * bgImages.length)]}
+        fill
+        className="object-cover"
+        alt="Landscape"
+        quality={50}
+        priority
+      />
+      <div className={"absolute inset-0 bg-black opacity-40"}></div>
+    </>
   );
 });
 

@@ -45,7 +45,6 @@ export default function ShareNoteDetailBody({ id }: Props) {
           }),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 5,
-        // enabled: !cookies.accessToken,
       },
       {
         queryKey: ["currentUserInfo"],
@@ -55,22 +54,18 @@ export default function ShareNoteDetailBody({ id }: Props) {
           }),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 5,
-        // enabled: !cookies.accessToken,
       },
     ],
   });
 
   useEffect(() => {
     if (data && userData) {
-      // 헤더 컴포넌트에서 현재 글 작성자인지 체크함
       setIsAuthor(
         data?.result.tastingNoteDetailInfo.memberInfo.memberId ===
           userData?.result.memberId,
       );
 
       setMemberInfo(userData.result);
-
-      //댓글 수
       setCount(data.result.tastingNoteDetailInfo.commentCount);
     }
 
@@ -93,31 +88,36 @@ export default function ShareNoteDetailBody({ id }: Props) {
   }
 
   return (
-    <section
-      className={clsx("pt-[64px] transition-all duration-700", {
-        "animate-fadeOut scale-90 overflow-hidden opacity-90 blur-lg":
-          isCommentsPageVisible === "Y",
-      })}
-    >
-      <ShareDetailNoteImageBox
-        info={data?.result?.tastingNoteDetailInfo}
-        imageList={data?.result?.imageInfo.imageUrlList || []}
-      />
-      <ShareNoteInfoBox
-        info={data?.result?.tastingNoteDetailInfo}
-        alcoholicDrinksInfo={data?.result?.alcoholicDrinksInfo}
-      />
+    <div className="relative h-screen overflow-hidden">
+      <section
+        className={clsx(
+          "h-full overflow-y-auto pb-[80px] pt-[64px] transition-all duration-700",
+          {
+            "animate-fadeOut scale-90 opacity-90 blur-lg scrollbar-hide":
+              isCommentsPageVisible === "Y",
+          },
+        )}
+      >
+        <ShareDetailNoteImageBox
+          info={data?.result?.tastingNoteDetailInfo}
+          imageList={data?.result?.imageInfo.imageUrlList || []}
+        />
+        <ShareNoteInfoBox
+          info={data?.result?.tastingNoteDetailInfo}
+          alcoholicDrinksInfo={data?.result?.alcoholicDrinksInfo}
+        />
 
-      <Gap />
+        <Gap />
 
-      <ShareDetailReviewBox
-        info={data?.result?.tastingNoteDetailInfo}
-        sensoryLevelIds={data?.result.sensoryLevelIds}
-        flavorLevelIds={data?.result.flavorLevelIds}
-        scentIds={data?.result.scentIds}
-      />
-      <LikeCommentFooter info={data?.result.tastingNoteDetailInfo} id={id} />
-    </section>
+        <ShareDetailReviewBox
+          info={data?.result?.tastingNoteDetailInfo}
+          sensoryLevelIds={data?.result.sensoryLevelIds}
+          flavorLevelIds={data?.result.flavorLevelIds}
+          scentIds={data?.result.scentIds}
+        />
+        <LikeCommentFooter info={data?.result.tastingNoteDetailInfo} id={id} />
+      </section>
+    </div>
   );
 }
 

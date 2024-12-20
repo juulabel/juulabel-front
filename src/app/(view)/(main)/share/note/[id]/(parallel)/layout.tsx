@@ -14,7 +14,7 @@ export default function NoteDetailLayout({
 }) {
   const { showComments } = useCommentStore();
   return (
-    <div className="w-full overflow-hidden pb-[100px]">
+    <div className="w-full">
       <ShareHeader />
       {note}
       {comments}
