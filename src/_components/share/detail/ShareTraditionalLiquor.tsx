@@ -37,6 +37,14 @@ export default function ShareTraditionalLiquor({ id }: Props) {
   const router = useRouter();
   const { data, isFetching, isError, isFetched } = useTraditionalLiquorList(id);
 
+  useEffect(() => {
+    // const sensoryIds = data?.result.tastingNoteSensorSummary.sensory.map(
+    //   (sensory) => {
+    //     return sensory.id;
+    //   },
+    // );
+  }, [isFetching]);
+
   if (isFetching) {
     return <ShareTraditionalLiquorSkeletonUI />;
   }
@@ -194,14 +202,14 @@ export default function ShareTraditionalLiquor({ id }: Props) {
             />
           </div>
         </div>
-        <ShareAboutAlcoholReview
+        {/* <ShareAboutAlcoholReview
           sensoryLevelIds={
             data?.result.tastingNoteSensorSummary?.sensory?.map(
               (sensory) => sensory.id,
             ) ?? []
           }
           alcoholColor={data?.result.tastingNoteSensorSummary.rgb || "#FFF"}
-        />
+        /> */}
         <Gap />
         <div className="w-full">
           <div className="space-y-1">

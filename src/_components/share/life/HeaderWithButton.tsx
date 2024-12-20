@@ -9,7 +9,7 @@ import { RxDotsHorizontal } from "react-icons/rx";
 interface IHeaderWithButton {
   title: string;
   titleLink?: string;
-  buttonType: "meatballs" | "newpost" | "notification";
+  buttonType: "meatballs" | "newpost" | "notification" | "";
   buttonName?: string;
   isActiveButton?: boolean;
   onClick?: (event: React.MouseEvent) => void;

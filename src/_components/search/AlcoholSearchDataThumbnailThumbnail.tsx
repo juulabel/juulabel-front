@@ -43,7 +43,7 @@ export default function AlcoholSearchDataThumbnail({
         </Caption>
         <Image
           src={
-            // thumbnail ??
+            thumbnail ??
             `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType.name)}.png`
           }
           alt="시음노트 썸네일"

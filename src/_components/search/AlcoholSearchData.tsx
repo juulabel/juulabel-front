@@ -7,12 +7,14 @@ import AlcoholTypeLoader from "../search/AlcoholTypeLoader";
 import Spinner from "./Spinner";
 
 interface AlcoholSearchDataProps {
+  totalCount: number;
   officialDataList: IAlcoholSearchData[] | [];
   isBottom: boolean;
   isLast: boolean;
 }
 
 export default function AlcoholSearchData({
+  totalCount,
   officialDataList,
   isBottom,
   isLast,
@@ -25,7 +27,7 @@ export default function AlcoholSearchData({
     <>
       <div className="mx-[4%] mt-[3%] flex flex-row items-center">
         <p className="text-base font-bold text-cool-grayscale-500">
-          {officialDataList?.length}건
+          {totalCount}건
         </p>
         <p className="text-base font-normal text-cool-grayscale-600">
           의 검색 결과가 있어요.
