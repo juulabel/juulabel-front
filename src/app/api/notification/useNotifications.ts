@@ -19,7 +19,7 @@ export const subscribeToNotifications = (
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-      withCredentials: true,
+      heartbeatTimeout: 120000,
     },
   );
 
@@ -38,9 +38,9 @@ export const subscribeToNotifications = (
     eventSource.close();
 
     // 3초 후 재연결 시도
-    setTimeout(() => {
-      subscribeToNotifications(onNewNotification);
-    }, 3000);
+    // setTimeout(() => {
+    //   subscribeToNotifications(onNewNotification);
+    // }, 3000);
   };
 
   return () => {

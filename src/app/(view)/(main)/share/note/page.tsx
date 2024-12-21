@@ -26,8 +26,6 @@ export default function Notes() {
         },
       );
 
-      console.log(res.data);
-
       return res.data.result.tastingNoteSummaries.content;
     },
   });

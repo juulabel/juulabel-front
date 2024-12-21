@@ -207,7 +207,6 @@ function OwnerModalContent({
   const handleDeleteButtonClick = async () => {
     const tastingNoteId = params.id; // params에서 id를 가져옴
     if (tastingNoteId) {
-      console.log("tastingNoteId", tastingNoteId);
       deleteTastingNote(Number(tastingNoteId));
     } else {
       toast("시음노트 ID를 찾을 수 없습니다.");
