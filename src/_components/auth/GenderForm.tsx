@@ -3,8 +3,7 @@ import Checkbox from "@/_common/Checkbox";
 interface IGender {
   genderCheck: boolean;
   maleClicked: boolean;
-  femaleClicked: boolean;
-  genderDisable: boolean;
+  femaleClicked: boolean;  
   onChangeGenderCheck: (value: boolean) => void;
   onChangeGender: (value: string) => void;
 }
@@ -12,15 +11,14 @@ interface IGender {
 export default function GenderForm({
   genderCheck,
   maleClicked,
-  femaleClicked,
-  genderDisable,
+  femaleClicked,  
   onChangeGenderCheck,
   onChangeGender,
-}: IGender) {
+}: IGender) {  
   const handleGender = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onChangeGender(
-      event.currentTarget.textContent === "남성" ? "남성" : "여성",
+      event.currentTarget.textContent === "남성" ? "MALE" : "FEMALE",
     );
   };
   return (
@@ -43,16 +41,14 @@ export default function GenderForm({
         <button
           type="button"
           className={`mx-[2%] h-12 w-[43%] rounded-[8px] border-[1px] border-cool-grayscale-300 text-base font-bold leading-6 ${maleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
-          onClick={(e) => handleGender(e)}
-          disabled={genderDisable}
+          onClick={(e) => handleGender(e)}          
         >
           남성
         </button>
         <button
           type="button"
           className={`mx-[2%] h-12 w-[43%] rounded-[8px] border-[1px] border-cool-grayscale-300 text-base font-bold leading-6 ${femaleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
-          onClick={(e) => handleGender(e)}
-          disabled={genderDisable}
+          onClick={(e) => handleGender(e)}          
         >
           여성
         </button>

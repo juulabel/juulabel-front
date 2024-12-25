@@ -20,7 +20,6 @@ export default function Page() {
   const [cookies, setCookie] = useCookies(["accessToken"]);
   const [alcoholTypes, setAlcoholTypes] = useState<number[]>([]);
   const [gender, setGender] = useState<string>("");
-  const [genderDisable, setGenderDisable] = useState<boolean>(false);
   const [genderCheck, setGenderCheck] = useState<boolean>(false);
   const [registerConfirmModalOpen, setRegisterConfirmModalOpen] =
     useState<boolean>(false);
@@ -31,23 +30,23 @@ export default function Page() {
     (gender || genderCheck) && alcoholTypes.length ? true : false;
   let maleClicked = false;
   let femaleClicked = false;
-  if (gender === "남성") {
+  if (gender === "MALE") {
     maleClicked = true;
     femaleClicked = false;
-  } else if (gender === "여성") {
+  } else if (gender === "FEMALE") {
     maleClicked = false;
     femaleClicked = true;
   }
 
   const handleAlcoholType = (value: number) => {
-    setAlcoholTypes((prevState) =>
+    setAlcoholTypes((prevState) => 
       prevState.includes(value)
         ? prevState.filter((type: number) => type !== value)
         : [...prevState, value],
     );
   };
   const handleRegister = () => {
-    registerStore.setGender(gender);
+    registerStore.setGender(gender === "MALE" ? "남성" : "여성");
     registerStore.setGendercheck(genderCheck);
     registerStore.setPreferredAlcoholType(alcoholTypes);
     setRegisterConfirmModalOpen(true);
@@ -66,7 +65,7 @@ export default function Page() {
   };
 
   const handleRegisterCancel = () => {
-    router.push("/");
+    router.replace("/");
   };
 
   const handleRegisterConfirm = async () => {
@@ -91,7 +90,7 @@ export default function Page() {
         setCookie("accessToken", response.data.result.token.accessToken, {
           path: "/",
         });
-        router.push("/share/note");
+        router.replace("/share/note");
       }
     } catch (error) {
       console.error(error);
@@ -101,16 +100,14 @@ export default function Page() {
   const handleGenderCheck = (value: boolean) => {
     setGenderCheck(value);
     if (!genderCheck) {
-      setGenderDisable(true);
       setGender("NONE");
     } else {
-      setGenderDisable(false);
       setGender("");
     }
   };
-  const handleGender = (value: string) => {
-    if (value == gender) setGender("");
-    else setGender(value);
+  const handleGender = (value: string) => {        
+    setGender(value);
+    setGenderCheck(false);
   };
 
   return (
@@ -127,7 +124,6 @@ export default function Page() {
           genderCheck={genderCheck}
           maleClicked={maleClicked}
           femaleClicked={femaleClicked}
-          genderDisable={genderDisable}
           onChangeGenderCheck={(value: boolean) => handleGenderCheck(value)}
           onChangeGender={(value: string) => handleGender(value)}
         />
