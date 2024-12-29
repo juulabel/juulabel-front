@@ -24,7 +24,8 @@ export default function FilterDropdown({ children, selectedCallback }: Props) {
     <div ref={ref} className={"relative flex items-center"}>
       <button
         onClick={() => {
-          setIsOpen((prev) => !prev);
+          // TODO: 추후 드랍다운 필요시 오픈할 예정
+          // setIsOpen((prev) => !prev);
         }}
         className={
           "text-[16px] font-normal leading-[24px] text-cool-grayscale-500"

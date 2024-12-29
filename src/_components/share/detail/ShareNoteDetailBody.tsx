@@ -17,6 +17,7 @@ import {
   useAuthorCheckStore,
   useCommentCountStore,
 } from "@/_store/tastingDetailStore";
+import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn";
 
 interface Props {
   id: number;
@@ -61,8 +62,8 @@ export default function ShareNoteDetailBody({ id }: Props) {
   useEffect(() => {
     if (data && userData) {
       setIsAuthor(
-        data?.result.tastingNoteDetailInfo.memberInfo.memberId ===
-          userData?.result.memberId,
+        data?.result?.tastingNoteDetailInfo.memberInfo.memberId ===
+          userData?.result?.memberId,
       );
 
       setMemberInfo(userData.result);

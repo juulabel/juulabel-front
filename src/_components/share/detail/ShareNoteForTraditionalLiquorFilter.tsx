@@ -16,22 +16,22 @@ export default function ShareNoteForTraditionalLiquorFilter() {
   return (
     <FilterDropdown
       selectedCallback={() => {
-        setClicked(false);
+        // setClicked(false);
       }}
     >
-      <div className={"flex items-center gap-1"}>
-        <span>{Object.values(selectedFilterOrderBy)[0]}</span>
-        <Image
-          src={"/svg/down_arrow.svg"}
-          alt={"v"}
-          className={clsx("cursor-pointer transition-transform duration-300", {
-            // "rotate-180": clicked,
-          })}
-          width={24}
-          height={24}
-          onClick={toggle}
-        />
-      </div>
+      {/*<div className={"flex items-center gap-1"}>*/}
+      <span>{Object.values(selectedFilterOrderBy)[0]}</span>
+      {/*<Image*/}
+      {/*  src={"/svg/down_arrow.svg"}*/}
+      {/*  alt={"v"}*/}
+      {/*  className={clsx("cursor-pointer transition-transform duration-300", {*/}
+      {/*    // "rotate-180": clicked,*/}
+      {/*  })}*/}
+      {/*  width={24}*/}
+      {/*  height={24}*/}
+      {/*  onClick={toggle}*/}
+      {/*/>*/}
+      {/*</div>*/}
     </FilterDropdown>
   );
 }

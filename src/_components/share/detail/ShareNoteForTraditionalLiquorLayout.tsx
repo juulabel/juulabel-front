@@ -1,9 +1,13 @@
-import { ReactNode } from "react";
+"use client";
+import { ReactNode, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import FilterDropdown from "@/_components/share/detail/FilterDropdown";
 import clsx from "clsx";
 import ShareNoteForTraditionalLiquorFilter from "@/_components/share/detail/ShareNoteForTraditionalLiquorFilter";
+import useTastingNoteStore from "@/_store/tastingNoteCountState";
+import { useIsFetching } from "@tanstack/react-query";
+import Skeleton from "react-loading-skeleton";
 
 interface Props {
   children: ReactNode;
@@ -14,6 +18,11 @@ export default function ShareNoteForTraditionalLiquorLayout({
   children,
   id,
 }: Props) {
+  const { tastingNoteTotalCount } = useTastingNoteStore();
+  const isFetching = useIsFetching({
+    queryKey: ["shareNoteForTraditionalLiquor", id],
+  });
+
   return (
     <section
       className={
@@ -40,15 +49,22 @@ export default function ShareNoteForTraditionalLiquorLayout({
       <section className={"h-[64px]"} />
 
       <section className="flex h-[71px] w-full flex-row items-center justify-between px-[16px]">
-        <div className={"text-[18px] leading-[27px]"}>
-          <span className="t font-bold">탁 100 네추럴</span>의 시음노트
-          <div className={"text-[16px] leading-[24px] text-cool-grayscale-500"}>
-            <span className={"font-bold text-primary-700"}> 10건</span>의
-            시음노트가 있어요.
-          </div>
-        </div>
-
-        <ShareNoteForTraditionalLiquorFilter />
+        {!isFetching && tastingNoteTotalCount !== 0 && (
+          <>
+            <div className={"text-[18px] leading-[27px]"}>
+              <span className="t font-bold">탁 100 네추럴</span>의 시음노트
+              <div
+                className={"text-[16px] leading-[24px] text-cool-grayscale-500"}
+              >
+                <span className={"font-bold text-primary-700"}>
+                  {tastingNoteTotalCount}건
+                </span>
+                의 시음노트가 있어요.
+              </div>
+            </div>
+            <ShareNoteForTraditionalLiquorFilter />
+          </>
+        )}
       </section>
       <section className={"w-full p-[16px]"}>{children}</section>
     </section>

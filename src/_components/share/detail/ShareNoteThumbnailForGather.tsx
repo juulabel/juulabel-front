@@ -69,19 +69,21 @@ export default function ShareNoteThumbnailForGather({
           />
         </div>
 
-        <div className="text-xs font-medium text-cool-grayscale-500">
+        <div className="text-nowrap text-xs font-medium text-cool-grayscale-500">
           {nickname}
         </div>
       </div>
-      <div className="text-x texst-cool-grayscale-500 flex flex-row items-center">
-        <Image
-          src={"/svg/moon_rating_icon_mini.svg"}
-          alt={"c"}
-          width={16}
-          height={16}
-        />
+      <div className="texst-cool-grayscale-500 flex flex-row items-center text-xs">
+        {dateViewKoreanFull(createdAt)}
+        {/* 달점인데 현재 기획에서 제외됨
+        <Image*/}
+        {/*  src={"/svg/moon_rating_icon_mini.svg"}*/}
+        {/*  alt={"c"}*/}
+        {/*  width={16}*/}
+        {/*  height={16}*/}
+        {/*/>*/}
 
-        <span>4.3</span>
+        {/*<span>4.3</span>*/}
       </div>
     </Link>
   );

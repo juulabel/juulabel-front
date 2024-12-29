@@ -6,7 +6,11 @@ import ShareNoteThumbnailForGather from "@/_components/share/detail/ShareNoteThu
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Spinner from "@/_components/search/Spinner"; // 기본 스타일 추가
+import Spinner from "@/_components/search/Spinner";
+import useTastingNoteStore from "@/_store/tastingNoteCountState";
+import ServerToast from "@/_components/share/error/ServerToast";
+import Image from "next/image";
+import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn"; // 기본 스타일 추가
 
 interface Props {
   id: number;
@@ -19,6 +23,7 @@ export default function ShareNoteForTraditionalLiquorBody({ id }: Props) {
     isFetchingNextPage,
     fetchNextPage,
     isFetching,
+    isError,
     status,
   } = useInfiniteQuery({
     queryKey: ["shareNoteForTraditionalLiquor", id],
@@ -52,18 +57,47 @@ export default function ShareNoteForTraditionalLiquorBody({ id }: Props) {
     isFetchingNextPage: isFetchingNextPage,
     fetchNextPage: fetchNextPage,
   });
+  const { setTastingNoteTotalCount } = useTastingNoteStore();
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    if (data && data.length > 0) {
+      // Extract total count from the first page and first item
+      const totalCount = data[0].tastingNoteTotalCount ?? 0;
+
+      setTastingNoteTotalCount(totalCount);
+    } else {
+      // Default to 0 if no data exists
+      setTastingNoteTotalCount(0);
+    }
+    console.log(isError);
+  }, [data, setTastingNoteTotalCount, isError]);
 
   if (status === "pending" && !isFetchingNextPage) {
     return <SkeletonUI />;
   }
 
+  if (isError) {
+    return (
+      <ServerToast text={"잘못된 접근입니다."} redirectPath={"/share/note"} />
+    );
+  }
+
   return (
     <>
       <div className={"grid grid-cols-2 gap-x-2 gap-y-5"}>
+        {data?.length === 0 && (
+          <div className="col-span-2 mt-[24vh] flex w-full flex-col items-center justify-center justify-self-center">
+            <Image
+              width={92}
+              height={123}
+              src="/images/note/unoffical_page_icon.png"
+              alt="비공식 데이터 사진"
+            />
+            <p className="my-6 text-lg font-medium text-cool-grayscale-600">
+              찾으시는 결과가 없어요.
+            </p>
+          </div>
+        )}
         {data?.map((note) => {
           return (
             <ShareNoteThumbnailForGather key={note.TastingNoteId} {...note} />
@@ -71,7 +105,12 @@ export default function ShareNoteForTraditionalLiquorBody({ id }: Props) {
         })}
         <div ref={observerRef}></div>
       </div>
-      {isFetchingNextPage && <Spinner spinnerVisibility={true} />}
+      <ScrollUpFloatingBtn layoutId={"layout-liquor"} />
+      {isFetchingNextPage && (
+        <div className="fixed bottom-1 left-1/2 z-50 -translate-x-1/2 transform">
+          <Spinner spinnerVisibility={true} />
+        </div>
+      )}
     </>
   );
 }

@@ -2,6 +2,9 @@ import { create } from "zustand";
 
 export const filterList: Record<string, string>[] = [
   {
+    "0": "최신 순",
+  },
+  {
     "1": "가나다 순",
   },
   {
