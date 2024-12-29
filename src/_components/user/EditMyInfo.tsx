@@ -23,7 +23,7 @@ interface ErrorResponse {
 interface IEditMyInfo {
   user: IMyInfo;
   hasEdited: boolean;
-  setHasEdited: (edited: boolean) => void; // Add this line
+  setHasEdited: (edited: boolean) => void;
 }
 
 export default function EditMyInfo({
@@ -49,10 +49,10 @@ export default function EditMyInfo({
   useState<boolean>(false);
 
   const [genderCheck, setGenderCheck] = useState<boolean>(false);
-  const [genderDisable, setGenderDisable] = useState<boolean>(false);
 
   let maleClicked = false;
   let femaleClicked = false;
+  console.log(gender);
   if (gender === "MALE") {
     maleClicked = true;
     femaleClicked = false;
@@ -91,26 +91,36 @@ export default function EditMyInfo({
     newNickname = nickname,
     newIntroduction = introduction,
     newImage = image,
-    newGenderDisable = genderDisable,
     newGender = gender,
     newAlcoholTypeIds = alcoholTypeIds,
   }: {
     newNickname?: string;
     newIntroduction?: string;
     newImage?: string | null;
-    newGenderDisable?: boolean;
     newGender?: string;
     newAlcoholTypeIds?: number[];
   }) => {
-    const isEdited =
-      user?.nickname == newNickname &&
-      user?.introduction == newIntroduction &&
-      user?.profileImage == newImage &&
-      (user?.gender === "NONE") == newGenderDisable &&
-      user?.gender == newGender &&
-      arraysAreEqual(user?.alcoholTypeIds, newAlcoholTypeIds);
+    const nicknameEdited = user?.nickname !== newNickname;
+    console.log(`nicknameEdited: ${nicknameEdited}`);
+    const introductionEdited = user?.introduction !== newIntroduction;
+    console.log(`introductionEdited: ${introductionEdited}`);
+    const imageEdited = user?.profileImage !== newImage;
+    console.log(`imageEdited: ${imageEdited}`);
+    const genderEdited = user?.gender !== newGender;
+    console.log(`genderEdited: ${genderEdited}`);
+    const alcoholTypesEdited = !arraysAreEqual(
+      user?.alcoholTypeIds,
+      newAlcoholTypeIds,
+    );
+    console.log(`alcoholTypedEdited: ${alcoholTypesEdited}`);
 
-    setHasEdited(!isEdited);
+    const isEdited =
+      nicknameEdited ||
+      introductionEdited ||
+      imageEdited ||
+      genderEdited ||
+      alcoholTypesEdited;
+    setHasEdited(isEdited);
   };
 
   useEffect(() => {
@@ -118,8 +128,8 @@ export default function EditMyInfo({
       setNickname(user?.nickname);
       setIntroduction(user?.introduction ?? "");
       setImage(user?.profileImage);
+      setGenderCheck(user?.gender == "NONE");
       setGender(user?.gender ?? "");
-      setGenderDisable(user?.gender == "NONE");
       setAlcoholTypes(user?.alcoholTypeIds ?? []);
     }
   }, [user]);
@@ -127,24 +137,24 @@ export default function EditMyInfo({
   const handleGenderCheck = (newGenderDisable: boolean) => {
     setGenderCheck(newGenderDisable);
     if (!genderCheck) {
-      setGenderDisable(true);
       setGender("NONE");
-    } else setGenderDisable(false);
-    checkIfAnyValuesAreEdited({ newGenderDisable });
+      checkIfAnyValuesAreEdited({ newGender: "NONE" });
+    }
   };
   const handleGender = (newGender: string) => {
     setGender(newGender);
+    setGenderCheck(false);
     checkIfAnyValuesAreEdited({ newGender });
   };
 
   const onSubmit = async () => {
-    const regex = /[\s\W_]/;
+    const regex = /[^\w\uAC00-\uD7A3]/;
     if (regex.test(nickname)) {
       seterrorNameMsg("띄어쓰기 및 특수문자를 사용할수 없어요.");
       return;
     }
 
-    if (user?.nickname != nickname && !(await checkNickname(nickname))) {
+    if (user?.nickname != nickname && (await checkNickname(nickname))) {
       setDoesNameAlreadyExist(true);
       return;
     }
@@ -187,6 +197,7 @@ export default function EditMyInfo({
       }
     }
   };
+
   return (
     <>
       <label
@@ -271,7 +282,6 @@ export default function EditMyInfo({
         genderCheck={genderCheck}
         maleClicked={maleClicked}
         femaleClicked={femaleClicked}
-        genderDisable={genderDisable}
         onChangeGenderCheck={(value: boolean) => handleGenderCheck(value)}
         onChangeGender={(value: string) => handleGender(value)}
       />

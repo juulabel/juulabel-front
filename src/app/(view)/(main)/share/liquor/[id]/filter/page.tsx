@@ -6,11 +6,12 @@ import ShareNoteForTraditionalLiquorBody from "@/_components/share/detail/ShareN
 export default function NoteFilterPage({ params }: SearchParamProps) {
   const numberTypeId = Number(params.id);
 
-  if (!numberTypeId || isNaN(params.id)) {
+  if (!numberTypeId || isNaN(numberTypeId)) {
     return (
       <ServerToast text={"잘못된 접근입니다."} redirectPath={"/share/note"} />
     );
   }
+
   return (
     <ShareNoteForTraditionalLiquorLayout id={numberTypeId}>
       <ShareNoteForTraditionalLiquorBody id={numberTypeId} />

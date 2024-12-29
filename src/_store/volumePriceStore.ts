@@ -12,9 +12,10 @@ interface VolumePriceStore {
 const useVolumePriceStore = create<VolumePriceStore>((set) => ({
   volumePriceDetails: [],
   selectedVolumePriceDetails: null,
-  setVolumePriceDetails: (details) => set({ volumePriceDetails: details }),
-  setSelectedVolumePriceDetails: (detail: IVolumePriceDetails) =>
-    set({ selectedVolumePriceDetails: detail }),
+  setVolumePriceDetails: (details: IVolumePriceDetails[]) =>
+    set({ volumePriceDetails: details }),
+  setSelectedVolumePriceDetails: (detail: IVolumePriceDetails | null) =>
+    set({ selectedVolumePriceDetails: detail }), // Allow null here
   clearVolumePriceDetails: () => set({ volumePriceDetails: [] }),
 }));
 

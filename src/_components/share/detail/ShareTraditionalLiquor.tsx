@@ -94,7 +94,9 @@ export default function ShareTraditionalLiquor({ id }: Props) {
             </div>
             <TraditionalLiquorCapacityCell
               alcoholicVolume={
-                data?.result.alcoholicDrinksDetailInfo.alcoholicVolume
+                String(
+                  data?.result?.alcoholicDrinksDetailInfo.alcoholicVolume,
+                ) || "0"
               }
               mediumTextStyle={mediumTextStyle}
             />
@@ -118,7 +120,7 @@ export default function ShareTraditionalLiquor({ id }: Props) {
             </div>
             <TraditionalLiquorDetailPrice
               regularPrice={
-                data?.result.alcoholicDrinksDetailInfo?.regularPrice
+                data?.result.alcoholicDrinksDetailInfo?.regularPrice || 0
               }
             />
           </div>

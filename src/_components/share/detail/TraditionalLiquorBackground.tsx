@@ -23,5 +23,5 @@ const TraditionalLiquorBackground = React.memo(() => {
     </>
   );
 });
-
+TraditionalLiquorBackground.displayName = "TraditionalLiquorBackground";
 export default TraditionalLiquorBackground;

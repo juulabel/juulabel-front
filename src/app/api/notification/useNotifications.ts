@@ -19,8 +19,7 @@ export const subscribeToNotifications = (
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-      // withCredentials: true,
-      heartbeatTimeout: 180 * 1000,
+      heartbeatTimeout: 120000,
     },
   );
 
@@ -211,7 +210,7 @@ export const useDeleteAllNotifications = () => {
  */
 const fetchNotificationCount = async (): Promise<number> => {
   const notifications = await fetchNotifications();
-  return notifications.length;
+  return notifications.filter((notification) => !notification.isRead).length;
 };
 
 export const useFetchNotificationCount = () => {
