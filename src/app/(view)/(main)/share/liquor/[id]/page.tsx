@@ -19,7 +19,7 @@ export default function LiquorDetailPage({ params }: SearchParamProps) {
   }
 
   return (
-    <section className="relative h-full w-full max-w-[560px]">
+    <section className="relative h-screen w-full max-w-[560px] overflow-y-auto overflow-x-hidden">
       <ShareTraditionalLiquor id={numberTypeId} />
     </section>
   );
