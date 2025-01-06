@@ -26,7 +26,6 @@ export default function AlcoholSlider({
             className="flex flex-col items-center justify-center"
           >
             <div
-              
               className={`flex h-[74px] w-[74px] items-center justify-center rounded-full bg-cool-grayscale-100`}
             >
               <button

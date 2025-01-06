@@ -95,8 +95,6 @@ export default function ReplyList({ postId, parentCommentId }: Props) {
 
   console.log(memberInfo?.memberId);
   console.log(replyList?.at(0).memberInfo.memberId);
-  
-  
 
   return (
     <>

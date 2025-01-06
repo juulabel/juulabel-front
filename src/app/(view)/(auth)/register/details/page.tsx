@@ -39,7 +39,7 @@ export default function Page() {
   }
 
   const handleAlcoholType = (value: number) => {
-    setAlcoholTypes((prevState) => 
+    setAlcoholTypes((prevState) =>
       prevState.includes(value)
         ? prevState.filter((type: number) => type !== value)
         : [...prevState, value],
@@ -105,7 +105,7 @@ export default function Page() {
       setGender("");
     }
   };
-  const handleGender = (value: string) => {        
+  const handleGender = (value: string) => {
     setGender(value);
     setGenderCheck(false);
   };

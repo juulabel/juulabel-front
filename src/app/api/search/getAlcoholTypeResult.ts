@@ -7,7 +7,7 @@ export async function getAlcoholTypeResult(
   accessToken: string,
   type: number,
   sortType: string,
-  lastId?: number
+  lastId?: number,
 ): Promise<IAlcoholTypeResult | null> {
   try {
     const params = {

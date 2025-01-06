@@ -52,7 +52,7 @@ export default function MyInfoBody({ user, setIsEditMode }: IMyInfoBody) {
 
       <div className="h-1 bg-slate-100" />
 
-      <div className="flex py-4">
+      {/* <div className="flex py-4">
         <div>
           <div className="mb-1 text-base font-bold leading-normal text-slate-700">
             PUSH 알림 설정
@@ -80,7 +80,7 @@ export default function MyInfoBody({ user, setIsEditMode }: IMyInfoBody) {
             )}
           />
         </button>
-      </div>
+      </div> */}
 
       <button
         onClick={handleSignOut}

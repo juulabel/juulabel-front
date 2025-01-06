@@ -25,7 +25,7 @@ interface IRegisterUserState {
   memberId: number;
   setAllAgree: (value: boolean) => void;
   setServiceAgree: (value: boolean) => void;
-  setPrivateInformationAGree: (value: boolean) => void;
+  setPrivateInformationAgree: (value: boolean) => void;
   setMarketingAgree: (value: boolean) => void;
   setNickname: (value: string) => void;
   setEmail: (value: string) => void;
@@ -71,7 +71,7 @@ export const useRegisterStore = create(
             isAgreed: value,
           },
         })),
-      setPrivateInformationAGree: (value: boolean) =>
+      setPrivateInformationAgree: (value: boolean) =>
         set((state) => ({
           ...state,
           privateInformationAgree: {
