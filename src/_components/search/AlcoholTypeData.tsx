@@ -91,9 +91,7 @@ export default function AlcoholTypeData({
         {/* Filter button */}
         <div className="flex flex-row items-center">
           <p className="px-1 text-base font-bold text-cool-grayscale-500">총</p>
-          <p className="text-base font-bold text-[#ff823b]">
-            {totalCount}개
-          </p>
+          <p className="text-base font-bold text-[#ff823b]">{totalCount}개</p>
           <p className="text-base font-normal text-cool-grayscale-600">
             의 리스트가 있어요.
           </p>

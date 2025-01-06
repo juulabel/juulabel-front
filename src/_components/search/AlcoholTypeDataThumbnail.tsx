@@ -14,7 +14,10 @@ export default function AlcohoTypeDataThumbnail({
   const router = useRouter();
 
   return (
-    <Link className="mb-[5%] flex w-full cursor-pointer flex-col" href={`/share/liquor/${id}`}>
+    <Link
+      className="mb-[5%] flex w-full cursor-pointer flex-col"
+      href={`/share/liquor/${id}`}
+    >
       <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg">
         <Image
           src={thumbnail}

@@ -7,8 +7,8 @@ import LifeViewer from "@/_components/share/life/LifeViewer";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
 import { getLifeDetail } from "@/app/api/life/getLifeDetail";
-import { useQueries, useQueryClient } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useQueries } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
@@ -20,9 +20,6 @@ import useMemberStore from "@/_store/memberStore";
 function LifeDetailPage({ params }: SearchParamProps) {
   const router = useRouter();
   const id = params.id;
-  const searchParams = useSearchParams();
-  const posted = searchParams.get("posted");
-  const editMode = searchParams.get("editMode");
   const [cookie] = useCookies(["accessToken"]);
   const { setIsAuthor } = useAuthorCheckStore();
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -61,16 +58,6 @@ function LifeDetailPage({ params }: SearchParamProps) {
     }
   }, [data, userData]);
 
-  useEffect(() => {
-    if (posted === "true") {
-      if (editMode) {
-        toast("일상생활 수정이 완료되었어요.");
-      } else {
-        toast("일상생활 작성이 완료되었어요.");
-      }
-    }
-  });
-
   const handleDeleteConfirm = async () => {
     const isSuccess = await deleteDailyLife(cookie.accessToken, id);
     if (isSuccess) {
@@ -95,8 +82,6 @@ function LifeDetailPage({ params }: SearchParamProps) {
 
     router.push(`/share/life/write?dailyLifeId=${id}`);
   };
-
-  console.log(error);
 
   // 임시 에러 및 로딩 컴포넌트
   if (isLoadingUser || isLoadingLife) {

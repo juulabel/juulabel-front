@@ -134,9 +134,13 @@ function NewPostPage() {
               },
             );
         if (response.data.success) {
-          router.replace(
-            `/share/life/${response.data.result.dailyLifeId}?posted=true&editMode=${editMode == null}`,
+          toast(
+            editMode
+              ? "일상생활 수정이 완료되었어요."
+              : "일상생활 작성이 완료되었어요.",
           );
+
+          router.replace(`/share/life/${response.data.result.dailyLifeId}`);
         }
       } catch (error) {
         if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
