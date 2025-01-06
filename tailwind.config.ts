@@ -39,6 +39,25 @@ const config: Config = {
         "cool-grayscale-800": "#1E293B",
         "cool-grayscale-900": "#020617",
       },
+      keyframes: {
+        "slide-down": {
+          "0%": {
+            transform: "scaleY(0)",
+            opacity: "0",
+          },
+          "50%": {
+            transform: "scaleY(0)",
+            opacity: "0.5",
+          },
+          "100%": {
+            transform: "scaleY(1)",
+            opacity: "1",
+          },
+        },
+      },
+      animation: {
+        "slide-down": "slide-down 0.4s ease-in-out",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],

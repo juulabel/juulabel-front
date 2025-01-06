@@ -59,11 +59,18 @@ export interface ITastingNoteSensorSummary {
   sensory: ISensory[];
 }
 
+export interface IVolumePriceDetails {
+  volume: number;
+  discountPrice: number;
+  regularPrice: number;
+}
+
 export interface IResponseTranditionalLiquor {
   alcoholicDrinksDetailInfo: IAlcoholicDrinksDetailInfo;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ingredientSummary: any[]; //무슨값인지 모르겠음
   tastingNoteSensorSummary: ITastingNoteSensorSummary;
+  volumePriceDetails: IVolumePriceDetails[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tastingNoteSummary: any[]; //무슨값인지 모르겠음
 }
