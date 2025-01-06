@@ -93,12 +93,6 @@ export default function ReplyList({ postId, parentCommentId }: Props) {
     }, 3000);
   });
 
-<<<<<<< HEAD
-  console.log(memberInfo?.memberId);
-  console.log(replyList?.at(0).memberInfo.memberId);
-
-=======
->>>>>>> 7fde79767a5a346e5e8346f756c459a4874f1927
   return (
     <>
       <div className={clsx("overflow-hidden")}>
