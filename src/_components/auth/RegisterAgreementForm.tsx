@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  agreementDefaultValues,
   AgreementUserFormValues,
   termsMapping,
 } from "@/_types/yup/yupRegister";
@@ -17,7 +16,6 @@ import { useEffect } from "react";
 
 export default function RegisterAgreementForm() {
   const router = useRouter();
-  const registerStore = useRegisterStore();
   const {
     data: terms,
     isLoading,
@@ -27,12 +25,51 @@ export default function RegisterAgreementForm() {
     queryFn: getTerms,
   });
 
+  const {
+    allAgree,
+    serviceAgree,
+    privateInformationAgree,
+    marketingAgree,
+    setAllAgree,
+    setServiceAgree,
+    setPrivateInformationAgree,
+    setMarketingAgree,
+  } = useRegisterStore();
+
+  // useForm 초기값을 zustand에서 가져옴
   const { control, watch, setValue, getValues } =
     useForm<AgreementUserFormValues>({
       mode: "onSubmit",
       reValidateMode: "onSubmit",
-      defaultValues: agreementDefaultValues,
+      defaultValues: {
+        allAgree: allAgree,
+        serviceAgree: serviceAgree.isAgreed,
+        privateInformationAgree: privateInformationAgree.isAgreed,
+        marketingAgree: marketingAgree.isAgreed,
+      },
     });
+
+  // zustand에 상태 저장
+  const saveAgreementData = () => {
+    setAllAgree(getValues("allAgree"));
+    setServiceAgree(getValues("serviceAgree"));
+    setPrivateInformationAgree(getValues("privateInformationAgree"));
+    setMarketingAgree(getValues("marketingAgree"));
+  };
+
+  // 리렌더링 시 zustand 상태 반영
+  useEffect(() => {
+    setValue("allAgree", allAgree);
+    setValue("serviceAgree", serviceAgree.isAgreed);
+    setValue("privateInformationAgree", privateInformationAgree.isAgreed);
+    setValue("marketingAgree", marketingAgree.isAgreed);
+  }, [
+    allAgree,
+    serviceAgree,
+    privateInformationAgree,
+    marketingAgree,
+    setValue,
+  ]);
 
   const handleAllAgree = (value: boolean) => {
     setValue("allAgree", value); // Update allAgree state
@@ -49,15 +86,6 @@ export default function RegisterAgreementForm() {
   const serviceAgreeWatch = watch("serviceAgree");
   const privateInformationAgreeWatch = watch("privateInformationAgree");
   const marketingAgreeWatch = watch("marketingAgree");
-
-  const saveAgreementData = () => {
-    registerStore.setAllAgree(getValues("allAgree"));
-    registerStore.setServiceAgree(getValues("serviceAgree"));
-    registerStore.setPrivateInformationAGree(
-      getValues("privateInformationAgree"),
-    );
-    registerStore.setMarketingAgree(getValues("marketingAgree"));
-  };
 
   // Automatically update "allAgree" if any checkbox is unchecked
   useEffect(() => {

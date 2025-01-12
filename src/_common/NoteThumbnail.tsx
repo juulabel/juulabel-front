@@ -30,7 +30,7 @@ export default function NoteThumbnail({
   isPrivate,
 }: INoteThumbnail) {
   return (
-    <div className="flex w-full h-full flex-col">
+    <div className="flex h-full w-full flex-col">
       <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
@@ -68,7 +68,7 @@ export default function NoteThumbnail({
       </div>
       <div className="mb-0.5 font-medium text-cool-grayscale-800">
         {alcoholicDrinksName}
-    </div>
+      </div>
       <div className="mb-1 flex items-center space-x-2">
         <Link
           href={`/user/profile/${memberId}`}

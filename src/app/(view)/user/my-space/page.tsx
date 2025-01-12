@@ -189,20 +189,17 @@ export default function Page() {
           <div className="h-full overflow-y-auto pt-[238px] scrollbar-hide">
             {isTastingNoteClicked ? (
               <>
-                {notes && notes.length > 0 ? (
-                  notes.map((note) => (
-                    <div
-                      key={note.TastingNoteId}
-                      className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6"
-                    >
+                <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto px-4 py-6">
+                  {notes && notes.length > 0 ? (
+                    notes.map((note) => (
                       <NoteThumbnail key={note.TastingNoteId} {...note} />
-                    </div>
-                  ))
-                ) : (
-                  <p className="flex h-full items-center justify-center text-base font-medium text-slate-500">
-                    작성된 시음노트가 없어요
-                  </p>
-                )}
+                    ))
+                  ) : (
+                    <p className="flex h-full items-center justify-center text-base font-medium text-slate-500">
+                      작성된 시음노트가 없어요
+                    </p>
+                  )}
+                </div>
                 <div ref={observerRef} className="loading-indicator">
                   {isFetchingNextPage ? (
                     <Loading />
