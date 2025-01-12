@@ -8,6 +8,7 @@ import ShareNoteForTraditionalLiquorFilter from "@/_components/share/detail/Shar
 import useTastingNoteStore from "@/_store/tastingNoteCountState";
 import { useIsFetching } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
+import useTraditionalLiquorList from "@/_utils/hooks/useTraditionalLiquorList";
 
 interface Props {
   children: ReactNode;
@@ -18,6 +19,8 @@ export default function ShareNoteForTraditionalLiquorLayout({
   children,
   id,
 }: Props) {
+  const { data, isError, isFetched } = useTraditionalLiquorList(id);
+
   const { tastingNoteTotalCount } = useTastingNoteStore();
   const isFetching = useIsFetching({
     queryKey: ["shareNoteForTraditionalLiquor", id],
@@ -52,7 +55,10 @@ export default function ShareNoteForTraditionalLiquorLayout({
         {!isFetching && tastingNoteTotalCount !== 0 && (
           <>
             <div className={"text-[18px] leading-[27px]"}>
-              <span className="t font-bold">탁 100 네추럴</span>의 시음노트
+              <span className="mr-2 font-bold">
+                {data?.result.alcoholicDrinksDetailInfo.name}
+              </span>
+              의 시음노트
               <div
                 className={"text-[16px] leading-[24px] text-cool-grayscale-500"}
               >
