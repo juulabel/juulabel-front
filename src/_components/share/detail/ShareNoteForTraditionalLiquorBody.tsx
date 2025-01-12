@@ -57,8 +57,7 @@ export default function ShareNoteForTraditionalLiquorBody({ id }: Props) {
     isFetchingNextPage: isFetchingNextPage,
     fetchNextPage: fetchNextPage,
   });
-  const { setTastingNoteTotalCount, setAlcoholicDrinksName } =
-    useTastingNoteStore();
+  const { setTastingNoteTotalCount } = useTastingNoteStore();
 
   useEffect(() => {
     if (data && data.length > 0) {
