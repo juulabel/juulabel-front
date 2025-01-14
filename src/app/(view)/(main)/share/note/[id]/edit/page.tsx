@@ -37,7 +37,7 @@ function EditTastingNote({ id }: IEditTastingNote) {
   const brewery = searchParams.get("brewery") ?? "";
   const breweryLocation = searchParams.get("breweryLocation") ?? "";
 
-  const { setTastingNoteRequest } = useTastingNoteStore();
+  const { setTastingNoteRequest, setImageUrlList } = useTastingNoteStore();
   const [cookies] = useCookies(["accessToken"]);
 
   const { data } = useQuery({
@@ -67,7 +67,7 @@ function EditTastingNote({ id }: IEditTastingNote) {
           type.name === data.tastingNoteDetailInfo.alcoholTypeName,
       );
 
-      const processedData: ITastingNoteWriteRequest = {
+      const requestData: ITastingNoteWriteRequest = {
         alcoholicDrinksDetails: {
           alcoholicDrinksName: data.tastingNoteDetailInfo.alcoholicDrinksName,
           alcoholContent: data.tastingNoteDetailInfo.alcoholContent,
@@ -85,9 +85,13 @@ function EditTastingNote({ id }: IEditTastingNote) {
         isPrivate: false,
         rating: data.tastingNoteDetailInfo.rating,
       };
-      setTastingNoteRequest({ request: processedData, files: [] });
+
+      const imageUrlList = data.imageInfo.imageUrlList || [];
+      setImageUrlList(imageUrlList);
+
+      setTastingNoteRequest({ request: requestData, files: [] });
     }
-  }, [data, alcoholTypeData]);
+  }, [data, alcoholTypeData, setImageUrlList, setTastingNoteRequest]);
 
   const [step, setStep] = useState<number>(1);
   const [rest, setRest] = useState<number>(4);
