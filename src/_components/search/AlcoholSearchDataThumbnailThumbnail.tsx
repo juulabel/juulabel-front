@@ -19,17 +19,18 @@ export default function AlcoholSearchDataThumbnail({
 
   const handleClick = () => {
     router.push(
-      `/share/note/write?alcoholicDrinksId=${alcoholicDrinksId}&productName=${encodeURIComponent(
-        name,
-      )}&alcoholContent=${encodeURIComponent(
-        alcoholContent,
-      )}&alcoholTypeId=${encodeURIComponent(
-        alcoholType.id,
-      )}&alcoholTypeName=${encodeURIComponent(
-        alcoholType.name,
-      )}&brewery=${brewery ? encodeURIComponent(brewery.name) : ""}&breweryLocation=${
-        brewery ? encodeURIComponent(brewery.region) : ""
-      }`,
+      `/share/liquor/${alcoholicDrinksId}`,
+      // `/share/note/write?alcoholicDrinksId=${alcoholicDrinksId}&productName=${encodeURIComponent(
+      //   name,
+      // )}&alcoholContent=${encodeURIComponent(
+      //   alcoholContent,
+      // )}&alcoholTypeId=${encodeURIComponent(
+      //   alcoholType.id,
+      // )}&alcoholTypeName=${encodeURIComponent(
+      //   alcoholType.name,
+      // )}&brewery=${brewery ? encodeURIComponent(brewery.name) : ""}&breweryLocation=${
+      //   brewery ? encodeURIComponent(brewery.region) : ""
+      // }`,
     );
   };
   return (
