@@ -62,8 +62,8 @@ export default function ShareTraditionalLiquor({ id }: Props) {
           alt="<"
           className="absolute left-5 top-1/3 z-10 -translate-y-1/2 cursor-pointer"
           onClick={() => {
-            // router.back();
-            router.push("/share/note");
+            router.back();
+            // router.push("/share/note");
           }}
         />
 
