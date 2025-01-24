@@ -19,6 +19,17 @@ import { toast } from "react-toastify";
 import Rating from "./Rating";
 import TopHeaderWithButton from "./TopHeaderWithButton";
 
+async function createFileFromUrl(url: string): Promise<File> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+
+  const file = new File([blob], url.split("/").pop() || "image", {
+    type: blob.type,
+  });
+
+  return file;
+}
+
 interface Inputs {
   files: File[];
 }
@@ -43,7 +54,7 @@ export default function CommentAndRatingForm({
 }: ICommentAndRatingForm) {
   const pathname = usePathname();
   const isEditMode = pathname.includes("/edit");
-  const { tastingNoteRequest } = useTastingNoteStore();
+  const { tastingNoteRequest, imageUrlList } = useTastingNoteStore();
   const tastingNoteInformationStore = useTastingNoteInformationStore();
   const {
     alcoholicDrinksDetails,
@@ -85,6 +96,24 @@ export default function CommentAndRatingForm({
     return match ? match[1] : null;
   };
   const tastingNoteId = extractIdFromPath();
+
+  useEffect(() => {
+    if (imageUrlList.length > 0) {
+      const existingImages = imageUrlList.map(async (url) => {
+        const file = await createFileFromUrl(url);
+
+        return {
+          id: crypto.randomUUID(),
+          file, // File 객체
+          url,
+        };
+      });
+
+      Promise.all(existingImages).then((images) => {
+        setImages(images);
+      });
+    }
+  }, [imageUrlList]);
 
   useEffect(() => {
     // 편집 모드일 경우 기존 comment와 rating을 초기값으로 설정
@@ -203,10 +232,12 @@ export default function CommentAndRatingForm({
           "Content-Type": "multipart/form-data",
         },
       });
-      // 로컬스토리지 비우기
 
       // 성공 시에 상세페이지로 redirect
       if (response.data.success) {
+        localStorage.removeItem("tasting-note-storage");
+        localStorage.removeItem("TastingNoteInformationStorage");
+
         const successMessage = isEditMode
           ? "시음노트 수정이 완료되었어요."
           : "시음노트 작성이 완료되었어요.";

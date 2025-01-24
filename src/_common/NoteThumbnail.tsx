@@ -31,7 +31,7 @@ export default function NoteThumbnail({
 }: INoteThumbnail) {
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="relative mb-2 aspect-[3/4] w-full grow overflow-hidden rounded-lg">
+      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg">
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
         </Caption>

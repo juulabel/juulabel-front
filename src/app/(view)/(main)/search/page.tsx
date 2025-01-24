@@ -176,8 +176,11 @@ export default function Page() {
       lastAlcoholicDrinksName,
     );
 
-    setSearchResult(data?.alcoholicDrinks ?? []);
-    setsearchResultCount(0);
+    setSearchResult((prevList) => [
+      ...prevList,
+      ...(data?.alcoholicDrinks ?? []),
+    ]);
+    setsearchResultCount(data?.totalCount ?? 0);
     setIsSearchDataLast(data?.isLast ?? false);
     setLastAlcoholicDrinksName(
       data?.alcoholicDrinks[data.alcoholicDrinks.length - 1].name,
