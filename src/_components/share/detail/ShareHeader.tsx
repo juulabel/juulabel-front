@@ -1,6 +1,7 @@
 "use client";
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
+import WarningModal from "@/_components/notification/\bWarningModal";
 import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useDeleteTastingNote } from "@/app/api/tasting-note/deleteTastingNote";
@@ -21,7 +22,12 @@ interface IAlcoholType {
 
 export default function ShareHeader() {
   const router = useRouter();
+  const params = useParams();
+
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const { deleteTastingNote } = useDeleteTastingNote();
+  const [deleteCheckModalOpen, setDeleteCheckModalOpen] =
+    useState<boolean>(false);
   const [checkNotToLook, setCheckNotToLook] = useState<boolean>(false);
   const pathname = usePathname();
 
@@ -49,6 +55,15 @@ export default function ShareHeader() {
   if (pathname.endsWith("/comments")) {
     return null;
   }
+
+  const handleDeleteButtonClick = async () => {
+    const tastingNoteId = params.id; // params에서 id를 가져옴
+    if (tastingNoteId) {
+      deleteTastingNote(Number(tastingNoteId));
+    } else {
+      toast("시음노트 ID를 찾을 수 없습니다.");
+    }
+  };
 
   return (
     <>
@@ -82,14 +97,32 @@ export default function ShareHeader() {
           )}
         </div>
       </div>
-      {modalOpen && (
+      {modalOpen && !deleteCheckModalOpen && (
         <ModalLayout onClose={handleModalClose}>
           {/* <VisitorsModalContent
             handleModalClose={handleModalClose}
             handleCheckNotToLookOpen={handleCheckNotToLookOpen}
           /> */}
-          <OwnerModalContent handleModalClose={handleModalClose} />
+          <OwnerModalContent
+            postId={params.id as string}
+            handleDeleteButtonClick={() => {
+              setDeleteCheckModalOpen(true);
+            }}
+            handleModalClose={handleModalClose}
+          />
         </ModalLayout>
+      )}
+      {deleteCheckModalOpen && (
+        <WarningModal
+          className="animate-modalOpen"
+          modalTitle="게시물을 삭제하시겠어요?"
+          confirmText="삭제하기"
+          cancelText="닫기"
+          handleConfirm={handleDeleteButtonClick}
+          handleCancel={() => {
+            setDeleteCheckModalOpen(false);
+          }}
+        />
       )}
     </>
   );
@@ -129,15 +162,15 @@ function VisitorsModalContent({
 
 function OwnerModalContent({
   handleModalClose,
+  handleDeleteButtonClick,
+  postId,
 }: {
   handleModalClose: () => void;
+  handleDeleteButtonClick: () => void;
+  postId: string;
 }) {
   const router = useRouter();
-  const params = useParams();
   const [cookie] = useCookies(["accessToken"]);
-  const { deleteTastingNote } = useDeleteTastingNote();
-
-  const postId = params.id;
 
   const {
     data: tastingNoteDetail,
@@ -199,15 +232,6 @@ function OwnerModalContent({
         // Unofficial 데이터인 경우
         router.push(`/share/note/${postId}/edit`);
       }
-    } else {
-      toast("시음노트 ID를 찾을 수 없습니다.");
-    }
-  };
-
-  const handleDeleteButtonClick = async () => {
-    const tastingNoteId = params.id; // params에서 id를 가져옴
-    if (tastingNoteId) {
-      deleteTastingNote(Number(tastingNoteId));
     } else {
       toast("시음노트 ID를 찾을 수 없습니다.");
     }

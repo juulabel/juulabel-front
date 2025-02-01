@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import Image from "next/image";
 
 interface IWarningModal {
@@ -8,6 +9,7 @@ interface IWarningModal {
   cancelText: string;
   handleConfirm: () => void;
   handleCancel: () => void;
+  className?: string;
 }
 
 export default function WarningModal({
@@ -16,10 +18,16 @@ export default function WarningModal({
   cancelText,
   handleConfirm,
   handleCancel,
+  className,
 }: IWarningModal) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="inline-flex h-[233px] w-[91%] max-w-[560px] flex-col items-center justify-center gap-6 rounded-2xl bg-white p-6">
+      <div
+        className={clsx(
+          "inline-flex h-[233px] w-[91%] max-w-[560px] flex-col items-center justify-center gap-6 rounded-2xl bg-white p-6",
+          className,
+        )}
+      >
         <div className="flex h-[79px] flex-col items-center justify-center gap-3 self-stretch">
           <Image
             width={44}

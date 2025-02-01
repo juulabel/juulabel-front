@@ -92,7 +92,7 @@ export default function ShareNoteDetailBody({ id }: Props) {
     <div className="relative h-screen overflow-hidden">
       <section
         className={clsx(
-          "h-full overflow-y-auto pb-[80px] pt-[64px] transition-all duration-700",
+          "h-full overflow-y-auto pb-[80px] pt-[64px] transition-all duration-700 scrollbar-hide",
           {
             "animate-fadeOut scale-90 opacity-90 blur-lg scrollbar-hide":
               isCommentsPageVisible === "Y",
