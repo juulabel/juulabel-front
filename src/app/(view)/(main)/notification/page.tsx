@@ -92,6 +92,10 @@ export default function Page() {
     markAllAsRead();
   };
 
+  const handleNotificationClick = (id: number) => {
+    markNotificationAsRead(id);
+  };
+
   if (isLoading) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
 
@@ -114,6 +118,7 @@ export default function Page() {
             alarmList={filteredNotifications}
             isEditing={isEditing}
             onDelete={handleDeleteNotificationById}
+            onNotificationClick={handleNotificationClick}
           />
         ) : (
           <div className="flex h-full flex-col items-center justify-center text-center">

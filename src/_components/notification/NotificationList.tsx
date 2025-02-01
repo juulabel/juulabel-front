@@ -43,13 +43,15 @@ const handleRedirect = (relatedUrl: string, router: AppRouterInstance) => {
 interface INotificationList {
   alarmList: INotificationSummary[];
   isEditing: boolean;
-  onDelete: (id: number) => void; // Accept the delete handler as a prop
+  onDelete: (id: number) => void;
+  onNotificationClick: (id: number) => void;
 }
 
 export default function NotificationList({
   alarmList,
   isEditing,
   onDelete, // Destructure onDelete
+  onNotificationClick,
 }: INotificationList) {
   const router = useRouter();
   return (
@@ -59,6 +61,7 @@ export default function NotificationList({
           key={index}
           className="flex cursor-pointer items-center justify-start gap-2 p-4 transition hover:bg-cool-grayscale-100"
           onClick={() => {
+            onNotificationClick(notification.id); // 알림 읽음 처리
             if (!isEditing && notification.relatedUrl) {
               handleRedirect(notification.relatedUrl, router);
             }
