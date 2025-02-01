@@ -10,7 +10,7 @@ export default function SplashScreen() {
   const pathname = usePathname();
   const router = useRouter();
   const [cookies] = useCookies(["accessToken"]);
-  const [isLoading, setIsLoading] = useState<boolean>(pathname === "/");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
 
   useEffect(() => {

@@ -1,15 +1,20 @@
 import { cn } from "@/_utils/commons";
 
 interface SpinnerProps {
+  className?: string;
   spinnerVisibility: boolean;
 }
 
-export default function Spinner({ spinnerVisibility }: SpinnerProps) {
+export default function Spinner({
+  spinnerVisibility,
+  className,
+}: SpinnerProps) {
   return (
     <div
       className={cn(
         "relative mb-[45px] flex h-12 w-12 items-center justify-center rounded-full bg-white opacity-0 shadow",
         spinnerVisibility && "opacity-1",
+        className,
       )}
     >
       <div
