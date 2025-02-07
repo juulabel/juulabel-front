@@ -1,7 +1,7 @@
 "use client";
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
-import WarningModal from "@/_components/notification/\bWarningModal";
+import WarningModal from "@/_components/notification/WarningModal";
 import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useDeleteTastingNote } from "@/app/api/tasting-note/deleteTastingNote";
@@ -75,7 +75,7 @@ export default function ShareHeader() {
           }}
         >
           <Image
-            src={"/svg/left_arrow.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/left_arrow.svg`}
             width={32}
             height={32}
             alt="left"
@@ -87,7 +87,7 @@ export default function ShareHeader() {
         <div>
           {isAuthor && (
             <Image
-              src={"/svg/three_dots_horizontal.svg"}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/three_dots_horizontal.svg`}
               width={28}
               height={28}
               alt="three dots"

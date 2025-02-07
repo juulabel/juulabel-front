@@ -12,7 +12,7 @@ export default function FloatingBtn() {
       <div
         className={cn(
           "pointer-events-none absolute inset-0 z-20 h-full w-full transition duration-200 ease-out",
-          clicked && "pointer-events-auto bg-black bg-opacity-60"
+          clicked && "pointer-events-auto bg-black bg-opacity-60",
         )}
         onClick={() => setClicked((prev) => !prev)}
       />
@@ -23,18 +23,18 @@ export default function FloatingBtn() {
           className={cn(
             "pointer-events-auto h-24 w-[143px] rounded-lg border bg-white opacity-0 transition-opacity duration-200 ease-out",
             clicked && "opacity-100",
-            !clicked && "pointer-events-none"
+            !clicked && "pointer-events-none",
           )}
         >
           <Link
             href={clicked ? "/share/note/search" : "#"}
             className={cn(
               "flex h-1/2 items-center justify-center",
-              !clicked && "cursor-not-allowed"
+              !clicked && "cursor-not-allowed",
             )}
           >
             <Image
-              src="/images/icons/addingBtn/tasting.png"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/addingBtn/tasting.png`}
               alt="시음노트 작성 아이콘"
               width={24}
               height={24}
@@ -47,11 +47,11 @@ export default function FloatingBtn() {
             href={clicked ? "/share/life/write" : "#"}
             className={cn(
               "flex h-1/2 items-center justify-center",
-              !clicked && "cursor-not-allowed"
+              !clicked && "cursor-not-allowed",
             )}
           >
             <Image
-              src="/images/icons/addingBtn/dailyfeed.png"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/addingBtn/dailyfeed.png`}
               alt="일상생활 작성 아이콘"
               width={24}
               height={24}
@@ -64,12 +64,12 @@ export default function FloatingBtn() {
         <button
           className={cn(
             "pointer-events-auto flex h-12 w-12 items-center justify-center rounded-3xl bg-primary-700 shadow transition duration-200 ease-out",
-            clicked && "bg-white"
+            clicked && "bg-white",
           )}
           onClick={() => setClicked((prev) => !prev)}
         >
           <Image
-            src={`/images/icons/addingBtn/${clicked ? "cancel" : "add"}.png`}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/addingBtn/${clicked ? "cancel" : "add"}.png`}
             alt="글 추가 아이콘"
             width={clicked ? 34 : 24}
             height={clicked ? 34 : 24}

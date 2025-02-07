@@ -84,7 +84,7 @@ export default function RecentSearchList({
                   {recentSearch}
                 </p>
                 <img
-                  src="/images/icons/addingBtn/cancel.png"
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/addingBtn/cancel.png`}
                   className="h-[4%] w-[4%] cursor-pointer"
                   alt="취소 버튼"
                   onClick={() => handleDeleteRecentSearch(recentSearch)}

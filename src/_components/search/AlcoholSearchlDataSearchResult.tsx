@@ -43,7 +43,7 @@ export default function AlcoholSearchDataSearchResult({
             width={18}
             height={18}
             className="mx-[4%]"
-            src="/svg/search_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/search_icon.svg`}
             alt="검색 아이콘"
           />
           <div

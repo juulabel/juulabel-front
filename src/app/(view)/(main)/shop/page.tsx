@@ -11,7 +11,7 @@ export default function Notes() {
           className="pb-[16px]"
           width="95"
           height="88"
-          src={"/images/temp_shop_logo.png"}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/temp_shop_logo.png`}
           alt="장터 임시 페이지 아이콘"
         />
         <div className="font-['Pretendard'] text-base font-medium leading-normal text-slate-800">

@@ -30,7 +30,7 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
             </Link> */}
             <Link href="/notification" className="relative">
               <Image
-                src="/images/icons/header/notification.png"
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/header/notification.png`}
                 width="24"
                 height="24"
                 alt="notification"

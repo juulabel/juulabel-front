@@ -75,7 +75,7 @@ export default function ModifyBody() {
       <div className="fixed top-0 z-10 flex h-[64px] w-full max-w-[560px] items-center justify-between border-b border-gray-300 bg-white px-3">
         <div className="cursor-pointer">
           <Image
-            src={"/svg/left_arrow.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/left_arrow.svg`}
             width={32}
             height={32}
             alt="left"

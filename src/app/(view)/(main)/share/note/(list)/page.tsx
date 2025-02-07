@@ -2,6 +2,7 @@
 
 import NoteThumbnail from "@/_common/NoteThumbnail";
 import Spinner from "@/_components/search/Spinner";
+import ServerToast from "@/_components/share/error/ServerToast";
 import ShareLayout from "@/_components/share/ShareLayout";
 import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
 import { INoteThumbnail } from "@/_types/share";
@@ -19,6 +20,7 @@ export default function Notes() {
     isFetching,
     isFetchingNextPage,
     hasNextPage,
+    isError,
   } = useInfiniteQuery({
     queryKey: ["getNoteList"],
     queryFn: ({ pageParam }) =>
@@ -56,6 +58,15 @@ export default function Notes() {
 
   if (isFetching && !isFetchingNextPage) return <SkeletomUIForList />;
 
+  if (isError) {
+    return (
+      <ServerToast
+        text="데이터를 불러오는 중 에러가 발생했습니다."
+        redirectPath="/"
+      />
+    );
+  }
+
   return (
     <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
       {notes?.map((note) => (
@@ -63,7 +74,10 @@ export default function Notes() {
       ))}
       {isFetchingNextPage && (
         <div className="fixed bottom-9 left-1/2 z-50 -translate-x-1/2">
-          <Spinner spinnerVisibility className="animate-fade-in-up-loader" />
+          <Spinner
+            spinnerVisibility
+            className="animate-fade-in-up-loader shadow-[0_0_15px_rgba(0,0,0,0.7)]"
+          />
         </div>
       )}
       <div ref={observerRef}></div>

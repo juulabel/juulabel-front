@@ -15,10 +15,10 @@ interface Props {
   imageList: string[];
 }
 
-const userDefaultImg = "/images/placeholders/profile/default_profile.png";
+const userDefaultImg = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
 
 export default function ShareDetailNoteImageBox({ info, imageList }: Props) {
-  const defaultImage = `/images/placeholders/alcohols/${placeholderThumbnailProvider(info?.alcoholTypeName || "소주")}.png`;
+  const defaultImage = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(info?.alcoholTypeName || "소주")}.png`;
   const userDefaultImage = info?.memberInfo.profileImage || userDefaultImg;
   const imagesToUse = imageList.length > 0 ? imageList : [defaultImage];
 

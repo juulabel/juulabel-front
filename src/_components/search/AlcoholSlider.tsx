@@ -37,7 +37,7 @@ export default function AlcoholSlider({
                 } // Trigger the handler on click
               >
                 <Image
-                  src={drink.image}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${drink.image}`}
                   width={44}
                   height={52}
                   alt={drink.value}

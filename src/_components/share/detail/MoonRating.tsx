@@ -73,7 +73,7 @@ function renderMoons({ count, moonType }: Params) {
     return (
       <Image
         key={`${moonType}-${index}`}
-        src={moonImages[moonType]}
+        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${moonImages[moonType]}`}
         alt={`${moonType} moon`}
         width={30}
         height={30}

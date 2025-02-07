@@ -12,7 +12,7 @@ const TraditionalLiquorBackground = React.memo(() => {
   return (
     <>
       <Image
-        src={bgImages[Math.floor(Math.random() * bgImages.length)]}
+        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${bgImages[Math.floor(Math.random() * bgImages.length)]}`}
         fill
         className="object-cover"
         alt="Landscape"

@@ -37,7 +37,7 @@ export default function TraditionalLiquorCapacityCell({
       {selectedVolumePriceDetails?.volume || alcoholicVolume}ml
       <TraditionalLiquorDropDown selectedCallback={toggle}>
         <Image
-          src={"/svg/down_arrow.svg"}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/down_arrow.svg`}
           alt={"v"}
           className={clsx("cursor-pointer transition-transform duration-300", {
             "rotate-180": clicked,

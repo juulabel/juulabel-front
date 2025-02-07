@@ -42,7 +42,7 @@ export default function ReplyBody({
         onClick={handleReplyClose} // 함수 바로 전달
       >
         <Image
-          src="/svg/down_arrow.svg"
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/down_arrow.svg`}
           width={20}
           height={20}
           alt="tets"

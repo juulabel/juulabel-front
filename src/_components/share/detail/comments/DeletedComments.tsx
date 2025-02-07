@@ -29,7 +29,7 @@ export default function DeletedComments({ commentInfo, postId }: Props) {
       <div className="flex h-[42px] flex-row items-center gap-2">
         <div className="relative z-20 h-[24px] w-[24px]">
           <Image
-            src={"/svg/anonymous_user_icon.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/anonymous_user_icon.svg`}
             fill
             className="object-cover"
             alt="user"
@@ -43,7 +43,7 @@ export default function DeletedComments({ commentInfo, postId }: Props) {
         <div className="flex flex-row items-center gap-1">
           <Image
             className="cursor-pointer"
-            src={"/svg/like.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/like.svg`}
             width={20}
             height={20}
             alt="좋아요"
@@ -56,7 +56,7 @@ export default function DeletedComments({ commentInfo, postId }: Props) {
 
         <div className="flex flex-row items-center gap-1">
           <Image
-            src={"/svg/speech_bubble.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/speech_bubble.svg`}
             width={20}
             height={20}
             className="cursor-pointer"

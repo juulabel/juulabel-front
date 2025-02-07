@@ -15,7 +15,7 @@
 }
 
 .checkbox-custom {
-  background-image: url("/images/check_icon.png");
+  background-image: url("/app/images/check_icon.png");
   background-size: 12px 8px;
   background-repeat: no-repeat;
   background-position: center;
@@ -144,7 +144,7 @@
 }
 
 .animate-fadeIn-footer {
-  animation: fadeInFooter 2s ease-in-out forwards;
+  animation: fadeInFooter 1.2s ease-in-out forwards;
 }
 
 .animate-fadeOut {
@@ -194,7 +194,7 @@ input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   cursor: pointer;
   background-color: #020617;
-  background-image: url("/images/icons/checkbox.png"); /* 아이콘 이미지 추가 */
+  background-image: url("/app/images/icons/checkbox.png"); /* 아이콘 이미지 추가 */
   background-size: 16px 16px;
   background-repeat: no-repeat;
   background-position: center; /* 아이콘을 중앙에 위치 */
@@ -212,7 +212,7 @@ input[type="range"]::-moz-range-thumb {
   height: 28px;
   border-radius: 8px;
   background-color: #020617;
-  background-image: url("/images/icons/checkbox.png");
+  background-image: url("/app/images/icons/checkbox.png");
   background-size: 16px 16px;
   background-repeat: no-repeat;
   background-position: center;

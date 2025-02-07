@@ -77,7 +77,7 @@ export default function Rating({ value, onChange }: IRating) {
           ></div>
           {/* 이미지 (전체 크기 유지) */}
           <img
-            src={getStarImage(fullValue)}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${getStarImage(fullValue)}`}
             alt="moon"
             className="h-full w-full"
           />

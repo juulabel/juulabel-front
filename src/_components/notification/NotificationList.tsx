@@ -71,11 +71,11 @@ export default function NotificationList({
             width={40}
             height={40}
             className={`rounded-full ${notification.isRead && "grayscale"}`}
-            src={
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${
               notification.notificationType == "ADMIN_NOTIFY"
                 ? "/svg/announcement_alarm.svg"
                 : notification.profileImageUrl || "/svg/announcement_alarm.svg"
-            }
+            }`}
             alt="알림 프로필 사진"
           />
 
@@ -91,7 +91,7 @@ export default function NotificationList({
               <Image
                 width={2}
                 height={9}
-                src="/svg/stroke.svg"
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/stroke.svg`}
                 alt="| 아이콘"
               />
               <div
@@ -118,7 +118,7 @@ export default function NotificationList({
               <Image
                 width={18}
                 height={18}
-                src="/svg/white_close_icon.svg"
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/white_close_icon.svg`}
                 alt="닫기 아이콘"
               />
             </button>

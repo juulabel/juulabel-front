@@ -19,7 +19,7 @@ export default function MySpaceHeader({ title }: IMySpaceHeader) {
         <div className="flex space-x-3">
           <Link href="/notification" className="relative">
             <Image
-              src="/images/icons/header/notification.png"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/header/notification.png`}
               width="32"
               height="32"
               alt="notification"

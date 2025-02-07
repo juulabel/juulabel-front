@@ -209,7 +209,10 @@ export default function EditMyInfo({
           <Image
             width={120}
             height={120}
-            src={image ?? `/images/placeholders/profile/default_profile.png`}
+            src={
+              image ??
+              `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
+            }
             alt="내 정보 이미지"
             className="absolute left-0 top-0 h-[120px] w-[120px] rounded-full"
           />

@@ -20,16 +20,11 @@ import useVolumePriceStore from "@/_store/volumePriceStore";
 import TraditionalLiquorDetailPrice from "@/_components/share/detail/TraditionalLiquorDetailPrice";
 import useTraditionalLiquorList from "@/_utils/hooks/useTraditionalLiquorList";
 import TraditionalLiquorBackground from "@/_components/share/detail/TraditionalLiquorBackground";
+import ServerToast from "../error/ServerToast";
 
 interface Props {
   id: number;
 }
-const rawMaterials = ["정제수(생수)", "찹쌀(인천 강화섬쌀)", "국", "밀"];
-
-const bgImages = [
-  "/images/traditional_liquor_bg.jpg",
-  "/images/traditional_liquor_bg2.jpg",
-];
 
 export default function ShareTraditionalLiquor({ id }: Props) {
   const mediumTextStyle = "text-[16px] font-normal text-cool-grayscale-700";
@@ -43,12 +38,19 @@ export default function ShareTraditionalLiquor({ id }: Props) {
     //     return sensory.id;
     //   },
     // );
-
-    console.log(data);
   }, [isFetching]);
 
   if (isFetching) {
     return <ShareTraditionalLiquorSkeletonUI />;
+  }
+
+  if (isError) {
+    return (
+      <ServerToast
+        text="데이터를 불러오는 중 에러가 발생했습니다."
+        redirectPath="/share/note"
+      />
+    );
   }
   return (
     <>
@@ -56,14 +58,13 @@ export default function ShareTraditionalLiquor({ id }: Props) {
         <TraditionalLiquorBackground />
 
         <Image
-          src={"/svg/left_arrow_white.svg"}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/left_arrow_white.svg`}
           width={28}
           height={28}
           alt="<"
           className="absolute left-5 top-1/3 z-10 -translate-y-1/2 cursor-pointer"
           onClick={() => {
             router.back();
-            // router.push("/share/note");
           }}
         />
 
@@ -138,7 +139,7 @@ export default function ShareTraditionalLiquor({ id }: Props) {
         <div className="flex w-full flex-col">
           <div className="flex flex-row gap-2">
             <Image
-              src={"/svg/location.svg"}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/location.svg`}
               width={16}
               height={16}
               alt="location"
@@ -154,7 +155,7 @@ export default function ShareTraditionalLiquor({ id }: Props) {
         <div className="flex w-full flex-col">
           <div className="flex flex-row gap-2">
             <Image
-              src={"/svg/raw_materials.svg"}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/raw_materials.svg`}
               width={16}
               height={16}
               alt="raw meterials"
@@ -333,13 +334,13 @@ export default function ShareTraditionalLiquor({ id }: Props) {
             </div> */}
             <div className="flex h-full w-full flex-col items-center justify-center gap-2 pt-4">
               <Image
-                src={"/svg/food_search_icon.svg"}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/food_search_icon.svg`}
                 width={30}
                 height={28}
                 alt="icon"
               />
               <div className="flex flex-col items-center text-[14px] text-cool-grayscale-600">
-                <span>잘 맞는 페어링 음식을 찾고 있어요.</span>
+                <span>잘 맞는 페어링 음식을 찾 있어요.</span>
                 <span>조금만 기다려 주세요!</span>
               </div>
             </div>

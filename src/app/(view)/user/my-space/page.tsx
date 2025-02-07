@@ -123,7 +123,7 @@ export default function Page() {
                     className="h-[72px] w-[72px] rounded-full"
                     src={
                       user.profileImage ??
-                      "/images/placeholders/profile/default_profile.png"
+                      `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
                     }
                     alt="유저 이미지"
                   />
@@ -137,7 +137,7 @@ export default function Page() {
                   width={24}
                   height={24}
                   className="r rounded-full"
-                  src={"/svg/right-arrow.svg"}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/right-arrow.svg`}
                   alt="내정보"
                 />
               </Link>

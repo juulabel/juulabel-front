@@ -97,7 +97,7 @@ export default function CommentFooter({ info, dailyLifeId }: Props) {
       <footer className="fixed bottom-0 z-10 flex h-[62px] w-full max-w-[560px] items-center justify-between space-x-2 bg-white p-4 px-4 py-2 text-cool-grayscale-500">
         <div className="flex items-center space-x-2">
           <Image
-            src={info?.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${info?.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}`}
             alt="좋아요 아이콘"
             width={22}
             height={22}
@@ -116,7 +116,7 @@ export default function CommentFooter({ info, dailyLifeId }: Props) {
           className="flex items-center space-x-2"
         >
           <Image
-            src="/images/icons/comment.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/comment.png`}
             alt="댓글 아이콘"
             width={26}
             height={22}

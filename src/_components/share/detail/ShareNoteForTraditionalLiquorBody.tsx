@@ -90,7 +90,7 @@ export default function ShareNoteForTraditionalLiquorBody({ id }: Props) {
             <Image
               width={92}
               height={123}
-              src="/images/note/unoffical_page_icon.png"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/note/unoffical_page_icon.png`}
               alt="비공식 데이터 사진"
             />
             <p className="my-6 text-lg font-medium text-cool-grayscale-600">

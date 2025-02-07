@@ -26,7 +26,7 @@ export default function ConfirmModal({
           <Image
             width={44}
             height={40}
-            src="/images/register_cancel_warning.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/register_cancel_warning.png`}
             alt="경고"
           />
           <div className="flex h-[59px] flex-col items-start justify-start gap-2 self-stretch">

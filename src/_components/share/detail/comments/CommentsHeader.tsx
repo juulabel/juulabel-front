@@ -49,7 +49,7 @@ export default function CommentsHeader({ isLife }: Props) {
     <div className="fixed top-0 z-50 flex h-[64px] w-full max-w-[560px] flex-row items-center justify-center gap-2 border-b border-gray-300 bg-white px-3">
       <Image
         className="absolute left-4 cursor-pointer"
-        src={"/svg/left_arrow.svg"}
+        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/left_arrow.svg`}
         width={32}
         height={32}
         alt="cancel"
