@@ -38,7 +38,7 @@ export default function NoteThumbnail({
         {hasMultipleImages && (
           <Image
             className="absolute right-2 top-2 z-10"
-            src="/images/icons/pictures.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/pictures.png`}
             alt="복수 이미지 아이콘"
             width={24}
             height={24}
@@ -47,7 +47,7 @@ export default function NoteThumbnail({
         {hasMultipleImages && (
           <Image
             className="absolute right-9 top-2 z-10"
-            src="/svg/lock.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/lock.svg`}
             alt="복수 이미지 아이콘"
             width={24}
             height={24}
@@ -57,7 +57,7 @@ export default function NoteThumbnail({
           <Image
             src={
               thumbnailPath ??
-              `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
+              `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
             }
             alt="시음노트 썸네일"
             sizes="50vw"
@@ -76,7 +76,8 @@ export default function NoteThumbnail({
         >
           <Image
             src={
-              profileImage ?? `/images/placeholders/profile/default_profile.png`
+              profileImage ??
+              `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
             }
             alt="작성자 이미지"
             sizes="10vw"

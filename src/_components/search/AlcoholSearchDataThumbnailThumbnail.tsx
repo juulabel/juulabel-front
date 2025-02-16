@@ -45,7 +45,7 @@ export default function AlcoholSearchDataThumbnail({
         <Image
           src={
             thumbnail ??
-            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType.name)}.png`
+            `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType.name)}.png`
           }
           alt="시음노트 썸네일"
           fill
@@ -59,7 +59,7 @@ export default function AlcoholSearchDataThumbnail({
         <Image
           width={16}
           height={16}
-          src="/svg/pin_icon.svg"
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/pin_icon.svg`}
           alt="위치 아이콘"
           className="mr-[1%]"
         />
@@ -71,11 +71,11 @@ export default function AlcoholSearchDataThumbnail({
         <Image
           width={16}
           height={16}
-          src={cn(
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${
             alcoholContent == 0
               ? "/svg/gray_moon_score_icon.svg"
-              : "/svg/moon_score_icon.svg",
-          )}
+              : "/svg/moon_score_icon.svg"
+          }`}
           alt="위치 아이콘"
           className="mr-[1%]"
         />

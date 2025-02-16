@@ -20,7 +20,7 @@ export default function TraditionalDrinkInformationComponent() {
         <Image
           width={16}
           height={16}
-          src="/svg/add_icon.svg"
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/add_icon.svg`}
           className="mr-[3px]"
           alt="추가 버튼"
         />

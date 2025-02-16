@@ -1,5 +1,6 @@
 "use client";
 
+import ShareLayout from "@/_components/share/ShareLayout";
 import { ITastingNoteResponse } from "@/_types";
 import { createContext, ReactNode, useContext, useState } from "react";
 
@@ -20,7 +21,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <TastingNoteContext.Provider
       value={{ tastingNoteData, setTastingNoteData }}
     >
-      {children}
+      <ShareLayout>{children}</ShareLayout>
     </TastingNoteContext.Provider>
   );
 }

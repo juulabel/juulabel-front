@@ -1,5 +1,5 @@
 "use client";
-import WarningModal from "@/_components/notification/\bWarningModal";
+import WarningModal from "@/_components/notification/WarningModal";
 import CommentFooter from "@/_components/reaction/CommentFooter";
 import EditModal from "@/_components/share/EditModal";
 import HeaderWithButton from "@/_components/share/life/HeaderWithButton";

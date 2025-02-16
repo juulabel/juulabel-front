@@ -10,7 +10,7 @@ export default function SplashScreen() {
   const pathname = usePathname();
   const router = useRouter();
   const [cookies] = useCookies(["accessToken"]);
-  const [isLoading, setIsLoading] = useState<boolean>(pathname === "/");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function SplashScreen() {
     return (
       <div className="flex h-[100vh] w-full max-w-[560px] flex-col items-center justify-center bg-primary-700">
         <Image
-          src="/images/main_logo2.png"
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/main_logo2.png`}
           width={226}
           height={148}
           alt="주라벨 메인 로고2"

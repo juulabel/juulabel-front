@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  siteUrl: "https://juulabel.com/app",
+  basePath: "/app",
+  // assetPrefix: "/app",
   reactStrictMode: false,
   images: {
     domains: [

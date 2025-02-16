@@ -64,6 +64,11 @@ export default function useCommentsLike(isLife: boolean) {
       );
     },
     onSettled: (data, error, variables) => {
+      if (isLife) {
+        queryClient.invalidateQueries({
+          queryKey: ["lifeComments", variables.postId],
+        });
+      }
       queryClient.invalidateQueries({
         queryKey: [isLife ? "lifeComments" : "noteComments", variables.postId],
       });

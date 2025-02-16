@@ -43,9 +43,7 @@ export default function Page() {
     }
   }, [debouncedSearchQuery]);
 
-  useEffect(() => {
-    console.log(searchQueryResult);
-  }, [searchQueryResult]);
+  useEffect(() => {}, [searchQueryResult]);
 
   return (
     <div className="w-full max-w-[560px]">
@@ -80,7 +78,11 @@ export default function Page() {
                       <Image
                         width={44}
                         height={44}
-                        src={user.image ? user.image : "/images/kakao_icon.png"}
+                        src={
+                          user.image
+                            ? user.image
+                            : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kakao_icon.png`
+                        }
                         alt="유저 이미지"
                         className="rounded-full"
                       />

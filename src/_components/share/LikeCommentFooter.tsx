@@ -46,7 +46,6 @@ export default function LikeCommentFooter({ info, id }: Props) {
         queryKey: ["noteDetail", id],
       });
       const previousNoteData = queryClient.getQueryData(["noteDetail", id]);
-      console.log(previousNoteData);
 
       queryClient.setQueryData(
         ["noteDetail", id],
@@ -104,7 +103,7 @@ export default function LikeCommentFooter({ info, id }: Props) {
   return (
     <footer
       className={clsx(
-        "animate-fadeIn-footer fixed bottom-0 z-40 flex h-[82px] w-full max-w-[560px] translate-y-0 flex-row items-center justify-between bg-[#FFFFFF] p-5 px-6 shadow-[0px_-4px_32px_0px_#00000012]",
+        "animate-fadeIn-footer fixed bottom-0 z-40 flex h-[62px] w-full max-w-[560px] translate-y-0 flex-row items-center justify-between bg-[#FFFFFF] p-5 px-6 shadow-[0px_-4px_32px_0px_#00000012]",
       )}
       style={{
         transition: "opacity 0.4s ease-out",
@@ -112,15 +111,15 @@ export default function LikeCommentFooter({ info, id }: Props) {
     >
       <div className="flex items-center gap-3">
         <Image
-          src={info?.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}
-          width={30}
-          height={30}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${info?.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}`}
+          width={22}
+          height={22}
           alt="좋아요"
           onClick={handleLikeClick}
           className="cursor-pointer"
         />
 
-        <div className="text-[21px] font-bold">
+        <div className="text-sm font-bold text-cool-grayscale-500">
           {info?.likeCount} 명이 좋아합니다.
         </div>
       </div>
@@ -130,12 +129,12 @@ export default function LikeCommentFooter({ info, id }: Props) {
         onClick={handleCommentsPage}
       >
         <Image
-          src={"/svg/speech_bubble.svg"}
-          width={30}
-          height={30}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/speech_bubble.svg`}
+          width={18}
+          height={18}
           alt="좋아요"
         />
-        <span className="text-[18px]">{info?.commentCount}</span>
+        <span className="text-sm">{info?.commentCount}</span>
       </div>
     </footer>
   );

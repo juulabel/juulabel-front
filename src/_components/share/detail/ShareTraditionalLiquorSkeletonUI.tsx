@@ -36,7 +36,7 @@ export default function ShareTraditionalLiquorSkeletonUI() {
         />
 
         <Image
-          src={"/svg/left_arrow_white.svg"}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/left_arrow_white.svg`}
           width={28}
           height={28}
           alt="<"

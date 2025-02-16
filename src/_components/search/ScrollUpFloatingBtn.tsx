@@ -49,7 +49,7 @@ export default function ScrollUpFloatingBtn({ layoutId }: Props) {
           }}
         >
           <Image
-            src="/svg/up_arrow.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/up_arrow.svg`}
             alt="글 추가 아이콘"
             width={24}
             height={24}

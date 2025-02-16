@@ -24,7 +24,7 @@ export default function NotificationDeleteAll({
           <Image
             width={44}
             height={40}
-            src="/images/register_cancel_warning.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/register_cancel_warning.png`}
             alt="경고"
           />
           <div className="self-stretch text-center text-lg font-bold leading-[27px] text-slate-800">

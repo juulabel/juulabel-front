@@ -34,7 +34,7 @@ export default function AlcohoTypeDataThumbnail({
         <Image
           width={16}
           height={16}
-          src="/svg/pin_icon.svg"
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/pin_icon.svg`}
           alt="위치 아이콘"
           className="mr-[1%]"
         />

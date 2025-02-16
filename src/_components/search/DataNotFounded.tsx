@@ -36,7 +36,7 @@ export default function DataNotFounded({
             width={18}
             height={18}
             className="mx-[4%]"
-            src="/svg/search_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/search_icon.svg`}
             alt="검색 아이콘"
           />
           <div
@@ -53,7 +53,7 @@ export default function DataNotFounded({
             width={24}
             height={24}
             className="mx-3 cursor-pointer"
-            src="/svg/cancel_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/cancel_icon.svg`}
             alt="취소 아이콘"
             onClick={() => {
               handleClearSearchQuery();
@@ -66,7 +66,7 @@ export default function DataNotFounded({
         <Image
           width={92}
           height={123}
-          src="/images/note/unoffical_page_icon.png"
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/note/unoffical_page_icon.png`}
           alt="비공식 데이터 사진"
         />
         <p className="my-6 text-lg font-medium text-cool-grayscale-600">

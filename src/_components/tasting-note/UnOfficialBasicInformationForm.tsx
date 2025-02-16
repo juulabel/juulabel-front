@@ -212,7 +212,7 @@ export default function UnOfficialBasicInformationForm({
               <Image
                 width={24}
                 height={24}
-                src="/svg/down_arrow.svg"
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/down_arrow.svg`}
                 alt="Dropdown Icon"
               />
             </div>

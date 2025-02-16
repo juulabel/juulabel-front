@@ -49,7 +49,7 @@ export default function OfficialDataSearchResult({
             width={18}
             height={18}
             className="mx-[4%]"
-            src="/svg/search_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/search_icon.svg`}
             alt="검색 아이콘"
           />
           <div
@@ -66,7 +66,7 @@ export default function OfficialDataSearchResult({
             width={24}
             height={24}
             className="mx-3 cursor-pointer"
-            src="/svg/cancel_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/cancel_icon.svg`}
             alt="취소 아이콘"
             onClick={() => {
               handleClearSearchQuery();

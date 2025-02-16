@@ -126,7 +126,7 @@ export default function Page() {
               width={56}
               height={56}
               className="pb-[8px]"
-              src="/svg/zero_notification.svg"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/zero_notification.svg`}
               alt="알림 없음 표시 아이콘"
             />
             <div className="font-['Pretendard'] text-base font-medium leading-normal text-slate-700">

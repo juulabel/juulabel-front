@@ -46,7 +46,7 @@ export default function LifeList({
               src={
                 thumbnailPath && isValidUrl(thumbnailPath)
                   ? thumbnailPath
-                  : "/images/placeholders/life/default_life_thumbnail.png"
+                  : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/life/default_life_thumbnail.png`
               }
               alt="일상생활 썸네일 이미지"
               sizes="30vw"
@@ -67,7 +67,7 @@ export default function LifeList({
               src={
                 profileImage
                   ? profileImage
-                  : "/images/placeholders/profile/default_profile.png"
+                  : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
               }
               alt="작성자 이미지"
               sizes="10vw"
@@ -82,7 +82,7 @@ export default function LifeList({
         </Link>
         <div className="flex items-center">
           <Image
-            src="/svg/like.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/like.svg`}
             alt="좋아요 아이콘"
             className="mr-0.5"
             width={14}
@@ -90,7 +90,7 @@ export default function LifeList({
           />
           <div className="mr-1.5">{likeCount}</div>
           <Image
-            src="/images/icons/comment.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/comment.png`}
             alt="댓글 아이콘"
             className="mr-0.5"
             width={18}

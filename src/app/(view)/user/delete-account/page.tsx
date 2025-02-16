@@ -68,7 +68,7 @@ export default function Page() {
               <Image
                 width={64}
                 height={64}
-                src={"/svg/green_check_mark.svg"}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/green_check_mark.svg`}
                 alt={"회원 탈퇴 완료"}
               />
             </div>

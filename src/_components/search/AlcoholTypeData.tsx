@@ -104,7 +104,7 @@ export default function AlcoholTypeData({
             {sortedType.value}
           </div>
           <Image
-            src={isFilterOpen ? "/svg/up_arrow.svg" : "/svg/under.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${isFilterOpen ? "/svg/up_arrow.svg" : "/svg/under.svg"}`}
             alt="정렬 아이콘"
             width={16}
             height={16}

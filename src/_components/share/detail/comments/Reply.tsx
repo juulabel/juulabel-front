@@ -17,8 +17,8 @@ interface Props {
   replyInfo: IReply;
   isAuthor: boolean;
 }
-const defaultUserImageURL =
-  "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage";
+
+const defaultUserImageURL = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
 
 export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
   const pathname = usePathname();
@@ -66,7 +66,7 @@ export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
             }}
           >
             <Image
-              src={"/svg/three-dots-horizontal-24.svg"}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/three-dots-horizontal-24.svg`}
               width={24}
               height={24}
               alt="점"
@@ -97,7 +97,7 @@ export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
           }}
         >
           <Image
-            src={replyInfo.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${replyInfo.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}`}
             width={20}
             height={20}
             alt="좋아요"

@@ -27,7 +27,6 @@ export default function CommentsWithReplyWrapper({
 
   // commentId, tastingNotdId,
 
-  useEffect(() => {}, []);
   return (
     <>
       <div
@@ -47,7 +46,7 @@ export default function CommentsWithReplyWrapper({
           <div className="flex flex-row items-center gap-1">
             <Image
               className="cursor-pointer"
-              src={commentInfo.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${commentInfo.isLiked ? "/svg/like_full.svg" : "/svg/like.svg"}`}
               width={20}
               height={20}
               alt="좋아요"
@@ -73,7 +72,7 @@ export default function CommentsWithReplyWrapper({
 
           <div className="flex flex-row items-center gap-1">
             <Image
-              src={"/svg/speech_bubble.svg"}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/speech_bubble.svg`}
               width={20}
               height={20}
               className="cursor-pointer"
