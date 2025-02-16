@@ -38,7 +38,7 @@ export default function NoteThumbnail({
         {hasMultipleImages && (
           <Image
             className="absolute right-2 top-2 z-10"
-            src="/images/icons/pictures.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/pictures.png`}
             alt="복수 이미지 아이콘"
             width={24}
             height={24}

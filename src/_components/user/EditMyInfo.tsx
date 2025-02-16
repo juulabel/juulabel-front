@@ -221,7 +221,7 @@ export default function EditMyInfo({
               <Image
                 width={18}
                 height={18}
-                src={"/svg/gallery.svg"}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/gallery.svg`}
                 alt="갤러리 이미지"
               />
             </div>

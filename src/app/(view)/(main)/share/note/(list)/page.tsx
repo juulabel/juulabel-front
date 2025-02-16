@@ -69,6 +69,11 @@ export default function Notes() {
 
   return (
     <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
+      {notes?.length === 0 && (
+        <div className="text-md col-span-2 h-full pt-10 text-center text-gray-600">
+          데이터가 없습니다.
+        </div>
+      )}
       {notes?.map((note) => (
         <NoteThumbnail key={note.TastingNoteId} {...note} />
       ))}

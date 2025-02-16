@@ -24,7 +24,7 @@ export default function FollowHeader({ title }: IFollowHeader) {
           <Image
             width={18}
             height={18}
-            src="/svg/search_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/search_icon.svg`}
             alt="Search Icon"
             onClick={() => router.push("/user/search")}
           />

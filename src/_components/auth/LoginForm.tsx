@@ -46,7 +46,7 @@ export default function LoginForm() {
             <Image
               width={71}
               height={31}
-              src="/images/tool-tip.png"
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/tool-tip.png`}
               alt="최근 로그인"
             />
           </div>

@@ -78,7 +78,7 @@ export default function Page() {
           <Image
             width={32}
             height={32}
-            src="/svg/close_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/close_icon.svg`}
             alt="닫기 아이콘"
             onClick={() => router.back()}
           />

@@ -52,7 +52,7 @@ export default function PreferredAlcoholForm({
               onClick={(event) => handlePreferredAlcohol(event, drink.key)}
             >
               <Image
-                src={drink.image}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}` + drink.image}
                 width={66}
                 height={78}
                 alt={drink.value}

@@ -60,7 +60,7 @@ export default function AlcoholSearchDataSearchResult({
             width={24}
             height={24}
             className="mx-3 cursor-pointer"
-            src="/svg/cancel_icon.svg"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/cancel_icon.svg`}
             alt="취소 아이콘"
             onClick={() => {
               handleClearSearchQuery();
