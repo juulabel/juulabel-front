@@ -64,7 +64,7 @@ export default function AlcoholTypeData({
 
   return (
     <div className="w-full max-w-[560px]">
-      <div className="sticky top-0 z-50 mx-[4%] flex h-16 flex-row items-center justify-between bg-white px-2">
+      <div className="sticky top-0 z-50 flex h-16 flex-row items-center justify-between bg-white px-2">
         <div>
           <button onClick={handleCloseSearchList}>
             <GoChevronLeft size={24} />
