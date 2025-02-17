@@ -41,7 +41,7 @@ function KakaoLoginHandlerComponent() {
             }
           }
         } catch (error) {
-          console.error(error);
+          console.error("로그인 실패", error);
         }
       };
       loginHandler();
