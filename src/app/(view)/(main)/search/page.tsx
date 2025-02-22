@@ -3,7 +3,7 @@
 import SearchData from "@/_common/SearchData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import { useDebounce } from "@/_utils/useDebounce";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
 import AlcoholSlider from "@/_components/search/AlcoholSlider";
 import { useCookies } from "react-cookie";
@@ -28,121 +28,97 @@ export default function Page() {
   const [isBottom, setIsBottom] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>(
-    [],
-  );
+  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>([]);
   const [searchResultCount, setSearchResultCount] = useState(0);
   const [searchResult, setSearchResult] = useState<IAlcoholSearchData[]>([]);
-  const [openOfficialSearchDataList, setOpenOfficialSearchDataList] =
-    useState(false);
-  const [openUnOfficialSearchDataList, setOpenUnOfficialSearchDataList] =
-    useState(false);
+  const [openOfficialSearchDataList, setOpenOfficialSearchDataList] = useState(false);
+  const [openUnOfficialSearchDataList, setOpenUnOfficialSearchDataList] = useState(false);
   const [openAlcoholTypeDataList, setOpenAlcoholTypeDataList] = useState(false);
   const [alcoholTypeDataCount, setAlcoholTypeDataCount] = useState(0);
-  const [alcoholTypeData, setAlcoholTypeData] = useState<IAlcoholTypeData[]>(
-    [],
-  );
+  const [alcoholTypeData, setAlcoholTypeData] = useState<IAlcoholTypeData[]>([]);
   const [selectedTab, setSelectedTab] = useState<IAlcoholTypeTab>({
     id: 1,
     value: "탁주",
   });
-  const [selectedSortedType, setSelectedSortedType] =
-    useState<IAlcoholSortedType>({
-      id: "NAME",
-      value: "가나다 순",
-    });
-  const [lastAlcoholicDrinksName, setLastAlcoholicDrinksName] = useState<
-    string | null
-  >();
+  const [selectedSortedType, setSelectedSortedType] = useState<IAlcoholSortedType>({
+    id: "NAME",
+    value: "가나다 순",
+  });
+  const [lastAlcoholicDrinksName, setLastAlcoholicDrinksName] = useState<string | null>();
   const [isTypeDataLast, setIsTypeDataLast] = useState(false);
   const [isSearchDataLast, setIsSearchDataLast] = useState(false);
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  const fetchAlcoholSearchData = useCallback(async () => {
+  const fetchAlcoholSearchData = useCallback(async (isReplacing: boolean) => {
     const data = await getAlcoholSearchResult(
       cookies.accessToken,
       searchQuery,
-      lastAlcoholicDrinksName,
+      isReplacing ? null : lastAlcoholicDrinksName,
     );
 
     if (!data) return;
 
-    setSearchResult((prev) => [...prev, ...(data.alcoholicDrinks ?? [])]);
+    setSearchResult(prev => isReplacing ? (data.alcoholicDrinks ?? []) : [...prev, ...(data.alcoholicDrinks ?? [])]);
     setSearchResultCount(data.totalCount ?? 0);
     setIsSearchDataLast(data.isLast ?? false);
 
     if (data.alcoholicDrinks?.length) {
-      setLastAlcoholicDrinksName(
-        data.alcoholicDrinks[data.alcoholicDrinks.length - 1].name,
-      );
+      setLastAlcoholicDrinksName(data.alcoholicDrinks[data.alcoholicDrinks.length - 1].name);
       setOpenOfficialSearchDataList(true);
     } else {
       setOpenUnOfficialSearchDataList(true);
     }
   }, [cookies.accessToken, searchQuery, lastAlcoholicDrinksName]);
 
-  const fetchAlcoholTypeData = useCallback(
-    async (
-      isReplacing: boolean,
-      tab?: IAlcoholTypeTab,
-      sortedType?: IAlcoholSortedType,
-      lastId?: number,
-    ) => {
-      const data = await getAlcoholTypeResult(
-        cookies.accessToken,
-        tab?.id ?? selectedTab.id,
-        sortedType?.id ?? selectedSortedType.id,
-        lastId,
-      );
+  const fetchAlcoholTypeData = useCallback(async (
+    isReplacing: boolean,
+    tab?: IAlcoholTypeTab,
+    sortedType?: IAlcoholSortedType,
+    lastId?: number,
+  ) => {
+    const data = await getAlcoholTypeResult(
+      cookies.accessToken,
+      tab?.id ?? selectedTab.id,
+      sortedType?.id ?? selectedSortedType.id,
+      lastId,
+    );
 
-      if (!data?.alcoholicDrinks) return;
+    if (!data?.alcoholicDrinks) return;
 
-      if (isReplacing) {
-        setAlcoholTypeData(data.alcoholicDrinks.content ?? []);
-        setIsTypeDataLast(false);
-      } else {
-        setAlcoholTypeData((prev) => [
-          ...prev,
-          ...(data.alcoholicDrinks.content ?? []),
-        ]);
-      }
+    setAlcoholTypeData(prev => 
+      isReplacing ? 
+      (data.alcoholicDrinks.content ?? []) : 
+      [...prev, ...(data.alcoholicDrinks.content ?? [])]
+    );
+    
+    setAlcoholTypeDataCount(data.totalCount ?? 0);
+    setIsTypeDataLast(data.isLast ?? false);
+    if (isReplacing) setIsTypeDataLast(false);
+  }, [cookies.accessToken, selectedTab.id, selectedSortedType.id]);
 
-      setAlcoholTypeDataCount(data.totalCount ?? 0);
-      setIsTypeDataLast(data.isLast ?? false);
-    },
-    [cookies.accessToken, selectedTab.id, selectedSortedType.id],
-  );
+  const handleAlcoholTypeClick = useCallback(async (tab: IAlcoholTypeTab) => {
+    setSelectedTab(tab);
+    setOpenAlcoholTypeDataList(true);
+    await fetchAlcoholTypeData(true, tab);
+  }, [fetchAlcoholTypeData]);
 
-  const handleAlcoholTypeClick = useCallback(
-    async (tab: IAlcoholTypeTab) => {
-      setSelectedTab(tab);
-      setOpenAlcoholTypeDataList(true);
-      await fetchAlcoholTypeData(true, tab);
-    },
-    [fetchAlcoholTypeData],
-  );
+  const handleQuerySearch = useCallback(async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      saveRecentSearchDataToLocalStorage({
+        localStorageKey: "TastingNoteRecentSearchList",
+        searchData: searchQuery,
+      });
+      setSearchResult([]);
+      setLastAlcoholicDrinksName(null);
+      await fetchAlcoholSearchData(true);
+    }
+  }, [searchQuery, fetchAlcoholSearchData]);
 
-  const handleQuerySearch = useCallback(
-    async (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter") {
-        saveRecentSearchDataToLocalStorage({
-          localStorageKey: "TastingNoteRecentSearchList",
-          searchData: searchQuery,
-        });
-        await fetchAlcoholSearchData();
-      }
-    },
-    [searchQuery, fetchAlcoholSearchData],
-  );
-
-  const handleSortedType = useCallback(
-    async (sortedType: IAlcoholSortedType) => {
-      setSelectedSortedType(sortedType);
-      await fetchAlcoholTypeData(true, undefined, sortedType);
-    },
-    [fetchAlcoholTypeData],
-  );
+  const handleSortedType = useCallback(async (sortedType: IAlcoholSortedType) => {
+    setSelectedSortedType(sortedType);
+    await fetchAlcoholTypeData(true, undefined, sortedType);
+  }, [fetchAlcoholTypeData]);
 
   const handleCloseSearchList = useCallback(() => {
     if (openOfficialSearchDataList) {
@@ -170,20 +146,15 @@ export default function Page() {
   useEffect(() => {
     const handleScroll = async () => {
       const isAtBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight;
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight;
 
       if (isAtBottom && !isBottom) {
         setIsBottom(true);
         if (openAlcoholTypeDataList && !isTypeDataLast) {
           await fetchAlcoholTypeData(false);
         }
-        if (
-          openOfficialSearchDataList &&
-          !isSearchDataLast &&
-          searchResult.length > 0
-        ) {
-          await fetchAlcoholSearchData();
+        if (openOfficialSearchDataList && !isSearchDataLast && searchResult.length > 0) {
+          await fetchAlcoholSearchData(false);
         }
       } else {
         setIsBottom(false);
@@ -203,67 +174,64 @@ export default function Page() {
     fetchAlcoholSearchData,
   ]);
 
+  const showSearchHeader = useMemo(() => 
+    !openOfficialSearchDataList && !openUnOfficialSearchDataList && !openAlcoholTypeDataList,
+    [openOfficialSearchDataList, openUnOfficialSearchDataList, openAlcoholTypeDataList]
+  );
+
+  const showSearchData = useMemo(() => 
+    !openAlcoholTypeDataList && !openOfficialSearchDataList && !openUnOfficialSearchDataList,
+    [openAlcoholTypeDataList, openOfficialSearchDataList, openUnOfficialSearchDataList]
+  );
+
   return (
     <div className="relative h-full w-full max-w-[560px]">
-      {!openOfficialSearchDataList &&
-        !openUnOfficialSearchDataList &&
-        !openAlcoholTypeDataList && <SearchHeader />}
+      {showSearchHeader && <SearchHeader />}
 
-      {!openAlcoholTypeDataList &&
-        !openOfficialSearchDataList &&
-        !openUnOfficialSearchDataList && (
-          <div>
-            <SearchData
-              searchQuery={searchQuery}
-              placeholder="전통주 또는 양조장 이름으로 검색해보세요."
-              handleChangeQuery={(e) => setSearchQuery(e.target.value)}
-              handleClearSearchQuery={() => setSearchQuery("")}
-              handleQuerySearch={handleQuerySearch}
-              handleFocus={() => setIsInputFocused(true)}
-            />
-            <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
-            {relatedSearchDataList.length > 0 &&
-              relatedSearchDataList.map((data: string, index: number) => (
-                <RelatedSearchResult
-                  key={index}
-                  searchedData={data}
-                  searchQuery={debouncedSearchQuery}
-                  localStorageKey="TastingNoteRecentSearchList"
-                  setQuery={setSearchQuery}
-                  setSearchResult={setSearchResult}
-                  handleOfficialDataSearchList={() =>
-                    setOpenOfficialSearchDataList(true)
-                  }
-                  handleUnOfficialDataSearchList={() =>
-                    setOpenUnOfficialSearchDataList(true)
-                  }
-                />
-              ))}
+      {showSearchData && (
+        <div>
+          <SearchData
+            searchQuery={searchQuery}
+            placeholder="전통주 또는 양조장 이름으로 검색해보세요."
+            handleChangeQuery={(e) => setSearchQuery(e.target.value)}
+            handleClearSearchQuery={() => setSearchQuery("")}
+            handleQuerySearch={handleQuerySearch}
+            handleFocus={() => setIsInputFocused(true)}
+          />
+          <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
+          {relatedSearchDataList.length > 0 &&
+            relatedSearchDataList.map((data: string, index: number) => (
+              <RelatedSearchResult
+                key={index}
+                searchedData={data}
+                searchQuery={debouncedSearchQuery}
+                localStorageKey="TastingNoteRecentSearchList"
+                setQuery={setSearchQuery}
+                setSearchResult={setSearchResult}
+                handleOfficialDataSearchList={() => setOpenOfficialSearchDataList(true)}
+                handleUnOfficialDataSearchList={() => setOpenUnOfficialSearchDataList(true)}
+              />
+            ))}
 
-            {debouncedSearchQuery?.length === 0 &&
-              (isInputFocused ? (
-                <RecentSearchList
-                  localStorageKey="TastingNoteRecentSearchList"
-                  setSearchQuery={setSearchQuery}
-                  setSearchResult={(searchResult: IAlcoholSearchResult) => {
-                    setIsSearchDataLast(searchResult.isLast);
-                    setSearchResult(searchResult.alcoholicDrinks);
-                    setOpenOfficialSearchDataList(
-                      searchResult.alcoholicDrinks.length > 0,
-                    );
-                    setOpenUnOfficialSearchDataList(
-                      searchResult.alcoholicDrinks.length === 0,
-                    );
-                  }}
-                  handleUnOfficialDataSearchList={() =>
-                    setOpenUnOfficialSearchDataList
-                  }
-                />
-              ) : (
-                <AlcoholSlider onAlcoholTypeClick={handleAlcoholTypeClick} />
-              ))}
-          </div>
-        )}
+          {debouncedSearchQuery?.length === 0 && (
+            isInputFocused ? (
+              <RecentSearchList
+                localStorageKey="TastingNoteRecentSearchList"
+                setSearchQuery={setSearchQuery}
+                setSearchResult={(searchResult: IAlcoholSearchResult) => {
+                  setIsSearchDataLast(searchResult.isLast);
+                  setSearchResult(searchResult.alcoholicDrinks);
+                  setOpenOfficialSearchDataList(searchResult.alcoholicDrinks.length > 0);
+                  setOpenUnOfficialSearchDataList(searchResult.alcoholicDrinks.length === 0);
+                }}
+                handleUnOfficialDataSearchList={() => setOpenUnOfficialSearchDataList}
+              />
+            ) : (
+              <AlcoholSlider onAlcoholTypeClick={handleAlcoholTypeClick} />
+            )
+          )}
+        </div>
+      )}
 
       {openAlcoholTypeDataList && (
         <AlcoholTypeData
@@ -287,9 +255,7 @@ export default function Page() {
           totalCount={searchResultCount}
           officialDataList={searchResult}
           query={searchQuery}
-          closeOfficialDataSearchResult={() =>
-            setOpenOfficialSearchDataList(false)
-          }
+          closeOfficialDataSearchResult={() => setOpenOfficialSearchDataList(false)}
           handleClearSearchQuery={() => setSearchQuery("")}
           handleCloseSearchList={handleCloseSearchList}
           isBottom={isBottom}
@@ -308,7 +274,7 @@ export default function Page() {
         />
       )}
 
-      {openAlcoholTypeDataList || openOfficialSearchDataList ? (
+      {(openAlcoholTypeDataList || openOfficialSearchDataList) ? (
         <ScrollUpFloatingBtn />
       ) : (
         <Navigation />

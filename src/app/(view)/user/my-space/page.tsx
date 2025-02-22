@@ -156,6 +156,38 @@ export default function Page() {
                 <p>작성된 자기소개가 없어요</p>
               )}
             </div>
+            <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-sm font-normal text-cool-grayscale-500">
+                  팔로잉
+                </p>
+                <p className="text-base font-bold text-cool-grayscale-800">
+                  {user.followings ?? 0}
+                </p>
+              </div>
+
+              <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
+
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-sm font-normal text-cool-grayscale-500">
+                  팔로워
+                </p>
+                <p className="text-base font-bold text-cool-grayscale-800">
+                  {user.followers ?? 0}
+                </p>
+              </div>
+
+              <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
+
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-sm font-normal text-cool-grayscale-500">
+                  총 게시글
+                </p>
+                <p className="text-base font-bold text-cool-grayscale-800">
+                  {user.documents ?? 0}
+                </p>
+              </div>
+            </div>
 
             <div className="flex flex-row">
               <button
@@ -186,7 +218,7 @@ export default function Page() {
               </button>
             </div>
           </div>
-          <div className="h-full overflow-y-auto pt-[238px] scrollbar-hide">
+          <div className="h-full overflow-y-auto pt-[290px] scrollbar-hide">
             {isTastingNoteClicked ? (
               <>
                 <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto px-4 py-6">
@@ -195,9 +227,11 @@ export default function Page() {
                       <NoteThumbnail key={note.TastingNoteId} {...note} />
                     ))
                   ) : (
-                    <p className="flex h-full items-center justify-center text-base font-medium text-slate-500">
-                      작성된 시음노트가 없어요
-                    </p>
+                    <div className="col-span-2 flex h-[calc(100vh-270px)] items-center justify-center">
+                      <p className="text-base font-medium text-slate-500">
+                        작성된 시음노트가 없어요
+                      </p>
+                    </div>
                   )}
                 </div>
                 <div ref={observerRef} className="loading-indicator">
@@ -217,9 +251,11 @@ export default function Page() {
                     <LifeList key={post.dailyLifeId} {...post} />
                   ))
                 ) : (
-                  <p className="flex h-full items-center justify-center text-base font-medium text-slate-500">
-                    작성된 일상생활이 없어요
-                  </p>
+                  <div className="col-span-2 flex h-[calc(100vh-270px)] items-center justify-center">
+                    <p className="text-base font-medium text-slate-500">
+                      작성된 일상생활이 없어요
+                    </p>
+                  </div>
                 )}
               </>
             )}

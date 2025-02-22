@@ -1,5 +1,6 @@
 "use client";
 
+import FollowButton from "@/_common/FollowButton";
 import LifeList from "@/_common/LifeList";
 import Loading from "@/_common/Loading";
 import NoteThumbnail from "@/_common/NoteThumbnail";
@@ -13,6 +14,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+import { followUser } from "@/app/api/user/followUser";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -21,6 +24,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [lastDailyLifeId, setLastDailyLifeId] = useState(0);
   const [isLifeLast, setIsLifeLast] = useState(false);
   const [noteList, setNoteList] = useState<INoteThumbnail[]>([]);
+  const [isFollowed, setIsFollowed] = useState(false);
   const [lastTastingNoteId, setLastTastingNoteId] = useState(0);
   const [isNoteLast, setIsNoteLast] = useState(false);
   const [isTastingNoteClicked, setIsTastingNoteClicked] =
@@ -50,7 +54,7 @@ export default function Page({ params }: { params: { id: string } }) {
           },
         },
       );
-
+      setIsFollowed(res.data.result.isFollowed);
       const notes = res.data.result.tastingNoteSummaries;
       setNoteList(notes.content ?? []);
       setIsNoteLast(notes.last);
@@ -143,6 +147,17 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   };
 
+  const handleFollowButton = async () => {
+    setIsFollowed(!isFollowed);
+    if (isFollowed) {
+      toast("팔로우 취소하였습니다.");
+    } else {
+      toast("팔로우 하였습니다.");
+    }
+    // TODO: 팔로우 버튼 작동 하지 않음
+    const data = await followUser(userId);
+    console.log(data);
+  };
   if (isLoadingUser) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
   return (
@@ -190,6 +205,45 @@ export default function Page({ params }: { params: { id: string } }) {
               )}
             </div>
 
+            <div className="flex justify-center">
+              <FollowButton
+                textSize="sm"
+                isFollowed={isFollowed}
+                onChangeFollow={handleFollowButton}
+              />
+            </div>
+            <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-sm font-normal text-cool-grayscale-500">
+                  팔로잉
+                </p>
+                <p className="text-base font-bold text-cool-grayscale-800">
+                  {user.followings ?? 0}
+                </p>
+              </div>
+
+              <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
+
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-sm font-normal text-cool-grayscale-500">
+                  팔로워
+                </p>
+                <p className="text-base font-bold text-cool-grayscale-800">
+                  {user.followers ?? 0}
+                </p>
+              </div>
+
+              <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
+
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-sm font-normal text-cool-grayscale-500">
+                  총 게시글
+                </p>
+                <p className="text-base font-bold text-cool-grayscale-800">
+                  {user.documents ?? 0}
+                </p>
+              </div>
+            </div>
             <div className="flex flex-row">
               <button
                 className={`flex h-11 flex-row items-center justify-center ${isTastingNoteClicked ? "border-b-2 border-black" : "border-b-2 border-cool-grayscale-300"} w-1/2`}
@@ -219,17 +273,19 @@ export default function Page({ params }: { params: { id: string } }) {
               </button>
             </div>
           </div>
-          <div className="h-full overflow-y-auto px-4 pt-[270px] scrollbar-hide">
+          <div className="h-full overflow-y-auto px-4 pt-[340px] scrollbar-hide">
             {isTastingNoteClicked ? (
-              <div className="grid grid-cols-2 gap-x-2 gap-y-5">
+              <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto py-6">
                 {noteList && noteList.length > 0 ? (
                   noteList.map((note) => (
                     <NoteThumbnail key={note.TastingNoteId} {...note} />
                   ))
                 ) : (
-                  <p className="flex h-full items-center justify-center text-base font-medium text-slate-500">
-                    작성된 시음노트가 없어요
-                  </p>
+                  <div className="col-span-2 flex h-[calc(100vh-270px)] items-center justify-center">
+                    <p className="text-base font-medium text-slate-500">
+                      작성된 시음노트가 없어요
+                    </p>
+                  </div>
                 )}
               </div>
             ) : (
@@ -239,9 +295,11 @@ export default function Page({ params }: { params: { id: string } }) {
                     <LifeList key={post.dailyLifeId} {...post} />
                   ))
                 ) : (
-                  <p className="flex h-full items-center justify-center text-base font-medium text-slate-500">
-                    작성된 일상생활이 없어요
-                  </p>
+                  <div className="flex h-[calc(100vh-270px)] items-center justify-center">
+                    <p className="text-base font-medium text-slate-500">
+                      작성된 일상생활이 없어요
+                    </p>
+                  </div>
                 )}
               </>
             )}
