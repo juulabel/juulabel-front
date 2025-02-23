@@ -14,9 +14,9 @@ function KakaoLoginHandlerComponent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
+  const authCode = searchParams.get("code");
 
   useEffect(() => {
-    const authCode = searchParams.get("code");
     if (authCode) {
       const loginHandler = async () => {
         try {
@@ -46,7 +46,7 @@ function KakaoLoginHandlerComponent() {
       };
       loginHandler();
     }
-  });
+  }, [authCode]);
 
   return <div>카카오 소셜 로그인</div>;
 }
