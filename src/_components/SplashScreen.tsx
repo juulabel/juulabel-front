@@ -39,6 +39,7 @@ export default function SplashScreen() {
           width={226}
           height={148}
           alt="주라벨 메인 로고2"
+          priority
         />
         <div className="mt-8 flex w-full flex-row justify-center text-xl text-white">
           <span>우리술,</span>

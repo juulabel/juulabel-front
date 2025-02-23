@@ -35,6 +35,7 @@ export default function LoginForm() {
           height={112}
           src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/main_logo.png`}
           alt="주라벨 메인로고"
+          priority
         />
         <h2 className="mt-4 text-xl font-bold text-primary-700">
           주라벨에 오신 것을 환영해요!
