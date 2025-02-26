@@ -47,12 +47,17 @@ export default function Page() {
   };
 
   const handleDeleteBtn = async () => {
+    const reason =
+      selectedReason === deleteList[deleteList.length - 1]
+        ? etcReport
+        : selectedReason;
+
     const data = await deleteUser({
       accessToken: cookies.accessToken,
-      reason: etcReport,
+      reason: reason,
     });
-    if (!data.success) {
-      toast("내부 서버 오류 입니다." + data.message);
+    if (!data?.success) {
+      toast("내부 서버 오류 입니다." + data?.message);
       return;
     }
     setIsFinal(true);

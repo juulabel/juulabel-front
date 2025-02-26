@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
 import { GoChevronLeft } from "react-icons/go";
 
 interface ITopHeader {
@@ -13,6 +14,7 @@ interface ITopHeader {
 export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
   const router = useRouter();
   const totalSteps = step + rest; // 전체 단계 수
+  const pathname = usePathname();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
@@ -28,8 +30,8 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
   };
 
   return (
-    <div>
-      <div className="relative flex h-16 flex-row items-center justify-center p-4">
+    <div className="fixed top-0 h-16 max-h-16 w-full max-w-[560px] bg-white">
+      <div className="flex h-16 flex-row items-center justify-center p-4">
         {step != 0 && (
           <button onClick={handleClick} className="absolute left-4 p-1">
             <GoChevronLeft size={24} />
@@ -37,16 +39,20 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
         )}
         <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
       </div>
-      <div className="flex">
-        <div
-          className="h-1 bg-primary-700"
-          style={{ width: `${(step / totalSteps) * 100}%` }}
-        />
-        <div
-          className="h-1 bg-primary-300"
-          style={{ width: `${(rest / totalSteps) * 100}%` }}
-        />
-      </div>
+      {pathname.startsWith("/register") && (
+        <div className="relative flex">
+          <motion.div
+            className="absolute z-50 h-1 bg-primary-700"
+            initial={{ width: 0 }}
+            animate={{ width: `${(step / totalSteps) * 100}%` }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+          />
+          <div
+            className="absolute h-1 bg-primary-300"
+            style={{ width: `100%` }}
+          />
+        </div>
+      )}
     </div>
   );
 }

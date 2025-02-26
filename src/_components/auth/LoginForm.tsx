@@ -27,9 +27,9 @@ export default function LoginForm() {
   }, []);
 
   return (
-    <div className="h-full w-full max-w-[560px] animate-fade-in-up">
+    <div className="flex h-full w-full max-w-[560px] animate-fade-in-up flex-col items-center justify-center gap-5">
       <TopHeader title="로그인" step={0} rest={0} />
-      <div className="mb-[60px] mt-[136px] flex flex-col items-center justify-center">
+      <div className="mb-4 flex flex-col items-center justify-center">
         <Image
           width={228}
           height={112}
@@ -61,8 +61,6 @@ export default function LoginForm() {
         />
         <p className="ml-1 text-base font-medium">카카오로 시작하기</p>
       </LoginButton>
-
-      <div className="mb-4" />
 
       <LoginButton buttonType="google" handleButton={handleGoogleLogin}>
         <div className="absolute bottom-9 right-[280px]">

@@ -18,7 +18,6 @@ const TraditionalLiquorBackground = React.memo(() => {
         alt="Landscape"
         quality={50}
         priority
-        formats={["image/webp", "image/avif"]}
       />
       <div className={"absolute inset-0 bg-black opacity-40"}></div>
     </>

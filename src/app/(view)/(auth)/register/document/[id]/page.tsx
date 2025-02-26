@@ -32,13 +32,13 @@ export default function Page() {
     ));
   };
   return (
-    <div className="h-full w-full max-w-[560px]">
+    <>
       <TopHeader
         rest={0}
         step={0}
         title={`${termsDetail.title} ${termsDetail.is_required ? "(필수)" : "(선택)"}`}
       />
       {convertNewLinesToBreaks(termsDetail.content)}
-    </div>
+    </>
   );
 }
