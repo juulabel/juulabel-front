@@ -44,7 +44,7 @@ export default function RelatedSearchResult({
       searchData: searchedData,
     });
     const data = await getAlcoholSearchResult(
-      cookies.accessToken,
+    cookies.accessToken,
       searchedData,
       null,
     );
