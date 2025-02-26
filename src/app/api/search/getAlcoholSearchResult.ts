@@ -31,7 +31,7 @@ export async function getAlcoholSearchResult(
     );
     if (response.status === 200 && response.data) {
       console.log(response.data);
-      
+
       return response.data.result;
     } else
       throw new Error(

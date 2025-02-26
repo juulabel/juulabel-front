@@ -9,7 +9,7 @@ import useTastingNoteStore from "@/_store/tastingNoteCountState";
 import { useIsFetching } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
 import useTraditionalLiquorList from "@/_utils/hooks/useTraditionalLiquorList";
-
+import { useRouter } from "next/navigation";
 interface Props {
   children: ReactNode;
   id: number;
@@ -20,6 +20,7 @@ export default function ShareNoteForTraditionalLiquorLayout({
   id,
 }: Props) {
   const { data, isError, isFetched } = useTraditionalLiquorList(id);
+  const router = useRouter();
 
   const { tastingNoteTotalCount } = useTastingNoteStore();
   const isFetching = useIsFetching({
@@ -34,14 +35,17 @@ export default function ShareNoteForTraditionalLiquorLayout({
       id={"layout-liquor"}
     >
       <header className="fixed top-0 z-50 flex h-[64px] w-full max-w-[560px] items-center justify-between border-b border-gray-300 bg-white px-3">
-        <Link href={`/share/liquor/${id}`} className="cursor-pointer">
-          <Image
-            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/left_arrow.svg`}
-            width={32}
-            height={32}
-            alt="left"
-          />
-        </Link>
+        <Image
+          onClick={() => {
+            router.back();
+          }}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/left_arrow.svg`}
+          width={32}
+          height={32}
+          alt="left"
+          className="cursor-pointer"
+        />
+
         <div className="text-[18px] font-semibold text-[#334155]">
           시음노트 모아보기
         </div>
