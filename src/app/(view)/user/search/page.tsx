@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { followUser } from "@/app/api/user/followUser";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import UserHeader from "@/_components/user/UserHeader";
 
 interface ISearchUser {
   id: number;
@@ -51,7 +52,7 @@ export default function Page() {
     }
 
     // Make API call in background
-    followUser(id);
+    followUser(id.toString());
   };
 
   useEffect(() => {
@@ -91,7 +92,11 @@ export default function Page() {
 
   return (
     <div className="h-full w-full max-w-[560px]">
-      <TopHeader title="유저 검색" rest={0} step={0} />
+      <UserHeader
+        title="유저 검색"
+        handleBackButton={() => router.back()}
+        bottomBorder={false}
+      />
       <SearchData
         searchQuery={searchQuery}
         placeholder="닉네임으로 검색해보세요."

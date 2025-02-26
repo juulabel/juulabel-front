@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { followUser } from "@/app/api/user/followUser";
@@ -20,33 +20,34 @@ import { followUser } from "@/app/api/user/followUser";
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [cookies] = useCookies(["accessToken"]);
-  const [lifeList, setlifeList] = useState<ILifeList[]>([]);
-  const [lastDailyLifeId, setLastDailyLifeId] = useState(0);
-  const [isLifeLast, setIsLifeLast] = useState(false);
-  const [noteList, setNoteList] = useState<INoteThumbnail[]>([]);
-  const [isFollowed, setIsFollowed] = useState(false);
-  const [lastTastingNoteId, setLastTastingNoteId] = useState(0);
-  const [isNoteLast, setIsNoteLast] = useState(false);
-  const [isTastingNoteClicked, setIsTastingNoteClicked] =
-    useState<boolean>(true);
-  const [isDailyLifeClicked, setIsDailyLifeClicked] = useState<boolean>(false);
-  const [isBottom, setIsBottom] = useState(false);
-  const userId = Number(params.id);
+
+  const [contentState, setContentState] = useState({
+    lifeList: [] as ILifeList[],
+    noteList: [] as INoteThumbnail[],
+    lastDailyLifeId: 0,
+    lastTastingNoteId: 0,
+    isLifeLast: false,
+    isNoteLast: false,
+    isFollowed: false,
+    isTastingNoteClicked: true,
+    isDailyLifeClicked: false,
+    isBottom: false,
+  });
 
   const {
     data: user,
     isLoading: isLoadingUser,
     error,
   } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => getUserProfile(userId, cookies.accessToken),
+    queryKey: ["user", params.id],
+    queryFn: () => getUserProfile(params.id),
   });
 
-  const { data, isLoading } = useQuery<INoteThumbnail[]>({
-    queryKey: [`${userId}-note`],
+  useQuery<INoteThumbnail[]>({
+    queryKey: [`${params.id}-note`],
     queryFn: async () => {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${userId}/tasting_notes?pageSize=15`,
+        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${params.id}/tasting_notes?pageSize=15`,
         {
           withCredentials: true,
           headers: {
@@ -54,112 +55,122 @@ export default function Page({ params }: { params: { id: string } }) {
           },
         },
       );
-      setIsFollowed(res.data.result.isFollowed);
+
       const notes = res.data.result.tastingNoteSummaries;
-      setNoteList(notes.content ?? []);
-      setIsNoteLast(notes.last);
-      setLastTastingNoteId(
-        notes.content[notes.content.length - 1].TastingNoteId ?? 0,
-      );
+      setContentState((prev) => ({
+        ...prev,
+        isFollowed: res.data.result.isFollowed,
+        noteList: notes.content ?? [],
+        isNoteLast: notes.last,
+        lastTastingNoteId:
+          notes.content[notes.content.length - 1]?.TastingNoteId ?? 0,
+      }));
+
       return notes.content;
     },
   });
 
+  const fetchContent = useCallback(
+    async (type: "notes" | "lives") => {
+      const endpoint =
+        type === "notes"
+          ? `/tasting_notes?pageSize=15&lastTastingNoteId=${contentState.lastTastingNoteId}`
+          : `/daily-lives?pageSize=15&lastDailyLifeId=${contentState.lastDailyLifeId}`;
+
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${params.id}${endpoint}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${cookies.accessToken}`,
+          },
+        },
+      );
+
+      const content =
+        type === "notes"
+          ? res.data.result.tastingNoteSummaries
+          : res.data.result.dailyLifeSummaries;
+
+      setContentState((prev) => ({
+        ...prev,
+        [type === "notes" ? "noteList" : "lifeList"]: content.content,
+        [type === "notes" ? "isNoteLast" : "isLifeLast"]: content.last,
+        [type === "notes" ? "lastTastingNoteId" : "lastDailyLifeId"]:
+          content.content.length > 0
+            ? content.content[content.content.length - 1][
+                type === "notes" ? "TastingNoteId" : "dailyLifeId"
+              ]
+            : prev[type === "notes" ? "lastTastingNoteId" : "lastDailyLifeId"],
+      }));
+    },
+    [
+      params.id,
+      cookies.accessToken,
+      contentState.lastTastingNoteId,
+      contentState.lastDailyLifeId,
+    ],
+  );
+
   useEffect(() => {
     const handleScroll = async () => {
-      if (
+      const isAtBottom =
         window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight
-      ) {
-        if (!isBottom) {
-          setIsBottom(true);
-          if (
-            isTastingNoteClicked &&
-            !isNoteLast &&
-            user!.tastingNoteCount > 0
-          ) {
-            await fetchTastingNotes();
-          }
-          if (isDailyLifeClicked && !isLifeLast && user!.dailyLifeCount > 0) {
-            await fetchDailyLifes();
-          }
+        document.documentElement.scrollHeight;
+
+      if (isAtBottom && !contentState.isBottom) {
+        setContentState((prev) => ({ ...prev, isBottom: true }));
+
+        if (
+          contentState.isTastingNoteClicked &&
+          !contentState.isNoteLast &&
+          user?.tastingNoteCount > 0
+        ) {
+          await fetchContent("notes");
         }
-      } else {
-        setIsBottom(false);
+        if (
+          contentState.isDailyLifeClicked &&
+          !contentState.isLifeLast &&
+          user?.dailyLifeCount > 0
+        ) {
+          await fetchContent("lives");
+        }
+      } else if (!isAtBottom) {
+        setContentState((prev) => ({ ...prev, isBottom: false }));
       }
     };
+
     window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [contentState, user, fetchContent]);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  });
+  const handleTabClick = async (type: "notes" | "lives") => {
+    setContentState((prev) => ({
+      ...prev,
+      isTastingNoteClicked: type === "notes",
+      isDailyLifeClicked: type === "lives",
+    }));
 
-  const handleTastingNoteClick = () => {
-    setIsTastingNoteClicked(true);
-    setIsDailyLifeClicked(false);
-  };
-  const handleDailyLifeClick = () => {
-    setIsTastingNoteClicked(false);
-    setIsDailyLifeClicked(true);
-    if (!isLifeLast && user!.dailyLifeCount > 0) {
-      fetchDailyLifes();
-    }
-  };
-
-  const fetchDailyLifes = async () => {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${userId}/daily-lives?pageSize=15&lastDailyLifeId=${lastDailyLifeId}`,
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${cookies.accessToken}`,
-        },
-      },
-    );
-
-    const life = res.data.result.dailyLifeSummaries;
-
-    setlifeList(life.content);
-    setIsLifeLast(life.last);
-    if (life.content.length > 0) {
-      setLastDailyLifeId(life.content[life.content.length - 1].dailyLifeId);
-    }
-  };
-
-  const fetchTastingNotes = async () => {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${userId}/tasting_notes?pageSize=15&lastTastingNoteId=${lastTastingNoteId}`,
-      {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${cookies.accessToken}`,
-        },
-      },
-    );
-
-    const note = res.data.result.tastingNoteSummaries;
-
-    setNoteList(note.content);
-    setIsNoteLast(note.last);
-    if (note.content.length > 0) {
-      setLastTastingNoteId(note.content[note.content.length - 1].TastingNoteId);
+    if (
+      type === "lives" &&
+      !contentState.isLifeLast &&
+      user?.dailyLifeCount > 0
+    ) {
+      await fetchContent("lives");
     }
   };
 
   const handleFollowButton = async () => {
-    setIsFollowed(!isFollowed);
-    if (isFollowed) {
-      toast("팔로우 취소하였습니다.");
-    } else {
-      toast("팔로우 하였습니다.");
-    }
-    // TODO: 팔로우 버튼 작동 하지 않음
-    const data = await followUser(userId);
-    console.log(data);
+    setContentState((prev) => ({ ...prev, isFollowed: !prev.isFollowed }));
+    toast(
+      contentState.isFollowed ? "팔로우 취소하였습니다." : "팔로우 하였습니다.",
+    );
+    await followUser(params.id);
   };
+
   if (isLoadingUser) return <Loading />;
   if (error) return <div>Error : {error.message}</div>;
+
   return (
     <>
       {user && (
@@ -205,15 +216,20 @@ export default function Page({ params }: { params: { id: string } }) {
               )}
             </div>
 
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
               <FollowButton
                 textSize="sm"
-                isFollowed={isFollowed}
+                isFollowed={contentState.isFollowed}
                 onChangeFollow={handleFollowButton}
               />
             </div>
             <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
-              <div className="flex flex-col items-center justify-center">
+              <div
+                onClick={() =>
+                  router.push(`/user/profile/${params.id}/following`)
+                }
+                className="flex cursor-pointer flex-col items-center justify-center"
+              >
                 <p className="text-sm font-normal text-cool-grayscale-500">
                   팔로잉
                 </p>
@@ -224,7 +240,12 @@ export default function Page({ params }: { params: { id: string } }) {
 
               <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
 
-              <div className="flex flex-col items-center justify-center">
+              <div
+                onClick={() =>
+                  router.push(`/user/profile/${params.id}/followers`)
+                }
+                className="flex cursor-pointer flex-col items-center justify-center"
+              >
                 <p className="text-sm font-normal text-cool-grayscale-500">
                   팔로워
                 </p>
@@ -243,14 +264,14 @@ export default function Page({ params }: { params: { id: string } }) {
                   {user.documents ?? 0}
                 </p>
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-row">
               <button
-                className={`flex h-11 flex-row items-center justify-center ${isTastingNoteClicked ? "border-b-2 border-black" : "border-b-2 border-cool-grayscale-300"} w-1/2`}
-                onClick={() => handleTastingNoteClick()}
+                className={`flex h-11 flex-row items-center justify-center border-b-2 ${contentState.isTastingNoteClicked ? "border-black" : "border-cool-grayscale-300"} w-1/2`}
+                onClick={() => handleTabClick("notes")}
               >
                 <p
-                  className={`${isTastingNoteClicked ? "text-base text-black" : "text-cool-grayscale-600"}`}
+                  className={`${contentState.isTastingNoteClicked ? "text-base text-black" : "text-cool-grayscale-600"}`}
                 >
                   시음노트
                 </p>
@@ -259,11 +280,11 @@ export default function Page({ params }: { params: { id: string } }) {
                 </p>
               </button>
               <button
-                className={`flex h-11 flex-row items-center justify-center ${isDailyLifeClicked ? "border-b-2 border-black" : "border-b-2 border-cool-grayscale-300"} w-1/2`}
-                onClick={() => handleDailyLifeClick()}
+                className={`flex h-11 flex-row items-center justify-center border-b-2 ${contentState.isDailyLifeClicked ? "border-black" : "border-cool-grayscale-300"} w-1/2`}
+                onClick={() => handleTabClick("lives")}
               >
                 <p
-                  className={`${isDailyLifeClicked ? "text-base text-black" : "text-cool-grayscale-600"} `}
+                  className={`${contentState.isDailyLifeClicked ? "text-base text-black" : "text-cool-grayscale-600"} `}
                 >
                   일상생활
                 </p>
@@ -273,11 +294,11 @@ export default function Page({ params }: { params: { id: string } }) {
               </button>
             </div>
           </div>
-          <div className="h-full overflow-y-auto px-4 pt-[340px] scrollbar-hide">
-            {isTastingNoteClicked ? (
+          <div className="h-full overflow-y-auto px-4 pt-[240px] scrollbar-hide">
+            {contentState.isTastingNoteClicked ? (
               <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto py-6">
-                {noteList && noteList.length > 0 ? (
-                  noteList.map((note) => (
+                {contentState.noteList.length > 0 ? (
+                  contentState.noteList.map((note) => (
                     <NoteThumbnail key={note.TastingNoteId} {...note} />
                   ))
                 ) : (
@@ -290,8 +311,8 @@ export default function Page({ params }: { params: { id: string } }) {
               </div>
             ) : (
               <>
-                {lifeList && lifeList.length > 0 ? (
-                  lifeList.map((post) => (
+                {contentState.lifeList.length > 0 ? (
+                  contentState.lifeList.map((post) => (
                     <LifeList key={post.dailyLifeId} {...post} />
                   ))
                 ) : (

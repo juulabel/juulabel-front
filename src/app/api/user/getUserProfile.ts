@@ -1,20 +1,17 @@
-import axios from "axios";
 import { instance } from "../axios";
+import { Cookies } from "react-cookie";
 
-export async function getUserProfile(id: number, token: string) {
+export async function getUserProfile(id: string) {
   try {
+    const cookies = new Cookies();
+
     const response = await instance.get(`/v1/api/members/${id}/profile`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${cookies.get("accessToken")}`,
       },
     });
     if (response.status === 200 && response.data) return response.data.result;
-    else
-      throw new Error(
-        `Unexpected response : ${response.status} ${response.statusText}`,
-      );
   } catch (error) {
     console.error(error);
-    return null;
   }
 }

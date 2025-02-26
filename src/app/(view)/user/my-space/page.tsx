@@ -156,7 +156,7 @@ export default function Page() {
                 <p>작성된 자기소개가 없어요</p>
               )}
             </div>
-            <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
+            {/* <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
               <div className="flex flex-col items-center justify-center">
                 <p className="text-sm font-normal text-cool-grayscale-500">
                   팔로잉
@@ -187,7 +187,7 @@ export default function Page() {
                   {user.documents ?? 0}
                 </p>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex flex-row">
               <button
@@ -218,7 +218,7 @@ export default function Page() {
               </button>
             </div>
           </div>
-          <div className="h-full overflow-y-auto pt-[290px] scrollbar-hide">
+          <div className="h-full overflow-y-auto pt-[240px] scrollbar-hide">
             {isTastingNoteClicked ? (
               <>
                 <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto px-4 py-6">
