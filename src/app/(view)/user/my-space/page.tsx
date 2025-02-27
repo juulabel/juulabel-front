@@ -15,7 +15,6 @@ import { getMyNote } from "@/app/api/user/getMyNote";
 import { getMySpace } from "@/app/api/user/getMySpace";
 
 import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -157,39 +156,48 @@ export default function Page() {
               )}
             </div>
             {/* <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
-              <div className="flex flex-col items-center justify-center">
+              <Link
+                href={`/user/profile/${user.id}/following`}
+                className="flex flex-col items-center justify-center"
+              >
                 <p className="text-sm font-normal text-cool-grayscale-500">
                   팔로잉
                 </p>
                 <p className="text-base font-bold text-cool-grayscale-800">
-                  {user.followings ?? 0}
+                  {user.followingCount ?? 0}
                 </p>
-              </div>
+              </Link>
 
               <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
 
-              <div className="flex flex-col items-center justify-center">
+              <Link
+                href={`/user/profile/${user.id}/followers`}
+                className="flex flex-col items-center justify-center"
+              >
                 <p className="text-sm font-normal text-cool-grayscale-500">
                   팔로워
                 </p>
                 <p className="text-base font-bold text-cool-grayscale-800">
-                  {user.followers ?? 0}
+                  {user.followerCount ?? 0}
                 </p>
-              </div>
+              </Link>
 
               <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
 
-              <div className="flex flex-col items-center justify-center">
+              <Link
+                href={`/user/profile/${user.id}/posts`}
+                className="flex flex-col items-center justify-center"
+              >
                 <p className="text-sm font-normal text-cool-grayscale-500">
                   총 게시글
                 </p>
                 <p className="text-base font-bold text-cool-grayscale-800">
-                  {user.documents ?? 0}
+                  {user.myTastingNoteCount + user.myDailyLifeCount}
                 </p>
-              </div>
+              </Link>
             </div> */}
 
-            <div className="flex flex-row">
+            <div className="flex flex-row pt-4">
               <button
                 className={`flex h-11 flex-row items-center justify-center ${isTastingNoteClicked ? "border-b-2 border-black" : "border-b-2 border-cool-grayscale-300"} w-1/2`}
                 onClick={() => handleTastingNoteTab()}
@@ -218,7 +226,7 @@ export default function Page() {
               </button>
             </div>
           </div>
-          <div className="h-full overflow-y-auto pt-[240px] scrollbar-hide">
+          <div className="h-full overflow-y-auto pt-[250px] scrollbar-hide">
             {isTastingNoteClicked ? (
               <>
                 <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto px-4 py-6">
