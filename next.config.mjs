@@ -2,7 +2,6 @@
 const nextConfig = {
   siteUrl: "https://juulabel.com/app",
   basePath: "/app",
-  // assetPrefix: "/app",
   reactStrictMode: false,
   images: {
     domains: [
@@ -14,8 +13,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "*.cloudfront.net",
+      },
+      {
+        protocol: "https",
         hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",
-        port: "",
         pathname: "member/**",
       },
     ],
@@ -29,7 +31,7 @@ const nextConfig = {
       use: ["@svgr/webpack"],
     });
 
-    // fixing the msw error (_http_common not found)
+    // Fixing the msw error (_http_common not found)
     if (isServer) {
       config.externals = [...(config.externals || []), "_http_common"];
       config.target = "node";
@@ -38,4 +40,5 @@ const nextConfig = {
     return config;
   },
 };
+
 export default nextConfig;

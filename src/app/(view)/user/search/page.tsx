@@ -128,9 +128,8 @@ export default function Page() {
                         width={44}
                         height={44}
                         src={
-                          user.profileImage
-                            ? user.profileImage
-                            : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kakao_icon.png`
+                          user.profileImage ??
+                          `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
                         }
                         alt="유저 이미지"
                         className="rounded-full"
