@@ -10,15 +10,12 @@ export async function deleteUser({
   reason: string;
 }) {
   try {
-    const response = await instance.post(
-      requests.deleteMe,
-      { withdrawalReason: reason },
-      {
-        headers: {
-          accessToken: accessToken,
-        },
+    const response = await instance.delete(requests.deleteMe, {
+      data: { withdrawalReason: reason },
+      headers: {
+        accessToken: accessToken,
       },
-    );
+    });
 
     if (response.status === 200 && response.data) {
       return response.data;

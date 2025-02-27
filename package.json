@@ -21,6 +21,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.12",
     "event-source-polyfill": "^1.0.31",
+    "framer-motion": "^12.4.7",
     "next": "14.2.13",
     "nookies": "^2.5.2",
     "react": "^18",

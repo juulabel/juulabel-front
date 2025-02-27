@@ -63,6 +63,7 @@ export default function Notes() {
       <ServerToast
         text="데이터를 불러오는 중 에러가 발생했습니다."
         redirectPath="/"
+        cookieDelete
       />
     );
   }

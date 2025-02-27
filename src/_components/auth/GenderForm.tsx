@@ -15,11 +15,12 @@ export default function GenderForm({
   onChangeGenderCheck,
   onChangeGender,
 }: IGender) {
-  const handleGender = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleGender = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    gender: "MALE" | "FEMALE",
+  ) => {
     event.preventDefault();
-    onChangeGender(
-      event.currentTarget.textContent === "남성" ? "MALE" : "FEMALE",
-    );
+    onChangeGender(gender);
   };
   return (
     <div>
@@ -41,14 +42,14 @@ export default function GenderForm({
         <button
           type="button"
           className={`mx-[2%] h-12 w-[43%] rounded-[8px] border-[1px] border-cool-grayscale-300 text-base font-bold leading-6 ${maleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
-          onClick={(e) => handleGender(e)}
+          onClick={(e) => handleGender(e, "MALE")}
         >
           남성
         </button>
         <button
           type="button"
           className={`mx-[2%] h-12 w-[43%] rounded-[8px] border-[1px] border-cool-grayscale-300 text-base font-bold leading-6 ${femaleClicked ? "border-2 border-primary-700 bg-[#FF823C] bg-opacity-10" : ""}`}
-          onClick={(e) => handleGender(e)}
+          onClick={(e) => handleGender(e, "FEMALE")}
         >
           여성
         </button>

@@ -61,7 +61,11 @@ export default function RegisterConfirmModal({
               성별
             </div>
             <div className="shrink grow basis-0 text-right text-base font-normal leading-normal text-slate-600">
-              {genderCheck ? "성별 체크 안함" : gender}
+              {genderCheck
+                ? "성별 체크 안함"
+                : gender === "MALE"
+                  ? "남성"
+                  : "여성"}
             </div>
           </div>
         </div>

@@ -46,7 +46,8 @@ export default function Page() {
     );
   };
   const handleRegister = () => {
-    registerStore.setGender(gender === "MALE" ? "남성" : "여성");
+    // registerStore.setGender(gender === "MALE" ? "남성" : "여성");
+    registerStore.setGender(gender);
     registerStore.setGendercheck(genderCheck);
     registerStore.setPreferredAlcoholType(alcoholTypes);
     setRegisterConfirmModalOpen(true);
@@ -112,7 +113,7 @@ export default function Page() {
 
   return (
     registerStore.nickname && (
-      <div className="h-full w-full max-w-[560px]">
+      <>
         <TopHeader
           title="회원가입"
           step={3}
@@ -163,7 +164,7 @@ export default function Page() {
             handleRegisterConfirmModalClose={handleRegisterConfirmModalClose}
           />
         )}
-      </div>
+      </>
     )
   );
 }
