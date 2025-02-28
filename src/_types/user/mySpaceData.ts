@@ -5,7 +5,7 @@ export interface IMySpace {
   myDailyLifeCount: number;
   myTastingNoteCount: number;
   savedTastingNoteCount: number;
-  followings: number | null;
-  followers: number | null;
+  followingCount: number | null;
+  followerCount: number | null;
   documents: number | null;
 }

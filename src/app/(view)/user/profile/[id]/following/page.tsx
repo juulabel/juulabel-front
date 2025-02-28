@@ -42,6 +42,8 @@ export default function FollowingPage({ params }: { params: { id: string } }) {
     isFollowerClicked: false,
   });
 
+  console.log(data);
+
   return (
     <div className="h-full w-full max-w-[560px]">
       <UserHeader
