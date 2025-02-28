@@ -6,6 +6,7 @@ const nextConfig = {
   images: {
     domains: [
       "via.placeholder.com",
+      "d3jwyw9rpnxu8p.cloudfront.net",
       "juulabel.s3.ap-northeast-2.amazonaws.com",
       "picsum.photos",
       "drive.google.com",

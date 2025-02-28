@@ -21,7 +21,7 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
           <div className="flex space-x-3">
             <Link href="/follow">
               <Image
-                src="/images/icons/header/add-people.png"
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/header/add-people.png`}
                 width="24"
                 height="24"
                 alt="add people"
