@@ -44,7 +44,7 @@ export default function OfficialDataThumbnail({
         <Image
           src={
             // thumbnail ??
-            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType.name)}.png`
+            `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType.name)}.png`
           }
           alt="시음노트 썸네일"
           fill

@@ -88,7 +88,7 @@ function WriteTastingNote() {
   };
 
   return (
-    <div className="h-full w-full max-w-[560px]">
+    <div className="h-full w-full max-w-[560px] pt-16">
       {renderHeaderComponent()}
       {renderStepComponent()}
     </div>

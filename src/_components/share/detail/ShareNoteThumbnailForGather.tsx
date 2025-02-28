@@ -45,7 +45,7 @@ export default function ShareNoteThumbnailForGather({
         <Image
           src={
             thumbnailPath ??
-            `/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
+            `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
           }
           alt="시음노트 썸네일"
           sizes="50vw"
