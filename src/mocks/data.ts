@@ -1,3 +1,5 @@
+import { INoteThumbnail } from "@/_types/share";
+
 export const notificationDummyData = [
   {
     id: 1,
@@ -247,51 +249,70 @@ export const reportListDummyData = [
   "기타 부적절한 내용",
 ];
 
-export const shareNotesDummyData = [
+export const shareNotesDummyData: INoteThumbnail[] = [
   {
-    noteId: "1",
-    alcoholType: "소주",
-    alcoholThumbnail:
+    TastingNoteId: 1,
+    alcoholicDrinksName: "소주",
+    alcoholTypeName: "소주",
+    thumbnailPath:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
-    alcoholImageCount: 1,
-    alcoholName: "느린마을 증류주",
-    username: "작성자 닉네임",
-    userImage:
-      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
-    published: "2024.7.11",
+    hasMultipleImages: false,
+    isPrivate: false,
+    memberInfo: {
+      memberId: 1,
+      nickname: "작성자 닉네임",
+      profileImage:
+        "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
+    },
+    createdAt: "2024.7.11",
   },
   {
-    noteId: "2",
-    alcoholType: "기타주류",
-    alcoholThumbnail:
+    TastingNoteId: 2,
+    alcoholicDrinksName: "기타주류",
+    alcoholTypeName: "기타주류",
+    thumbnailPath:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
-    alcoholImageCount: 2,
-    alcoholName: "느린마을 증류주",
-    username: "작성자 닉네임",
-    userImage:
-      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
-    published: "2024.7.11",
+    hasMultipleImages: true,
+    isPrivate: false,
+    memberInfo: {
+      memberId: 1,
+      nickname: "작성자 닉네임",
+      profileImage:
+        "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
+    },
+    createdAt: "2024.7.11",
   },
   {
-    noteId: "3",
-    alcoholType: "소주",
-    alcoholThumbnail:
+    TastingNoteId: 3,
+    alcoholicDrinksName: "소주",
+    alcoholTypeName: "소주",
+    thumbnailPath:
       "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
-    alcoholImageCount: 1,
-    alcoholName: "느린마을 증류주",
-    username: "작성자 닉네임",
-    userImage:
-      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
-    published: "2024.7.11",
+    hasMultipleImages: false,
+    isPrivate: false,
+    memberInfo: {
+      memberId: 1,
+      nickname: "작성자 닉네임",
+      profileImage:
+        "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
+    },
+    createdAt: "2024.7.11",
   },
   {
-    noteId: "4",
-    alcoholType: "소주",
-    alcoholName: "느린마을 증류주",
-    username: "작성자 닉네임",
-    userImage:
-      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
-    published: "2024.7.11",
+    TastingNoteId: 4,
+    alcoholicDrinksName: "소주",
+    alcoholTypeName: "소주",
+    thumbnailPath:
+      "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/2853feefc9884c6dimage",
+    hasMultipleImages: false,
+    isPrivate: false,
+    memberInfo: {
+      memberId: 1,
+      nickname: "작성자 닉네임",
+      profileImage:
+        "https://juulabel.s3.ap-northeast-2.amazonaws.com/member/2024/07/27/d483114c48ed44adimage",
+    },
+    createdAt: "2024.7.11",
   },
 ];
 

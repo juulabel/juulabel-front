@@ -47,7 +47,7 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
         <ShareTabButton />
       </div>
 
-      <div className="h-full overflow-y-auto pb-[65px] pt-[108px] scrollbar-hide">
+      <div className="h-full pb-[65px] pt-[108px] scrollbar-hide">
         {children}
       </div>
       <FloatingBtn />

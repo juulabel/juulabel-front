@@ -3,15 +3,10 @@
 import NoteThumbnail from "@/_common/NoteThumbnail";
 import Spinner from "@/_components/search/Spinner";
 import ServerToast from "@/_components/share/error/ServerToast";
-import ShareLayout from "@/_components/share/ShareLayout";
 import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
-import { INoteThumbnail } from "@/_types/share";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import getNoteList from "@/app/api/tasting-note/getNoteList";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useEffect } from "react";
-import { useCookies } from "react-cookie";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export default function Notes() {
   const {
@@ -69,7 +64,7 @@ export default function Notes() {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-2 gap-y-5 overflow-y-auto px-4 py-6">
+    <div className="grid grid-cols-2 gap-x-2 gap-y-5 px-4 pb-20 pt-4">
       {notes?.length === 0 && (
         <div className="text-md col-span-2 h-full pt-10 text-center text-gray-600">
           데이터가 없습니다.
