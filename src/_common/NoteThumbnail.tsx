@@ -35,24 +35,24 @@ export default function NoteThumbnail({
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
         </Caption>
-        {hasMultipleImages && (
-          <Image
-            className="absolute right-2 top-2 z-10"
-            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/pictures.png`}
-            alt="복수 이미지 아이콘"
-            width={24}
-            height={24}
-          />
-        )}
-        {hasMultipleImages && (
-          <Image
-            className="absolute right-9 top-2 z-10"
-            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/lock.svg`}
-            alt="복수 이미지 아이콘"
-            width={24}
-            height={24}
-          />
-        )}
+        <div className="absolute right-2 top-2 z-10 flex space-x-2">
+          {hasMultipleImages && (
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/pictures.png`}
+              alt="복수 이미지 아이콘"
+              width={24}
+              height={24}
+            />
+          )}
+          {isPrivate && (
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/lock.svg`}
+              alt="복수 이미지 아이콘"
+              width={24}
+              height={24}
+            />
+          )}
+        </div>
         <Link href={`/share/note/${TastingNoteId}`}>
           <Image
             src={
