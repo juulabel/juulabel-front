@@ -23,6 +23,12 @@ export default function LifeList({
       return false;
     }
   }
+
+  const imagePath =
+    thumbnailPath && isValidUrl(thumbnailPath)
+      ? thumbnailPath
+      : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/life/default_life_thumbnail.png`;
+
   return (
     <Link href={`/share/life/${dailyLifeId}`} className="block px-4 pt-5">
       <div className="mb-4 flex items-center justify-between">
@@ -43,11 +49,7 @@ export default function LifeList({
               </div>
             )}
             <Image
-              src={
-                thumbnailPath && isValidUrl(thumbnailPath)
-                  ? thumbnailPath
-                  : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/life/default_life_thumbnail.png`
-              }
+              src={imagePath}
               alt="일상생활 썸네일 이미지"
               sizes="30vw"
               fill
