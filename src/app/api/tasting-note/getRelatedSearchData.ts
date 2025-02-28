@@ -5,7 +5,7 @@ export async function getRelatedSearchData(
 ): Promise<string[] | null> {
   try {
     const response = await axios.get(
-      `https://juulabel.shop/v1/api/alcoholicDrinks/related-search?keyword=` +
+      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/alcoholicDrinks/related-search?keyword=` +
         searchData,
     ); //추후 API 수정 시에 queryString에 searchData 추가
     if (response.status === 200 && response.data)

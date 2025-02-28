@@ -3,7 +3,7 @@ import axios from "axios";
 export async function getMySpace(accessToken: string) {
   try {
     const response = await axios.get(
-      `https://juulabel.shop/v1/api/members/my-space`,
+      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/my-space`,
       {
         withCredentials: true,
         headers: {
