@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ITastingNoteDetailInfo } from "@/_types";
 import { dateViewKoreanFull } from "@/_utils/time";
 import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
+import Link from "next/link";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;
@@ -30,7 +31,10 @@ export default function ShareDetailNoteImageBox({ info, imageList }: Props) {
     <div className="w-full">
       {/* 유저 헤더영역 */}
       <div className="flex h-[64px] items-center justify-between px-5">
-        <div className="flex h-full items-center gap-[12px]">
+        <Link
+          href={`/user/profile/${info.memberInfo.memberId}`}
+          className="flex h-full items-center gap-[12px]"
+        >
           <div className="relative h-[30px] w-[30px] overflow-hidden rounded-full">
             <Image
               src={userDefaultImage}
@@ -42,7 +46,7 @@ export default function ShareDetailNoteImageBox({ info, imageList }: Props) {
           <div className="text-[14px] font-semibold text-[#334155]">
             {info.memberInfo.nickname}
           </div>
-        </div>
+        </Link>
 
         <div className="text-[14px] font-semibold text-[#64748B]">
           {dateViewKoreanFull(info.createdAt)}
