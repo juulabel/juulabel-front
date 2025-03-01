@@ -107,22 +107,6 @@ export default function FullScreenImageCarousel({ images, onClose }: Props) {
             </div>
           ))}
         </div>
-
-        {/* Navigation Arrows */}
-        <button
-          onClick={handlePrev}
-          className="absolute left-5 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center rounded-full bg-gray-800 bg-opacity-50 p-2 text-white transition hover:bg-opacity-70"
-        >
-          <SlArrowLeft />
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute right-5 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center rounded-full bg-gray-800 bg-opacity-50 p-2 text-white transition hover:bg-opacity-70"
-        >
-          <SlArrowRight />
-        </button>
-
-        {/* Dots Indicator */}
       </section>
     </section>
   );
