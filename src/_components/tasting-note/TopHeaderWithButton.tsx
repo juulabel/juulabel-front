@@ -60,7 +60,7 @@ export default function TopHeaderWithButton({
     }
   };
   return (
-    <div>
+    <div className="fixed top-0 w-full max-w-[560px] bg-white">
       <div className="relative flex h-16 flex-row items-center justify-center p-4">
         {/* 뒤로가기 버튼 */}
         <button onClick={handleBackButton} className="absolute left-4 p-1">

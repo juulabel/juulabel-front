@@ -10,6 +10,7 @@ import { ITastingNoteDetailInfo } from "@/_types";
 import { dateViewKoreanFull } from "@/_utils/time";
 import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
 import Link from "next/link";
+import FullScreenImageCarousel from "@/_common/FullScreenImageCarousel";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;

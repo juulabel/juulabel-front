@@ -8,8 +8,9 @@ import OfficialBasicInformationForm from "@/_components/tasting-note/OfficialBas
 import ScentForm from "@/_components/tasting-note/ScentForm";
 import UnOfficialBasicInformationForm from "@/_components/tasting-note/UnOfficialBasicInformationForm";
 import VisualAndTextureForm from "@/_components/tasting-note/VisualAndTextureForm";
+import { cn } from "@/_utils/commons";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 function WriteTastingNote() {
   const searchParams = useSearchParams();
@@ -87,8 +88,12 @@ function WriteTastingNote() {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
   return (
-    <div className="h-full w-full max-w-[560px]">
+    <div className={cn("h-full w-full max-w-[560px] pt-16", {})}>
       {renderHeaderComponent()}
       {renderStepComponent()}
     </div>

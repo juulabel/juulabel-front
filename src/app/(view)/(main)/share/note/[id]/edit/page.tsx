@@ -96,7 +96,7 @@ function EditTastingNote({ id }: IEditTastingNote) {
   const [step, setStep] = useState<number>(1);
   const [rest, setRest] = useState<number>(4);
 
-//  step을 1 증가시키는 함수
+  //  step을 1 증가시키는 함수
   const handleStepNext = () => {
     if (step < 5) {
       setStep((prev) => prev + 1);
@@ -160,7 +160,7 @@ function EditTastingNote({ id }: IEditTastingNote) {
   };
 
   return (
-    <div className="h-full w-full max-w-[560px]">
+    <div className="h-full w-full max-w-[560px] pt-16">
       {renderHeaderComponent()}
       {renderStepComponent()}
     </div>

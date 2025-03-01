@@ -8,12 +8,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import required modules
 import { Pagination } from "swiper/modules";
 import Image from "next/image";
+import FullScreenImageCarousel from "@/_common/FullScreenImageCarousel";
 
 interface ILifeCarousel {
   imageUrlList: string[];
 }
 
 export default function LifeCarousel({ imageUrlList }: ILifeCarousel) {
+  const [fullScreenOpen, setFullScreenOpen] = useState<boolean>(false);
   const pagination = {
     el: ".swiper-custom-pagination",
     clickable: true,
@@ -24,6 +26,16 @@ export default function LifeCarousel({ imageUrlList }: ILifeCarousel) {
       return '<div class="' + className + '">' + "</div>";
     },
   };
+
+  const handleClose = () => {
+    setFullScreenOpen(false);
+  };
+
+  if (fullScreenOpen) {
+    return (
+      <FullScreenImageCarousel images={imageUrlList} onClose={handleClose} />
+    );
+  }
 
   return (
     <>
@@ -44,6 +56,9 @@ export default function LifeCarousel({ imageUrlList }: ILifeCarousel) {
                   sizes="100vw"
                   fill
                   className="object-cover"
+                  onClick={() => {
+                    setFullScreenOpen(true);
+                  }}
                 />
               </SwiperSlide>
             ))}

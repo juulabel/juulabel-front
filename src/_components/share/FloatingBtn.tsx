@@ -11,7 +11,7 @@ export default function FloatingBtn() {
       {/* backdrop */}
       <div
         className={cn(
-          "pointer-events-none absolute inset-0 z-20 h-full w-full transition duration-200 ease-out",
+          "pointer-events-none fixed top-0 z-20 h-full w-full max-w-[560px] transition duration-200 ease-out",
           clicked && "pointer-events-auto bg-black bg-opacity-60",
         )}
         onClick={() => setClicked((prev) => !prev)}

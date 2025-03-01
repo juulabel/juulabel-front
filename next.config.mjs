@@ -7,6 +7,7 @@ const nextConfig = {
     domains: [
       "via.placeholder.com",
       "d3jwyw9rpnxu8p.cloudfront.net",
+      "https://drive.google.com",
       "juulabel.s3.ap-northeast-2.amazonaws.com",
       "picsum.photos",
       "drive.google.com",
