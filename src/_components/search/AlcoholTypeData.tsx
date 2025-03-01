@@ -138,7 +138,7 @@ export default function AlcoholTypeData({
         {AlcoholSearchTypeDataList?.map(
           (AlcoholSearchTypeData: IAlcoholTypeData) => (
             <AlcoholTypeDataThumbnail
-              key={AlcoholSearchTypeData.id} // Add unique key here
+              key={AlcoholSearchTypeData.id} 
               {...AlcoholSearchTypeData}
             />
           ),

@@ -7,17 +7,20 @@ export async function getAlcoholTypeResult(
   accessToken: string,
   type: number,
   sortType: string,
-  lastId?: number,
+  lastAlcoholicDrinksName?: string,
 ): Promise<IAlcoholTypeResult | null> {
   try {
     const params = {
       type: type.toString(),
       sortType: sortType,
       pageSize: "15", // Convert the number to a string
+      lastAlcoholicDrinksName: lastAlcoholicDrinksName ?? "",
     };
 
     // Create a query string from the params object
     const queryString = new URLSearchParams(params).toString();
+
+    console.log(queryString);
 
     const response = await instance.get(
       `${requests.typeSerach}${queryString}`,
