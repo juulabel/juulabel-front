@@ -75,6 +75,7 @@ export default function CommentAndRatingForm({
   const [images, setImages] = useState<FileInfo[]>([]);
   const [isActiveButton, setIsActiveButton] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const {
@@ -198,6 +199,10 @@ export default function CommentAndRatingForm({
   };
 
   const onSubmit = async (data: Inputs) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     const { files } = data;
 
     console.log(content);
@@ -250,6 +255,8 @@ export default function CommentAndRatingForm({
       if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
         toast(error.response?.data.result);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -441,6 +448,16 @@ export default function CommentAndRatingForm({
             setModalOpen(false);
           }}
         />
+      )}
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="flex flex-col items-center">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-cool-grayscale-200 border-t-blue-500"></div>
+            <p className="mt-4 animate-pulse text-white">
+              게시물을 등록 중입니다...
+            </p>
+          </div>
+        </div>
       )}
     </>
   );
