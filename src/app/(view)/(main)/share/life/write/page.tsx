@@ -16,6 +16,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { urlToFile } from "@/app/api/life/urlToFile";
 import Loading from "@/_common/Loading";
+import { log } from "console";
 
 export interface Inputs {
   title: string;
@@ -62,6 +63,7 @@ function NewPostPage() {
   const [confirm, setConfirm] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [images, setImages] = useState<FileInfo[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     initEditMode();
@@ -94,10 +96,14 @@ function NewPostPage() {
   // Wrap onSubmit in useCallback and include dependencies
   const onSubmit = useCallback(
     async (data: Inputs) => {
+      if (isSubmitting) return;
+
       if (data.isPrivate && !confirm) {
         setModalOpen(true);
         return;
       }
+
+      setIsSubmitting(true);
 
       const headers = {
         Authorization: `Bearer ${cookie.accessToken}`,
@@ -142,16 +148,20 @@ function NewPostPage() {
 
           router.replace(`/share/life/${response.data.result.dailyLifeId}`);
         }
+        console.log(isPrivate);
+
+        console.log(response.data);
       } catch (error) {
         if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
           toast(error.response?.data.result);
         }
+      } finally {
+        setIsSubmitting(false);
+        setConfirm(false);
       }
-
-      setConfirm(false);
     },
-    [confirm, cookie.accessToken, router],
-  ); // Add confirm and router to the dependencies
+    [confirm, cookie.accessToken, router, isSubmitting],
+  ); // Add isSubmitting to the dependencies
 
   const watchTitle = watch("title");
   const watchContent = watch("content");
@@ -205,7 +215,7 @@ function NewPostPage() {
         title="일상생활 작성하기"
         buttonType="newpost"
         buttonName="등록"
-        isActiveButton={isValid}
+        isActiveButton={isValid && !isSubmitting}
         onClick={handleSubmit(onSubmit)}
       />
 
@@ -356,6 +366,16 @@ function NewPostPage() {
             setModalOpen(false);
           }}
         />
+      )}
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="flex flex-col items-center">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-cool-grayscale-200 border-t-blue-500"></div>
+            <p className="mt-4 animate-pulse text-white">
+              게시물을 등록 중입니다...
+            </p>
+          </div>
+        </div>
       )}
     </>
   );
