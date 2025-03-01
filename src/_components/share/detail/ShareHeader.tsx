@@ -71,7 +71,7 @@ export default function ShareHeader() {
         <div
           className="cursor-pointer"
           onClick={() => {
-            router.push("/share/note");
+            router.back();
           }}
         >
           <Image

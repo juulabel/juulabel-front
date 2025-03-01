@@ -246,6 +246,7 @@ export default function CommentAndRatingForm({
         router.refresh();
       }
     } catch (error) {
+      console.error(error);
       if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
         toast(error.response?.data.result);
       }
