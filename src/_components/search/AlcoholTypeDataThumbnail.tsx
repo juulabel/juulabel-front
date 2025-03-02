@@ -27,7 +27,7 @@ export default function AlcohoTypeDataThumbnail({
           src={convertGoogleDriveURL(thumbnail)}
           alt="전통주 썸네일"
           sizes="50vw"
-          className="object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
           onLoad={() => setIsLoading(false)}
         />
       </div>
