@@ -4,8 +4,10 @@ import Caption from "@/_common/Caption";
 import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
 import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import { cn } from "@/_utils/commons";
+import convertGoogleDriveURL from "@/_utils/convertGoogleDriveUrl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function AlcoholSearchDataThumbnail({
   id: alcoholicDrinksId,
@@ -16,7 +18,7 @@ export default function AlcoholSearchDataThumbnail({
   brewery,
 }: IAlcoholSearchData) {
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(true);
   const handleClick = () => {
     router.push(
       `/share/liquor/${alcoholicDrinksId}`,
@@ -42,15 +44,24 @@ export default function AlcoholSearchDataThumbnail({
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholType.name}
         </Caption>
-        <Image
-          src={
-            thumbnail ??
-            `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholType.name)}.png`
-          }
-          alt="시음노트 썸네일"
-          fill
-          className="object-cover"
-        />
+        {isLoading && (
+          <div className="absolute inset-0 z-10 animate-[pulse_1.5s_ease-in-out_infinite] animate-pulse bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 bg-[length:200%_100%]" />
+        )}
+        <div className="relative h-full w-full">
+          <img
+            src={
+              thumbnail
+                ? convertGoogleDriveURL(thumbnail)
+                : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(
+                    alcoholType.name,
+                  )}.png`
+            }
+            alt="시음노트 썸네일"
+            sizes="50vw"
+            className="absolute inset-0 h-full w-full object-cover"
+            onLoad={() => setIsLoading(false)}
+          />
+        </div>
       </div>
       <div className="mb-[1%] text-base font-medium text-cool-grayscale-800">
         {name}

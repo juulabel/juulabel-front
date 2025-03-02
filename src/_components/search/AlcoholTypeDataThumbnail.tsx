@@ -1,8 +1,8 @@
 import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
 import { IAlcoholTypeData } from "@/_types/search/alcoholTypeData";
+import convertGoogleDriveURL from "@/_utils/convertGoogleDriveUrl";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AlcohoTypeDataThumbnail({
@@ -12,9 +12,7 @@ export default function AlcohoTypeDataThumbnail({
   breweryName,
   averageRating,
 }: IAlcoholTypeData) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-
   return (
     <Link
       className="mb-[5%] flex w-full cursor-pointer flex-col"
@@ -22,19 +20,15 @@ export default function AlcohoTypeDataThumbnail({
     >
       <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg">
         {isLoading && (
-          <div className="absolute inset-0 z-10 animate-pulse bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 bg-[length:200%_100%] animate-[pulse_1.5s_ease-in-out_infinite]" />
+          <div className="absolute inset-0 z-10 animate-[pulse_1.5s_ease-in-out_infinite] animate-pulse bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 bg-[length:200%_100%]" />
         )}
-        <Image
-          src={thumbnail}
+
+        <img
+          src={convertGoogleDriveURL(thumbnail)}
           alt="전통주 썸네일"
           sizes="50vw"
-          fill
           className="object-cover"
-          loading="lazy"
-          placeholder="blur"
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFeAJ5jITW5QAAAABJRU5ErkJggg=="
-          priority={false}
-          onLoadingComplete={() => setIsLoading(false)}
+          onLoad={() => setIsLoading(false)}
         />
       </div>
       <div className={`mb-[1%] text-base font-medium text-cool-grayscale-800`}>
