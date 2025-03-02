@@ -122,6 +122,14 @@ export default function CommentsBody({ id, isLife }: Props) {
           },
         )}
       >
+        {commentList?.length === 0 && (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-[18px]">
+            <span className="text-[20px] font-bold">
+              아직 등록된 댓글이 없습니다.
+            </span>
+            <span>첫 번째 댓글을 남겨보세요 !</span>
+          </div>
+        )}
         {commentList?.map((comment: IComment, index: number) => {
           if (comment.isDeleted) {
             return (
