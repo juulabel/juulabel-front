@@ -1,18 +1,15 @@
 import axios from "axios";
 import { Cookies } from "react-cookie";
 
-export const getFollowee = async (
-  id: string,
-  lastFolloweeId: string | null,
-) => {
+export const getFollower = async (id: string, lastFollowId: string | null) => {
   try {
     const cookies = new Cookies();
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${id}/followings`,
+      `${process.env.NEXT_PUBLIC_JUULABEL_API_URL}/v1/api/members/${id}/followers`,
       {
         withCredentials: true,
         params: {
-          lastFolloweeId: lastFolloweeId,
+          lastFollowId: lastFollowId,
           pageSize: 15,
         },
         headers: {
@@ -20,13 +17,15 @@ export const getFollowee = async (
         },
       },
     );
-    const { content, last } = res.data.result.followings;
+
+    const { content, last } = res.data.result.followers;
+    console.log(res.data);
     return {
       content,
       nextPage: last
         ? null
         : {
-            lastFolloweeId: content[content.length - 1]?.id || null,
+            lastFollowId: content[content.length - 1]?.id || null,
           },
     };
   } catch (error) {

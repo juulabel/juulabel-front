@@ -23,16 +23,15 @@ export default function RecommendedUserList({
     setIsFollowed(initialFollowState);
   }, [recommendedUserList]);
   const handleFollowButton = async (id: number) => {
-    //const followResult = await followUser(id);
-    //console.log(followResult);
-    //현재 follow api가 정상적으로 동작하지 않는 것으로 판단 => 추후 동작하면 수정
     setIsFollowed((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
+
+    followUser(id.toString());
   };
   return (
-    <div className="mb-8 mt-4">
+    <div className="mb-8">
       {recommendedUserList.map((user: RecommendedUser, index: number) => (
         <div
           key={user.id}
@@ -55,7 +54,9 @@ export default function RecommendedUserList({
           >
             <Image
               src={
-                user.image ? user.image : "https://via.placeholder.com/72x72"
+                user.profileImage
+                  ? user.profileImage
+                  : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
               }
               width={48}
               height={48}
@@ -63,19 +64,16 @@ export default function RecommendedUserList({
               className="mr-4 flex rounded-full"
             />
             <div>
-              <p className="font-bold">{user.nickname}</p>
-              <div className="flex">
-                {user.badge.map((index) => (
-                  <Image
-                    width={20}
-                    height={20}
-                    src="https:via.placeholder.com/20x20"
-                    key={index}
-                    alt="배지"
-                    className="mr-2 rounded-full"
-                  />
-                ))}
-              </div>
+              <span>{user.nickname}</span>
+              {user.hasBadge && (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`}
+                  alt="배지"
+                  className="mr-2"
+                  width={28}
+                  height={28}
+                />
+              )}
             </div>
           </div>
           <div>

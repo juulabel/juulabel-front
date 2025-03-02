@@ -6,6 +6,6 @@ export interface IMySpace {
   myTastingNoteCount: number;
   savedTastingNoteCount: number;
   followingCount: number | null;
-  followerCount: number | null;
-  documents: number | null;
+  followerCount: number | null;  
+  hasBadge: boolean;
 }

@@ -1,9 +1,9 @@
 export interface RecommendedUser {
   id: number;
   nickname: string;
-  image: string;
-  badge: string[];
+  profileImage: string;  
   isFollowed: boolean;
+  hasBadge: boolean;
 }
 
 export interface RecommendUserList {

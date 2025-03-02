@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -38,6 +39,16 @@ export default function Page({ params }: { params: { id: string } }) {
     followerCount: 0,
   });
 
+  const authHeaders = useMemo(
+    () => ({
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${cookies.accessToken}`,
+      },
+    }),
+    [cookies.accessToken],
+  );
+
   const {
     data: user,
     isLoading: isLoadingUser,
@@ -56,41 +67,6 @@ export default function Page({ params }: { params: { id: string } }) {
       }));
     }
   }, [user]);
-
-  const authHeaders = useMemo(
-    () => ({
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${cookies.accessToken}`,
-      },
-    }),
-    [cookies.accessToken],
-  );
-
-  useQuery<INoteThumbnail[]>({
-    queryKey: [`${params.id}-note`],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${apiUrl}/v1/api/members/${params.id}/tasting_notes?pageSize=15`,
-        authHeaders,
-      );
-
-      const notes = res.data.result.tastingNoteSummaries;
-      const content = notes.content || [];
-
-      setContentState((prev) => ({
-        ...prev,
-        isFollowed: res.data.result.isFollowed,
-        noteList: content,
-        isNoteLast: notes.last,
-        lastTastingNoteId:
-          content.length > 0 ? content[content.length - 1]?.TastingNoteId : 0,
-      }));
-
-      return content;
-    },
-    enabled: !!cookies.accessToken,
-  });
 
   const fetchContent = useCallback(
     async (type: "notes" | "lives") => {
@@ -137,53 +113,81 @@ export default function Page({ params }: { params: { id: string } }) {
     ],
   );
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const isAtBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 10;
+  useQuery<INoteThumbnail[]>({
+    queryKey: [`${params.id}-note`],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${apiUrl}/v1/api/members/${params.id}/tasting_notes?pageSize=15`,
+        authHeaders,
+      );
 
-      if (isAtBottom && !contentState.isBottom) {
-        setContentState((prev) => ({ ...prev, isBottom: true }));
+      const notes = res.data.result.tastingNoteSummaries;
+      const content = notes.content || [];
 
-        if (
-          contentState.isTastingNoteClicked &&
-          !contentState.isNoteLast &&
-          (user?.tastingNoteCount || 0) > 0
-        ) {
-          fetchContent("notes");
-        } else if (
-          contentState.isDailyLifeClicked &&
-          !contentState.isLifeLast &&
-          (user?.dailyLifeCount || 0) > 0
-        ) {
-          fetchContent("lives");
-        }
-      } else if (!isAtBottom) {
-        setContentState((prev) => ({ ...prev, isBottom: false }));
+      setContentState((prev) => ({
+        ...prev,
+        isFollowed: res.data.result.isFollowed,
+        noteList: content,
+        isNoteLast: notes.last,
+        lastTastingNoteId:
+          content.length > 0 ? content[content.length - 1]?.TastingNoteId : 0,
+      }));
+
+      return content;
+    },
+    enabled: !!cookies.accessToken,
+  });
+
+  const handleScroll = useCallback(() => {
+    const isAtBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 10;
+
+    if (isAtBottom && !contentState.isBottom) {
+      setContentState((prev) => ({ ...prev, isBottom: true }));
+
+      if (
+        contentState.isTastingNoteClicked &&
+        !contentState.isNoteLast &&
+        (user?.tastingNoteCount || 0) > 0
+      ) {
+        fetchContent("notes");
+      } else if (
+        contentState.isDailyLifeClicked &&
+        !contentState.isLifeLast &&
+        (user?.dailyLifeCount || 0) > 0
+      ) {
+        fetchContent("lives");
       }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    } else if (!isAtBottom) {
+      setContentState((prev) => ({ ...prev, isBottom: false }));
+    }
   }, [contentState, user, fetchContent]);
 
-  const handleTabClick = (type: "notes" | "lives") => {
-    setContentState((prev) => ({
-      ...prev,
-      isTastingNoteClicked: type === "notes",
-      isDailyLifeClicked: type === "lives",
-    }));
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
-    if (
-      type === "lives" &&
-      !contentState.isLifeLast &&
-      contentState.lifeList.length === 0 &&
-      (user?.dailyLifeCount || 0) > 0
-    ) {
-      fetchContent("lives");
-    }
-  };
+  const handleTabClick = useCallback(
+    (type: "notes" | "lives") => {
+      setContentState((prev) => ({
+        ...prev,
+        isTastingNoteClicked: type === "notes",
+        isDailyLifeClicked: type === "lives",
+      }));
+
+      if (
+        type === "lives" &&
+        !contentState.isLifeLast &&
+        contentState.lifeList.length === 0 &&
+        (user?.dailyLifeCount || 0) > 0
+      ) {
+        fetchContent("lives");
+      }
+    },
+    [contentState.isLifeLast, contentState.lifeList.length, user, fetchContent],
+  );
 
   const handleFollowButton = async () => {
     try {
@@ -211,6 +215,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const totalPosts = (user.tastingNoteCount || 0) + (user.dailyLifeCount || 0);
   const defaultProfileImage = `${imagePath}/images/placeholders/profile/default_profile.png`;
+  const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
 
   return (
     <div className="relative h-full w-full max-w-[560px]">
@@ -233,6 +238,16 @@ export default function Page({ params }: { params: { id: string } }) {
               />
             </div>
             <p className="ml-2 text-lg font-bold leading-7">{user.nickname}</p>
+            {user.hasBadge && (
+              <Image
+                onClick={() => setIsBadgeInfoModalOpen(true)}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`}
+                alt="배지"
+                className="ml-2"
+                width={32}
+                height={32}
+              />
+            )}
           </div>
         </div>
         <div
@@ -250,7 +265,7 @@ export default function Page({ params }: { params: { id: string } }) {
           )}
         </div>
 
-        {/* <div className="flex justify-center">
+        <div className="flex justify-center">
           <FollowButton
             textSize="sm"
             isFollowed={contentState.isFollowed}
@@ -258,8 +273,10 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </div>
         <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
-          <Link
-            href={`/user/profile/${params.id}/following`}
+          <div
+            onClick={() =>
+              router.replace(`/user/profile/${params.id}/following`)
+            }
             className="flex cursor-pointer flex-col items-center justify-center"
           >
             <p className="text-sm font-normal text-cool-grayscale-500">
@@ -268,12 +285,14 @@ export default function Page({ params }: { params: { id: string } }) {
             <p className="text-base font-bold text-cool-grayscale-800">
               {user.followingCount ?? 0}
             </p>
-          </Link>
+          </div>
 
           <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
 
-          <Link
-            href={`/user/profile/${params.id}/followers`}
+          <div
+            onClick={() =>
+              router.replace(`/user/profile/${params.id}/follower`)
+            }
             className="flex cursor-pointer flex-col items-center justify-center"
           >
             <p className="text-sm font-normal text-cool-grayscale-500">
@@ -282,19 +301,19 @@ export default function Page({ params }: { params: { id: string } }) {
             <p className="text-base font-bold text-cool-grayscale-800">
               {contentState.followerCount}
             </p>
-          </Link>
+          </div>
 
           <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
 
-          <Link href="#" className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center">
             <p className="text-sm font-normal text-cool-grayscale-500">
               총 게시글
             </p>
             <p className="text-base font-bold text-cool-grayscale-800">
               {totalPosts}
             </p>
-          </Link>
-        </div> */}
+          </div>
+        </div>
         <div className="flex flex-row pt-4">
           <button
             className={`flex h-11 flex-row items-center justify-center border-b-2 ${contentState.isTastingNoteClicked ? "border-black" : "border-cool-grayscale-300"} w-1/2`}
@@ -324,7 +343,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </button>
         </div>
       </div>
-      <div className="h-full overflow-y-auto px-4 pt-[250px] scrollbar-hide">
+      <div className="h-full overflow-y-auto px-4 pt-[360px] scrollbar-hide">
         {contentState.isTastingNoteClicked ? (
           <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto py-6">
             {contentState.noteList.length > 0 ? (
@@ -355,6 +374,9 @@ export default function Page({ params }: { params: { id: string } }) {
           </>
         )}
       </div>
+      {isBadgeInfoModalOpen && (
+        <BadgeInfoModal setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen} />
+      )}
     </div>
   );
 }

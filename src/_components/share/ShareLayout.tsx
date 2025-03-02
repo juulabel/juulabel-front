@@ -19,7 +19,7 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
             공유 공간
           </h1>
           <div className="flex space-x-3">
-            {/* <Link href="/follow">
+            <Link href="/follow">
               <Image
                 src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/header/add-people.png`}
                 width="24"
@@ -27,7 +27,7 @@ export default function ShareLayout({ children }: { children: ReactNode }) {
                 alt="add people"
                 className="w-[24px] lg:w-[32px]"
               />
-            </Link> */}
+            </Link>
             <Link href="/notification" className="relative">
               <Image
                 src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/header/notification.png`}
