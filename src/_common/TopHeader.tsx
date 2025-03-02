@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/_utils/commons";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { GoChevronLeft } from "react-icons/go";
@@ -30,7 +31,9 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
   };
 
   return (
-    <div className="fixed top-0 h-16 max-h-16 w-full max-w-[560px] bg-white">
+    <div
+      className={cn("fixed top-0 h-16 max-h-16 w-full max-w-[560px] bg-white")}
+    >
       <div className="flex h-16 flex-row items-center justify-center p-4">
         {step != 0 && (
           <button onClick={handleClick} className="absolute left-4 p-1">
@@ -39,7 +42,7 @@ export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
         )}
         <div className="text-lg font-bold text-cool-grayscale-700">{title}</div>
       </div>
-      {pathname.startsWith("/register") && (
+      {pathname !== "/" && (
         <div className="relative flex">
           <motion.div
             className="absolute z-50 h-1 bg-primary-700"
