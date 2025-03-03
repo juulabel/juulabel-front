@@ -2,7 +2,7 @@
 
 import { cn } from "@/_utils/commons";
 import { usePathname } from "next/navigation";
-import { ToastContainer } from "react-toastify";
+import { Slide, ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Make sure you import default styles
 
 interface IToastProvider {
@@ -24,6 +24,7 @@ export default function ToastProvider({ children }: IToastProvider) {
         position={
           topToastPaths.includes(pathName) ? "top-center" : "bottom-center"
         }
+        transition={Slide}
         autoClose={2000}
         className={cn(
           "z-50 flex w-full max-w-[560px] flex-col items-center px-4",

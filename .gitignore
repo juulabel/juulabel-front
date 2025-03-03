@@ -47,4 +47,4 @@ yarn-error.log*
 next-env.d.ts
 
 # build files
-juulabel-front.tar.gz
+*.tar.gz

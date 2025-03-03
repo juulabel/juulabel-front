@@ -59,24 +59,42 @@ export default function LevelSelector({
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <input
-        type="range"
-        min="0"
-        max={levels.length - 1}
-        step="1"
-        value={levels.findIndex((level) => level.id === selectedId)}
-        onChange={handleSliderChange}
-        className="h-3 w-full cursor-pointer appearance-none rounded-lg focus:outline-none"
-        style={{
-          background: `linear-gradient(
-                  to right,
-                  #475569 0%,
-                  #475569 ${(levels.findIndex((level) => level.id === selectedId) / (levels.length - 1)) * 100}%,
-                  #E2E8F0 ${(levels.findIndex((level) => level.id === selectedId) / (levels.length - 1)) * 100}%,
-                  #E2E8F0 100%
-                )`,
-        }}
-      />
+      <div className="relative w-full">
+        <input
+          type="range"
+          min="0"
+          max={levels.length - 1}
+          step="1"
+          value={levels.findIndex((level) => level.id === selectedId)}
+          onChange={handleSliderChange}
+          className="relative z-10 h-3 w-full cursor-pointer appearance-none rounded-lg focus:outline-none"
+          style={{
+            background: `linear-gradient(
+                    to right,
+                    #475569 0%,
+                    #475569 ${(levels.findIndex((level) => level.id === selectedId) / (levels.length - 1)) * 100}%,
+                    #E2E8F0 ${(levels.findIndex((level) => level.id === selectedId) / (levels.length - 1)) * 100}%,
+                    #E2E8F0 100%
+                  )`,
+          }}
+        />
+
+        {/* Level dots - overlay on top of the slider */}
+        <div className="pointer-events-none absolute top-1/2 z-20 flex w-full -translate-y-1/2 justify-between px-4">
+          {levels.map((level, index) => (
+            <div
+              key={level.id}
+              className={`h-[6px] w-[9px] rounded-full ${
+                index === levels.findIndex((l) => l.id === selectedId)
+                  ? "opacity-0"
+                  : index < levels.findIndex((l) => l.id === selectedId)
+                    ? "bg-slate-500"
+                    : "bg-slate-300"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
 
       {/* 슬라이더 아래의 description 레이블 */}
       {showDescriptions && (
