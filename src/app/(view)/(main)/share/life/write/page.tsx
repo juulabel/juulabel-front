@@ -220,8 +220,11 @@ function NewPostPage() {
       />
 
       <form className="flex h-full flex-col">
-        <div className="flex cursor-pointer items-center justify-between bg-cool-grayscale-50 px-4 py-2 text-sm font-medium text-cool-grayscale-700">
-          <div>일상생활 작성 시 안내사항 안내</div>
+        <div
+          onClick={() => router.push("/share/life/write/notice")}
+          className="flex cursor-pointer items-center justify-between bg-cool-grayscale-50 px-4 py-2 text-sm font-medium text-cool-grayscale-700"
+        >
+          <div>일상생활 작성 시 유의사항 안내</div>
           <GoChevronRight size={18} className="text-cool-grayscale-500" />
         </div>
         <div className="flex h-12 items-center justify-between px-4 pb-2 pt-4">
