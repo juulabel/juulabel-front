@@ -24,6 +24,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [cookies] = useCookies(["accessToken"]);
   const apiUrl = process.env.NEXT_PUBLIC_JUULABEL_API_URL;
   const imagePath = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;
+  const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
 
   const [contentState, setContentState] = useState({
     lifeList: [] as ILifeList[],
@@ -215,7 +216,6 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const totalPosts = (user.tastingNoteCount || 0) + (user.dailyLifeCount || 0);
   const defaultProfileImage = `${imagePath}/images/placeholders/profile/default_profile.png`;
-  const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
 
   return (
     <div className="relative h-full w-full max-w-[560px]">
