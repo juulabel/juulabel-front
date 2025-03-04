@@ -191,10 +191,11 @@ export default function EditMyInfo({
       );
 
       if (response.data.success) {
-        toast("내 정보 수정이 완료되었어요.");
-        setIsEditMode(false);
-      }
+        toast("내 정보 수정이 완료되었어요.");        
+        router.replace("/user/my-space");
+      }      
     } catch (error) {
+      console.error(error);
       if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
         toast(error.response?.data.result);
       }

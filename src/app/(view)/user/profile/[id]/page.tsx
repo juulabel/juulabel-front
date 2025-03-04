@@ -5,7 +5,7 @@ import LifeList from "@/_common/LifeList";
 import Loading from "@/_common/Loading";
 import NoteThumbnail from "@/_common/NoteThumbnail";
 import UserHeader from "@/_components/user/UserHeader";
-import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
+// import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import { cn } from "@/_utils/commons";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
@@ -210,7 +210,7 @@ export default function Page({ params }: { params: { id: string } }) {
           )}
         </div>
 
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <FollowButton
             textSize="sm"
             isFollowed={isFollowed}
@@ -258,7 +258,7 @@ export default function Page({ params }: { params: { id: string } }) {
               {totalPosts}
             </p>
           </div>
-        </div>
+        </div> */}
         <div className="flex flex-row pt-4">
           <button
             className={`flex h-11 flex-row items-center justify-center border-b-2 ${isTastingNoteClicked ? "border-black" : "border-cool-grayscale-300"} w-1/2`}
@@ -288,10 +288,10 @@ export default function Page({ params }: { params: { id: string } }) {
           </button>
         </div>
       </div>
-      <div className="h-full overflow-y-auto px-4 pt-[360px] scrollbar-hide">
+      <div className="h-full overflow-y-auto px-4 pt-[250px] scrollbar-hide">
         {isTastingNoteClicked ? (
           isLoadingNoteList ? (
-            <SkeletomUIForList/>
+            <SkeletomUIForList />
           ) : noteList.length > 0 ? (
             <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto py-6">
               {noteList.map((note) => (
@@ -307,21 +307,21 @@ export default function Page({ params }: { params: { id: string } }) {
             {isLoadingLifeList ? (
               <LifeListSkeletonList />
             ) : lifeList.length > 0 ? (
-              <>
+              <div className="pt-3">
                 {lifeList.map((post) => (
                   <LifeList key={post.dailyLifeId} {...post} />
                 ))}
                 <div ref={observerRef} className="h-4"></div>
-              </>
+              </div>
             ) : (
               renderEmptyState("일상생활")
             )}
           </>
         )}
       </div>
-      {isBadgeInfoModalOpen && (
+      {/* {isBadgeInfoModalOpen && (
         <BadgeInfoModal setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen} />
-      )}
+      )} */}
     </div>
   );
 }

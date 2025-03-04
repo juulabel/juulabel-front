@@ -3,7 +3,7 @@
 import LifeList from "@/_common/LifeList";
 import Navigation from "@/_common/Navigation";
 import NoteThumbnail from "@/_common/NoteThumbnail";
-import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
+// import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import ServerToast from "@/_components/share/error/ServerToast";
 import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
 import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
@@ -190,7 +190,7 @@ export default function Page() {
               <p>작성된 자기소개가 없어요</p>
             )}
           </div>
-          <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
+          {/* <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
             <Link
               href={`/user/profile/${user.memberId}/following`}
               className="flex flex-col items-center justify-center"
@@ -227,7 +227,7 @@ export default function Page() {
                 {totalPosts}
               </p>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-row pt-4">
             <button
@@ -250,7 +250,7 @@ export default function Page() {
             </button>
           </div>
         </div>
-        <div className="h-full overflow-y-auto px-4 pt-[310px] scrollbar-hide">
+        <div className="h-full overflow-y-auto px-4 pt-[250px] scrollbar-hide">
           {isTastingNoteClicked ? (
             isLoadingNoteList ? (
               <SkeletomUIForList />
@@ -271,7 +271,7 @@ export default function Page() {
           ) : isLoadingLifeList ? (
             <LifeListSkeletonList />
           ) : lifeList && lifeList.length > 0 ? (
-            <div className="pb-10">
+            <div className="pt-3 pb-10">
               {lifeList.map((post) => (
                 <LifeList key={post.dailyLifeId} {...post} />
               ))}
@@ -288,9 +288,9 @@ export default function Page() {
         </div>
       </div>
       <Navigation />
-      {isBadgeInfoModalOpen && (
+      {/* {isBadgeInfoModalOpen && (
         <BadgeInfoModal setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen} />
-      )}
+      )} */}
     </>
   );
 }
