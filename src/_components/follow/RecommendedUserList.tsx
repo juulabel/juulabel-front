@@ -78,7 +78,7 @@ export default function RecommendedUserList({
               </div>
             </div>
           </div>
-          <div>
+          <div className="mr-[4%]">
             <FollowButton
               width="18"
               isFollowed={isFollowed[user.id]}
