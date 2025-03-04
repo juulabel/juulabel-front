@@ -13,6 +13,7 @@ import { checkNickname } from "@/app/api/auth/checkName";
 import { IMyInfo } from "@/_types/user/myInfoData";
 import { useCookies } from "react-cookie";
 import { resizeImage } from "@/_utils/resizeImage";
+import { urlToFile } from "@/app/api/life/urlToFile";
 
 interface ErrorResponse {
   message: string;
@@ -42,7 +43,7 @@ export default function EditMyInfo({
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [alcoholTypeIds, setAlcoholTypes] = useState<number[]>([]);
-
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [doesNameAlreadyExist, setDoesNameAlreadyExist] =
     useState<boolean>(false);
   const [changeProfileImgModal, setChangeProfileImgModal] =
@@ -120,14 +121,26 @@ export default function EditMyInfo({
   };
 
   useEffect(() => {
-    if (user !== undefined) {
-      setNickname(user.nickname);
-      setIntroduction(user.introduction ?? "");
-      setImage(user.profileImage);
-      setGenderCheck(user.gender === "NONE");
-      setGender(user.gender ?? "");
-      setAlcoholTypes(user.alcoholTypeIds ?? []);
-    }
+    const initializeUserData = async () => {
+      if (user !== undefined) {
+        setNickname(user.nickname);
+        setIntroduction(user.introduction ?? "");
+        if (user.profileImage) {
+          try {
+            const fileFromUrl = await urlToFile({ url: user.profileImage });
+            setFile(fileFromUrl);
+            setImage(URL.createObjectURL(fileFromUrl));            
+          } catch (error) {
+            console.error("Error converting profile image URL to file:", error);
+          }
+        }
+        setGenderCheck(user.gender === "NONE");
+        setGender(user.gender ?? "");
+        setAlcoholTypes(user.alcoholTypeIds ?? []);
+      }
+    };
+
+    initializeUserData();
   }, [user]);
 
   const handleGenderCheck = (newGenderDisable: boolean) => {
@@ -154,6 +167,7 @@ export default function EditMyInfo({
   };
 
   const onSubmit = async () => {
+    setIsSubmitting(true);
     const regex = /[^\w\uAC00-\uD7A3]/;
     if (regex.test(nickname)) {
       setErrorNameMsg("띄어쓰기 및 특수문자를 사용할수 없어요.");
@@ -195,14 +209,16 @@ export default function EditMyInfo({
       );
 
       if (response.data.success) {
-        toast("내 정보 수정이 완료되었어요.");        
+        toast("내 정보 수정이 완료되었어요.");
         router.replace("/user/my-space");
-      }      
+      }
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
         toast(error.response?.data.result);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -333,6 +349,16 @@ export default function EditMyInfo({
           handleDeleteImg={handleDeleteImage}
           handleCancel={() => setChangeProfileImgModal(false)}
         />
+      )}
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="flex flex-col items-center">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-cool-grayscale-200 border-t-blue-500"></div>
+            <p className="mt-4 animate-pulse text-white">
+              내 정보 수정 중입니다...
+            </p>
+          </div>
+        </div>
       )}
     </>
   );

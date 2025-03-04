@@ -30,8 +30,8 @@ export const resizeImage = ({
           min, // Crop height (square size)
           0, // Destination X
           0, // Destination Y
-          120, // Destination width
-          120, // Destination height
+          width, // Destination width
+          height, // Destination height
         );
 
         canvas.toBlob(
