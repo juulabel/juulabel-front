@@ -28,7 +28,7 @@ export default function Page() {
     queryKey: ["my-info"],
     queryFn: () => getMyInfo(cookies.accessToken),
     gcTime: 0,
-    staleTime: 0,    
+    staleTime: 0,
   });
 
   const handleBackButton = () => {

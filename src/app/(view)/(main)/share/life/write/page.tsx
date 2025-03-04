@@ -149,9 +149,11 @@ function NewPostPage() {
               : "일상생활 작성이 완료되었어요.",
           );
 
-          editMode
-            ? router.back()
-            : router.replace(`/share/life/${response.data.result.dailyLifeId}`);
+          if (editMode) {
+            router.back();
+          } else {
+            router.replace(`/share/life/${response.data.result.dailyLifeId}`);
+          }
         }
       } catch (error) {
         if (axios.isAxiosError<ErrorResponse>(error)) {
