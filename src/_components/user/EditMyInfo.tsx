@@ -1,18 +1,18 @@
 import { AiFillExclamationCircle } from "react-icons/ai";
-import ConfirmModal from "@/_common/ConfirmModal";
 import ProfileChangeModal from "@/_components/user/ProfileChangeModal";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
 import BottomButton from "@/_common/BottomButton";
 import GenderForm from "@/_components/auth/GenderForm";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState, useMemo } from "react";
 import { formInstance } from "@/app/api/axios";
 import axios, { AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 import { checkNickname } from "@/app/api/auth/checkName";
 import { IMyInfo } from "@/_types/user/myInfoData";
 import { useCookies } from "react-cookie";
-import { useRouter } from "next/navigation";
+import { resizeImage } from "@/_utils/resizeImage";
 
 interface ErrorResponse {
   message: string;
@@ -24,18 +24,20 @@ interface IEditMyInfo {
   user: IMyInfo;
   hasEdited: boolean;
   setHasEdited: (edited: boolean) => void;
+  setIsEditMode: (editMode: boolean) => void;
 }
 
 export default function EditMyInfo({
   user,
-  setHasEdited,
   hasEdited,
+  setHasEdited,
+  setIsEditMode,
 }: IEditMyInfo) {
-  const router = useRouter();
   const [cookies] = useCookies(["accessToken"]);
+  const router = useRouter();
   const [gender, setGender] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
-  const [errorNameMsg, seterrorNameMsg] = useState("");
+  const [errorNameMsg, setErrorNameMsg] = useState("");
   const [introduction, setIntroduction] = useState<string>("");
   const [image, setImage] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -46,26 +48,21 @@ export default function EditMyInfo({
   const [changeProfileImgModal, setChangeProfileImgModal] =
     useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  useState<boolean>(false);
-
   const [genderCheck, setGenderCheck] = useState<boolean>(false);
 
-  let maleClicked = false;
-  let femaleClicked = false;
-  console.log(gender);
-  if (gender === "MALE") {
-    maleClicked = true;
-    femaleClicked = false;
-  } else if (gender === "FEMALE") {
-    maleClicked = false;
-    femaleClicked = true;
-  }
+  const { maleClicked, femaleClicked } = useMemo(() => {
+    return {
+      maleClicked: gender === "MALE",
+      femaleClicked: gender === "FEMALE",
+    };
+  }, [gender]);
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile);
-      setImage(URL.createObjectURL(selectedFile));
+      const resizedFile = await resizeImage(selectedFile);
+      setFile(resizedFile);
+      setImage(URL.createObjectURL(resizedFile));
       setHasEdited(true);
     }
   };
@@ -101,18 +98,13 @@ export default function EditMyInfo({
     newAlcoholTypeIds?: number[];
   }) => {
     const nicknameEdited = user?.nickname !== newNickname;
-    console.log(`nicknameEdited: ${nicknameEdited}`);
     const introductionEdited = user?.introduction !== newIntroduction;
-    console.log(`introductionEdited: ${introductionEdited}`);
     const imageEdited = user?.profileImage !== newImage;
-    console.log(`imageEdited: ${imageEdited}`);
     const genderEdited = user?.gender !== newGender;
-    console.log(`genderEdited: ${genderEdited}`);
     const alcoholTypesEdited = !arraysAreEqual(
       user?.alcoholTypeIds,
       newAlcoholTypeIds,
     );
-    console.log(`alcoholTypedEdited: ${alcoholTypesEdited}`);
 
     const isEdited =
       nicknameEdited ||
@@ -125,12 +117,12 @@ export default function EditMyInfo({
 
   useEffect(() => {
     if (user !== undefined) {
-      setNickname(user?.nickname);
-      setIntroduction(user?.introduction ?? "");
-      setImage(user?.profileImage);
-      setGenderCheck(user?.gender == "NONE");
-      setGender(user?.gender ?? "");
-      setAlcoholTypes(user?.alcoholTypeIds ?? []);
+      setNickname(user.nickname);
+      setIntroduction(user.introduction ?? "");
+      setImage(user.profileImage);
+      setGenderCheck(user.gender === "NONE");
+      setGender(user.gender ?? "");
+      setAlcoholTypes(user.alcoholTypeIds ?? []);
     }
   }, [user]);
 
@@ -141,20 +133,30 @@ export default function EditMyInfo({
       checkIfAnyValuesAreEdited({ newGender: "NONE" });
     }
   };
+
   const handleGender = (newGender: string) => {
     setGender(newGender);
     setGenderCheck(false);
     checkIfAnyValuesAreEdited({ newGender });
   };
 
+  const handleAlcoholTypeChange = (value: number) => {
+    const newAlcoholTypeIds = alcoholTypeIds.includes(value)
+      ? alcoholTypeIds.filter((type: number) => type !== value)
+      : [...alcoholTypeIds, value];
+
+    setAlcoholTypes(newAlcoholTypeIds);
+    checkIfAnyValuesAreEdited({ newAlcoholTypeIds });
+  };
+
   const onSubmit = async () => {
     const regex = /[^\w\uAC00-\uD7A3]/;
     if (regex.test(nickname)) {
-      seterrorNameMsg("띄어쓰기 및 특수문자를 사용할수 없어요.");
+      setErrorNameMsg("띄어쓰기 및 특수문자를 사용할수 없어요.");
       return;
     }
 
-    if (user?.nickname != nickname && (await checkNickname(nickname))) {
+    if (user?.nickname !== nickname && (await checkNickname(nickname))) {
       setDoesNameAlreadyExist(true);
       return;
     }
@@ -166,15 +168,16 @@ export default function EditMyInfo({
       alcoholTypeIds,
     };
 
-    const reqeustBlob = new Blob([JSON.stringify(request)], {
+    const requestBlob = new Blob([JSON.stringify(request)], {
       type: "application/json",
     });
 
     const formData = new FormData();
-    formData.append("request", reqeustBlob);
+    formData.append("request", requestBlob);
     if (file) {
       formData.append("image", file);
     }
+
     try {
       const response = await formInstance.put(
         "/v1/api/members/me/profile",
@@ -188,31 +191,46 @@ export default function EditMyInfo({
       );
 
       if (response.data.success) {
-        toast("내 정보 수정이 완료되었어요.");
-        router.replace(`/user/my-space`);
-      }
+        toast("내 정보 수정이 완료되었어요.");        
+        router.replace("/user/my-space");
+      }      
     } catch (error) {
+      console.error(error);
       if (axios.isAxiosError<ErrorResponse, AxiosRequestConfig>(error)) {
         toast(error.response?.data.result);
       }
     }
   };
 
+  const handleProfileImageClick = () => {
+    setChangeProfileImgModal(true);
+  };
+
+  const handleSelectImage = () => {
+    fileInputRef.current?.click();
+    setChangeProfileImgModal(false);
+  };
+
+  const handleDeleteImage = () => {
+    setChangeProfileImgModal(false);
+    setImage(null);
+    setFile(null);
+    setHasEdited(true);
+  };
+
+  const defaultProfileImage = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
+
   return (
     <>
       <label
         className="flex flex-grow flex-col items-center justify-center"
-        onClick={() => setChangeProfileImgModal(true)}
-        // htmlFor="image-files"
+        onClick={handleProfileImageClick}
       >
         <div className="relative mb-6 inline-flex h-[120px] w-[120px]">
           <Image
             width={120}
             height={120}
-            src={
-              image ??
-              `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
-            }
+            src={image ?? defaultProfileImage}
             alt="내 정보 이미지"
             className="absolute left-0 top-0 h-[120px] w-[120px] rounded-full"
           />
@@ -244,7 +262,7 @@ export default function EditMyInfo({
           className="h-11 w-full rounded-[6px] border-[1px] border-solid border-cool-grayscale-300 p-4"
           placeholder="닉네임을 입력해주세요."
           value={nickname}
-          onChange={handleNicknameChange} // Use the handler function here
+          onChange={handleNicknameChange}
           maxLength={8}
         />
         {doesNameAlreadyExist && (
@@ -276,7 +294,7 @@ export default function EditMyInfo({
           <p
             className={`${introduction.length === 0 ? "text-cool-grayscale-400" : "text-cool-grayscale-800"}, text-xs font-normal`}
           >
-            {introduction.length > 0 ? introduction.length : 0}
+            {introduction.length}
           </p>
           <p className="text-xs font-normal text-cool-grayscale-800">/150</p>
         </div>
@@ -285,8 +303,8 @@ export default function EditMyInfo({
         genderCheck={genderCheck}
         maleClicked={maleClicked}
         femaleClicked={femaleClicked}
-        onChangeGenderCheck={(value: boolean) => handleGenderCheck(value)}
-        onChangeGender={(value: string) => handleGender(value)}
+        onChangeGenderCheck={handleGenderCheck}
+        onChangeGender={handleGender}
       />
       <div className="mt-6 h-[1px] w-[91%] bg-[lightly]" />
       <div className="mx-[4%] mt-6 flex flex-row justify-between">
@@ -299,18 +317,7 @@ export default function EditMyInfo({
       </div>
       <PreferredAlcoholForm
         alcoholTypes={alcoholTypeIds}
-        onChangeAlcoholType={(value: number) => {
-          // Compute the new state for alcoholTypeIds
-          const newAlcoholTypeIds = alcoholTypeIds.includes(value)
-            ? alcoholTypeIds.filter((type: number) => type !== value)
-            : [...alcoholTypeIds, value];
-
-          // Update the state
-          setAlcoholTypes(newAlcoholTypeIds);
-
-          // Check if any values are edited
-          checkIfAnyValuesAreEdited({ newAlcoholTypeIds });
-        }}
+        onChangeAlcoholType={handleAlcoholTypeChange}
       />
       <BottomButton enableButton={hasEdited} onClick={onSubmit}>
         완료하기
@@ -318,14 +325,8 @@ export default function EditMyInfo({
 
       {changeProfileImgModal && (
         <ProfileChangeModal
-          handleSelectImg={() => {
-            fileInputRef.current?.click();
-            setChangeProfileImgModal(false);
-          }}
-          handleDeleteImg={() => {
-            setChangeProfileImgModal(false);
-            setImage(null);
-          }}
+          handleSelectImg={handleSelectImage}
+          handleDeleteImg={handleDeleteImage}
           handleCancel={() => setChangeProfileImgModal(false)}
         />
       )}

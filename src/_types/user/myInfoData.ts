@@ -4,7 +4,7 @@ export interface IMyInfo {
   email: string;
   isNotificationsAllowed: boolean;
   introduction: string;
-  profileImage: string;
+  profileImage: string | null;
   gender: string;
   alcoholTypeIds: number[];
 }

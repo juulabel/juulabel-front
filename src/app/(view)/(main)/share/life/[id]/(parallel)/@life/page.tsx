@@ -35,14 +35,14 @@ function LifeDetailPage({ params }: SearchParamProps) {
       {
         queryKey: ["lifeDetail", id],
         queryFn: () => getLifeDetail({ id: Number(id) }),
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
+        staleTime: 0,
+        gcTime: 0,
       },
       {
         queryKey: ["currentUserInfo"],
         queryFn: () => getMyInfo(cookie.accessToken),
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
+        staleTime: 0,
+        gcTime: 0,
       },
     ],
   });

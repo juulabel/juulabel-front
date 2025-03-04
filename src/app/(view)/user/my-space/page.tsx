@@ -1,11 +1,13 @@
 "use client";
 
 import LifeList from "@/_common/LifeList";
-import Loading from "@/_common/Loading";
 import Navigation from "@/_common/Navigation";
 import NoteThumbnail from "@/_common/NoteThumbnail";
-import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
+// import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import ServerToast from "@/_components/share/error/ServerToast";
+import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
+import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
+import SkeletonUIForUserProfile from "@/_components/share/SkeletonUIForUserProfile";
 import MySpaceHeader from "@/_components/user/MySpaceHeader";
 import { IMySpace } from "@/_types/user/mySpaceData";
 import { cn } from "@/_utils/commons";
@@ -23,8 +25,14 @@ import { useCookies } from "react-cookie";
 export default function Page() {
   const [cookies] = useCookies(["accessToken"]);
   const [isTastingNoteClicked, setIsTastingNoteClicked] = useState(true);
-  const imagePath = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
+
+  const imagePath = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;
+  const defaultProfileImage = useMemo(
+    () => `${imagePath}/images/placeholders/profile/default_profile.png`,
+    [imagePath],
+  );
+
   const {
     data: user,
     isLoading: isLoadingUser,
@@ -32,14 +40,16 @@ export default function Page() {
   } = useQuery<IMySpace>({
     queryKey: ["my-space"],
     queryFn: () => getMySpace(cookies.accessToken),
-    staleTime: 300000, // 5 minutes
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const {
-    data: notes,
+    data: noteList,
+    isLoading: isLoadingNoteList,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
+    isFetchingNextPage: isFetchingNextPageNote,
     isError: isNotesError,
   } = useInfiniteQuery({
     queryKey: ["my-note"],
@@ -59,6 +69,7 @@ export default function Page() {
 
   const {
     data: lifeList,
+    isLoading: isLoadingLifeList,
     fetchNextPage: fetchNextLifePage,
     hasNextPage: hasNextLifePage,
     isFetchingNextPage: isFetchingNextLifePage,
@@ -79,27 +90,50 @@ export default function Page() {
     enabled: !!cookies.accessToken && !isTastingNoteClicked,
   });
 
+  const handleTabClick = useCallback((type: "noteList" | "lives") => {
+    setIsTastingNoteClicked(type === "noteList");
+  }, []);
+
   const observerRef = useInfiniteScroll({
     hasNextPage: isTastingNoteClicked ? hasNextPage : hasNextLifePage,
     isFetchingNextPage: isTastingNoteClicked
-      ? isFetchingNextPage
+      ? isFetchingNextPageNote
       : isFetchingNextLifePage,
     fetchNextPage: isTastingNoteClicked ? fetchNextPage : fetchNextLifePage,
   });
 
-  const handleTabClick = useCallback((type: "notes" | "lives") => {
-    setIsTastingNoteClicked(type === "notes");
-  }, []);
-
-  const defaultProfileImage = useMemo(
-    () => `${imagePath}/images/placeholders/profile/default_profile.png`,
-    [imagePath],
-  );
-
-  if (isLoadingUser || isFetchingNextPage || isFetchingNextLifePage)
-    return <Loading />;
+  if (isLoadingUser) return <SkeletonUIForUserProfile />;
   if (userError || isNotesError || isLifeError)
     return <ServerToast text="에러가 발생했습니다" redirectPath="/" />;
+  if (!user) return null;
+
+  const totalPosts = user.myTastingNoteCount + user.myDailyLifeCount;
+  const isActiveTab = isTastingNoteClicked
+    ? "border-black text-base text-black"
+    : "border-cool-grayscale-300 text-cool-grayscale-600";
+  const isInactiveTab = !isTastingNoteClicked
+    ? "border-black text-base text-black"
+    : "border-cool-grayscale-300 text-cool-grayscale-600";
+
+  const renderLoadingIndicator = (isFetching: boolean, hasMore: boolean) => {
+    if (isFetching) return null;
+    if (hasMore) {
+      return (
+        <div className="flex h-12 w-full items-center justify-center py-20">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-cool-grayscale-200 border-t-blue-500"></div>
+        </div>
+      );
+    }
+    return <br />;
+  };
+
+  const renderEmptyState = (type: string) => (
+    <div className="flex h-[calc(100vh-310px)] items-center justify-center">
+      <p className="text-base font-medium text-slate-500">
+        작성된 {type}이 없어요
+      </p>
+    </div>
+  );
 
   if (!user) return null;
 
@@ -125,7 +159,7 @@ export default function Page() {
               {user.hasBadge && (
                 <Image
                   onClick={() => setIsBadgeInfoModalOpen(true)}
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`}
+                  src={`${imagePath}/images/kisa-badge.png`}
                   alt="배지"
                   className="ml-2"
                   width={32}
@@ -160,7 +194,7 @@ export default function Page() {
               <p>작성된 자기소개가 없어요</p>
             )}
           </div>
-          <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
+          {/* <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
             <Link
               href={`/user/profile/${user.memberId}/following`}
               className="flex flex-col items-center justify-center"
@@ -176,7 +210,7 @@ export default function Page() {
             <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
 
             <Link
-              href={`/user/profile/${user.memberId}/followers`}
+              href={`/user/profile/${user.memberId}/follower`}
               className="flex flex-col items-center justify-center"
             >
               <p className="text-sm font-normal text-cool-grayscale-500">
@@ -197,111 +231,70 @@ export default function Page() {
                 {totalPosts}
               </p>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-row pt-4">
             <button
-              className={`flex h-11 w-1/2 flex-row items-center justify-center border-b-2 ${
-                isTastingNoteClicked
-                  ? "border-black"
-                  : "border-cool-grayscale-300"
-              }`}
-              onClick={() => handleTabClick("notes")}
+              className={`flex h-11 w-1/2 flex-row items-center justify-center border-b-2 ${isActiveTab}`}
+              onClick={() => handleTabClick("noteList")}
             >
-              <p
-                className={`${
-                  isTastingNoteClicked
-                    ? "text-base text-black"
-                    : "text-cool-grayscale-600"
-                }`}
-              >
-                시음노트
-              </p>
+              <p>시음노트</p>
               <p className="ml-1 text-sm text-cool-grayscale-600">
                 {user.myTastingNoteCount}개
               </p>
             </button>
             <button
-              className={`flex h-11 w-1/2 flex-row items-center justify-center border-b-2 ${
-                !isTastingNoteClicked
-                  ? "border-black"
-                  : "border-cool-grayscale-300"
-              }`}
+              className={`flex h-11 w-1/2 flex-row items-center justify-center border-b-2 ${isInactiveTab}`}
               onClick={() => handleTabClick("lives")}
             >
-              <p
-                className={`${
-                  !isTastingNoteClicked
-                    ? "text-base text-black"
-                    : "text-cool-grayscale-600"
-                }`}
-              >
-                일상생활
-              </p>
+              <p>일상생활</p>
               <p className="ml-1 text-sm text-cool-grayscale-600">
                 {user.myDailyLifeCount}개
               </p>
             </button>
           </div>
         </div>
-        <div className="h-full overflow-y-auto pt-[310px] scrollbar-hide">
+        <div className="h-full overflow-y-auto px-4 pt-[250px] scrollbar-hide">
           {isTastingNoteClicked ? (
-            <>
-              <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto px-4 py-6">
-                {notes && notes.length > 0 ? (
-                  notes.map((note) => (
+            isLoadingNoteList ? (
+              <SkeletomUIForList />
+            ) : noteList && noteList.length > 0 ? (
+              <>
+                <div className="grid grid-cols-2 gap-x-5 gap-y-5 py-6">
+                  {noteList.map((note) => (
                     <NoteThumbnail key={note.TastingNoteId} {...note} />
-                  ))
-                ) : (
-                  <div className="col-span-2 flex h-[calc(100vh-270px)] items-center justify-center">
-                    <p className="text-base font-medium text-slate-500">
-                      작성된 시음노트가 없어요
-                    </p>
-                  </div>
-                )}
-              </div>
+                  ))}
+                </div>
+                <div ref={observerRef} className="loading-indicator">
+                  {renderLoadingIndicator(isFetchingNextPageNote, hasNextPage)}
+                </div>
+              </>
+            ) : (
+              renderEmptyState("시음노트")
+            )
+          ) : isLoadingLifeList ? (
+            <LifeListSkeletonList />
+          ) : lifeList && lifeList.length > 0 ? (
+            <div className="pt-3 pb-10">
+              {lifeList.map((post) => (
+                <LifeList key={post.dailyLifeId} {...post} />
+              ))}
               <div ref={observerRef} className="loading-indicator">
-                {isFetchingNextPage ? (
-                  <Loading />
-                ) : hasNextPage ? (
-                  <p>Loading more...</p>
-                ) : (
-                  <br />
+                {renderLoadingIndicator(
+                  isFetchingNextLifePage,
+                  hasNextLifePage,
                 )}
               </div>
-            </>
+            </div>
           ) : (
-            <>
-              <div className="px-4">
-                {lifeList && lifeList.length > 0 ? (
-                  lifeList.map((post) => (
-                    <LifeList key={post.dailyLifeId} {...post} />
-                  ))
-                ) : (
-                  <div className="flex h-[calc(100vh-270px)] items-center justify-center">
-                    <p className="text-base font-medium text-slate-500">
-                      작성된 일상생활이 없어요
-                    </p>
-                  </div>
-                )}
-              </div>
-              <div ref={observerRef} className="loading-indicator">
-                {isFetchingNextLifePage ? (
-                  <Loading />
-                ) : hasNextLifePage ? (
-                  <p>Loading more...</p>
-                ) : (
-                  <br />
-                )}
-              </div>
-            </>
+            renderEmptyState("일상생활")
           )}
         </div>
       </div>
       <Navigation />
-      {isBadgeInfoModalOpen && (
+      {/* {isBadgeInfoModalOpen && (
         <BadgeInfoModal setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen} />
-      )}
+      )} */}
     </>
   );
 }
