@@ -6,29 +6,26 @@ import { useTastingNoteInformationStore } from "@/_store/tastingNote";
 import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { ITastingNoteWriteRequest } from "@/_types";
 import { cn } from "@/_utils/commons";
+import { resizeImage } from "@/_utils/resizeImage";
 import { formInstance } from "@/app/api/axios";
 import ImageIcon from "@/icons/image_icon.svg";
 import axios, { AxiosRequestConfig } from "axios";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Rating from "./Rating";
 import TopHeaderWithButton from "./TopHeaderWithButton";
-import { resizeImage } from "@/_utils/resizeImage";
 
 async function createFileFromUrl(url: string): Promise<File> {
   const response = await fetch(url);
   const blob = await response.blob();
-
-  const file = new File([blob], url.split("/").pop() || "image", {
+  return new File([blob], url.split("/").pop() || "image", {
     type: blob.type,
   });
-
-  return file;
 }
 
 interface Inputs {
@@ -38,6 +35,7 @@ interface Inputs {
 interface FileInfo {
   file: File;
   id: string;
+  url?: string;
 }
 
 interface ErrorResponse {
@@ -80,12 +78,9 @@ export default function CommentAndRatingForm({
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const {
-    register,
     handleSubmit,
-    watch,
     control,
     setValue,
-    formState: { errors, isValid },
   } = useForm<Inputs>({
     defaultValues: {
       files: [],
@@ -93,27 +88,28 @@ export default function CommentAndRatingForm({
   });
 
   // URL에서 id 값을 추출
-  const extractIdFromPath = () => {
+  const tastingNoteId = useMemo(() => {
     const match = pathname.match(/\/share\/note\/(\d+)\/edit/);
     return match ? match[1] : null;
-  };
-  const tastingNoteId = extractIdFromPath();
+  }, [pathname]);
+
+  // 이미지 URL을 메모이제이션하여 불필요한 리렌더링 방지
+  const imageUrls = useMemo(() => {
+    return images.map(image => ({
+      id: image.id,
+      url: URL.createObjectURL(image.file)
+    }));
+  }, [images]);
 
   useEffect(() => {
     if (imageUrlList.length > 0) {
-      const existingImages = imageUrlList.map(async (url) => {
-        const file = await createFileFromUrl(url);
-
-        return {
+      Promise.all(
+        imageUrlList.map(async (url) => ({
           id: crypto.randomUUID(),
-          file, // File 객체
+          file: await createFileFromUrl(url),
           url,
-        };
-      });
-
-      Promise.all(existingImages).then((images) => {
-        setImages(images);
-      });
+        }))
+      ).then(setImages);
     }
   }, [imageUrlList]);
 
@@ -142,66 +138,59 @@ export default function CommentAndRatingForm({
   }, [rating]);
 
   // 부연설명 입력폼 크기 조절
-  const handleResizeHeight = () => {
+  const handleResizeHeight = useCallback(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  };
+  }, []);
 
   // 부연설명 입력 시 실행되는 함수
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleContentChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
     handleResizeHeight();
-  };
+  }, [handleResizeHeight]);
 
-  const handleCheckboxChange = () => {
-    const newCheckedState = !isPrivate;
-    setIsPrivate(newCheckedState);
-  };
+  const handleCheckboxChange = useCallback(() => {
+    setIsPrivate(prev => !prev);
+  }, []);
 
   // Image selection event handler
-  const handleImageChange = async (
+  const handleImageChange = useCallback(async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const selectedFiles = event.target.files
       ? Array.from(event.target.files)
       : null;
-    if (selectedFiles) {
-      const totalImages = images.length + selectedFiles.length;
-      if (totalImages > 9) {
-        alert("최대 9개의 이미지만 업로드할 수 있습니다.");
-        return;
-      }
-
-      const newImagesWithId = selectedFiles.map(async (file) => {
-        const resizedFile = await resizeImage({
-          file,
-          width: 1280,
-          height: 1280,
-        });
-        return {
-          file: resizedFile,
-          id: crypto.randomUUID(),
-        };
-      });
-
-      const processedImages = await Promise.all(newImagesWithId);
-
-      setImages((prev) => [...(prev || []), ...processedImages]);
-    } else {
+    if (!selectedFiles) {
       setImages([]);
+      return;
     }
-  };
+    
+    const totalImages = images.length + selectedFiles.length;
+    if (totalImages > 9) {
+      alert("최대 9개의 이미지만 업로드할 수 있습니다.");
+      return;
+    }
+
+    const processedImages = await Promise.all(
+      selectedFiles.map(async (file) => ({
+        file: await resizeImage({ file, width: 1280, height: 1280 }),
+        id: crypto.randomUUID(),
+      }))
+    );
+
+    setImages(prev => [...prev, ...processedImages]);
+  }, [images]);
 
   // Image removal event handler
-  const removeHandler = (event: React.MouseEvent<HTMLDivElement>) => {
+  const removeHandler = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     const clickedImageId = event.currentTarget.id;
-    setImages((prev) => prev.filter((image) => image.id !== clickedImageId));
-  };
+    setImages(prev => prev.filter(image => image.id !== clickedImageId));
+  }, []);
 
   // 등록 버튼 클릭 시 실행되는 함수
-  const handleSubmitButton = () => {
+  const handleSubmitButton = useCallback(() => {
     // 부연설명, 달점, 비공개 여부 localStorage에 저장
     tastingNoteInformationStore.setContent(content);
     tastingNoteInformationStore.setRating(rating);
@@ -209,9 +198,9 @@ export default function CommentAndRatingForm({
 
     // 모달 띄움
     setModalOpen(true);
-  };
+  }, [content, isPrivate, rating, tastingNoteInformationStore]);
 
-  const onSubmit = async (data: Inputs) => {
+  const onSubmit = useCallback(async (data: Inputs) => {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
@@ -230,9 +219,11 @@ export default function CommentAndRatingForm({
       rating,
       content,
     };
+    
     const reqeustBlob = new Blob([JSON.stringify(request)], {
       type: "application/json",
     });
+    
     const formData = new FormData();
     formData.append("request", reqeustBlob);
     files.forEach((image) => {
@@ -259,8 +250,7 @@ export default function CommentAndRatingForm({
           ? "시음노트 수정이 완료되었어요."
           : "시음노트 작성이 완료되었어요.";
         toast(successMessage);
-        router.push(`/share/note/${response.data.result.id}`);
-        router.refresh();
+        router.replace(`/share/note/${response.data.result.id}`);        
       }
     } catch (error) {
       console.error(error);
@@ -270,7 +260,23 @@ export default function CommentAndRatingForm({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [
+    alcoholTypeId, 
+    alcoholicDrinksDetails, 
+    alcoholicDrinksId, 
+    colorId, 
+    content, 
+    cookie.accessToken, 
+    flavorLevelIds, 
+    isEditMode, 
+    isPrivate, 
+    isSubmitting, 
+    rating, 
+    router, 
+    scentIds, 
+    sensoryLevelIds, 
+    tastingNoteId
+  ]);
 
   return (
     <>
@@ -358,14 +364,14 @@ export default function CommentAndRatingForm({
           {/* 아래부터는 스크롤 고정 부분 */}
           <div className="sticky bottom-0 bg-white">
             {/* 이미지 미리보기  UI*/}
-            {images.length !== 0 && (
+            {images.length > 0 && (
               <div className="flex w-full items-center space-x-4 overflow-x-scroll px-4 pb-3 pt-2 scrollbar-hide">
-                {images.map((image) => (
+                {imageUrls.map((image) => (
                   <div className="relative shrink-0" key={image.id}>
                     <div className="h-14 w-14 md:h-16 md:w-16">
                       <Image
                         alt="일상생활 내용 이미지"
-                        src={URL.createObjectURL(image.file)}
+                        src={image.url}
                         width={1920}
                         height={1080}
                         className="h-full w-full rounded-lg object-cover"
@@ -407,7 +413,7 @@ export default function CommentAndRatingForm({
             <label
               className={cn(
                 "flex cursor-pointer items-center border-t text-cool-grayscale-800",
-                (!images || images.length >= 9) && "text-cool-grayscale-400",
+                images.length >= 9 && "text-cool-grayscale-400",
               )}
               htmlFor="image-files"
             >
@@ -417,8 +423,7 @@ export default function CommentAndRatingForm({
                   height={24}
                   className={cn(
                     "fill-cool-grayscale-800",
-                    (!images || images.length >= 9) &&
-                      "fill-cool-grayscale-400",
+                    images.length >= 9 && "fill-cool-grayscale-400",
                   )}
                 />
               </div>
@@ -427,15 +432,15 @@ export default function CommentAndRatingForm({
                 name="files"
                 control={control}
                 defaultValue={[]}
-                render={({ field: { onChange, value } }) => (
+                render={() => (
                   <input
                     type="file"
                     id="image-files"
                     multiple
                     className="hidden"
                     accept="image/*"
-                    onChange={handleImageChange} // 파일 선택 시 이벤트 핸들러
-                    disabled={!images || images.length >= 9} // 최대 이미지 개수 체크
+                    onChange={handleImageChange}
+                    disabled={images.length >= 9}
                   />
                 )}
               />
