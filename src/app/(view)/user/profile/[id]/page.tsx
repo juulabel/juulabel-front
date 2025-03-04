@@ -258,7 +258,7 @@ export default function Page({ params }: { params: { id: string } }) {
               {totalPosts}
             </p>
           </div>
-        </div> */}
+        </div>
         <div className="flex flex-row pt-4">
           <button
             className={`flex h-11 flex-row items-center justify-center border-b-2 ${isTastingNoteClicked ? "border-black" : "border-cool-grayscale-300"} w-1/2`}
@@ -288,7 +288,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </button>
         </div>
       </div>
-      <div className="h-full overflow-y-auto px-4 pt-[250px] scrollbar-hide">
+      <div className="h-full overflow-y-auto px-4 pt-[350px] scrollbar-hide">
         {isTastingNoteClicked ? (
           isLoadingNoteList ? (
             <SkeletomUIForList />

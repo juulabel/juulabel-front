@@ -137,8 +137,6 @@ export default function Page() {
 
   if (!user) return null;
 
-  const totalPosts = user.myTastingNoteCount + user.myDailyLifeCount;
-
   return (
     <>
       <div className="relative h-full w-full max-w-[560px]">
@@ -194,7 +192,7 @@ export default function Page() {
               <p>작성된 자기소개가 없어요</p>
             )}
           </div>
-          {/* <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
+          <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
             <Link
               href={`/user/profile/${user.memberId}/following`}
               className="flex flex-col items-center justify-center"
@@ -231,7 +229,7 @@ export default function Page() {
                 {totalPosts}
               </p>
             </div>
-          </div> */}
+          </div>
 
           <div className="flex flex-row pt-4">
             <button
@@ -254,7 +252,7 @@ export default function Page() {
             </button>
           </div>
         </div>
-        <div className="h-full overflow-y-auto px-4 pt-[250px] scrollbar-hide">
+        <div className="h-full overflow-y-auto px-4 pt-[300px] scrollbar-hide">
           {isTastingNoteClicked ? (
             isLoadingNoteList ? (
               <SkeletomUIForList />
@@ -275,7 +273,7 @@ export default function Page() {
           ) : isLoadingLifeList ? (
             <LifeListSkeletonList />
           ) : lifeList && lifeList.length > 0 ? (
-            <div className="pt-3 pb-10">
+            <div className="pb-10 pt-3">
               {lifeList.map((post) => (
                 <LifeList key={post.dailyLifeId} {...post} />
               ))}
