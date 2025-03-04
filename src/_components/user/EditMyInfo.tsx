@@ -60,7 +60,11 @@ export default function EditMyInfo({
   const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      const resizedFile = await resizeImage(selectedFile);
+      const resizedFile = await resizeImage({
+        file: selectedFile,
+        width: 120,
+        height: 120,
+      });
       setFile(resizedFile);
       setImage(URL.createObjectURL(resizedFile));
       setHasEdited(true);

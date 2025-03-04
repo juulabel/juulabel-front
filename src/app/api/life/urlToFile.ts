@@ -1,6 +1,6 @@
 export const urlToFile = async ({ url }: { url: string }) => {
   // Fetch the image as a Blob
-  try {
+  try {  
     const response = await fetch(url);
     const blob = await response.blob();
 

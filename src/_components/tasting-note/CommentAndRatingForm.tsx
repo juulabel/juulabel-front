@@ -18,6 +18,7 @@ import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Rating from "./Rating";
 import TopHeaderWithButton from "./TopHeaderWithButton";
+import { resizeImage } from "@/_utils/resizeImage";
 
 async function createFileFromUrl(url: string): Promise<File> {
   const response = await fetch(url);
@@ -160,7 +161,9 @@ export default function CommentAndRatingForm({
   };
 
   // Image selection event handler
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const selectedFiles = event.target.files
       ? Array.from(event.target.files)
       : null;
@@ -170,12 +173,22 @@ export default function CommentAndRatingForm({
         alert("최대 9개의 이미지만 업로드할 수 있습니다.");
         return;
       }
-      const newImagesWithId = selectedFiles.map((file) => ({
-        file,
-        id: crypto.randomUUID(),
-      }));
 
-      setImages((prev) => [...(prev || []), ...newImagesWithId]);
+      const newImagesWithId = selectedFiles.map(async (file) => {
+        const resizedFile = await resizeImage({
+          file,
+          width: 1280,
+          height: 1280,
+        });
+        return {
+          file: resizedFile,
+          id: crypto.randomUUID(),
+        };
+      });
+
+      const processedImages = await Promise.all(newImagesWithId);
+
+      setImages((prev) => [...(prev || []), ...processedImages]);
     } else {
       setImages([]);
     }
@@ -205,7 +218,6 @@ export default function CommentAndRatingForm({
 
     const { files } = data;
 
-    console.log(content);
     const request: ITastingNoteWriteRequest = {
       alcoholicDrinksDetails,
       alcoholTypeId,
