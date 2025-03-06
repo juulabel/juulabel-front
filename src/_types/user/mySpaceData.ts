@@ -1,4 +1,5 @@
 export interface IMySpace {
+  memberId: number;
   nickname: string;
   introduction: string;
   profileImage: string;
@@ -7,5 +8,5 @@ export interface IMySpace {
   savedTastingNoteCount: number;
   followingCount: number | null;
   followerCount: number | null;
-  documents: number | null;
+  hasBadge: boolean;
 }

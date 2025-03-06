@@ -46,7 +46,7 @@ export default function Lifes() {
   }
 
   return (
-    <>
+    <div className="pb-[65px]">
       <ul>
         {life?.map((post) => (
           <li key={post.dailyLifeId}>
@@ -60,6 +60,6 @@ export default function Lifes() {
         </div>
       )}
       <div ref={observerRef} />
-    </>
+    </div>
   );
 }

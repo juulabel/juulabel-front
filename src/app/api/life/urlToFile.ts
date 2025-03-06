@@ -1,14 +1,16 @@
-export const urlToFile = async ({
-  url,
-  filename,
-}: {
-  url: string;
-  filename: string;
-}) => {
+export const urlToFile = async ({ url }: { url: string }) => {
   // Fetch the image as a Blob
-  const response = await fetch(url);
-  const blob = await response.blob();
+  try {  
+    const response = await fetch(url);
+    const blob = await response.blob();
 
-  // Create a File object from the Blob
-  return new File([blob], filename, { type: blob.type });
+    const file = new File([blob], url.split("/").pop() || "image", {
+      type: blob.type,
+    });
+
+    return file;
+  } catch (error) {
+    console.error("Error converting URL to File:", error);
+    throw error;
+  }
 };

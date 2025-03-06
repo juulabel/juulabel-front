@@ -374,7 +374,12 @@ export default function Page() {
       {openAlcoholTypeDataList || openOfficialSearchDataList ? (
         <ScrollUpFloatingBtn />
       ) : (
-        <Navigation />
+        <Navigation
+          handleSearchClick={() => {
+            setSearchQuery("");
+            setIsInputFocused(false);
+          }}
+        />
       )}
     </div>
   );
