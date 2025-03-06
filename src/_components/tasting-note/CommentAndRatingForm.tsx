@@ -11,7 +11,13 @@ import ImageIcon from "@/icons/image_icon.svg";
 import axios, { AxiosRequestConfig } from "axios";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
@@ -49,9 +55,10 @@ interface ICommentAndRatingForm {
   handleStepBack: () => void;
 }
 
-export default function CommentAndRatingForm({
-  handleStepBack,
-}: ICommentAndRatingForm) {
+const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
+  { handleStepBack }: ICommentAndRatingForm,
+  ref,
+) {
   const pathname = usePathname();
   const isEditMode = pathname.includes("/edit");
   const { tastingNoteRequest, imageUrlList } = useTastingNoteStore();
@@ -78,6 +85,8 @@ export default function CommentAndRatingForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  console.log(rating);
+
   const {
     register,
     handleSubmit,
@@ -97,6 +106,12 @@ export default function CommentAndRatingForm({
     return match ? match[1] : null;
   };
   const tastingNoteId = extractIdFromPath();
+
+  useImperativeHandle(ref, () => ({
+    submitForm: () => {
+      handleSubmit(onSubmit)();
+    },
+  }));
 
   useEffect(() => {
     if (imageUrlList.length > 0) {
@@ -205,7 +220,6 @@ export default function CommentAndRatingForm({
 
     const { files } = data;
 
-    console.log(content);
     const request: ITastingNoteWriteRequest = {
       alcoholicDrinksDetails,
       alcoholTypeId,
@@ -262,7 +276,7 @@ export default function CommentAndRatingForm({
 
   return (
     <>
-      <TopHeaderWithButton
+      {/* <TopHeaderWithButton
         title={isEditMode ? "시음노트 수정하기" : "시음노트 작성하기"}
         buttonType="text"
         buttonName="등록"
@@ -272,7 +286,7 @@ export default function CommentAndRatingForm({
         haveSteps={true}
         currentStep={5}
         remainStep={0}
-      />
+      /> */}
       <div className="mx-[18px] mt-6 flex flex-col gap-y-10">
         {/* 타이틀 */}
         <div>
@@ -461,4 +475,6 @@ export default function CommentAndRatingForm({
       )}
     </>
   );
-}
+});
+
+export default CommentAndRatingForm;
