@@ -22,10 +22,15 @@ export interface IAdditionalMemberInfo {
   alcoholTypeIds: number[];
 }
 
-interface IMemberInfo {
+export interface IMyInfo {
   memberId: number;
   nickname: string;
-  profileImage: string;
+  email: string;
+  isNotificationsAllowed: boolean;
+  introduction: string;
+  profileImage: string | null;
+  gender: string;
+  alcoholTypeIds: number[];
 }
 
 export interface IApiResponse<T> {
