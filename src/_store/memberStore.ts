@@ -1,9 +1,9 @@
-import { IMemberInfo } from "@/_types";
+import { IMyInfo } from "@/_types";
 import { create } from "zustand";
 
 interface MemberState {
-  memberInfo: IMemberInfo | null;
-  setMemberInfo: (data: IMemberInfo) => void;
+  memberInfo: IMyInfo | null;
+  setMemberInfo: (data: IMyInfo) => void;
 }
 
 const useMemberStore = create<MemberState>((set) => ({

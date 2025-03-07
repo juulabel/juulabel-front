@@ -10,10 +10,10 @@ import { formInstance } from "@/app/api/axios";
 import axios, { AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 import { checkNickname } from "@/app/api/auth/checkName";
-import { IMyInfo } from "@/_types/user/myInfoData";
 import { useCookies } from "react-cookie";
 import { resizeImage } from "@/_utils/resizeImage";
 import { urlToFile } from "@/app/api/life/urlToFile";
+import { IMyInfo } from "@/_types";
 
 interface ErrorResponse {
   message: string;
