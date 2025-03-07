@@ -42,7 +42,7 @@ export default function LevelSelector({
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(event.target.value);
       const newSelectedId = levels[value].id;
-
+      //selectedId 는 선택된게 있는지 체크함
       setSelectedId((prev) => {
         // 기존에 선택했던 값을 배열에서 제거하고 새로 선택한 값을 추가
         setSelectedIds((prevIds) => {
@@ -84,7 +84,7 @@ export default function LevelSelector({
           {levels.map((level, index) => (
             <div
               key={level.id}
-              className={`h-[6px] w-[9px] rounded-full ${
+              className={`z-0 h-[6px] w-[9px] rounded-full ${
                 index === levels.findIndex((l) => l.id === selectedId)
                   ? "opacity-0"
                   : index < levels.findIndex((l) => l.id === selectedId)

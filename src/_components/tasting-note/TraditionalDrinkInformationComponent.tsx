@@ -15,7 +15,7 @@ export default function TraditionalDrinkInformationComponent() {
       </p>
       <div
         className="mt-4 flex h-[37px] cursor-pointer items-center justify-center rounded-[4px] bg-black px-3 py-2"
-        onClick={() => router.push("/share/note/write")}
+        onClick={() => router.replace("/share/note/write")}
       >
         <Image
           width={16}

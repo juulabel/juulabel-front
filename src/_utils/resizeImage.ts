@@ -1,12 +1,20 @@
-export const resizeImage = (file: File): Promise<File> => {
+export const resizeImage = ({
+  file,
+  width,
+  height,
+}: {
+  file: File;
+  width: number;
+  height: number;
+}): Promise<File> => {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        canvas.width = 120;
-        canvas.height = 120;
+        canvas.width = width;
+        canvas.height = height;
 
         const ctx = canvas.getContext("2d")!;
         const min = Math.min(img.width, img.height);
@@ -22,8 +30,8 @@ export const resizeImage = (file: File): Promise<File> => {
           min, // Crop height (square size)
           0, // Destination X
           0, // Destination Y
-          120, // Destination width
-          120, // Destination height
+          width, // Destination width
+          height, // Destination height
         );
 
         canvas.toBlob(

@@ -340,7 +340,7 @@ export default function ShareTraditionalLiquor({ id }: Props) {
                 alt="icon"
               />
               <div className="flex flex-col items-center text-[14px] text-cool-grayscale-600">
-                <span>잘 맞는 페어링 음식을 찾 있어요.</span>
+                <span>잘 맞는 페어링 음식을 찾고 있어요.</span>
                 <span>조금만 기다려 주세요!</span>
               </div>
             </div>

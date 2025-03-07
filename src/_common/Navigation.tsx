@@ -9,14 +9,16 @@ import LabelCameraSvg from "@/icons/navigation/label-camera.svg";
 import ShopSvg from "@/icons/navigation/shop.svg";
 import ShopActSvg from "@/icons/navigation/shop-active.svg";
 import MypageSvg from "@/icons/navigation/mypage.svg";
-import MypageActSvg from "@/icons/navigation/mypage-active.svg";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/_utils/commons";
-import Modal from "./Modal";
 import ModalWithoutCancel from "./ModalWithoutCancel";
 
-export default function Navigation() {
+export default function Navigation({
+  handleSearchClick,
+}: {
+  handleSearchClick?: () => void;
+}) {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const pathname = usePathname();
 
@@ -39,6 +41,7 @@ export default function Navigation() {
         </Link>
         <Link
           href="/search"
+          onClick={handleSearchClick}
           className={cn(
             "flex w-1/5 flex-col items-center justify-center text-cool-grayscale-500",
             pathname.startsWith("/search") && "text-cool-grayscale-800",

@@ -16,6 +16,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { urlToFile } from "@/app/api/life/urlToFile";
 import Loading from "@/_common/Loading";
+import { resizeImage } from "@/_utils/resizeImage";
 
 export interface Inputs {
   title: string;
@@ -168,7 +169,7 @@ function NewPostPage() {
   );
 
   const handleImageChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
       const selectedFiles = event.target.files
         ? Array.from(event.target.files)
         : null;
@@ -181,13 +182,26 @@ function NewPostPage() {
         return;
       }
 
-      const newImagesWithId = selectedFiles.map((file) => ({
-        file,
-        id: crypto.randomUUID(),
-        preview: URL.createObjectURL(file),
-      }));
+      const processedImages = await Promise.all(
+        selectedFiles.map(async (file) => {
+          const resizedFile = await resizeImage({
+            file,
+            width: 1280,
+            height: 1280,
+          });
 
-      setImages((prev) => [...prev, ...newImagesWithId]);
+          console.log(file.size);
+          console.log(resizedFile.size);
+
+          return {
+            file: resizedFile,
+            id: crypto.randomUUID(),
+            preview: URL.createObjectURL(resizedFile),
+          };
+        }),
+      );
+
+      setImages((prev) => [...prev, ...processedImages]);
     },
     [images.length],
   );

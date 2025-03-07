@@ -2,7 +2,6 @@
 
 import Loading from "@/_common/Loading";
 import UserHeader from "@/_components/user/UserHeader";
-import { IMyInfo } from "@/_types/user/myInfoData";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -11,6 +10,7 @@ import { useRouter } from "next/navigation";
 import EditMyInfo from "@/_components/user/EditMyInfo";
 import ConfirmModal from "@/_common/ConfirmModal";
 import MyInfoBody from "@/_components/user/MyInfoBody";
+import { IMyInfo } from "@/_types";
 
 export default function Page() {
   const router = useRouter();
