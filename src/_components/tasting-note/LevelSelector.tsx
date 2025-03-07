@@ -43,16 +43,18 @@ export default function LevelSelector({
       const value = parseInt(event.target.value);
       const newSelectedId = levels[value].id;
       //selectedId 는 선택된게 있는지 체크함
-      setSelectedId((prev) => {
-        // 기존에 선택했던 값을 배열에서 제거하고 새로 선택한 값을 추가
-        setSelectedIds((prevIds) => {
-          const updatedIds = prevIds.filter((id) => id !== prev); // 이전 값 제거
-          return updatedIds.includes(newSelectedId)
-            ? updatedIds
-            : [...updatedIds, newSelectedId]; // 새로운 값 추가
+      setTimeout(() => {
+        setSelectedId((prev) => {
+          // 기존에 선택했던 값을 배열에서 제거하고 새로 선택한 값을 추가
+          setSelectedIds((prevIds) => {
+            const updatedIds = prevIds.filter((id) => id !== prev); // 이전 값 제거
+            return updatedIds.includes(newSelectedId)
+              ? updatedIds
+              : [...updatedIds, newSelectedId]; // 새로운 값 추가
+          });
+          return newSelectedId;
         });
-        return newSelectedId;
-      });
+      }, 0);
     },
     [levels, setSelectedIds],
   );
