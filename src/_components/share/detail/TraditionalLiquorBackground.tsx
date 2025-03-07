@@ -3,21 +3,23 @@
 import React from "react";
 import Image from "next/image";
 
-const bgImages = [
-  "/images/traditional_liquor_bg.jpg",
-  "/images/traditional_liquor_bg2.jpg",
-];
+import bgImage1 from "@/icons/images/traditional_liquor_bg.jpg";
+import bgImage2 from "@/icons/images/traditional_liquor_bg2.jpg";
+
+const bgImages = [bgImage1, bgImage2];
 
 const TraditionalLiquorBackground = React.memo(() => {
+  const selectedImage = bgImages[Math.floor(Math.random() * bgImages.length)];
   return (
     <>
       <Image
-        src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${bgImages[Math.floor(Math.random() * bgImages.length)]}`}
+        src={selectedImage}
         fill
         className="object-cover"
         alt="Landscape"
-        quality={50}
+        quality={70}
         priority
+        placeholder="blur"
       />
       <div className={"absolute inset-0 bg-black opacity-40"}></div>
     </>

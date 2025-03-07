@@ -12,6 +12,7 @@ import VisualAndTextureForm from "@/_components/tasting-note/VisualAndTextureFor
 import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { ITastingNoteWriteRequest } from "@/_types";
 import { cn } from "@/_utils/commons";
+import useTastingNoteDataForEdit from "@/_utils/hooks/useTastingNoteDataForEdit";
 import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
 import { useQuery } from "@tanstack/react-query";
@@ -44,61 +45,10 @@ function EditTastingNote({ id }: IEditTastingNote) {
 
   const { setTastingNoteRequest, setImageUrlList } = useTastingNoteStore();
   const [cookies] = useCookies(["accessToken"]);
+  const { noteDetail, alcoholTypeData } = useTastingNoteDataForEdit(id);
 
-  const { data } = useQuery({
-    queryKey: ["noteDetail", id],
-    queryFn: () =>
-      getNoteDetail({
-        token: cookies.accessToken,
-        id: id,
-      }),
-    select: (data) => data.result,
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 5,
-    // enabled: !cookies.accessToken,
-  });
-
-  const { data: alcoholTypeData } = useQuery({
-    queryKey: ["alcoholType"],
-    queryFn: getAlcoholType,
-    select: (data) => data.alcoholTypeInfos,
-  });
   const [containerHeight, setContainerHeight] = useState<number>(0);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    if (data && alcoholTypeData) {
-      // `alcoholTypeData`에서 `alcoholTypeName`과 일치하는 `id`를 찾음
-      const matchedType = alcoholTypeData.find(
-        (type: IAlcoholType) =>
-          type.name === data.tastingNoteDetailInfo.alcoholTypeName,
-      );
-
-      const requestData: ITastingNoteWriteRequest = {
-        alcoholicDrinksDetails: {
-          alcoholicDrinksName: data.tastingNoteDetailInfo.alcoholicDrinksName,
-          alcoholContent: data.tastingNoteDetailInfo.alcoholContent,
-          alcoholTypeName: data.tastingNoteDetailInfo.alcoholTypeName,
-          breweryName: data.tastingNoteDetailInfo.breweryName,
-          breweryRegion: "",
-        },
-        alcoholTypeId: matchedType ? matchedType.id : 0,
-        alcoholicDrinksId: data.tastingNoteDetailInfo.tastingNoteId,
-        colorId: data.tastingNoteDetailInfo.rgbColor,
-        scentIds: data.scentIds,
-        sensoryLevelIds: data.sensoryLevelIds,
-        flavorLevelIds: data.flavorLevelIds,
-        content: data.tastingNoteDetailInfo.content,
-        isPrivate: false,
-        rating: data.tastingNoteDetailInfo.rating,
-      };
-
-      const imageUrlList = data.imageInfo.imageUrlList || [];
-      setImageUrlList(imageUrlList);
-
-      setTastingNoteRequest({ request: requestData, files: [] });
-    }
-  }, [data, alcoholTypeData, setImageUrlList, setTastingNoteRequest]);
 
   const [step, setStep] = useState<number>(1);
   const [rest, setRest] = useState<number>(4);
@@ -109,6 +59,11 @@ function EditTastingNote({ id }: IEditTastingNote) {
       setStep((prev) => prev + 1);
       setRest((prev) => prev - 1);
     }
+
+    if (stepRefs.current[step + 1]) {
+      const currentHeight = stepRefs.current[step + 1]?.scrollHeight ?? 0;
+      setContainerHeight(currentHeight);
+    }
   };
 
   // step을 1 감소시키는 함수
@@ -117,7 +72,13 @@ function EditTastingNote({ id }: IEditTastingNote) {
       setStep((prev) => prev - 1);
       setRest((prev) => prev + 1);
     }
+
+    if (stepRefs.current[step - 1]) {
+      const currentHeight = stepRefs.current[step - 1]?.scrollHeight ?? 0;
+      setContainerHeight(currentHeight);
+    }
   };
+
   const handleButtonClick = () => {
     if (formRef.current) {
       formRef.current.submitForm();
@@ -211,19 +172,17 @@ function EditTastingNote({ id }: IEditTastingNote) {
   };
 
   useEffect(() => {
-    let timeoutId: number;
-
-    if (stepRefs.current[step - 1]) {
-      const currentHeight = stepRefs.current[step - 1]?.scrollHeight ?? 0;
-
-      // 애니메이션 효과 시간 떄ㅑ문에 이렇게함
-      timeoutId = window.setTimeout(() => {
+    const timeoutId = setTimeout(() => {
+      if (stepRefs.current[step - 1]) {
+        const currentHeight = stepRefs.current[step - 1]?.scrollHeight ?? 0;
         setContainerHeight(currentHeight);
-      }, 700);
-    }
+      }
+    }, 200); // 50ms 정도 지연
 
-    // 클린업 함수로 타임아웃 정리
-    return () => clearTimeout(timeoutId);
+    return () => {
+      clearTimeout(timeoutId);
+      setImageUrlList([]);
+    };
   }, [step]);
 
   return (
