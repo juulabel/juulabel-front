@@ -1,5 +1,5 @@
 import Modal from "@/_common/Modal";
-import { IMyInfo } from "@/_types/user/myInfoData";
+import { IMyInfo } from "@/_types";
 import { cn } from "@/_utils/commons";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
