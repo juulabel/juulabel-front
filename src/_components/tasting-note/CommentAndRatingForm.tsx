@@ -27,6 +27,7 @@ import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Rating from "./Rating";
+import { useQueryClient } from "@tanstack/react-query";
 
 async function createFileFromUrl(url: string): Promise<File> {
   const response = await fetch(url);
@@ -62,6 +63,9 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
 ) {
   const pathname = usePathname();
   const isEditMode = pathname.includes("/edit");
+
+  const queryClient = useQueryClient();
+
   const { tastingNoteRequest, imageUrlList } = useTastingNoteStore();
   const tastingNoteInformationStore = useTastingNoteInformationStore();
   const {
@@ -85,8 +89,6 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
   const [modalOpen, setModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  console.log(rating);
 
   const { handleSubmit, control, setValue } = useForm<Inputs>({
     defaultValues: {
@@ -142,7 +144,7 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
       "files",
       images.map((image) => image.file),
     );
-  }, [images, setValue]);
+  }, [images]);
 
   useEffect(() => {
     if (rating > 0) {
@@ -266,6 +268,12 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
         if (response.data.success) {
           localStorage.removeItem("tasting-note-storage");
           localStorage.removeItem("TastingNoteInformationStorage");
+
+          if (isEditMode) {
+            await queryClient.invalidateQueries({
+              queryKey: ["noteDetail", response.data.result.id],
+            });
+          }
 
           const successMessage = isEditMode
             ? "시음노트 수정이 완료되었어요."

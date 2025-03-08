@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface IRating {
   value: number; // 달점
@@ -87,10 +87,10 @@ export default function Rating({ value, onChange }: IRating) {
 
     return stars;
   };
-
+  const Component = useMemo(() => renderStars(), [rating]);
   return (
     <div className="flex gap-x-3" onMouseLeave={handleMouseUp}>
-      {renderStars()}
+      {Component}
     </div>
   );
 }

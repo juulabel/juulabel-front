@@ -41,6 +41,11 @@ function WriteTastingNote() {
       setStep((prev) => prev + 1);
       setRest((prev) => prev - 1);
     }
+
+    if (stepRefs.current[step + 1]) {
+      const currentHeight = stepRefs.current[step + 1]?.scrollHeight ?? 0;
+      setContainerHeight(currentHeight);
+    }
   };
 
   // step을 1 감소시키는 함수
@@ -52,6 +57,11 @@ function WriteTastingNote() {
     if (1 < step) {
       setStep((prev) => prev - 1);
       setRest((prev) => prev + 1);
+    }
+
+    if (stepRefs.current[step - 1]) {
+      const currentHeight = stepRefs.current[step - 1]?.scrollHeight ?? 0;
+      setContainerHeight(currentHeight);
     }
   };
 
@@ -149,18 +159,13 @@ function WriteTastingNote() {
   };
 
   useEffect(() => {
-    let timeoutId: number;
-
-    if (stepRefs.current[step - 1]) {
-      const currentHeight = stepRefs.current[step - 1]?.scrollHeight ?? 0;
-
-      // 애니메이션 효과 시간 떄ㅑ문에 이렇게함
-      timeoutId = window.setTimeout(() => {
+    const timeoutId = setTimeout(() => {
+      if (stepRefs.current[step - 1]) {
+        const currentHeight = stepRefs.current[step - 1]?.scrollHeight ?? 0;
         setContainerHeight(currentHeight);
-      }, 700);
-    }
+      }
+    }, 200); // 50ms 정도 지연
 
-    // 클린업 함수로 타임아웃 정리
     return () => clearTimeout(timeoutId);
   }, [step]);
 
