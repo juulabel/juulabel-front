@@ -1,14 +1,14 @@
 "use client";
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { getFollowee } from "@/app/api/user/getFollowee";
+import { getFollowee } from "@/app/api/user/follow/getFollowee";
 import UserHeader from "@/_components/user/UserHeader";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Link from "next/link";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
 import RecommendedUserList from "@/_components/follow/RecommendedUserList";
-
+import Loading from "@/_common/Loading";
+import ServerToast from "@/_components/share/error/ServerToast";
+import { useCallback } from "react";
 export default function FollowingPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const {
@@ -36,14 +36,26 @@ export default function FollowingPage({ params }: { params: { id: string } }) {
   } = useQuery({
     queryKey: ["user", params.id],
     queryFn: () => getUserProfile(params.id),
-    staleTime: 0,
-    gcTime: 0,
   });
+
+  if (isLoadingUser || isFetching) {
+    return <Loading />;
+  }
+
+  if (isError || error) {
+    return (
+      <ServerToast
+        text="데이터를 불러오는 중 에러가 발생했습니다."
+        redirectPath="/"
+        cookieDelete
+      />
+    );
+  }
 
   return (
     <div className="h-full w-full max-w-[560px]">
       <UserHeader
-        title={`${user?.nickname ?? "팔로잉"}`}
+        title={`${user?.id == params.id ? "내 활동" : (user?.nickname ?? "팔로잉")}`}
         handleBackButton={() => router.replace(`/user/profile/${params.id}`)}
         bottomBorder={false}
       />
@@ -68,7 +80,10 @@ export default function FollowingPage({ params }: { params: { id: string } }) {
           </p>
         </div>
       </div>
-      <RecommendedUserList recommendedUserList={following ?? []} />
+      <RecommendedUserList
+        recommendedUserList={following ?? []}
+        userId={params.id}
+      />
     </div>
   );
 }

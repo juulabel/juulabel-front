@@ -5,7 +5,6 @@ import UserHeader from "@/_components/user/UserHeader";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import EditMyInfo from "@/_components/user/EditMyInfo";
 import ConfirmModal from "@/_common/ConfirmModal";
@@ -13,8 +12,7 @@ import MyInfoBody from "@/_components/user/MyInfoBody";
 import { IMyInfo } from "@/_types";
 
 export default function Page() {
-  const router = useRouter();
-  const [cookies] = useCookies(["accessToken"]);
+  const router = useRouter(); 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [editCancelModalOpen, setEditCancelModalOpen] =
     useState<boolean>(false);
@@ -26,7 +24,7 @@ export default function Page() {
     error,
   } = useQuery<IMyInfo>({
     queryKey: ["my-info"],
-    queryFn: () => getMyInfo(cookies.accessToken),
+    queryFn: () => getMyInfo(),
     gcTime: 0,
     staleTime: 0,
   });

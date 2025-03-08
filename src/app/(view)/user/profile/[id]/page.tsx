@@ -9,8 +9,13 @@ import UserHeader from "@/_components/user/UserHeader";
 import { cn } from "@/_utils/commons";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
-import { followUser } from "@/app/api/user/followUser";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { followUser } from "@/app/api/user/follow/followUser";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -28,8 +33,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const imagePath = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
   const [isTastingNoteClicked, setIsTastingNoteClicked] = useState(true);
-  const [isFollowed, setIsFollowed] = useState(false);
-  const [followerCount, setFollowerCount] = useState(0);
 
   const authHeaders = useMemo(
     () => ({
@@ -49,13 +52,6 @@ export default function Page({ params }: { params: { id: string } }) {
     queryKey: ["user", params.id],
     queryFn: () => getUserProfile(params.id),
   });
-
-  useEffect(() => {
-    if (user) {
-      setIsFollowed(user.isFollowed ?? false);
-      setFollowerCount(user.followerCount ?? 0);
-    }
-  }, [user]);
 
   const {
     data: noteData,
@@ -133,18 +129,31 @@ export default function Page({ params }: { params: { id: string } }) {
     setIsTastingNoteClicked(type === "notes");
   }, []);
 
-  const handleFollowButton = async () => {
-    try {
-      await followUser(params.id);
-      setIsFollowed(!isFollowed);
-      setFollowerCount((prev) => prev + (isFollowed ? -1 : 1));
+  const queryClient = useQueryClient();
 
-      toast(isFollowed ? "팔로우 취소하였습니다." : "팔로우 하였습니다.");
-    } catch (error) {
-      console.error("Follow error:", error);
+  const { mutate: handleFollowButton } = useMutation({
+    mutationFn: () => followUser(params.id),
+    onMutate: async () => {
+      queryClient.setQueryData(["user", params.id], (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          isFollowed: !oldData.isFollowed,
+          followerCount: oldData.followerCount + (oldData.isFollowed ? -1 : 1),
+        };
+      });
+    },
+    onSuccess: ({ id, nickname, isFollowed }) => {
+      toast(
+        isFollowed
+          ? `${nickname}님을 팔로우 취소했어요.`
+          : `${nickname}님을 팔로우했어요.`,
+      );
+    },
+    onError: () => {
       toast.error("팔로우 상태 변경에 실패했습니다.");
-    }
-  };
+    },
+  });
 
   if (isLoadingUser) return <SkeletonUIForUserProfile />;
 
@@ -213,7 +222,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <div className="flex justify-center">
           <FollowButton
             textSize="sm"
-            isFollowed={isFollowed}
+            isFollowed={user.isFollowed}
             onChangeFollow={handleFollowButton}
           />
         </div>
@@ -244,7 +253,7 @@ export default function Page({ params }: { params: { id: string } }) {
               팔로워
             </p>
             <p className="text-base font-bold text-cool-grayscale-800">
-              {followerCount}
+              {user.followerCount ?? 0}
             </p>
           </div>
 

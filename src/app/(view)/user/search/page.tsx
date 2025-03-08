@@ -5,7 +5,7 @@ import { useDebounce } from "@/_utils/useDebounce";
 import { getSearchUser } from "@/app/api/user/getSearchUser";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { followUser } from "@/app/api/user/followUser";
+import { followUser } from "@/app/api/user/follow/followUser";
 import Image from "next/image";
 import UserHeader from "@/_components/user/UserHeader";
 import FollowButton from "@/_common/FollowButton";

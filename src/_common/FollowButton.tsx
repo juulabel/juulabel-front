@@ -3,6 +3,7 @@ interface IFollowButton {
   textSize: string;
   isFollowed: boolean;
   onChangeFollow: () => void;
+  isCurrentUser?: boolean;
 }
 
 export default function FollowButton({
@@ -10,6 +11,7 @@ export default function FollowButton({
   textSize,
   isFollowed,
   onChangeFollow,
+  isCurrentUser,
 }: IFollowButton) {
   return isFollowed ? (
     <button
@@ -25,7 +27,7 @@ export default function FollowButton({
       className={`mr-[4%] flex h-9 ${width ? "w-full" : "w-[91%]"} items-center justify-center rounded-[4px] bg-black p-2 text-white text-${textSize} font-bold`}
       onClick={onChangeFollow}
     >
-      팔로우 하기
+      {isCurrentUser ? "맞팔로우 하기" : "팔로우 하기"}
     </button>
   );
 }
