@@ -293,7 +293,7 @@ export default function Page({ params }: { params: { id: string } }) {
           isLoadingNoteList ? (
             <SkeletomUIForList />
           ) : noteList.length > 0 ? (
-            <div className="grid grid-cols-2 gap-x-5 gap-y-5 overflow-y-auto py-6">
+            <div className="grid grid-cols-2 gap-x-5 gap-y-5 py-6 pb-[70px]">
               {noteList.map((note) => (
                 <NoteThumbnail key={note.TastingNoteId} {...note} />
               ))}
@@ -307,7 +307,7 @@ export default function Page({ params }: { params: { id: string } }) {
             {isLoadingLifeList ? (
               <LifeListSkeletonList />
             ) : lifeList.length > 0 ? (
-              <div className="pt-3">
+              <div className="pb-10 pt-3">
                 {lifeList.map((post) => (
                   <LifeList key={post.dailyLifeId} {...post} />
                 ))}
