@@ -103,6 +103,7 @@ export default function VisualAndTextureForm({
     queryFn: () => getSensories(alcoholTypeId),
   });
 
+  useEffect(() => {}, [sensoryLevelInfos, colors]);
   // editMode일 때 store에서 colorId와 sensoryLevelIds 불러와 초기값으로 설정
   useEffect(() => {
     if (isEditMode && tastingNoteRequest && colors) {
@@ -353,7 +354,7 @@ export default function VisualAndTextureForm({
                   width={32}
                   height={32}
                   className="absolute right-4 top-4 cursor-pointer"
-                  src="/svg/close_icon.svg"
+                  src="/app/svg/close_icon.svg"
                   alt="취소 아이콘"
                   onClick={() => setShowBottomSheet((prev) => !prev)}
                 />
