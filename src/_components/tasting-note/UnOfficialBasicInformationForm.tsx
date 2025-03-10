@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, MouseEvent } from "react";
 import { useForm } from "react-hook-form";
 
 interface AlcoholTypeResponse {
@@ -55,7 +55,7 @@ export default function UnOfficialBasicInformationForm({
     isValid
   );
 
-  const { data: alcoholType, isLoading: isLoadingAlcoholType } = useQuery({
+  const { data: alcoholType, isFetching: isLoadingAlcoholType } = useQuery({
     queryKey: ["alcoholType"],
     queryFn: getAlcoholType,
   });
@@ -91,7 +91,7 @@ export default function UnOfficialBasicInformationForm({
   const handleAlcoholTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    const selectedAlcoholType = alcoholType.alcoholTypeInfos.find(
+    const selectedAlcoholType = alcoholType.alcoholTypeInfos?.find(
       (alcohol: AlcoholTypeResponse) => alcohol.name === event.target.value,
     );
     if (selectedAlcoholType) {
@@ -113,7 +113,8 @@ export default function UnOfficialBasicInformationForm({
     saveBasicInformation();
     handleStep();
   };
-  if (isLoadingAlcoholType) return <Loading />;
+
+  // if (isLoadingAlcoholType) return <Loading />;
   return (
     <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
       <div>
@@ -195,7 +196,7 @@ export default function UnOfficialBasicInformationForm({
               <option value="" disabled hidden>
                 주종을 선택하여 주세요
               </option>
-              {alcoholType.alcoholTypeInfos.map(
+              {alcoholType?.alcoholTypeInfos?.map(
                 (alcohol: { id: number; name: string; image: string }) => (
                   <option
                     key={alcohol.id}

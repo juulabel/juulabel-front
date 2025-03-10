@@ -1,3 +1,4 @@
+import { usePathname } from "next/navigation";
 import {
   Dispatch,
   SetStateAction,
@@ -27,13 +28,15 @@ export default function LevelSelector({
 }: ILevelSelector) {
   const initialSelectedId = defaultSelectedId ?? levels[0].id;
   const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
-
+  const pathname = usePathname();
+  const isEditMode = pathname.includes("/edit");
   useEffect(() => {
     // 초기 마운트 시 levels에 있는 모든 값을 제거하고 initialSelectedId만 추가
     setSelectedIds((prev) => {
       const filteredIds = prev.filter(
         (id) => !levels.some((level) => level.id === id),
       );
+
       return [...filteredIds, initialSelectedId];
     });
   }, [initialSelectedId, levels, setSelectedIds]);
@@ -42,6 +45,9 @@ export default function LevelSelector({
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(event.target.value);
       const newSelectedId = levels[value].id;
+      console.log(
+        "이건가? : " + newSelectedId + ":" + levels[value].description,
+      );
       //selectedId 는 선택된게 있는지 체크함
       setTimeout(() => {
         setSelectedId((prev) => {
