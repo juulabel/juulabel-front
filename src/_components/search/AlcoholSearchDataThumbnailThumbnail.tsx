@@ -4,7 +4,6 @@ import Caption from "@/_common/Caption";
 import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
 import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import { cn } from "@/_utils/commons";
-import convertGoogleDriveURL from "@/_utils/convertGoogleDriveUrl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -51,7 +50,7 @@ export default function AlcoholSearchDataThumbnail({
           <img
             src={
               thumbnail
-                ? convertGoogleDriveURL(thumbnail)
+                ? thumbnail
                 : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(
                     alcoholType.name,
                   )}.png`
