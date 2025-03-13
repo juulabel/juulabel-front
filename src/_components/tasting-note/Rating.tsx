@@ -12,12 +12,16 @@ export default function Rating({ value, onChange }: IRating) {
   const maxStars = 5;
 
   useEffect(() => {
-    setRating(value); // value prop 변경 시 rating 상태 업데이트
+    if (rating !== value) {
+      setRating(value);
+    }
   }, [value]);
 
   useEffect(() => {
-    onChange(rating);
-  }, [rating]);
+    if (rating !== value) {
+      onChange(rating);
+    }
+  }, [rating, value]);
 
   const handleMouseDown = (value: number) => {
     setRating(value); // 클릭 시 바로 선택

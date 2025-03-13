@@ -28,41 +28,40 @@ export default function LevelSelector({
 }: ILevelSelector) {
   const initialSelectedId = defaultSelectedId ?? levels[0].id;
   const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
+  const [initTrigger, setInitTrigger] = useState<boolean>(false);
   const pathname = usePathname();
   const isEditMode = pathname.includes("/edit");
+  const [renderTrigger, setRenderTrigger] = useState(false);
+
   useEffect(() => {
     // 초기 마운트 시 levels에 있는 모든 값을 제거하고 initialSelectedId만 추가
     setSelectedIds((prev) => {
       const filteredIds = prev.filter(
         (id) => !levels.some((level) => level.id === id),
       );
-
       return [...filteredIds, initialSelectedId];
     });
+
+    // 상태 업데이트 후 강제 리렌더링 트리거
+    setRenderTrigger((prev) => !prev);
   }, [initialSelectedId, levels, setSelectedIds]);
 
   const handleSliderChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(event.target.value);
-      const newSelectedId = levels[value].id;
-      console.log(
-        "이건가? : " + newSelectedId + ":" + levels[value].description,
-      );
-      //selectedId 는 선택된게 있는지 체크함
-      setTimeout(() => {
-        setSelectedId((prev) => {
-          // 기존에 선택했던 값을 배열에서 제거하고 새로 선택한 값을 추가
-          setSelectedIds((prevIds) => {
-            const updatedIds = prevIds.filter((id) => id !== prev); // 이전 값 제거
-            return updatedIds.includes(newSelectedId)
-              ? updatedIds
-              : [...updatedIds, newSelectedId]; // 새로운 값 추가
-          });
-          return newSelectedId;
-        });
-      }, 0);
+      const value = parseInt(event.target.value, 10);
+      const newSelectedId = levels[value]?.id;
+      if (!newSelectedId) return; // 방어 코드: 유효하지 않은 값 방지
+
+      setSelectedIds((prevIds) => {
+        const updatedIds = prevIds.filter((id) => id !== selectedId); // 이전 선택 제거
+        return updatedIds.includes(newSelectedId)
+          ? updatedIds
+          : [...updatedIds, newSelectedId]; // 중복 방지 후 추가
+      });
+
+      setSelectedId(newSelectedId);
     },
-    [levels, setSelectedIds],
+    [levels, selectedId, setSelectedIds],
   );
 
   return (

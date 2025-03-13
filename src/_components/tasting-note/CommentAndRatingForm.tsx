@@ -342,19 +342,7 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
 
   return (
     <>
-      {/* <TopHeaderWithButton
-        title={isEditMode ? "시음노트 수정하기" : "시음노트 작성하기"}
-        buttonType="text"
-        buttonName="등록"
-        isActiveButton={isActiveButton}
-        onClickBackButton={handleStepBack}
-        onClickButton={handleSubmitButton}
-        haveSteps={true}
-        currentStep={5}
-        remainStep={0}
-      /> */}
       <div className="mx-[18px] mt-6 flex flex-col gap-y-10">
-        {/* 타이틀 */}
         <div>
           <p className="text-xl font-bold text-cool-grayscale-800">
             마지막 단계에요!
