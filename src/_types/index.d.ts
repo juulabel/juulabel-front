@@ -149,3 +149,17 @@ interface IComment {
 }
 
 type IReply = Omit<IComment, "replyCount">;
+
+interface IPaginatedData {
+  pages: Array<{
+    content: RecommendedUser[];
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
+
+interface IUserProfileData {
+  followingCount: number;
+  followerCount: number;
+  [key: string]: unknown;
+}

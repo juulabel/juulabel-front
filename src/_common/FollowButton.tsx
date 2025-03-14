@@ -2,7 +2,7 @@ interface IFollowButton {
   width?: string;
   textSize: string;
   isFollowed: boolean;
-  onChangeFollow: () => void;
+  onChangeFollow: (e: React.MouseEvent) => void;
   isCurrentUser?: boolean;
 }
 

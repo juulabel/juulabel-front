@@ -227,7 +227,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <FollowButton
             textSize="sm"
             isFollowed={user.isFollowed}
-            onChangeFollow={handleFollowButton}
+            onChangeFollow={() => handleFollowButton()}
           />
         </div>
         <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">

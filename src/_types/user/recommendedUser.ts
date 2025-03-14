@@ -11,4 +11,5 @@ export interface RecommendUserList {
   isCurrentUser?: boolean;
   userId: string;
   isFollower?: boolean;
+  debouncedSearchQuery?: string;
 }
