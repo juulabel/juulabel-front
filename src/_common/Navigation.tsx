@@ -24,7 +24,7 @@ export default function Navigation({
 
   return (
     <>
-      <footer className="fixed bottom-0 z-10 flex h-[66px] w-full max-w-[560px] items-center justify-between space-x-2 border-t border-cool-grayscale-200 bg-white px-4 py-2">
+      <footer className="fixed bottom-0 z-10 flex h-[75px] w-full max-w-[560px] items-center justify-between space-x-2 border-t border-cool-grayscale-200 bg-white px-4 py-2 pb-[15px]">
         <Link
           href="/share/note"
           className={cn(
