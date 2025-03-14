@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
 import { ILevel } from "@/_types";
 import { useRef, useState } from "react";
 
@@ -33,6 +33,8 @@ export default function SensoryLevelSelector({
 
     setSelectedId(newSelectedId);
   };
+
+  useEffect(() => {}, [levels, selectedSensoryId, setSelectedSensoryIds]);
 
   return (
     <div className="flex w-full flex-col items-center justify-center">

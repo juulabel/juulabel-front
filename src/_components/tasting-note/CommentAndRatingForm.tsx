@@ -274,6 +274,7 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
         content,
       };
 
+      console.log("REQUEST BODY: " + JSON.stringify(request, null, 2));
       const reqeustBlob = new Blob([JSON.stringify(request)], {
         type: "application/json",
       });

@@ -39,11 +39,6 @@ export default function SensoryInfo({
         sensoryLevelIdsSet.has(level.id),
       );
 
-      //   console.log("levels: " + JSON.stringify(levels, null, 2));
-
-      // const matchingLevel =
-      //   tastingNoteRequest.request.sensoryLevelIds[sensoryIndex];
-
       return matchingLevel?.id;
     }
     return undefined;
