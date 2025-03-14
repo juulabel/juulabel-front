@@ -10,14 +10,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "@/_utils/useDebounce";
 import { getSearchUser } from "@/app/api/user/getSearchUser";
-import SearchData from "@/_common/SearchData";
 import Image from "next/image";
-import FollowButton from "@/_common/FollowButton";
 import { followUser } from "@/app/api/user/follow/followUser";
 import { IMyInfo } from "@/_types";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import { toast } from "react-toastify";
 import ServerToast from "@/_components/share/error/ServerToast";
+import SearchData from "@/_components/tasting-note/search/SearchData";
+import FollowButton from "@/_common/FollowButton";
 
 interface ISearchUser {
   id: number;
@@ -151,6 +151,7 @@ export default function Page() {
         placeholder="닉네임으로 검색해보세요."
         handleChangeQuery={handleChangeQuery}
         handleClearSearchQuery={handleClearSearchQuery}
+        fetchOfficialDataSearchList={() => {}}
       />
       <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
 

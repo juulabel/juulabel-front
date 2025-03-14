@@ -9,6 +9,6 @@ export interface RecommendedUser {
 export interface RecommendUserList {
   recommendedUserList: RecommendedUser[];
   isCurrentUser?: boolean;
-  userId: String;
+  userId: string;
   isFollower?: boolean;
 }

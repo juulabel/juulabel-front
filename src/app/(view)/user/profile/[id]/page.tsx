@@ -134,14 +134,18 @@ export default function Page({ params }: { params: { id: string } }) {
   const { mutate: handleFollowButton } = useMutation({
     mutationFn: () => followUser(params.id),
     onMutate: async () => {
-      queryClient.setQueryData(["user", params.id], (oldData: any) => {
-        if (!oldData) return oldData;
-        return {
-          ...oldData,
-          isFollowed: !oldData.isFollowed,
-          followerCount: oldData.followerCount + (oldData.isFollowed ? -1 : 1),
-        };
-      });
+      queryClient.setQueryData(
+        ["user", params.id],
+        (oldData: { isFollowed: boolean; followerCount: number }) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            isFollowed: !oldData.isFollowed,
+            followerCount:
+              oldData.followerCount + (oldData.isFollowed ? -1 : 1),
+          };
+        },
+      );
     },
     onSuccess: ({ id, nickname, isFollowed }) => {
       toast(

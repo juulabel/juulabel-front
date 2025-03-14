@@ -40,7 +40,7 @@ function LifeDetailPage({ params }: SearchParamProps) {
       },
       {
         queryKey: ["currentUserInfo"],
-        queryFn: () => getMyInfo(cookie.accessToken),
+        queryFn: () => getMyInfo(),
         staleTime: 0,
         gcTime: 0,
       },

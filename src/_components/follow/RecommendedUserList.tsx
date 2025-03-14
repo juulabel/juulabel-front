@@ -31,6 +31,22 @@ type DeleteButtonMutateParams = {
   id: number;
 };
 
+// Define types for user profile data
+interface UserProfileData {
+  followingCount: number;
+  followerCount: number;
+  [key: string]: unknown;
+}
+
+// Define types for paginated data
+interface PaginatedData {
+  pages: Array<{
+    content: RecommendedUser[];
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
+
 const UserItem = memo(
   ({
     user,
@@ -140,7 +156,7 @@ export default function RecommendedUserList({
   const queryClient = useQueryClient();
 
   const updateFollowCounts = useCallback(
-    (oldData: any, id: number, isFollowed: boolean) => {
+    (oldData: UserProfileData | undefined, id: number, isFollowed: boolean) => {
       if (!oldData) return oldData;
 
       const newFollowingCount =
@@ -167,13 +183,17 @@ export default function RecommendedUserList({
   );
 
   const updateUserListCache = useCallback(
-    (oldData: any, id: number, isFollowed: boolean) => {
+    (
+      oldData: PaginatedData | RecommendedUser[] | undefined,
+      id: number,
+      isFollowed: boolean,
+    ) => {
       if (!oldData) return oldData;
 
-      if (oldData.pages) {
+      if ('pages' in oldData) {
         return {
           ...oldData,
-          pages: oldData.pages.map((page: any) => ({
+          pages: oldData.pages.map((page) => ({
             ...page,
             content: page.content.map((user: RecommendedUser) =>
               user.id === id ? { ...user, isFollowed: !isFollowed } : user,
@@ -182,7 +202,7 @@ export default function RecommendedUserList({
         };
       }
 
-      return oldData.map((user: RecommendedUser) =>
+      return (oldData as RecommendedUser[]).map((user: RecommendedUser) =>
         user.id === id ? { ...user, isFollowed: !isFollowed } : user,
       );
     },
@@ -193,13 +213,13 @@ export default function RecommendedUserList({
     mutationFn: ({ id }: FollowButtonMutateParams) => followUser(id.toString()),
     onMutate: async ({ id, nickname, isFollowed }) => {
       // Update the user profile cache
-      queryClient.setQueryData(["user", userId], (oldData: any) =>
+      queryClient.setQueryData(["user", userId], (oldData: UserProfileData | undefined) =>
         updateFollowCounts(oldData, id, isFollowed),
       );
 
       // Update the follower/following list cache
       const queryKey = [isFollower ? "follower" : "following", userId];
-      queryClient.setQueryData(queryKey, (oldData: any) =>
+      queryClient.setQueryData(queryKey, (oldData: PaginatedData | RecommendedUser[] | undefined) =>
         updateUserListCache(oldData, id, isFollowed),
       );
 
@@ -229,13 +249,13 @@ export default function RecommendedUserList({
       deleteFollower(id.toString()),
     onMutate: async ({ id }) => {
       // Update the follower list cache
-      queryClient.setQueryData(["follower", userId], (oldData: any) => {
+      queryClient.setQueryData(["follower", userId], (oldData: PaginatedData | RecommendedUser[] | undefined) => {
         if (!oldData) return oldData;
 
-        if (oldData.pages) {
+        if ('pages' in oldData) {
           return {
             ...oldData,
-            pages: oldData.pages.map((page: any) => ({
+            pages: oldData.pages.map((page) => ({
               ...page,
               content: page.content.filter(
                 (user: RecommendedUser) => user.id !== id,
@@ -244,11 +264,11 @@ export default function RecommendedUserList({
           };
         }
 
-        return oldData.filter((user: RecommendedUser) => user.id !== id);
+        return (oldData as RecommendedUser[]).filter((user: RecommendedUser) => user.id !== id);
       });
 
       // Update follower count in user profile
-      queryClient.setQueryData(["user", userId], (oldData: any) => {
+      queryClient.setQueryData(["user", userId], (oldData: UserProfileData | undefined) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
