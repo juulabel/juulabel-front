@@ -49,13 +49,13 @@ export default function Lifes() {
             <LifeList {...post} />
           </li>
         ))}
+        <div ref={observerRef} />
       </ul>
       {isFetchingNextPage && (
         <div className="fixed bottom-9 left-1/2 z-50 -translate-x-1/2">
           <Spinner spinnerVisibility={true} />
         </div>
       )}
-      <div ref={observerRef} />
     </div>
   );
 }

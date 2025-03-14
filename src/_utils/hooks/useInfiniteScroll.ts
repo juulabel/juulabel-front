@@ -16,16 +16,17 @@ export default function useInfiniteScroll({
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting) {         
           fetchNextPage();
         }
       },
       {
-        threshold: 1.0,
+        threshold: 0.8,
       },
     );
 
     if (observerRef.current) {
+      
       observer.observe(observerRef.current);
     }
     return () => {
