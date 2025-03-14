@@ -27,7 +27,8 @@ import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Rating from "./Rating";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getSensories } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 
 async function createFileFromUrl(url: string): Promise<File> {
   const response = await fetch(url);
@@ -45,6 +46,23 @@ interface FileInfo {
   file: File;
   id: string;
   url?: string;
+}
+
+interface ISensoryInfo {
+  id: number;
+  name: string;
+  description: string;
+}
+
+interface ILevel {
+  id: number;
+  score: number;
+  description: string;
+}
+
+interface ISensoryLevelInfo {
+  sensory: ISensoryInfo;
+  levels: ILevel[];
 }
 
 interface ErrorResponse {
@@ -89,6 +107,11 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
   const [modalOpen, setModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const { data: sensoryLevelInfos } = useQuery<ISensoryLevelInfo[]>({
+    queryKey: ["tastingNoteSensories", alcoholTypeId],
+    queryFn: () => getSensories(alcoholTypeId),
+  });
 
   const { handleSubmit, control, setValue } = useForm<Inputs>({
     defaultValues: {
@@ -229,6 +252,14 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
       setIsSubmitting(true);
 
       const { files } = data;
+      // 값 자꾸 삐꾸나는거 방지용
+      const levelIds =
+        sensoryLevelInfos?.flatMap((info) =>
+          info.levels.map((level) => level.id),
+        ) ?? [];
+      const filteredSensoryLevelIds = sensoryLevelIds.filter((id) =>
+        levelIds.includes(id),
+      );
 
       const request: ITastingNoteWriteRequest = {
         alcoholicDrinksDetails,
@@ -236,7 +267,7 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
         alcoholicDrinksId,
         scentIds,
         colorId,
-        sensoryLevelIds,
+        sensoryLevelIds: filteredSensoryLevelIds,
         flavorLevelIds,
         isPrivate,
         rating,

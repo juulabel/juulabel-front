@@ -2,7 +2,7 @@ import { INoteThumbnail } from "@/_types/share";
 import { dateViewKoreanFull } from "@/_utils/time";
 import Image from "next/image";
 import Link from "next/link";
-import Caption from "./Caption";
+import Caption from "../../_common/Caption";
 
 export const placeholderThumbnailProvider = (alcoholType: string) => {
   switch (alcoholType) {
@@ -62,6 +62,7 @@ export default function NoteThumbnail({
             alt="시음노트 썸네일"
             sizes="50vw"
             fill
+            
             className="object-cover"
           />
         </Link>

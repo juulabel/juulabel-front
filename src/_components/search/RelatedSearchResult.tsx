@@ -1,32 +1,22 @@
 "use client";
 
-import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
-import { getAlcoholSearchResult } from "@/app/api/search/getAlcoholSearchResult";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 
 interface IRelatedSearchResult {
   searchedData: string;
   searchQuery: string;
-  localStorageKey: string;
-  setQuery: (value: string) => void;
-  setSearchResult: (data: IAlcoholSearchData[]) => void;
-  handleUnOfficialDataSearchList: () => void;
-  handleOfficialDataSearchList: () => void;
+  localStorageKey: string;  
+  fetchOfficialDataSearchList: (recentSearch: string) => void;
 }
 
 export default function RelatedSearchResult({
   searchedData,
   searchQuery,
   localStorageKey,
-  setQuery,
-  setSearchResult,
-  handleUnOfficialDataSearchList,
-  handleOfficialDataSearchList,
+  fetchOfficialDataSearchList,
 }: IRelatedSearchResult) {
-  const [cookies] = useCookies(["accessToken"]);
   const [index, setIndex] = useState(-1);
   const [beforeHighlight, setBeforeHighlight] = useState("");
   const [afterHighlight, setAfterHighlight] = useState("");
@@ -43,19 +33,7 @@ export default function RelatedSearchResult({
       localStorageKey,
       searchData: searchedData,
     });
-    const data = await getAlcoholSearchResult(
-    cookies.accessToken,
-      searchedData,
-      null,
-    );
-    if (data) {
-      setQuery(searchedData);
-      setSearchResult(data.alcoholicDrinks);
-      handleOfficialDataSearchList();
-    } else {
-      setQuery(searchedData);
-      handleUnOfficialDataSearchList();
-    }
+    fetchOfficialDataSearchList(searchedData);
   };
   return (
     index != -1 && (

@@ -1,18 +1,14 @@
 "use client";
 
-import LifeList from "@/_common/LifeList";
+import LifeList from "@/_components/life/LifeList";
 import Spinner from "@/_components/search/Spinner";
 import ServerToast from "@/_components/share/error/ServerToast";
 import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import { getLifeList } from "@/app/api/life/getLifeList";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useCookies } from "react-cookie";
 
 export default function Lifes() {
-  const [cookies] = useCookies(["accessToken"]);
-
   const {
     data: life,
     fetchNextPage,

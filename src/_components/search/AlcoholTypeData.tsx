@@ -10,35 +10,25 @@ import { IAlcoholSortedType } from "@/_types/search/alcoholSortedType";
 import AlcoholTypeLoader from "./AlcoholTypeLoader";
 import AlcoholTypeDataThumbnail from "./AlcoholTypeDataThumbnail";
 import Spinner from "./Spinner";
-
-interface AlcoholTypeDataProps {
-  totalCount: number;
-  AlcoholSearchTypeDataList: IAlcoholTypeData[] | [];
-  selectedTab: IAlcoholTypeTab;
-  sortedType: IAlcoholSortedType;
-  onTabClick: (tab: IAlcoholTypeTab) => void;
-  onSortedTypeClick: (sortedType: IAlcoholSortedType) => void;
-  handleCloseSearchList: () => void;
-  isBottom: boolean;
-  isLast: boolean;
-}
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getAlcoholTypeResult } from "@/app/api/search/getAlcoholTypeResult";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 
 export default function AlcoholTypeData({
-  totalCount,
-  AlcoholSearchTypeDataList,
-  selectedTab,
-  sortedType,
-  onTabClick,
-  onSortedTypeClick,
   handleCloseSearchList,
-  isBottom,
-  isLast,
-}: AlcoholTypeDataProps) {
+  selectedTab,
+  setSelectedTab,
+}: {
+  handleCloseSearchList: () => void;
+  selectedTab: IAlcoholTypeTab;
+  setSelectedTab: (tab: IAlcoholTypeTab) => void;
+}) {  
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const spinnerVisibility = useMemo(
-    () => isBottom && !isLast,
-    [isBottom, isLast],
-  );
+  const [selectedSortedType, setSelectedSortedType] =
+    useState<IAlcoholSortedType>({
+      id: "NAME",
+      value: "가나다 순",
+    });
 
   const tabItems = useMemo<IAlcoholTypeTab[]>(
     () => [
@@ -62,6 +52,52 @@ export default function AlcoholTypeData({
     [],
   );
 
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["alcoholTypeData", selectedTab.id, selectedSortedType.id],
+    queryFn: ({ pageParam }) =>
+      getAlcoholTypeResult(
+        selectedTab.id,
+        selectedSortedType.id,
+        pageParam.lastAlcoholicDrinksName,
+      ),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.data.length) return null;
+      return lastPage.isLast
+        ? null
+        : {
+            lastAlcoholicDrinksName: lastPage.data.slice(-1)[0]?.name || null,
+          };
+    },
+    initialPageParam: {
+      lastAlcoholicDrinksName: null,
+    },
+  });
+
+  const alcoholTypeData = useMemo(
+    () => data?.pages.flatMap((page) => page.data) || [],
+    [data?.pages]
+  );
+
+  const totalCount = data?.pages[0]?.totalCount || 0;
+
+  const observerRef = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
+
+  const toggleFilter = () => setIsFilterOpen(!isFilterOpen);
+
+  const handleSortTypeSelect = (sortedType: IAlcoholSortedType) => {
+    setSelectedSortedType(sortedType);
+    setIsFilterOpen(false);
+  };
+
   return (
     <div className="w-full max-w-[560px]">
       <div className="sticky top-0 z-50 flex h-16 flex-row items-center justify-between bg-white px-2">
@@ -81,7 +117,7 @@ export default function AlcoholTypeData({
               "flex items-center justify-center py-[0.54rem] font-medium text-cool-grayscale-500",
               selectedTab.id === tab.id && "border-b-2 border-black text-black",
             )}
-            onClick={() => onTabClick(tab)}
+            onClick={() => setSelectedTab(tab)}
           >
             {tab.value}
           </button>
@@ -97,11 +133,11 @@ export default function AlcoholTypeData({
           </p>
         </div>
         <button
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          onClick={toggleFilter}
           className="relative z-10 inline-flex h-6 items-center justify-start gap-0.5"
         >
           <div className="text-center text-base font-medium leading-normal text-slate-500">
-            {sortedType.value}
+            {selectedSortedType.value}
           </div>
           <Image
             src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}${isFilterOpen ? "/svg/up_arrow.svg" : "/svg/under.svg"}`}
@@ -118,10 +154,7 @@ export default function AlcoholTypeData({
               <button
                 key={sortedType.id}
                 id={sortedType.id}
-                onClick={() => {
-                  onSortedTypeClick(sortedType);
-                  setIsFilterOpen(!isFilterOpen);
-                }}
+                onClick={() => handleSortTypeSelect(sortedType)}
                 className="inline-flex items-center justify-center gap-2 px-1 py-2"
               >
                 <div className="text-sm font-normal leading-[21px] text-slate-800">
@@ -135,19 +168,18 @@ export default function AlcoholTypeData({
 
       {/* Alcohol data list */}
       <div className="gay-y-5 relative z-0 grid grid-cols-2 gap-x-2 overflow-y-auto px-4 pt-6">
-        {AlcoholSearchTypeDataList?.map(
-          (AlcoholSearchTypeData: IAlcoholTypeData) => (
-            <AlcoholTypeDataThumbnail
-              key={AlcoholSearchTypeData.id} 
-              {...AlcoholSearchTypeData}
-            />
-          ),
-        )}
+        {alcoholTypeData.map((item: IAlcoholTypeData) => (
+          <AlcoholTypeDataThumbnail
+            key={item.id}
+            {...item}
+          />
+        ))}
       </div>
       <div className="relative flex flex-col items-center justify-between pb-10">
-        <Spinner spinnerVisibility={spinnerVisibility} />
+        <Spinner spinnerVisibility={isFetchingNextPage} />
         <AlcoholTypeLoader />
       </div>
+      <div ref={observerRef} />
     </div>
   );
 }

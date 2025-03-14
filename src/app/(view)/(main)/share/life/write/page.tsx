@@ -12,7 +12,7 @@ import Modal from "@/_common/Modal";
 import { formInstance } from "@/app/api/axios";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { urlToFile } from "@/app/api/life/urlToFile";
 import Loading from "@/_common/Loading";
@@ -59,10 +59,10 @@ function NewPostPage() {
     },
   });
 
-  const [confirm, setConfirm] = useState<boolean>(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [confirm, setConfirm] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [images, setImages] = useState<FileInfo[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const watchTitle = watch("title");
   const watchContent = watch("content");
@@ -189,9 +189,6 @@ function NewPostPage() {
             width: 1280,
             height: 1280,
           });
-
-          console.log(file.size);
-          console.log(resizedFile.size);
 
           return {
             file: resizedFile,

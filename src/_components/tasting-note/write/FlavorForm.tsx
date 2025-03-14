@@ -4,7 +4,7 @@ import { getFlavors } from "@/app/api/tasting-note/getTastingNoteFormInformation
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useTastingNoteInformationStore } from "../../_store/tastingNote";
+import { useTastingNoteInformationStore } from "../../../_store/tastingNote";
 import RadarChart from "./HexagonChart";
 import LevelSelector from "./LevelSelector";
 
