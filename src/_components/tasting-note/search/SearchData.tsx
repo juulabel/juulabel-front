@@ -1,3 +1,4 @@
+import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import Image from "next/image";
 
 interface ISearchData {
@@ -5,8 +6,8 @@ interface ISearchData {
   placeholder: string;
   handleClearSearchQuery: () => void;
   handleChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleQuerySearch?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  handleFocus?: () => void; // New prop for focus
+  fetchOfficialDataSearchList: (recentSearch: string) => void;  
+  setIsInputFocused?: (isInputFocused: boolean) => void;
 }
 //handleQuerySearch를 optional로 한 이유는 handleQuerySearch는 최근 검색어를 저장하는 함수인데 해당 함수를 사용하지 않는 페이지가 있어서 이렇게 처리했습니다
 
@@ -15,9 +16,19 @@ export default function SearchData({
   placeholder,
   handleChangeQuery,
   handleClearSearchQuery,
-  handleQuerySearch,
-  handleFocus,
+  fetchOfficialDataSearchList,
+  setIsInputFocused,
 }: ISearchData) {
+  const handleQuerySearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      saveRecentSearchDataToLocalStorage({
+        localStorageKey: "TastingNoteRecentSearchList",
+        searchData: searchQuery,
+      });
+      fetchOfficialDataSearchList(searchQuery);
+    }
+  };
+
   return (
     <div className="mx-[4%] my-3 flex h-11 flex-row items-center rounded-[6px] bg-cool-grayscale-100">
       <Image
@@ -38,7 +49,7 @@ export default function SearchData({
           handleQuerySearch ? handleQuerySearch(event) : null
         }
         placeholder={placeholder}
-        onFocus={handleFocus}
+        onFocus={() => setIsInputFocused?.(true)}
       />
       {searchQuery && (
         <Image

@@ -1,7 +1,7 @@
 "use client";
 
 import Caption from "@/_common/Caption";
-import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
+import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
 import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import { cn } from "@/_utils/commons";
 import Image from "next/image";

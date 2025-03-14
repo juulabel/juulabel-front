@@ -1,43 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
-import OfficialData from "./OfficialData";
-import { IOfficialData } from "@/_types/tasting-note/officialData";
 import Image from "next/image";
-import ScrollUpFloatingBtn from "../search/ScrollUpFloatingBtn";
-import TraditionalDrinkInformationComponent from "./TraditionalDrinkInformationComponent";
-import Spinner from "../search/Spinner";
+import ScrollUpFloatingBtn from "../../search/ScrollUpFloatingBtn";
+import OfficialData from "./OfficialData";
 
 interface IOfficialDataSearchResult {
   query: string;
-  officialDataList: IOfficialData[] | []; //임시 데이터 타입
   closeOfficialDataSearchResult: () => void;
   handleClearSearchQuery: () => void;
   handleCloseSearchList: () => void;
-  isLast: boolean;
-  isBottom: boolean;
 }
 
 export default function OfficialDataSearchResult({
   query,
-  officialDataList,
   closeOfficialDataSearchResult,
   handleClearSearchQuery,
   handleCloseSearchList,
-  isLast,
-  isBottom,
 }: IOfficialDataSearchResult) {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  useEffect(() => {
-    setSearchQuery(query);
-  }, [query]);
-
-  const spinnerVisibility = useMemo(
-    () => isBottom && !isLast,
-    [isBottom, isLast],
-  );
-
   return (
     <div className="w-full max-w-[560px]">
       <div className="mx-[2%] my-2 flex flex-row items-center">
@@ -59,7 +39,8 @@ export default function OfficialDataSearchResult({
             <input
               className="w-full bg-cool-grayscale-100 focus:outline-none"
               type="text"
-              value={searchQuery}
+              value={query}
+              readOnly
             />
           </div>
           <Image
@@ -75,11 +56,8 @@ export default function OfficialDataSearchResult({
           />
         </div>
       </div>
-      <OfficialData officialDataList={officialDataList} />
-      <div className="relative flex flex-col items-center justify-between">
-        <Spinner spinnerVisibility={spinnerVisibility} />
-        <TraditionalDrinkInformationComponent />
-      </div>
+      <OfficialData searchQuery={query} />
+
       <ScrollUpFloatingBtn />
     </div>
   );

@@ -3,7 +3,7 @@
 import React, { Fragment, useEffect } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import RadarChart from "@/_components/tasting-note/HexagonChart";
+import RadarChart from "@/_components/tasting-note/write/HexagonChart";
 import ShareAboutTheSmellOfAlcohol from "./ShareAboutTheSmellOfAlcohol";
 import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
 import MoonRating from "./MoonRating";

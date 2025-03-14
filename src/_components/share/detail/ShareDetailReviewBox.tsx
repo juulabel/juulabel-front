@@ -1,6 +1,6 @@
 "use client";
 import React, { Fragment, ReactNode, useEffect, useState } from "react";
-import HexagonChart from "../../tasting-note/HexagonChart";
+import HexagonChart from "../../tasting-note/write/HexagonChart";
 import MoonRating from "./MoonRating";
 import { ITastingNoteDetailInfo } from "@/_types";
 import {
@@ -9,7 +9,7 @@ import {
   scentMap,
   sensoryMap,
 } from "@/_utils/commons";
-import RadarChart from "../../tasting-note/HexagonChart";
+import RadarChart from "../../tasting-note/write/HexagonChart";
 import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
 
 interface Props {
@@ -143,4 +143,3 @@ function Separator() {
   return <div className="mx-auto h-[8px] w-[1px] bg-cool-grayscale-300"></div>;
 }
 
-function ReviewMoon() {}

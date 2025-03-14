@@ -1,9 +1,9 @@
 "use client";
 
 import FollowButton from "@/_common/FollowButton";
-import LifeList from "@/_common/LifeList";
+import LifeList from "@/_components/life/LifeList";
 import Loading from "@/_common/Loading";
-import NoteThumbnail from "@/_common/NoteThumbnail";
+import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
 import UserHeader from "@/_components/user/UserHeader";
 // import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import { cn } from "@/_utils/commons";

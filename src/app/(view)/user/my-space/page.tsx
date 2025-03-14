@@ -1,8 +1,8 @@
 "use client";
 
-import LifeList from "@/_common/LifeList";
+import LifeList from "@/_components/life/LifeList";
 import Navigation from "@/_common/Navigation";
-import NoteThumbnail from "@/_common/NoteThumbnail";
+import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
 // import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import ServerToast from "@/_components/share/error/ServerToast";
 import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";

@@ -10,9 +10,11 @@ import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
 import { useRegisterStore } from "@/_store/register";
 import { instance } from "@/app/api/axios";
 import requests from "@/app/api/requests";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const registerStore = useRegisterStore();
@@ -46,7 +48,6 @@ export default function Page() {
     );
   };
   const handleRegister = () => {
-    // registerStore.setGender(gender === "MALE" ? "남성" : "여성");
     registerStore.setGender(gender);
     registerStore.setGendercheck(genderCheck);
     registerStore.setPreferredAlcoholType(alcoholTypes);
@@ -94,6 +95,9 @@ export default function Page() {
         router.replace("/share/note");
       }
     } catch (error) {
+      if (error instanceof AxiosError) {
+        toast(error.response?.data.message);
+      }
       console.error(error);
     }
   };

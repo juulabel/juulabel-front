@@ -8,7 +8,7 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
 import { ITastingNoteDetailInfo } from "@/_types";
 import { dateViewKoreanFull } from "@/_utils/time";
-import { placeholderThumbnailProvider } from "@/_common/NoteThumbnail";
+import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
 import Link from "next/link";
 import FullScreenImageCarousel from "@/_common/FullScreenImageCarousel";
 

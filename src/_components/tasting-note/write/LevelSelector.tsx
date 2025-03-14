@@ -44,10 +44,7 @@ export default function LevelSelector({
   const handleSliderChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(event.target.value);
-      const newSelectedId = levels[value].id;
-      console.log(
-        "이건가? : " + newSelectedId + ":" + levels[value].description,
-      );
+      const newSelectedId = levels[value].id;      
       //selectedId 는 선택된게 있는지 체크함
       setTimeout(() => {
         setSelectedId((prev) => {
