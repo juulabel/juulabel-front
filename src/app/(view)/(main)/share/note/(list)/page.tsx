@@ -1,6 +1,6 @@
 "use client";
 
-import NoteThumbnail from "@/_common/NoteThumbnail";
+import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
 import Spinner from "@/_components/search/Spinner";
 import ServerToast from "@/_components/share/error/ServerToast";
 import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
@@ -81,7 +81,7 @@ export default function Notes() {
           />
         </div>
       )}
-      <div ref={observerRef}></div>
+      <div ref={observerRef} />
     </div>
   );
 }

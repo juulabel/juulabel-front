@@ -1,5 +1,4 @@
 import { ILevel, ISensoryLevelInfo } from "@/_types";
-import LevelSelector from "./LevelSelector";
 import { Dispatch, SetStateAction } from "react";
 import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";

@@ -3,12 +3,12 @@
 import Loading from "@/_common/Loading";
 import TopHeader from "@/_common/TopHeader";
 import ShareWriteTopHeader from "@/_components/share/ShareWriteTopHeader";
-import CommentAndRatingForm from "@/_components/tasting-note/CommentAndRatingForm";
-import FlavorForm from "@/_components/tasting-note/FlavorForm";
-import OfficialBasicInformationForm from "@/_components/tasting-note/OfficialBasicInformationForm";
-import ScentForm from "@/_components/tasting-note/ScentForm";
-import UnOfficialBasicInformationForm from "@/_components/tasting-note/UnOfficialBasicInformationForm";
-import VisualAndTextureForm from "@/_components/tasting-note/VisualAndTextureForm";
+import CommentAndRatingForm from "@/_components/tasting-note/write/CommentAndRatingForm";
+import FlavorForm from "@/_components/tasting-note/write/FlavorForm";
+import OfficialBasicInformationForm from "@/_components/tasting-note/write/OfficialBasicInformationForm";
+import ScentForm from "@/_components/tasting-note/write/ScentForm";
+import UnOfficialBasicInformationForm from "@/_components/tasting-note/write/UnOfficialBasicInformationForm";
+import VisualAndTextureForm from "@/_components/tasting-note/write/VisualAndTextureForm";
 import { cn } from "@/_utils/commons";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";

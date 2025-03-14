@@ -4,7 +4,7 @@ import ShareAboutTheSmellOfAlcohol from "@/_components/share/detail/ShareAboutTh
 import ShareTraditionalLiquor from "@/_components/share/detail/ShareTraditionalLiquor";
 import ServerToast from "@/_components/share/error/ServerToast";
 import Separator from "@/_components/share/Separator";
-import RadarChart from "@/_components/tasting-note/HexagonChart";
+import RadarChart from "@/_components/tasting-note/write/HexagonChart";
 import { SearchParamProps } from "@/_types";
 import { DrinkApiResponse } from "@/_types/tasting-note/drink";
 import { fetchLiquor } from "@/app/api/getTraditioanlLiquorList";
