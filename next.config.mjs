@@ -23,6 +23,7 @@ const nextConfig = {
   },
   experimental: {
     instrumentationHook: true,
+    appDir: true
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
@@ -35,14 +36,28 @@ const nextConfig = {
       config.target = "node";
     }
     return config;
-  },
+  },          
 };
 
+const isDev = process.env.NODE_ENV !== "production";
+
 export default withPWA({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,  
-  disable: process.env.NODE_ENV === 'development',
+  dest: 'public',    
+  disable: isDev,
   scope: '/app',
-  sw: 'sw.js',     
+  sw: 'sw.js',    
+  exclude: [
+    // add buildExcludes here
+    ({ asset, compilation }) => {
+      if (
+        asset.name.startsWith('server/') ||
+        asset.name.match(
+          /^((app-|^)build-manifest\.json|react-loadable-manifest\.json)$/
+        )
+      ) {
+        return true;
+      }
+      return false;
+    }
+  ]
 })(nextConfig);
