@@ -12,15 +12,20 @@ export default function Rating({ value, onChange }: IRating) {
   const maxStars = 5;
 
   useEffect(() => {
-    setRating(value); // value prop 변경 시 rating 상태 업데이트
+    if (rating !== value) {
+      setRating(value);
+    }
   }, [value]);
 
-  useEffect(() => {
-    onChange(rating);
-  }, [rating]);
+  // useEffect(() => {
+  //   if (rating !== value) {
+  //     onChange(rating);
+  //   }
+  // }, [rating, value]);
 
   const handleMouseDown = (value: number) => {
     setRating(value); // 클릭 시 바로 선택
+    onChange(value);
     setIsDragging(true); // 드래그 시작
   };
 
@@ -87,7 +92,7 @@ export default function Rating({ value, onChange }: IRating) {
 
     return stars;
   };
-  const Component = useMemo(() => renderStars(), [rating]);
+  const Component = useMemo(() => renderStars(), [rating, value]);
   return (
     <div className="flex gap-x-3" onMouseLeave={handleMouseUp}>
       {Component}

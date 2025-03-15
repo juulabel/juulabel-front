@@ -12,6 +12,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import LevelSelector from "./LevelSelector";
+import { ISensoryLevelInfo } from "@/_types";
+import SensoryInfo from "../SensoryInfo";
 
 interface ColorInfo {
   id: number;
@@ -54,17 +56,6 @@ interface ISensoryInfo {
   id: number;
   name: string;
   description: string;
-}
-
-interface ILevel {
-  id: number;
-  score: number;
-  description: string;
-}
-
-interface ISensoryLevelInfo {
-  sensory: ISensoryInfo;
-  levels: ILevel[];
 }
 
 export default function VisualAndTextureForm({
@@ -235,21 +226,6 @@ export default function VisualAndTextureForm({
     }
   };
 
-  // Function to match sensory levels with initial IDs in edit mode
-  const getInitialSensoryLevelId = (levels: ILevel[]) => {
-    if (
-      isEditMode &&
-      tastingNoteRequest &&
-      tastingNoteRequest.request.alcoholTypeId === alcoholTypeId
-    ) {
-      const matchingLevel = levels.find((level) =>
-        tastingNoteRequest.request.sensoryLevelIds.includes(level.id),
-      );
-      return matchingLevel ? matchingLevel.id : undefined;
-    }
-    return undefined;
-  };
-
   return (
     <div className="mx-[18px] mt-6 flex flex-col gap-y-10 pb-[102px]">
       <div>
@@ -302,27 +278,14 @@ export default function VisualAndTextureForm({
         </div>
         {/* 전통주 텍스처 선택 */}
         {sensoryLevelInfos &&
-          sensoryLevelInfos.map((sensoryLevelInfo) => (
-            <div className="mt-8" key={sensoryLevelInfo.sensory.id}>
-              {/* 타이틀 */}
-              <div className="mb-[20px]">
-                <span className="text-base font-bold text-cool-grayscale-800">
-                  {sensoryLevelInfo.sensory.name}
-                </span>
-                <span className="ml-[3%] text-sm font-normal text-cool-grayscale-500">
-                  {sensoryLevelInfo.sensory.description}
-                </span>
-              </div>
-              {/* 텍스처 평가 슬라이더 부분 */}
-              <LevelSelector
-                levels={sensoryLevelInfo.levels}
-                setSelectedIds={setSelectedSensoryIds}
-                showDescriptions={true}
-                defaultSelectedId={getInitialSensoryLevelId(
-                  sensoryLevelInfo.levels,
-                )}
-              />
-            </div>
+          sensoryLevelInfos.map((sensoryLevelInfo, index) => (
+            <SensoryInfo
+              key={sensoryLevelInfo.levels[0].id}
+              sensoryLevelInfo={sensoryLevelInfo}
+              setSelectedSensoryIds={setSelectedSensoryIds}
+              isEditMode={isEditMode}
+              sensoryIndex={index}
+            />
           ))}
         <BottomButton enableButton={enableButton} onClick={handleNextBotton}>
           다음

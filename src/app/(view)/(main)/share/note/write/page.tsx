@@ -48,6 +48,11 @@ function WriteTastingNote() {
     }
   };
 
+  const handleResizeObserver = (height: number) => {
+    const currentHeight = stepRefs.current[step + 1]?.scrollHeight ?? 0;
+    setContainerHeight(height !== 0 ? height : currentHeight);
+  };
+
   // step을 1 감소시키는 함수
   const handleStepBack = () => {
     if (topRef.current) {
@@ -131,6 +136,7 @@ function WriteTastingNote() {
             <CommentAndRatingForm
               ref={formRef}
               handleStepBack={handleStepBack}
+              handleResizeObserver={handleResizeObserver}
               key="comment"
             />,
           ].map((Component, index) => (
