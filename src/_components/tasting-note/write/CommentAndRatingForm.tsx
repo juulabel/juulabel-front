@@ -73,10 +73,11 @@ interface ErrorResponse {
 
 interface ICommentAndRatingForm {
   handleStepBack: () => void;
+  handleResizeObserver?: (height: number) => void;
 }
 
 const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
-  { handleStepBack }: ICommentAndRatingForm,
+  { handleStepBack, handleResizeObserver }: ICommentAndRatingForm,
   ref,
 ) {
   const pathname = usePathname();
@@ -107,6 +108,8 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
   const [modalOpen, setModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   const { data: sensoryLevelInfos } = useQuery<ISensoryLevelInfo[]>({
     queryKey: ["tastingNoteSensories", alcoholTypeId],
@@ -138,6 +141,21 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
       handleSubmit(onSubmit)();
     },
   }));
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      resizeObserverRef.current = new ResizeObserver(() => {
+        if (handleResizeObserver)
+          handleResizeObserver(mainRef.current?.scrollHeight ?? 0);
+      });
+
+      resizeObserverRef.current.observe(textareaRef.current);
+      resizeObserverRef.current.observe(textareaRef.current);
+    }
+    return () => {
+      resizeObserverRef.current?.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (imageUrlList.length > 0) {
@@ -343,7 +361,7 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
 
   return (
     <>
-      <div className="mx-[18px] mt-6 flex flex-col gap-y-10">
+      <div className="mx-[18px] mt-6 flex flex-col gap-y-10" ref={mainRef}>
         <div>
           <p className="text-xl font-bold text-cool-grayscale-800">
             마지막 단계에요!
@@ -353,9 +371,9 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
             대해 어떻게 생각하시나요?
           </p>
         </div>
-        <div className="flex flex-col">
+        <div className="flex h-full flex-col overflow-hidden overflow-y-scroll">
           {/* 부연설명 파트 */}
-          <div>
+          <div className="min-h-1 flex-1 basis-1">
             <div className="flex items-center justify-between">
               {/* 부연설명 왼쪽 타이틀 */}
               <div className="flex items-center gap-x-3">
@@ -391,29 +409,26 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
             <hr className="absolute left-1/2 h-1 w-screen -translate-x-1/2 transform border-0 bg-cool-grayscale-50" />
           </div>
 
-          {/* 달점 파트 */}
-          <div className="mt-4 text-center text-base font-bold text-cool-grayscale-800">
-            술에 대한 달점을 매겨주세요!
-          </div>
-          <div className="mt-[2px] flex items-center justify-center">
-            <span className="text-2xl font-bold text-primary-700">
-              {rating}
-            </span>
-            <span className="ml-[5px] text-base text-cool-grayscale-500">
-              /5
-            </span>
-            <span className="ml-[4px] text-base text-cool-grayscale-500">
-              점
-            </span>
-          </div>
-
-          {/* 달점 입력폼 */}
-          <div className="mb-6 mt-2 flex justify-center gap-x-3">
-            <Rating value={rating} onChange={(value) => setRating(value)} />
-          </div>
-
           {/* 아래부터는 스크롤 고정 부분 */}
-          <div className="sticky bottom-0 bg-white">
+          <div className="h-[347px] w-full bg-white pb-14">
+            {/* 달점 파트 */}
+            <div className="mt-4 text-center text-base font-bold text-cool-grayscale-800">
+              술에 대한 달점을 매겨주세요!
+            </div>
+            <div className="mt-[2px] flex items-center justify-center">
+              <span className="text-2xl font-bold text-primary-700">
+                {rating}
+              </span>
+              <span className="ml-[5px] text-base text-cool-grayscale-500">
+                /5
+              </span>
+              <span className="ml-[4px] text-base text-cool-grayscale-500">
+                점
+              </span>
+            </div>
+            <div className="mb-6 mt-2 flex justify-center gap-x-3">
+              <Rating value={rating} onChange={(value) => setRating(value)} />
+            </div>
             {/* 이미지 미리보기  UI*/}
             {images.length > 0 && (
               <div className="flex w-full items-center space-x-4 overflow-x-scroll px-4 pb-3 pt-2 scrollbar-hide">

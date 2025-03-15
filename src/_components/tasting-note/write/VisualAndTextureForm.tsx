@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import LevelSelector from "./LevelSelector";
 import { ISensoryLevelInfo } from "@/_types";
-import SensoryInfo from "./SensoryInfo";
+import SensoryInfo from "../SensoryInfo";
 
 interface ColorInfo {
   id: number;
