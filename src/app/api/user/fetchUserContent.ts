@@ -22,8 +22,8 @@ export const fetchUserContent = async ({
   const lastId = pageParam?.[lastIdParam];
 
   const endpoint = isNote
-    ? `/tasting_notes?pageSize=15${lastId ? `&${lastIdParam}=${lastId}` : ""}`
-    : `/daily-lives?pageSize=15${lastId ? `&${lastIdParam}=${lastId}` : ""}`;
+    ? `/tasting_notes?pageSize=10${lastId ? `&${lastIdParam}=${lastId}` : ""}`
+    : `/daily-lives?pageSize=10${lastId ? `&${lastIdParam}=${lastId}` : ""}`;
 
   const res = await instance.get(
     `${apiUrl}/v1/api/members/${userId}${endpoint}`,

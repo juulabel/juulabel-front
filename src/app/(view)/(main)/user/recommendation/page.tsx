@@ -16,6 +16,7 @@ import getMyInfo from "@/app/api/auth/getMyInfo";
 import ServerToast from "@/_components/share/error/ServerToast";
 import SearchData from "@/_components/tasting-note/search/SearchData";
 import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
+import UserListSkeleton from "@/_components/follow/UserListSkeleton";
 
 // Memoize constant values
 const IMAGE_BASE_PATH = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;
@@ -67,8 +68,6 @@ export default function Page() {
     setIsBadgeInfoModalOpen((prev) => !prev);
   }, []);
 
-  const emptyFetchCallback = useCallback(() => {}, []);
-
   // User data query
   const {
     data: user,
@@ -81,6 +80,7 @@ export default function Page() {
   });
 
   const fetchRecommendedSommelier = async () => {
+    setRecommendedSommelier(null);
     const data = await getUserRecommendation({
       badgeLastUserId: badgeLastUserId,
       tastingLastUserId: tastingLastUserId,
@@ -189,7 +189,6 @@ export default function Page() {
         placeholder="닉네임으로 검색해보세요."
         handleChangeQuery={handleChangeQuery}
         handleClearSearchQuery={handleClearSearchQuery}
-        fetchOfficialDataSearchList={emptyFetchCallback}
       />
       <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
 
@@ -205,6 +204,7 @@ export default function Page() {
             recommendedUserList={searchQueryResult}
             userId={userId}
             debouncedSearchQuery={debouncedSearchQuery}
+            onBadgeClick={handleBadgeInfoModalToggle}
           />
         </>
       )}
@@ -272,6 +272,7 @@ export default function Page() {
             <RecommendedUserList
               recommendedUserList={badgeRecommendations}
               userId={userId}
+              onBadgeClick={handleBadgeInfoModalToggle}
             />
           )}
           <div className="mx-[4%] py-[20px]">
@@ -288,16 +289,23 @@ export default function Page() {
               <p>를 좋아하는 사람들이에요.</p>
             </div>
           </div>
-          {tastingRecommendations && (
+
+          {!tastingRecommendations ? (
+            <UserListSkeleton count={5} />
+          ) : (
             <RecommendedUserList
               recommendedUserList={tastingRecommendations}
               userId={userId}
+              onBadgeClick={handleBadgeInfoModalToggle}
             />
           )}
         </>
       )}
       {isBadgeInfoModalOpen && (
-        <BadgeInfoModal setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen} />
+        <BadgeInfoModal
+          showApplyButton={false}
+          setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen}
+        />
       )}
     </div>
   );

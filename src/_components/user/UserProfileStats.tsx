@@ -7,8 +7,6 @@ interface UserProfileStatsProps {
   followerCount: number;
   totalPosts: number;
   isClickable?: boolean;
-  onFollowingClick?: () => void;
-  onFollowerClick?: () => void;
 }
 
 interface StatsElementProps {
@@ -23,22 +21,25 @@ export default function UserProfileStats({
   followerCount = 0,
   totalPosts = 0,
   isClickable = true,
-  onFollowingClick,
-  onFollowerClick,
 }: UserProfileStatsProps) {
-  const StatsElement = ({ label, count, className }: StatsElementProps): ReactNode => (
-    <div className={`flex flex-col items-center justify-center ${className || ""}`}>
+  const StatsElement = ({
+    label,
+    count,
+    className,
+  }: StatsElementProps): ReactNode => (
+    <div
+      className={`flex flex-col items-center justify-center ${className || ""}`}
+    >
       <p className="text-sm font-normal text-cool-grayscale-500">{label}</p>
       <p className="text-base font-bold text-cool-grayscale-800">{count}</p>
     </div>
   );
 
   return (
-    <div className="mx-[12%] mt-6 flex flex-row items-center justify-between">
+    <div className="mx-[12%] mb-4 mt-6 flex flex-row items-center justify-between">
       {isClickable ? (
-        <Link 
-          href={`/user/profile/${memberId}/following`}
-          onClick={onFollowingClick}
+        <Link
+          href={`/user/follow/${memberId}?type=following`}
           className="flex cursor-pointer flex-col items-center justify-center"
         >
           <p className="text-sm font-normal text-cool-grayscale-500">팔로잉</p>
@@ -53,9 +54,8 @@ export default function UserProfileStats({
       <div className="my-auto h-5 w-[1px] bg-cool-grayscale-200" />
 
       {isClickable ? (
-        <Link 
-          href={`/user/profile/${memberId}/follower`}
-          onClick={onFollowerClick}
+        <Link
+          href={`/user/follow/${memberId}?type=follower`}
           className="flex cursor-pointer flex-col items-center justify-center"
         >
           <p className="text-sm font-normal text-cool-grayscale-500">팔로워</p>
@@ -72,4 +72,4 @@ export default function UserProfileStats({
       <StatsElement label="총 게시글" count={totalPosts} />
     </div>
   );
-} 
+}

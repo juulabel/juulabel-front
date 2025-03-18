@@ -8,8 +8,8 @@ export interface RecommendedUser {
 
 export interface RecommendUserList {
   recommendedUserList: RecommendedUser[];
-  isCurrentUser?: boolean;
+  showDeleteButton?: boolean;
   userId: string;
-  isFollower?: boolean;
   debouncedSearchQuery?: string;
+  onBadgeClick: () => void;
 }

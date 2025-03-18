@@ -17,7 +17,7 @@ export default function MySpaceHeader({ title }: IMySpaceHeader) {
       <div className="mx-[4%] mb-4 flex h-16 flex-row items-center justify-between border-b-[1px] border-cool-grayscale-300">
         <div className="text-2xl font-bold">{title}</div>
         <div className="flex space-x-3">
-          <Link href="/follow">
+          <Link href="/user/recommendation">
             <Image
               src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/icons/header/add-people.png`}
               width="24"

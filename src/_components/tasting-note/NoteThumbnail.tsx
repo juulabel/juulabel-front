@@ -3,6 +3,7 @@ import { dateViewKoreanFull } from "@/_utils/time";
 import Image from "next/image";
 import Link from "next/link";
 import Caption from "../../_common/Caption";
+import { useRouter } from "next/navigation";
 
 export const placeholderThumbnailProvider = (alcoholType: string) => {
   switch (alcoholType) {
@@ -29,9 +30,13 @@ export default function NoteThumbnail({
   hasMultipleImages,
   isPrivate,
 }: INoteThumbnail) {
+  const router = useRouter();
   return (
-    <Link href={`/share/note/${TastingNoteId}`} className="flex h-full w-full flex-col">
-      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg">
+    <div className="flex h-full w-full flex-col">
+      <Link
+        href={`/share/note/${TastingNoteId}`}
+        className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg"
+      >
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
         </Caption>
@@ -64,7 +69,7 @@ export default function NoteThumbnail({
           fill
           className="object-cover"
         />
-      </div>
+      </Link>
       <div className="mb-0.5 font-medium text-cool-grayscale-800">
         {alcoholicDrinksName}
       </div>
@@ -92,6 +97,6 @@ export default function NoteThumbnail({
       <div className="text-xs text-cool-grayscale-500">
         {dateViewKoreanFull(createdAt)}
       </div>
-    </Link>
+    </div>
   );
 }

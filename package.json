@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NODE_ENV=production next build",
-    "start": "cross-env NODE_ENV=production PORT=5001 next start",
+    "start": "cross-env NODE_ENV=production PORT=5001 next start",        
+    "start:qa": "cross-env NODE_ENV=production PORT=5005 next start",
     "lint": "next lint",
     "check-code": "prettier --check .",
     "format": "prettier --write ."

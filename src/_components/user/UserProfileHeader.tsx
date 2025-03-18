@@ -38,17 +38,26 @@ export default function UserProfileHeader({
               alt="유저 이미지"
             />
           </div>
-          {hasBadge && (
-            <Image
-              onClick={onBadgeClick}
-              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`}
-              alt="배지"
-              className="ml-2 cursor-pointer"
-              width={32}
-              height={32}
-            />
-          )}
-          <p className="ml-2 text-lg font-bold leading-7">{nickname}</p>
+          <div className="ml-2 flex flex-col items-start">
+            {hasBadge && (
+              <div className="mb-1 justify-center text-xs font-bold leading-none text-orange-400">
+                주라벨 인증 뱃지 보유
+              </div>
+            )}
+            <div className="flex flex-row items-center">
+              {hasBadge && (
+                <Image
+                  onClick={onBadgeClick}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`}
+                  alt="배지"
+                  className="cursor-pointer"
+                  width={32}
+                  height={32}
+                />
+              )}
+              <p className="ml-2 text-lg font-bold leading-7">{nickname}</p>
+            </div>
+          </div>
         </div>
         {rightElement}
       </div>

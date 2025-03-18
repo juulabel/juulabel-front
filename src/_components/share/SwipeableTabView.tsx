@@ -19,7 +19,6 @@ interface SwipeableTabViewProps {
   activeIndex: number;
   onTabChange?: (index: number) => void;
   children: ReactNode[];
-  observerRef?: RefObject<HTMLDivElement>;
   className?: string;
 }
 
@@ -27,8 +26,6 @@ export default function SwipeableTabView({
   activeIndex,
   onTabChange,
   children,
-  observerRef,
-  className = "",
 }: SwipeableTabViewProps) {
   const [containerHeight, setContainerHeight] = useState<string>("auto");
   const swiperRef = useRef<SwiperType | null>(null);
@@ -46,16 +43,6 @@ export default function SwipeableTabView({
   useEffect(() => {
     tabRefs.current = Array(children.length).fill(null);
   }, [children.length]);
-
-  // Position observer element in active tab
-  useEffect(() => {
-    if (!observerRef?.current || !tabRefs.current[activeIndex]) return;
-
-    const activeTab = tabRefs.current[activeIndex];
-    if (activeTab && !activeTab.contains(observerRef.current)) {
-      activeTab.appendChild(observerRef.current);
-    }
-  }, [observerRef, activeIndex]);
 
   // Sync external activeIndex with Swiper and update height
   useEffect(() => {
@@ -95,23 +82,17 @@ export default function SwipeableTabView({
 
   return (
     <div
-      className={`relative w-full overflow-hidden ${className}`}
-      style={{ height: containerHeight, transition: "height 0.3s ease" }}
+      className={`relative w-full overflow-hidden`}
+      style={{
+        height: containerHeight,
+        transition: "height 0.3s ease",
+      }}
     >
       <Swiper
         onSwiper={handleSwiperInit}
-        slidesPerView={1}
         onSlideChange={handleSlideChange}
-        modules={[Virtual]}
         initialSlide={activeIndex}
-        resistance
-        resistanceRatio={0.85}
         touchStartPreventDefault={false}
-        virtual={{
-          enabled: true,
-          addSlidesAfter: 1,
-          addSlidesBefore: 1,
-        }}
       >
         {children.map((child, index) => (
           <SwiperSlide key={index} virtualIndex={index}>

@@ -3,34 +3,104 @@ import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
 import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
 import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
 import SwipeableTabView from "@/_components/share/SwipeableTabView";
-import { RefObject } from "react";
+import { useCallback, useMemo } from "react";
 import React from "react";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { fetchUserContent } from "@/app/api/user/fetchUserContent";
+import { useCookies } from "react-cookie";
 
 interface UserProfileContentProps {
-  isTastingNoteActive: boolean;
-  noteList: any[];
-  lifeList: any[];
-  isLoadingNoteList: boolean;
-  isLoadingLifeList: boolean;
-  isFetchingNextNotes: boolean;
-  isFetchingNextLives: boolean;
-  observerRef: RefObject<HTMLDivElement>;
+  activeTabIndex: number;
+  userId: string;
+
   isProfile?: boolean;
-  onTabChange?: (isTastingNote: boolean) => void; // Optional callback to change tabs from content swipe
+  onTabChange?: (index: number) => void; // Optional callback to change tabs from content swipe
 }
 
 export default function UserProfileContent({
-  isTastingNoteActive,
-  noteList,
-  lifeList,
-  isLoadingNoteList,
-  isLoadingLifeList,
-  isFetchingNextNotes,
-  isFetchingNextLives,
-  observerRef,
+  activeTabIndex,
+  userId,
   onTabChange,
   isProfile,
 }: UserProfileContentProps) {
+  const [cookies] = useCookies(["accessToken"]);
+
+  // Tasting notes query
+  const {
+    data: noteData,
+    fetchNextPage: fetchNextNotePage,
+    hasNextPage: hasNextNotePage,
+    isFetchingNextPage: isFetchingNextNotePage,
+    isLoading: isLoadingNoteList,
+  } = useInfiniteQuery({
+    queryKey: [`${userId}-notes`],
+    queryFn: ({ pageParam }) =>
+      fetchUserContent({
+        pageParam,
+        contentType: "notes",
+        userId: userId,
+      }),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.content.length || lastPage.last) return null;
+      const lastItem = lastPage.content.slice(-1)[0];
+      return { lastTastingNoteId: lastItem.TastingNoteId };
+    },
+    initialPageParam: { lastTastingNoteId: null },
+    enabled: !!cookies.accessToken && activeTabIndex === 0,
+  });
+
+  // Daily lives query
+  const {
+    data: lifeData,
+    isLoading: isLoadingLifeList,
+    fetchNextPage: fetchNextLifePage,
+    hasNextPage: hasNextLifePage,
+    isFetchingNextPage: isFetchingNextLifePage,
+  } = useInfiniteQuery({
+    queryKey: [`${userId}-lives`],
+    queryFn: ({ pageParam }) =>
+      fetchUserContent({
+        pageParam,
+        contentType: "lives",
+        userId: userId,
+      }),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.content.length || lastPage.last) return null;
+      const lastItem = lastPage.content.slice(-1)[0];
+      return { lastDailyLifeId: lastItem.dailyLifeId };
+    },
+    initialPageParam: { lastDailyLifeId: null },
+    enabled: !!cookies.accessToken && activeTabIndex === 1,
+  });
+
+  // Memoized content lists
+  const noteList = useMemo(
+    () => noteData?.pages.flatMap((page) => page.content || []) || [],
+    [noteData],
+  );
+
+  const lifeList = useMemo(
+    () => lifeData?.pages.flatMap((page) => page.content || []) || [],
+    [lifeData],
+  );
+
+  // Pagination state based on active tab
+  const notesPaginationState = {
+    hasNextPage: hasNextNotePage,
+    isFetchingNextPage: isFetchingNextNotePage,
+    fetchNextPage: fetchNextNotePage,
+  };
+
+  const livesPaginationState = {
+    hasNextPage: hasNextLifePage,
+    isFetchingNextPage: isFetchingNextLifePage,
+    fetchNextPage: fetchNextLifePage,
+  };
+
+  const notesObserverRef = useInfiniteScroll(notesPaginationState);
+  const livesObserverRef = useInfiniteScroll(livesPaginationState);
+
   const renderLoadingIndicator = (isFetching: boolean) => {
     if (isFetching) {
       return (
@@ -43,7 +113,7 @@ export default function UserProfileContent({
   };
 
   const renderEmptyState = (type: string) => (
-    <div className="flex h-[calc(100vh-310px)] items-center justify-center">
+    <div className="flex min-h-[50vh] flex-1 items-center justify-center">
       <p className="text-base font-medium text-slate-500">
         작성된 {type}이 없어요
       </p>
@@ -63,8 +133,10 @@ export default function UserProfileContent({
             {noteList.map((note) => (
               <NoteThumbnail key={note.TastingNoteId} {...note} />
             ))}
+            <div ref={notesObserverRef} />
           </div>
-          {isTastingNoteActive && renderLoadingIndicator(isFetchingNextNotes)}
+          {activeTabIndex === 0 &&
+            renderLoadingIndicator(isFetchingNextNotePage)}
         </>
       ) : (
         renderEmptyState("시음노트")
@@ -83,8 +155,10 @@ export default function UserProfileContent({
             {lifeList.map((post) => (
               <LifeThumbnail key={post.dailyLifeId} {...post} />
             ))}
+            <div ref={livesObserverRef} />
           </div>
-          {!isTastingNoteActive && renderLoadingIndicator(isFetchingNextLives)}
+          {activeTabIndex === 1 &&
+            renderLoadingIndicator(isFetchingNextLifePage)}
         </>
       ) : (
         renderEmptyState("일상생활")
@@ -92,18 +166,8 @@ export default function UserProfileContent({
     </>
   );
 
-  const handleTabChange = (index: number) => {
-    if (onTabChange) {
-      onTabChange(index === 0);
-    }
-  };
-
   return (
-    <SwipeableTabView
-      activeIndex={isTastingNoteActive ? 0 : 1}
-      onTabChange={handleTabChange}
-      observerRef={observerRef}
-    >
+    <SwipeableTabView activeIndex={activeTabIndex} onTabChange={onTabChange}>
       {tastingNotesTab}
       {dailyLifeTab}
     </SwipeableTabView>

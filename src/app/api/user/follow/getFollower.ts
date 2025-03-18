@@ -18,8 +18,7 @@ export const getFollower = async (id: string, lastFollowId: string | null) => {
       },
     );
 
-    const { content, last } = res.data.result.followers;
-    console.log(res.data);
+    const { content, last } = res.data.result.followers;    
     return {
       content,
       nextPage: last

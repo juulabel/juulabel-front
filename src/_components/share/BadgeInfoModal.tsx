@@ -61,11 +61,13 @@ export default function BadgeInfoModal({
             보유자만
             <br />이 뱃지를 받을 수 있습니다.
           </div>
+          {showApplyButton && (
           <div className="text-center text-sm text-slate-700">
             전통주에 대한 전문가의 평가는 단순한 리뷰가
-            <br />
-            아닌, 깊은 지식을 바탕으로 합니다.
-          </div>
+              <br />
+              아닌, 깊은 지식을 바탕으로 합니다.
+            </div>
+          )}
         </div>
         <div className="flex w-full flex-col gap-2">
           {showApplyButton && (
