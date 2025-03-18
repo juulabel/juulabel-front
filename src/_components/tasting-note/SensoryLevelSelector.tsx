@@ -1,0 +1,88 @@
+"use client";
+
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
+import { ILevel } from "@/_types";
+import { useRef, useState } from "react";
+
+interface Props {
+  levels: ILevel[];
+  selectedSensoryId: number | undefined;
+  setSelectedSensoryIds: Dispatch<SetStateAction<number[]>>;
+}
+
+export default function SensoryLevelSelector({
+  levels,
+  selectedSensoryId,
+  setSelectedSensoryIds,
+}: Props) {
+  const initSelectedSensoryId = selectedSensoryId ?? levels[0].id;
+
+  const [selectedId, setSelectedId] = useState<number>(initSelectedSensoryId);
+
+  const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(event.target.value, 10);
+    const newSelectedId = levels[value]?.id;
+    if (!newSelectedId) return;
+
+    setSelectedSensoryIds((prevIds) => {
+      const updatedIds = prevIds.filter((id) => id !== selectedId); // 이전 선택 제거
+      return updatedIds.includes(newSelectedId)
+        ? updatedIds
+        : [...updatedIds, newSelectedId]; // 중복 방지 후 추가
+    });
+
+    setSelectedId(newSelectedId);
+  };
+
+  useEffect(() => {}, [levels, selectedSensoryId, setSelectedSensoryIds]);
+
+  return (
+    <div className="flex w-full flex-col items-center justify-center">
+      <div className="relative w-full">
+        <input
+          type="range"
+          min="0"
+          max={levels.length - 1}
+          step="1"
+          value={levels.findIndex((level) => level.id === selectedId)}
+          onChange={handleSliderChange}
+          className="relative z-10 h-3 w-full cursor-pointer appearance-none rounded-lg focus:outline-none"
+          style={{
+            background: `linear-gradient(
+                        to right,
+                        #475569 0%,
+                        #475569 ${(levels.findIndex((level) => level.id === selectedId) / (levels.length - 1)) * 100}%,
+                        #E2E8F0 ${(levels.findIndex((level) => level.id === selectedId) / (levels.length - 1)) * 100}%,
+                        #E2E8F0 100%
+                      )`,
+          }}
+        />
+
+        {/* Level dots - overlay on top of the slider */}
+        <div className="pointer-events-none absolute top-1/2 z-20 flex w-full -translate-y-1/2 justify-between px-4">
+          {levels.map((level, index) => (
+            <div
+              key={level.id}
+              className={`z-0 h-[6px] w-[9px] rounded-full ${
+                index === levels.findIndex((l) => l.id === selectedId)
+                  ? "opacity-0"
+                  : index < levels.findIndex((l) => l.id === selectedId)
+                    ? "bg-slate-500"
+                    : "bg-slate-300"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* 슬라이더 아래의 description 레이블 */}
+      <div className="mt-3 flex w-full justify-between px-2">
+        {levels.map((level) => (
+          <span key={level.id} className="text-sm text-cool-grayscale-500">
+            {level.description}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}

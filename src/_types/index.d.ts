@@ -150,6 +150,17 @@ interface IComment {
 
 type IReply = Omit<IComment, "replyCount">;
 
+export interface ISensoryLevelInfo {
+  sensory: ISensoryInfo;
+  levels: ILevel[];
+}
+
+export interface ILevel {
+  id: number;
+  score: number;
+  description: string;
+}
+
 interface IPaginatedData {
   pages: Array<{
     content: RecommendedUser[];

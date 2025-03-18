@@ -75,6 +75,7 @@ export default function OfficialData({ searchQuery }: { searchQuery: string }) {
             {searchData?.map((officialData: IOfficialData) => (
               <OfficialDataThumbnail key={officialData.id} {...officialData} />
             ))}
+            <div ref={observerRef} />
           </div>
           {isFetchingNextPage && (
             <div className="fixed bottom-9 left-1/2 z-50 -translate-x-1/2">
@@ -84,7 +85,6 @@ export default function OfficialData({ searchQuery }: { searchQuery: string }) {
               />
             </div>
           )}
-          <div ref={observerRef} />
         </>
       )}
     </>

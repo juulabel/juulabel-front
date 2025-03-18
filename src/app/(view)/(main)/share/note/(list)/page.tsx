@@ -81,7 +81,7 @@ export default function Notes() {
           />
         </div>
       )}
-      <div ref={observerRef}></div>
+      <div ref={observerRef} />
     </div>
   );
 }
