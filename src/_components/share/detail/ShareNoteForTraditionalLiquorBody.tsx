@@ -68,7 +68,7 @@ export default function ShareNoteForTraditionalLiquorBody({ id }: Props) {
     } else {
       // Default to 0 if no data exists
       setTastingNoteTotalCount(0);
-    }    
+    }
   }, [data, setTastingNoteTotalCount, isError]);
 
   if (status === "pending" && !isFetchingNextPage) {

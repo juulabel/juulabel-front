@@ -48,7 +48,7 @@ export default function useCommentsLike(isLife: boolean) {
       } else {
         previousNoteCommentsData = commentsOptimisticUpdate({
           postId,
-        commentId,
+          commentId,
         });
       }
 

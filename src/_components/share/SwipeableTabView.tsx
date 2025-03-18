@@ -1,18 +1,6 @@
-import {
-  ReactNode,
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-} from "react";
-// Import Swiper React components
+import { ReactNode, useEffect, useRef, useState, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-// Import Swiper styles
 import "swiper/css";
-// Import Swiper core and required modules
-import { Virtual } from "swiper/modules";
-// Import Swiper types
 import type { Swiper as SwiperType } from "swiper";
 
 interface SwipeableTabViewProps {

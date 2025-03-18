@@ -14,7 +14,7 @@ export default function SplashScreen() {
   const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
 
   useEffect(() => {
-    // Simulate splash screen timeout if on the home page    
+    // Simulate splash screen timeout if on the home page
     if (isLoading) {
       const timer = setTimeout(() => {
         setIsLoading(false);
@@ -23,7 +23,7 @@ export default function SplashScreen() {
     }
 
     // Check for access token and handle redirection
-    if (cookies.accessToken) {      
+    if (cookies.accessToken) {
       router.push("/share/note");
     } else {
       setIsCheckingAuth(false); // Done checking auth, can show the login form

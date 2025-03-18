@@ -12,18 +12,21 @@ export default function BadgeInfoModal({
   showApplyButton = true,
 }: BadgeInfoModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  
+
   const handleClose = useCallback(() => {
     setIsBadgeInfoModalOpen(false);
   }, [setIsBadgeInfoModalOpen]);
-  
+
   const handleApplyClick = useCallback(() => {
     window.open("https://tally.so/r/3XzlRe", "_blank");
   }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         handleClose();
       }
     };
@@ -62,8 +65,8 @@ export default function BadgeInfoModal({
             <br />이 뱃지를 받을 수 있습니다.
           </div>
           {showApplyButton && (
-          <div className="text-center text-sm text-slate-700">
-            전통주에 대한 전문가의 평가는 단순한 리뷰가
+            <div className="text-center text-sm text-slate-700">
+              전통주에 대한 전문가의 평가는 단순한 리뷰가
               <br />
               아닌, 깊은 지식을 바탕으로 합니다.
             </div>
@@ -82,9 +85,7 @@ export default function BadgeInfoModal({
             onClick={handleClose}
             className={cn(
               "w-full rounded py-3 text-center text-sm font-bold",
-              showApplyButton
-                ? "text-slate-500"
-                : "bg-[#ff823b] text-white"
+              showApplyButton ? "text-slate-500" : "bg-[#ff823b] text-white",
             )}
           >
             닫기

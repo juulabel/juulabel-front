@@ -16,8 +16,11 @@ import { IAlcoholTypeTab } from "@/_types/search/alcoholTypeTab";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>([]);
-  const [openOfficialSearchDataList, setOpenOfficialSearchDataList] = useState(false);
+  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>(
+    [],
+  );
+  const [openOfficialSearchDataList, setOpenOfficialSearchDataList] =
+    useState(false);
   const [openAlcoholTypeDataList, setOpenAlcoholTypeDataList] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [selectedTab, setSelectedTab] = useState<IAlcoholTypeTab>({
@@ -41,9 +44,12 @@ export default function Page() {
     getRelatedSearchDataList();
   }, [debouncedSearchQuery, searchQuery]);
 
-  const handleSearchQueryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  }, []);
+  const handleSearchQueryChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    [],
+  );
 
   const clearSearchQuery = useCallback(() => {
     setSearchQuery("");
@@ -72,24 +78,24 @@ export default function Page() {
     setIsInputFocused(false);
   }, []);
 
-  const isSearchListOpen = useMemo(() => 
-    openOfficialSearchDataList || openAlcoholTypeDataList, 
-    [openOfficialSearchDataList, openAlcoholTypeDataList]
+  const isSearchListOpen = useMemo(
+    () => openOfficialSearchDataList || openAlcoholTypeDataList,
+    [openOfficialSearchDataList, openAlcoholTypeDataList],
   );
-  
-  const showMainContent = useMemo(() => 
-    !openOfficialSearchDataList && !openAlcoholTypeDataList,
-    [openOfficialSearchDataList, openAlcoholTypeDataList]
+
+  const showMainContent = useMemo(
+    () => !openOfficialSearchDataList && !openAlcoholTypeDataList,
+    [openOfficialSearchDataList, openAlcoholTypeDataList],
   );
-  
-  const showRecentSearches = useMemo(() => 
-    debouncedSearchQuery?.length === 0 && isInputFocused,
-    [debouncedSearchQuery, isInputFocused]
+
+  const showRecentSearches = useMemo(
+    () => debouncedSearchQuery?.length === 0 && isInputFocused,
+    [debouncedSearchQuery, isInputFocused],
   );
-  
-  const showAlcoholSlider = useMemo(() => 
-    debouncedSearchQuery?.length === 0 && !isInputFocused,
-    [debouncedSearchQuery, isInputFocused]
+
+  const showAlcoholSlider = useMemo(
+    () => debouncedSearchQuery?.length === 0 && !isInputFocused,
+    [debouncedSearchQuery, isInputFocused],
   );
 
   return (
@@ -108,7 +114,7 @@ export default function Page() {
           />
           <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
 
-          {relatedSearchDataList.length > 0 && 
+          {relatedSearchDataList.length > 0 &&
             relatedSearchDataList.map((data: string, index: number) => (
               <RelatedSearchResult
                 key={index}

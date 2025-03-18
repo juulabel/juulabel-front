@@ -91,9 +91,6 @@ const updateFollowCounts = (
   };
 };
 
-
-
-
 export function useCommonFollow(userId: string, isFollowerPath: boolean) {
   const queryClient = useQueryClient();
 
@@ -142,8 +139,6 @@ export function useCommonFollow(userId: string, isFollowerPath: boolean) {
 export type DeleteButtonMutateParams = {
   id: number;
 };
-
-
 
 export function useDeleteFollow(userId: string) {
   const queryClient = useQueryClient();

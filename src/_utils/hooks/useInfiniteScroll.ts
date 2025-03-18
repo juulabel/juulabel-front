@@ -15,8 +15,8 @@ export default function useInfiniteScroll({
     if (!hasNextPage || isFetchingNextPage) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {     
-        if (entries[0].isIntersecting) {          
+      (entries) => {
+        if (entries[0].isIntersecting) {
           fetchNextPage();
         }
       },

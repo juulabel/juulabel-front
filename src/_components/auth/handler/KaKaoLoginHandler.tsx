@@ -43,11 +43,11 @@ export default function KaKaoLoginHandler() {
               router.push("/share/note"); //추후 수정 예정
             }
           }
-        } catch (error) {                    
+        } catch (error) {
           if (isAxiosError(error) && error.response?.status === 400) {
             toast("탈퇴한 회원입니다.");
           } else {
-            //  terminal 에서 확인 필요            
+            //  terminal 에서 확인 필요
             toast("비정상 접근입니다.");
           }
           router.push("/");

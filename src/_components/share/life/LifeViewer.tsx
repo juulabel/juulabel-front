@@ -39,7 +39,7 @@ export default function LifeViewer({
                   : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`
               }
               alt="작성자 이미지"
-              fill              
+              fill
               className="object-cover"
             />
           </div>

@@ -39,7 +39,7 @@ export default function TraditionalLiquorDropDown({
         {children}
       </button>
       {isOpen && (
-        <ul className="animate-dropdown-open absolute -left-2 top-6 w-[120px] origin-top transform rounded-[8px] bg-white shadow-[0px_4px_8px_0px_#00000014]">
+        <ul className="absolute -left-2 top-6 w-[120px] origin-top transform animate-dropdown-open rounded-[8px] bg-white shadow-[0px_4px_8px_0px_#00000014]">
           {volumePriceDetails.map((detail) => (
             <li
               key={detail.volume}

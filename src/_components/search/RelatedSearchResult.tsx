@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 interface IRelatedSearchResult {
   searchedData: string;
   searchQuery: string;
-  localStorageKey: string;  
+  localStorageKey: string;
   fetchOfficialDataSearchList: (recentSearch: string) => void;
 }
 

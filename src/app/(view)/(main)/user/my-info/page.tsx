@@ -52,7 +52,6 @@ export default function Page() {
       />
       {!isEditMode ? (
         <MyInfoBody user={user} setIsEditMode={setIsEditMode} />
-        
       ) : (
         <EditMyInfo
           user={user}

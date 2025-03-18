@@ -10,10 +10,7 @@ interface IFollowHeader {
   onRefreshClick: () => void;
 }
 
-export default function FollowHeader({
-  title,
-  onRefreshClick,
-}: IFollowHeader) {
+export default function FollowHeader({ title, onRefreshClick }: IFollowHeader) {
   const router = useRouter();
   return (
     <div>

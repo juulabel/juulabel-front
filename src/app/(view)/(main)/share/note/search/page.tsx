@@ -12,13 +12,19 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>([]);
-  const [openOfficialSearchDataList, setOpenOfficialSearchDataList] = useState<boolean>(false);
+  const [relatedSearchDataList, setRelatedSearchDataList] = useState<string[]>(
+    [],
+  );
+  const [openOfficialSearchDataList, setOpenOfficialSearchDataList] =
+    useState<boolean>(false);
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  const handleChangeSearchQuery = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  }, []);
+  const handleChangeSearchQuery = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value);
+    },
+    [],
+  );
 
   const handleClearSearchQuery = useCallback(() => {
     setSearchQuery("");
@@ -48,34 +54,39 @@ export default function Page() {
     getRelatedSearchDataList();
   }, [debouncedSearchQuery, searchQuery]);
 
-  const renderRelatedResults = useMemo(() => 
-    relatedSearchDataList.map((data: string, index: number) => (
-      <RelatedSearchResult
-        key={index}
-        searchedData={data}
-        searchQuery={debouncedSearchQuery}
-        localStorageKey="TastingNoteRecentSearchList"
-        fetchOfficialDataSearchList={fetchOfficialDataSearchList}
-      />
-    )),
-    [relatedSearchDataList, debouncedSearchQuery, fetchOfficialDataSearchList]
+  const renderRelatedResults = useMemo(
+    () =>
+      relatedSearchDataList.map((data: string, index: number) => (
+        <RelatedSearchResult
+          key={index}
+          searchedData={data}
+          searchQuery={debouncedSearchQuery}
+          localStorageKey="TastingNoteRecentSearchList"
+          fetchOfficialDataSearchList={fetchOfficialDataSearchList}
+        />
+      )),
+    [relatedSearchDataList, debouncedSearchQuery, fetchOfficialDataSearchList],
   );
 
-  const renderRecentSearches = useMemo(() => (
-    <>
-      <RecentSearchList
-        localStorageKey="TastingNoteRecentSearchList"
-        fetchOfficialDataSearchList={fetchOfficialDataSearchList}
-      />
-      <div className="absolute bottom-[21%] left-1/2 translate-x-[-50%]">
-        <TraditionalDrinkInformationComponent />
-      </div>
-    </>
-  ), [fetchOfficialDataSearchList]);
+  const renderRecentSearches = useMemo(
+    () => (
+      <>
+        <RecentSearchList
+          localStorageKey="TastingNoteRecentSearchList"
+          fetchOfficialDataSearchList={fetchOfficialDataSearchList}
+        />
+        <div className="absolute bottom-[21%] left-1/2 translate-x-[-50%]">
+          <TraditionalDrinkInformationComponent />
+        </div>
+      </>
+    ),
+    [fetchOfficialDataSearchList],
+  );
 
-  const closeOfficialDataSearchResult = useCallback(() => 
-    setOpenOfficialSearchDataList(false), 
-  []);
+  const closeOfficialDataSearchResult = useCallback(
+    () => setOpenOfficialSearchDataList(false),
+    [],
+  );
 
   return (
     <>

@@ -1,11 +1,11 @@
-import withPWA from 'next-pwa';
+import withPWA from "next-pwa";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   siteUrl: "https://juulabel.com/app",
   basePath: "/app",
   reactStrictMode: false,
-  images: {    
+  images: {
     remotePatterns: [
       {
         protocol: "https",
@@ -17,13 +17,13 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",        
+        hostname: "juulabel.s3.ap-northeast-2.amazonaws.com",
       },
     ],
   },
   experimental: {
     instrumentationHook: true,
-    appDir: true
+    appDir: true,
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
@@ -36,28 +36,28 @@ const nextConfig = {
       config.target = "node";
     }
     return config;
-  },          
+  },
 };
 
 const isDev = process.env.NODE_ENV === "development";
 
 export default withPWA({
-  dest: 'public',    
+  dest: "public",
   disable: isDev,
-  scope: '/app',
-  sw: 'sw.js',    
+  scope: "/app",
+  sw: "sw.js",
   exclude: [
     // add buildExcludes here
     ({ asset, compilation }) => {
       if (
-        asset.name.startsWith('server/') ||
+        asset.name.startsWith("server/") ||
         asset.name.match(
-          /^((app-|^)build-manifest\.json|react-loadable-manifest\.json)$/
+          /^((app-|^)build-manifest\.json|react-loadable-manifest\.json)$/,
         )
       ) {
         return true;
       }
       return false;
-    }
-  ]
+    },
+  ],
 })(nextConfig);
