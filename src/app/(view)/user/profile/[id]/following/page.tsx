@@ -8,20 +8,24 @@ import { getUserProfile } from "@/app/api/user/getUserProfile";
 import RecommendedUserList from "@/_components/follow/RecommendedUserList";
 import Loading from "@/_common/Loading";
 import ServerToast from "@/_components/share/error/ServerToast";
-import { useCallback } from "react";
+import { useMemo } from "react";
+import FollowTabs from "@/_components/follow/FollowTabs";
+
 export default function FollowingPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const userId = params.id;
+  
   const {
     data: following,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     isFetching,
-    isError,
+    error: followingError,
   } = useInfiniteQuery({
-    queryKey: ["following", params.id],
+    queryKey: ["following", userId],
     queryFn: ({ pageParam }) =>
-      getFollowee(params.id.toString(), pageParam.lastFolloweeId),
+      getFollowee(userId.toString(), pageParam.lastFolloweeId),
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: { lastFolloweeId: null },
     select: (data) => data.pages.flatMap((page) => page.content),
@@ -32,17 +36,24 @@ export default function FollowingPage({ params }: { params: { id: string } }) {
   const {
     data: user,
     isLoading: isLoadingUser,
-    error,
+    error: userError,
   } = useQuery({
-    queryKey: ["user", params.id],
-    queryFn: () => getUserProfile(params.id),
+    queryKey: ["user", userId],
+    queryFn: () => getUserProfile(userId),
   });
+
+  const isCurrentUser = useMemo(
+    () => user?.id == userId,
+    [user, userId],
+  );
 
   if (isLoadingUser || isFetching) {
     return <Loading />;
   }
 
-  if (isError || error) {
+  if (followingError || userError) {
+    console.log("followingError", followingError);
+    console.log("userError", userError);
     return (
       <ServerToast
         text="데이터를 불러오는 중 에러가 발생했습니다."
@@ -55,34 +66,21 @@ export default function FollowingPage({ params }: { params: { id: string } }) {
   return (
     <div className="h-full w-full max-w-[560px]">
       <UserHeader
-        title={`${user?.id == params.id ? "내 활동" : (user?.nickname ?? "팔로잉")}`}
-        handleBackButton={() => router.replace(`/user/profile/${params.id}`)}
+        title={isCurrentUser ? "내 활동" : (user?.nickname ?? "팔로잉")}
+        handleBackButton={() => router.replace(`/user/profile/${userId}`)}
         bottomBorder={false}
       />
 
-      <div className="flex flex-row">
-        <div
-          onClick={() => router.replace(`/user/profile/${params.id}/following`)}
-          className="flex h-11 w-1/2 cursor-pointer flex-row items-center justify-center border-b-2 border-black"
-        >
-          <p className="text-base text-black">팔로잉</p>
-          <p className="ml-1 text-sm text-cool-grayscale-600">
-            {user?.followingCount ?? 0}
-          </p>
-        </div>
-        <div
-          onClick={() => router.replace(`/user/profile/${params.id}/follower`)}
-          className="flex h-11 w-1/2 cursor-pointer flex-row items-center justify-center border-b-2 border-cool-grayscale-300"
-        >
-          <p className="text-cool-grayscale-600">팔로워</p>
-          <p className="ml-1 text-sm text-cool-grayscale-600">
-            {user?.followerCount ?? 0}
-          </p>
-        </div>
-      </div>
+      <FollowTabs 
+        userId={userId}
+        followingCount={user?.followingCount ?? 0}
+        followerCount={user?.followerCount ?? 0}
+        activeTab="following"
+      />
+      
       <RecommendedUserList
         recommendedUserList={following ?? []}
-        userId={params.id}
+        userId={userId}        
       />
     </div>
   );

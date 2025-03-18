@@ -30,7 +30,7 @@ export default function NoteThumbnail({
   isPrivate,
 }: INoteThumbnail) {
   return (
-    <div className="flex h-full w-full flex-col">
+    <Link href={`/share/note/${TastingNoteId}`} className="flex h-full w-full flex-col">
       <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg">
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
@@ -53,19 +53,17 @@ export default function NoteThumbnail({
             />
           )}
         </div>
-        <Link href={`/share/note/${TastingNoteId}`}>
-          <Image
-            src={
-              thumbnailPath ??
-              `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
-            }
-            alt="시음노트 썸네일"
-            sizes="50vw"
-            fill
-            
-            className="object-cover"
-          />
-        </Link>
+
+        <Image
+          src={
+            thumbnailPath ??
+            `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
+          }
+          alt="시음노트 썸네일"
+          sizes="50vw"
+          fill
+          className="object-cover"
+        />
       </div>
       <div className="mb-0.5 font-medium text-cool-grayscale-800">
         {alcoholicDrinksName}
@@ -94,6 +92,6 @@ export default function NoteThumbnail({
       <div className="text-xs text-cool-grayscale-500">
         {dateViewKoreanFull(createdAt)}
       </div>
-    </div>
+    </Link>
   );
 }

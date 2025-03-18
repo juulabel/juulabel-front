@@ -4,9 +4,9 @@ import Loading from "@/_common/Loading";
 import FollowHeader from "@/_components/follow/FollowHeader";
 import RecommendedUserList from "@/_components/follow/RecommendedUserList";
 import { RecommendedUser } from "@/_types/user/recommendedUser";
-import { getRecommendedSommelier } from "@/app/api/user/getRecommendedSommelier";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { getUserRecommendation } from "@/app/api/user/getUserRecommendations";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "@/_utils/useDebounce";
 import { getSearchUser } from "@/app/api/user/getSearchUser";
@@ -15,35 +15,43 @@ import { IMyInfo } from "@/_types";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import ServerToast from "@/_components/share/error/ServerToast";
 import SearchData from "@/_components/tasting-note/search/SearchData";
+import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 
-const defaultProfileImage = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
+// Memoize constant values
+const IMAGE_BASE_PATH = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;
+const BUCKET_SVG = `${IMAGE_BASE_PATH}/svg/bucket.svg`;
+const CLOSE_ICON_SVG = `${IMAGE_BASE_PATH}/svg/close_icon.svg`;
+const KISA_BADGE_PNG = `${IMAGE_BASE_PATH}/images/kisa-badge.png`;
+
+interface IUserRecommendation {
+  badgeRecommendUser: {
+    content: RecommendedUser[];
+  };
+  tastingRecommendUser: {
+    content: RecommendedUser[];
+  };
+}
 
 export default function Page() {
-  const {
-    data: user,
-    isLoading: isLoadingUser,
-    error: errorUser,
-  } = useQuery<IMyInfo>({
-    queryKey: ["my-info"],
-    queryFn: getMyInfo,
-  });
-
-  const {
-    data: recommendedSommelier,
-    isLoading: isLoadingRecommendedSommelier,
-    error,
-  } = useQuery<RecommendedUser[]>({
-    queryKey: ["recommendedSommelier"],
-    queryFn: getRecommendedSommelier,
-  });
-
   const router = useRouter();
+
+  // State management
+  const [recommendedSommelier, setRecommendedSommelier] =
+    useState<IUserRecommendation | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchQueryResult, setSearchQueryResult] = useState<RecommendedUser[]>(
     [],
   );
+  const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] =
+    useState<boolean>(false);
+  const [badgeLastUserId, setBadgeLastUserId] = useState<number | null>(null);
+  const [tastingLastUserId, setTastingLastUserId] = useState<number | null>(
+    null,
+  );
+
   const debouncedSearchQuery = useDebounce(searchQuery, 250);
 
+  // Memoized callbacks
   const handleChangeQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(event.target.value);
@@ -55,29 +63,115 @@ export default function Page() {
     setSearchQuery("");
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!debouncedSearchQuery) return;
+  const handleBadgeInfoModalToggle = useCallback(() => {
+    setIsBadgeInfoModalOpen((prev) => !prev);
+  }, []);
 
+  const emptyFetchCallback = useCallback(() => {}, []);
+
+  // User data query
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    error: userError,
+  } = useQuery<IMyInfo>({
+    queryKey: ["my-info"],
+    queryFn: getMyInfo,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const fetchRecommendedSommelier = async () => {
+    const data = await getUserRecommendation({
+      badgeLastUserId: badgeLastUserId,
+      tastingLastUserId: tastingLastUserId,
+    });
+    setRecommendedSommelier(data);
+    if (data?.badgeRecommendUser?.content.length > 0) {
+      setBadgeLastUserId(data?.badgeRecommendUser?.content[0].id);
+    }
+    if (data?.tastingRecommendUser?.content.length > 0) {
+      setTastingLastUserId(data?.tastingRecommendUser?.content[0].id);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecommendedSommelier();
+  }, []);
+
+  const handleRefetch = useCallback(() => {
+    fetchRecommendedSommelier();
+  }, [fetchRecommendedSommelier]);
+
+  // Fetch search results when debounced query changes
+  useEffect(() => {
+    if (!debouncedSearchQuery) {
+      setSearchQueryResult([]);
+      return;
+    }
+
+    let isMounted = true;
+
+    const fetchData = async () => {
       try {
         const data = await getSearchUser({
           lastFollowId: 0,
           pageSize: 10,
           username: debouncedSearchQuery,
         });
-        setSearchQueryResult(data.result.followers.content);
+
+        if (isMounted) {
+          setSearchQueryResult(data.result.followers.content);
+        }
       } catch (error) {
         console.error("Failed to fetch search results:", error);
-        setSearchQueryResult([]);
-        router.push("/");
+        if (isMounted) {
+          setSearchQueryResult([]);
+          router.push("/");
+        }
       }
     };
 
     fetchData();
-  }, [debouncedSearchQuery]);
 
-  if (isLoadingRecommendedSommelier) return <Loading />;
-  if (error)
+    return () => {
+      isMounted = false;
+    };
+  }, [debouncedSearchQuery, router]);
+
+  // Memoized derived values
+  const userId = useMemo(
+    () => user?.memberId?.toString() || "0",
+    [user?.memberId],
+  );
+
+  const hasSearchResults = useMemo(
+    () => searchQuery.length > 0 && searchQueryResult.length > 0,
+    [searchQuery.length, searchQueryResult.length],
+  );
+
+  const noSearchResults = useMemo(
+    () => searchQuery.length > 0 && searchQueryResult.length === 0,
+    [searchQuery.length, searchQueryResult.length],
+  );
+
+  const showRecommendations = useMemo(
+    () => searchQuery.length === 0,
+    [searchQuery.length],
+  );
+
+  const badgeRecommendations = useMemo(
+    () => user?.hasBadge && recommendedSommelier?.badgeRecommendUser?.content,
+    [user?.hasBadge, recommendedSommelier?.badgeRecommendUser?.content],
+  );
+
+  const tastingRecommendations = useMemo(
+    () => recommendedSommelier?.tastingRecommendUser?.content,
+    [recommendedSommelier?.tastingRecommendUser?.content],
+  );
+
+  // Loading and error states
+  if (isLoadingUser) return <Loading />;
+  if (userError) {
     return (
       <ServerToast
         text="데이터를 불러오는데 실패했어요."
@@ -85,21 +179,21 @@ export default function Page() {
         cookieDelete
       />
     );
+  }
 
-  // if (recommendedSommelier) {
   return (
     <div className="h-full w-full max-w-[560px]">
-      <FollowHeader title="팔로우하기" />
+      <FollowHeader title="팔로우하기" onRefreshClick={handleRefetch} />
       <SearchData
         searchQuery={searchQuery}
         placeholder="닉네임으로 검색해보세요."
         handleChangeQuery={handleChangeQuery}
         handleClearSearchQuery={handleClearSearchQuery}
-        fetchOfficialDataSearchList={() => {}}
+        fetchOfficialDataSearchList={emptyFetchCallback}
       />
       <div className="mb-4 h-[1px] w-full bg-cool-grayscale-300" />
 
-      {searchQuery.length > 0 && searchQueryResult.length > 0 && (
+      {hasSearchResults && (
         <>
           <span className="mx-[4%] my-4 flex flex-row items-center text-sm text-cool-grayscale-500">
             <p className="text-cool-grayscale-800">
@@ -109,13 +203,13 @@ export default function Page() {
           </span>
           <RecommendedUserList
             recommendedUserList={searchQueryResult}
-            userId={user!.memberId!.toString()}
+            userId={userId}
             debouncedSearchQuery={debouncedSearchQuery}
           />
         </>
       )}
 
-      {searchQuery.length > 0 && searchQueryResult.length === 0 && (
+      {noSearchResults && (
         <div className="flex min-h-screen w-full items-center justify-center">
           <div className="flex flex-col items-center justify-center">
             <p className="text-lg font-medium leading-7 text-cool-grayscale-600">
@@ -128,55 +222,59 @@ export default function Page() {
         </div>
       )}
 
-      {searchQuery.length === 0  && (
+      {showRecommendations && (
         <>
-          <div className="mx-[4%]">
+          <div className="mx-[4%] pb-[20px]">
             <p className="text-base font-medium leading-6 text-cool-grayscale-800">
               소믈리에 추천
             </p>
-
-            <div className="flex flex-col items-center justify-center gap-2 py-[29px]">
-              <div className="flex flex-row items-center justify-center gap-2 pb-[10px]">
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/bucket.svg`}
-                  alt="배지"
-                  width={40}
-                  height={40}
-                />
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/close_icon.svg`}
-                  alt="배지"
-                  width={20}
-                  height={20}
-                />
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`}
-                  alt="배지"
-                  width={40}
-                  height={40}
-                />
+            {user?.hasBadge ? (
+              <div className="text-sm leading-5 text-cool-grayscale-500">
+                <p>주라벨 서비스 내에서 인증을 통해 소믈리에</p>
+                <p>뱃지를 얻은 사람들이에요.</p>
               </div>
-              <div className="relative justify-center self-stretch text-center text-sm font-medium leading-[21px] text-slate-800">
-                당신의 공간을 더 특별하게
-              </div>
-              <div className="relative justify-center self-stretch text-center text-sm font-normal leading-[21px] text-slate-600">
-                KISA 소믈리에 자격증이 있다면, 지금 바로
-                <br />내 공간에서 뱃지를 신청하세요!
-              </div>
-              <button className="w-[233px] items-center justify-center gap-2.5 overflow-hidden rounded bg-slate-950 p-2 pt-[8px]">
-                <div className="relative justify-center text-center text-xs font-bold leading-none text-white">
-                  뱃지 신청하기
+            ) : (
+              <div className="flex flex-col items-center justify-center gap-2 pt-[29px]">
+                <div className="flex flex-row items-center justify-center gap-2 pb-[10px]">
+                  <Image src={BUCKET_SVG} alt="배지" width={40} height={40} />
+                  <Image
+                    src={CLOSE_ICON_SVG}
+                    alt="배지"
+                    width={20}
+                    height={20}
+                  />
+                  <Image
+                    src={KISA_BADGE_PNG}
+                    alt="배지"
+                    width={40}
+                    height={40}
+                  />
                 </div>
-              </button>
-            </div>
-
-            {/* <div className="text-sm leading-5 text-cool-grayscale-500">
-              <p>주라벨 서비스 내에서 인증을 통해 소믈리에</p>
-              <p>뱃지를 얻은 사람들이에요.</p>
-            </div> */}
+                <div className="relative justify-center self-stretch text-center text-sm font-medium leading-[21px] text-slate-800">
+                  당신의 공간을 더 특별하게
+                </div>
+                <div className="relative justify-center self-stretch text-center text-sm font-normal leading-[21px] text-slate-600">
+                  KISA 소믈리에 자격증이 있다면, 지금 바로
+                  <br />내 공간에서 뱃지를 신청하세요!
+                </div>
+                <button
+                  onClick={handleBadgeInfoModalToggle}
+                  className="w-[233px] items-center justify-center gap-2.5 overflow-hidden rounded bg-slate-950 p-2 pt-[8px]"
+                >
+                  <div className="relative justify-center text-center text-xs font-bold leading-none text-white">
+                    뱃지 신청하기
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
-          <RecommendedUserList recommendedUserList={[]} userId={"0"} />
-          <div className="mx-[4%]">
+          {badgeRecommendations && (
+            <RecommendedUserList
+              recommendedUserList={badgeRecommendations}
+              userId={userId}
+            />
+          )}
+          <div className="mx-[4%] py-[20px]">
             <p className="text-base font-medium text-cool-grayscale-800">
               내 취향과 비슷한 유저들
             </p>
@@ -184,14 +282,22 @@ export default function Page() {
               <span className="flex flex-row">
                 <p>선호하는 주종인</p>
                 <p className="mx-1 text-cool-grayscale-700">
-                  {user?.alcoholTypeIds.join(", ")}
+                  {user?.alcoholTypeIds?.join(", ")}
                 </p>
               </span>
               <p>를 좋아하는 사람들이에요.</p>
             </div>
           </div>
-          <RecommendedUserList recommendedUserList={[]} userId={"0"} />
+          {tastingRecommendations && (
+            <RecommendedUserList
+              recommendedUserList={tastingRecommendations}
+              userId={userId}
+            />
+          )}
         </>
+      )}
+      {isBadgeInfoModalOpen && (
+        <BadgeInfoModal setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen} />
       )}
     </div>
   );

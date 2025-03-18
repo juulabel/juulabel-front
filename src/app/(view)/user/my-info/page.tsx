@@ -12,7 +12,7 @@ import MyInfoBody from "@/_components/user/MyInfoBody";
 import { IMyInfo } from "@/_types";
 
 export default function Page() {
-  const router = useRouter(); 
+  const router = useRouter();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [editCancelModalOpen, setEditCancelModalOpen] =
     useState<boolean>(false);
@@ -50,9 +50,9 @@ export default function Page() {
         handleBackButton={handleBackButton}
         bottomBorder={false}
       />
-
       {!isEditMode ? (
         <MyInfoBody user={user} setIsEditMode={setIsEditMode} />
+        
       ) : (
         <EditMyInfo
           user={user}

@@ -31,6 +31,7 @@ export interface IMyInfo {
   profileImage: string | null;
   gender: string;
   alcoholTypeIds: number[];
+  hasBadge: boolean;
 }
 
 export interface IApiResponse<T> {

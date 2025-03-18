@@ -7,9 +7,13 @@ import { GoChevronLeft } from "react-icons/go";
 
 interface IFollowHeader {
   title: string;
+  onRefreshClick: () => void;
 }
 
-export default function FollowHeader({ title }: IFollowHeader) {
+export default function FollowHeader({
+  title,
+  onRefreshClick,
+}: IFollowHeader) {
   const router = useRouter();
   return (
     <div>
@@ -25,8 +29,8 @@ export default function FollowHeader({ title }: IFollowHeader) {
             width={18}
             height={18}
             src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/reset.svg`}
-            alt="Search Icon"
-            onClick={() => router.push("/user/search")}
+            alt="Refresh Icon"
+            onClick={onRefreshClick}
           />
         </button>
       </div>

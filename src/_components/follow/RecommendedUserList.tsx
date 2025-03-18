@@ -16,13 +16,13 @@ import { log } from "console";
 
 // Constants defined outside component to prevent recreation
 
-type FollowButtonMutateParams = {
+export type FollowButtonMutateParams = {
   id: number;
   nickname: string;
   isFollowed: boolean;
 };
 
-type DeleteButtonMutateParams = {
+export type DeleteButtonMutateParams = {
   id: number;
 };
 
@@ -169,14 +169,12 @@ export default function RecommendedUserList({
     },
   });
 
-  console.log(recommendedUserList);
-
   return (
-    <div className="mb-8">
+    <>
       {recommendedUserList.map((user, index) => (
         <UserItem
           debouncedSearchQuery={debouncedSearchQuery}
-          key={user.id}
+          key={index}
           user={user}
           isFirst={index === 0}
           isLast={index === recommendedUserList.length - 1}
@@ -186,6 +184,6 @@ export default function RecommendedUserList({
           onDeleteButton={handleDeleteButton}
         />
       ))}
-    </div>
+    </>
   );
 }

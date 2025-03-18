@@ -1,12 +1,12 @@
 import { RecommendedUser } from "@/_types/user/recommendedUser";
 import { useCallback, memo, useMemo, useState } from "react";
-import { toast } from "react-toastify";
 import Image from "next/image";
 import FollowButton from "@/_common/FollowButton";
 import {
-  FollowButtonMutateParams,
   DeleteButtonMutateParams,
-} from "@/_components/follow/types";
+  FollowButtonMutateParams,
+} from "./RecommendedUserList";
+
 const DEFAULT_PROFILE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
 const BADGE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`;
 
@@ -97,7 +97,7 @@ export const UserItem = memo(
             width={48}
             height={48}
             alt="유저 이미지"
-            className="mr-4 flex rounded-full"
+            className="mr-4 flex h-[48px] w-[48px] rounded-full"
           />
           <div className="ml-2 flex flex-row items-center gap-2">
             <p>{renderHighlightedName(user.nickname)}</p>

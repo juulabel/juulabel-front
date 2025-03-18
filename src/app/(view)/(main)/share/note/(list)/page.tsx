@@ -50,6 +50,7 @@ export default function Notes() {
   // 임시 에러 및 로딩 컴포넌트
   // if (isLoading) return <div>Loading...</div>;
   // if (error) return <div>An error occurred : {error.message}</div>;
+  console.log("isLoading", "isLoading");
 
   if (isFetching && !isFetchingNextPage) return <SkeletomUIForList />;
 

@@ -3,7 +3,7 @@ import { dateView } from "@/_utils/time";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function LifeList({
+export default function LifeThumbnail({
   title,
   content,
   dailyLifeId,
@@ -30,6 +30,7 @@ export default function LifeList({
       : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/life/default_life_thumbnail.png`;
 
   return (
+
     <Link href={`/share/life/${dailyLifeId}`} className="block px-4 pt-5">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex-1">

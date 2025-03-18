@@ -10,7 +10,7 @@ export const getMyNote = async ({
   const res = await instance.get(`/v1/api/members/tasting_notes/my`, {
     params: {
       lastTastingNoteId: lastNoteId,
-      pageSize: 10,
+      pageSize: 16,
     },
     headers: {
       Authorization: `Bearer ${accessToken}`,
