@@ -16,13 +16,14 @@ import { useProfileFollow } from "@/_utils/hooks/useFollow";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import ServerToast from "@/_components/share/error/ServerToast";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({
+  params: { id: userId },
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
-
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-
-  const userId = params.id;
 
   const [
     { data: me, isLoading: isLoadingMe, error: meError },

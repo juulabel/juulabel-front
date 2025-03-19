@@ -11,6 +11,7 @@ export default function RecommendedUserList({
   showDeleteButton,
   debouncedSearchQuery,
   onBadgeClick,
+  onDeleteClick,
 }: RecommendUserList) {
   return (
     <div className="min-h-[200px]">
@@ -24,6 +25,7 @@ export default function RecommendedUserList({
           isLast={index === recommendedUserList.length - 1}
           showDeleteButton={showDeleteButton}
           onBadgeClick={onBadgeClick}
+          onDeleteClick={onDeleteClick}
         />
       ))}
     </div>

@@ -4,7 +4,6 @@ import Image from "next/image";
 import FollowButton from "@/_common/FollowButton";
 import { useCommonFollow, useDeleteFollow } from "@/_utils/hooks/useFollow";
 import { usePathname, useRouter } from "next/navigation";
-import BadgeInfoModal from "../share/BadgeInfoModal";
 
 const DEFAULT_PROFILE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
 const BADGE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`;
@@ -17,6 +16,13 @@ interface UserItemProps {
   showDeleteButton?: boolean;
   debouncedSearchQuery?: string;
   onBadgeClick: () => void;
+  onDeleteClick?: ({
+    userId,
+    nickname,
+  }: {
+    userId: number;
+    nickname: string;
+  }) => void;
 }
 
 const UserItemComponent = ({
@@ -27,11 +33,11 @@ const UserItemComponent = ({
   showDeleteButton,
   debouncedSearchQuery,
   onBadgeClick,
+  onDeleteClick,
 }: UserItemProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [isFollowed, setIsFollowed] = useState(user.isFollowed);
-  const [isBadgeClicked, setIsBadgeClicked] = useState(false);
 
   const isFollowerPath = pathname.includes("/follower");
 
@@ -39,7 +45,6 @@ const UserItemComponent = ({
     userId,
     isFollowerPath,
   );
-  const { mutate: handleDeleteButton } = useDeleteFollow(userId);
 
   const handleFollowClick = useCallback(
     (e: React.MouseEvent) => {
@@ -52,14 +57,6 @@ const UserItemComponent = ({
       });
     },
     [handleFollowButton, user.id, user.nickname],
-  );
-
-  const handleDeleteClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      handleDeleteButton({ id: user.id });
-    },
-    [handleDeleteButton, user.id],
   );
 
   const handleProfileClick = useCallback(() => {
@@ -124,7 +121,13 @@ const UserItemComponent = ({
       <div className="mr-[4%] flex flex-row whitespace-nowrap">
         {showDeleteButton && (
           <button
-            onClick={handleDeleteClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteClick?.({
+                userId: user.id,
+                nickname: user.nickname,
+              });
+            }}
             className="mr-4 items-center justify-center text-xs font-medium text-slate-500"
           >
             삭제
@@ -138,12 +141,6 @@ const UserItemComponent = ({
           showDeleteButton={showDeleteButton}
         />
       </div>
-      {isBadgeClicked && (
-        <BadgeInfoModal
-          setIsBadgeInfoModalOpen={setIsBadgeClicked}
-          showApplyButton={false}
-        />
-      )}
     </div>
   );
 };

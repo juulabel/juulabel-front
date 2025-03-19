@@ -1,6 +1,6 @@
 "use client";
 
-import { useInfiniteQuery, useQueries, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueries } from "@tanstack/react-query";
 import { getFollowee } from "@/app/api/user/follow/getFollowee";
 import UserHeader from "@/_components/user/UserHeader";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -15,6 +15,8 @@ import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import UserListSkeleton from "@/_components/follow/UserListSkeleton";
+import ConfirmModal from "@/_common/ConfirmModal";
+import { useDeleteFollow } from "@/_utils/hooks/useFollow";
 
 export default function FollowPage({
   params: { id: userId },
@@ -22,21 +24,40 @@ export default function FollowPage({
   params: { id: string };
 }) {
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
   const router = useRouter();
   const [activeTabIndex, setActiveTabIndex] = useState(
-    type === "following" ? 0 : 1,
+    searchParams.get("type") === "following" ? 0 : 1,
   );
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
+  const [isDeleteFollowModalOpen, setIsDeleteFollowModalOpen] = useState(false);
+  const [deleteFollowUser, setDeleteFollowUser] = useState<{
+    userId: number;
+    nickname: string;
+  } | null>(null);
 
-  const [
-    { data: me, isLoading: isLoadingMe, error: meError },
-    { data: user, isLoading: isLoadingUser, error: userError },
-  ] = useQueries({
+  const handleBadgeClick = useCallback(() => setIsBadgeInfoModalOpen(true), []);
+  const handleCloseDeleteModal = useCallback(
+    () => setIsDeleteFollowModalOpen(false),
+    [],
+  );
+  const handleTabChange = useCallback(
+    (index: number) => setActiveTabIndex(index),
+    [],
+  );
+
+  const handleDeleteClick = useCallback(
+    ({ userId, nickname }: { userId: number; nickname: string }) => {
+      setDeleteFollowUser({ userId, nickname });
+      setIsDeleteFollowModalOpen(true);
+    },
+    [],
+  );
+
+  const [{ data: me }, { data: user, error: userError }] = useQueries({
     queries: [
       {
         queryKey: ["my-info"],
-        queryFn: () => getMyInfo(),
+        queryFn: getMyInfo,
       },
       {
         queryKey: ["user", userId],
@@ -75,14 +96,14 @@ export default function FollowPage({
     fetchNextPage: followerQuery.fetchNextPage,
   });
 
-  const isCurrentUser = useMemo(() => me?.memberId === user?.id, [me, user]);
+  const { mutate: handleDeleteConfirm } = useDeleteFollow(userId);
 
-  const handleTabChange = useCallback((index: number) => {
-    setActiveTabIndex(index);
-  }, []);
+  const isCurrentUser = useMemo(() => me?.memberId === user?.id, [me, user]);
+  const title = isCurrentUser ? "내 활동" : user?.nickname || "팔로워";
+  const followingCount = user?.followingCount || 0;
+  const followerCount = user?.followerCount || 0;
 
   const hasError = followingQuery.error || userError || followerQuery.error;
-
   if (hasError) {
     return (
       <ServerToast
@@ -92,10 +113,6 @@ export default function FollowPage({
       />
     );
   }
-
-  const title = isCurrentUser ? "내 활동" : user?.nickname || "팔로워";
-  const followingCount = user?.followingCount || 0;
-  const followerCount = user?.followerCount || 0;
 
   return (
     <div className="h-full w-full max-w-[560px]">
@@ -142,7 +159,7 @@ export default function FollowPage({
             <RecommendedUserList
               recommendedUserList={followingQuery.data ?? []}
               userId={userId}
-              onBadgeClick={() => setIsBadgeInfoModalOpen(true)}
+              onBadgeClick={handleBadgeClick}
             />
           )}
           <div ref={followingObserverRef} />
@@ -155,7 +172,8 @@ export default function FollowPage({
               recommendedUserList={followerQuery.data ?? []}
               userId={userId}
               showDeleteButton
-              onBadgeClick={() => setIsBadgeInfoModalOpen(true)}
+              onBadgeClick={handleBadgeClick}
+              onDeleteClick={handleDeleteClick}
             />
           )}
           <div ref={followerObserverRef} />
@@ -166,6 +184,18 @@ export default function FollowPage({
         <BadgeInfoModal
           setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen}
           showApplyButton={false}
+        />
+      )}
+      {isDeleteFollowModalOpen && deleteFollowUser && (
+        <ConfirmModal
+          modalTitle={`정말 ${deleteFollowUser.nickname}님을 \n 팔로워 목록에서 삭제하시겠어요?`}
+          confirmText="팔로워에서 삭제하기"
+          cancelText="취소"
+          handleConfirm={() => {
+            handleDeleteConfirm({ id: deleteFollowUser.userId });
+            handleCloseDeleteModal();
+          }}
+          handleCancel={handleCloseDeleteModal}
         />
       )}
     </div>

@@ -1,8 +1,7 @@
 import withPWA from "next-pwa";
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  siteUrl: "https://juulabel.com/app",
+const nextConfig = {  
   basePath: "/app",
   reactStrictMode: false,
   images: {
@@ -22,8 +21,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    instrumentationHook: true,
-    appDir: true,
+    instrumentationHook: true,    
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({

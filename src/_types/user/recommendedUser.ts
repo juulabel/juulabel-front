@@ -12,4 +12,11 @@ export interface RecommendUserList {
   userId: string;
   debouncedSearchQuery?: string;
   onBadgeClick: () => void;
+  onDeleteClick?: ({
+    userId,
+    nickname,
+  }: {
+    userId: number;
+    nickname: string;
+  }) => void;
 }

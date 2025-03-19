@@ -160,7 +160,7 @@ export default function Page() {
   );
 
   const badgeRecommendations = useMemo(
-    () => user?.hasBadge && recommendedSommelier?.badgeRecommendUser?.content,
+    () => recommendedSommelier?.badgeRecommendUser?.content,
     [user?.hasBadge, recommendedSommelier?.badgeRecommendUser?.content],
   );
 
@@ -232,6 +232,15 @@ export default function Page() {
               <div className="text-sm leading-5 text-cool-grayscale-500">
                 <p>주라벨 서비스 내에서 인증을 통해 소믈리에</p>
                 <p>뱃지를 얻은 사람들이에요.</p>
+                {!badgeRecommendations ? (
+                  <UserListSkeleton count={5} />
+                ) : (
+                  <RecommendedUserList
+                    recommendedUserList={badgeRecommendations}
+                    userId={userId}
+                    onBadgeClick={handleBadgeInfoModalToggle}
+                  />
+                )}
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-2 pt-[29px]">
@@ -268,13 +277,7 @@ export default function Page() {
               </div>
             )}
           </div>
-          {badgeRecommendations && (
-            <RecommendedUserList
-              recommendedUserList={badgeRecommendations}
-              userId={userId}
-              onBadgeClick={handleBadgeInfoModalToggle}
-            />
-          )}
+
           <div className="mx-[4%] py-[20px]">
             <p className="text-base font-medium text-cool-grayscale-800">
               내 취향과 비슷한 유저들

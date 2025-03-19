@@ -2,7 +2,6 @@ import { ILifeList } from "@/_types/share";
 import { dateView } from "@/_utils/time";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 export default function LifeThumbnail({
   title,
   content,
@@ -15,22 +14,6 @@ export default function LifeThumbnail({
   commentCount,
   isLiked,
 }: ILifeList) {
-  const router = useRouter();
-
-  function isValidUrl(url: string) {
-    try {
-      new URL(url);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  const imagePath =
-    thumbnailPath && isValidUrl(thumbnailPath)
-      ? thumbnailPath
-      : `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/life/default_life_thumbnail.png`;
-
   return (
     <Link href={`/share/life/${dailyLifeId}`} className="block px-4 pt-5">
       <div className="mb-4 flex items-center justify-between">
@@ -51,7 +34,7 @@ export default function LifeThumbnail({
               </div>
             )}
             <Image
-              src={imagePath}
+              src={thumbnailPath}
               alt="일상생활 썸네일 이미지"
               sizes="30vw"
               fill
