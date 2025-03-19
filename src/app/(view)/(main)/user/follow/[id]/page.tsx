@@ -183,7 +183,7 @@ export default function FollowPage({
       {isBadgeInfoModalOpen && (
         <BadgeInfoModal
           setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen}
-          showApplyButton={false}
+          showApplyButton={!me?.hasBadge}
         />
       )}
       {isDeleteFollowModalOpen && deleteFollowUser && (

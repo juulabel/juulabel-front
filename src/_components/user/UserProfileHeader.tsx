@@ -40,7 +40,7 @@ export default function UserProfileHeader({
           </div>
           <div className="ml-2 flex flex-col items-start">
             {hasBadge && (
-              <div className="mb-1 justify-center text-xs font-bold leading-none text-orange-400">
+              <div className="mb-1 ml-1 justify-center text-xs font-bold leading-none text-orange-400">
                 주라벨 인증 뱃지 보유
               </div>
             )}

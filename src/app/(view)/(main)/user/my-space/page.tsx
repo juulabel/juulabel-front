@@ -108,7 +108,7 @@ export default function Page() {
       <Navigation />
       {isBadgeInfoModalOpen && (
         <BadgeInfoModal
-          showApplyButton={false}
+          showApplyButton={!user?.hasBadge}
           setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen}
         />
       )}

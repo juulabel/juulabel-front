@@ -63,7 +63,7 @@ export default function Page({
 
   const totalPosts = (user.tastingNoteCount || 0) + (user.dailyLifeCount || 0);
   const isCurrentUser = me?.memberId === user.id;
-  const contentTopPadding = isCurrentUser ? "300px" : "350px";
+  const contentTopPadding = isCurrentUser ? "pt-[300px]" : "pt-[350px]";
 
   return (
     <div className="relative h-full w-full max-w-[560px]">
@@ -118,7 +118,7 @@ export default function Page({
           </div>
         </SwipeableTabBar>
       </div>
-      <div className={`user px-4 pt-[${contentTopPadding}]`}>
+      <div className={`px-4 ${contentTopPadding}`}>
         <UserProfileContent
           activeTabIndex={activeTabIndex}
           onTabChange={handleTabChange}
@@ -128,7 +128,7 @@ export default function Page({
       </div>
       {isBadgeInfoModalOpen && (
         <BadgeInfoModal
-          showApplyButton={false}
+          showApplyButton={!me?.hasBadge}
           setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen}
         />
       )}
