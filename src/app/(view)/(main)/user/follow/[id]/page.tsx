@@ -31,7 +31,7 @@ export default function FollowPage({
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
   const [isDeleteFollowModalOpen, setIsDeleteFollowModalOpen] = useState(false);
   const [deleteFollowUser, setDeleteFollowUser] = useState<{
-    userId: number;
+    targetUserId: number;
     nickname: string;
   } | null>(null);
 
@@ -46,8 +46,14 @@ export default function FollowPage({
   );
 
   const handleDeleteClick = useCallback(
-    ({ userId, nickname }: { userId: number; nickname: string }) => {
-      setDeleteFollowUser({ userId, nickname });
+    ({
+      targetUserId,
+      nickname,
+    }: {
+      targetUserId: number;
+      nickname: string;
+    }) => {
+      setDeleteFollowUser({ targetUserId, nickname });
       setIsDeleteFollowModalOpen(true);
     },
     [],
@@ -158,7 +164,7 @@ export default function FollowPage({
           ) : (
             <RecommendedUserList
               recommendedUserList={followingQuery.data ?? []}
-              userId={userId}
+              myId={me.id}
               onBadgeClick={handleBadgeClick}
             />
           )}
@@ -170,7 +176,7 @@ export default function FollowPage({
           ) : (
             <RecommendedUserList
               recommendedUserList={followerQuery.data ?? []}
-              userId={userId}
+              myId={me.id}
               showDeleteButton
               onBadgeClick={handleBadgeClick}
               onDeleteClick={handleDeleteClick}
@@ -192,7 +198,7 @@ export default function FollowPage({
           confirmText="팔로워에서 삭제하기"
           cancelText="취소"
           handleConfirm={() => {
-            handleDeleteConfirm({ id: deleteFollowUser.userId });
+            handleDeleteConfirm({ id: deleteFollowUser.targetUserId });
             handleCloseDeleteModal();
           }}
           handleCancel={handleCloseDeleteModal}

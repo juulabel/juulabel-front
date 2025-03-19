@@ -9,7 +9,7 @@ const DEFAULT_PROFILE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images
 const BADGE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`;
 
 interface UserItemProps {
-  userId: string;
+  myId: string;
   user: RecommendedUser;
   isFirst: boolean;
   isLast: boolean;
@@ -17,16 +17,16 @@ interface UserItemProps {
   debouncedSearchQuery?: string;
   onBadgeClick: () => void;
   onDeleteClick?: ({
-    userId,
+    targetUserId,
     nickname,
   }: {
-    userId: number;
+    targetUserId: number;
     nickname: string;
   }) => void;
 }
 
 const UserItemComponent = ({
-  userId,
+  myId,
   user,
   isFirst,
   isLast,
@@ -41,10 +41,7 @@ const UserItemComponent = ({
 
   const isFollowerPath = pathname.includes("/follower");
 
-  const { mutate: handleFollowButton } = useCommonFollow(
-    userId,
-    isFollowerPath,
-  );
+  const { mutate: handleFollowButton } = useCommonFollow(myId, isFollowerPath);
 
   const handleFollowClick = useCallback(
     (e: React.MouseEvent) => {
@@ -124,7 +121,7 @@ const UserItemComponent = ({
             onClick={(e) => {
               e.stopPropagation();
               onDeleteClick?.({
-                userId: user.id,
+                targetUserId: user.id,
                 nickname: user.nickname,
               });
             }}
@@ -133,13 +130,15 @@ const UserItemComponent = ({
             삭제
           </button>
         )}
-        <FollowButton
-          width="18"
-          isFollowed={isFollowed}
-          textSize="xs"
-          onChangeFollow={handleFollowClick}
-          showDeleteButton={showDeleteButton}
-        />
+        {myId !== user.id.toString() && (
+          <FollowButton
+            width="18"
+            isFollowed={isFollowed}
+            textSize="xs"
+            onChangeFollow={handleFollowClick}
+            showDeleteButton={showDeleteButton}
+          />
+        )}
       </div>
     </div>
   );

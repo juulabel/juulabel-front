@@ -7,16 +7,16 @@ export interface RecommendedUser {
 }
 
 export interface RecommendUserList {
+  myId: string;
   recommendedUserList: RecommendedUser[];
   showDeleteButton?: boolean;
-  userId: string;
   debouncedSearchQuery?: string;
   onBadgeClick: () => void;
   onDeleteClick?: ({
-    userId,
+    targetUserId,
     nickname,
   }: {
-    userId: number;
+    targetUserId: number;
     nickname: string;
   }) => void;
 }

@@ -6,7 +6,7 @@ import { UserItem } from "./UserItem";
 // Constants defined outside component to prevent recreation
 
 export default function RecommendedUserList({
-  userId,
+  myId,
   recommendedUserList,
   showDeleteButton,
   debouncedSearchQuery,
@@ -19,7 +19,7 @@ export default function RecommendedUserList({
         <UserItem
           key={index}
           user={user}
-          userId={userId}
+          myId={myId}
           debouncedSearchQuery={debouncedSearchQuery}
           isFirst={index === 0}
           isLast={index === recommendedUserList.length - 1}

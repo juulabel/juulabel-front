@@ -33,6 +33,14 @@ interface IUserRecommendation {
   };
 }
 
+const preferedAlcohlMap = {
+  1: "탁주",
+  2: "소주•증류주",
+  3: "약청주",
+  4: "과실주",
+  5: "기타 주류",
+};
+
 export default function Page() {
   const router = useRouter();
 
@@ -70,7 +78,7 @@ export default function Page() {
 
   // User data query
   const {
-    data: user,
+    data: me,
     isLoading: isLoadingUser,
     error: userError,
   } = useQuery<IMyInfo>({
@@ -139,10 +147,7 @@ export default function Page() {
   }, [debouncedSearchQuery, router]);
 
   // Memoized derived values
-  const userId = useMemo(
-    () => user?.memberId?.toString() || "0",
-    [user?.memberId],
-  );
+  const myId = useMemo(() => me?.memberId?.toString() || "0", [me?.memberId]);
 
   const hasSearchResults = useMemo(
     () => searchQuery.length > 0 && searchQueryResult.length > 0,
@@ -161,7 +166,7 @@ export default function Page() {
 
   const badgeRecommendations = useMemo(
     () => recommendedSommelier?.badgeRecommendUser?.content,
-    [user?.hasBadge, recommendedSommelier?.badgeRecommendUser?.content],
+    [me?.hasBadge, recommendedSommelier?.badgeRecommendUser?.content],
   );
 
   const tastingRecommendations = useMemo(
@@ -202,7 +207,7 @@ export default function Page() {
           </span>
           <RecommendedUserList
             recommendedUserList={searchQueryResult}
-            userId={userId}
+            myId={myId}
             debouncedSearchQuery={debouncedSearchQuery}
             onBadgeClick={handleBadgeInfoModalToggle}
           />
@@ -228,7 +233,7 @@ export default function Page() {
             <p className="text-base font-medium leading-6 text-cool-grayscale-800">
               소믈리에 추천
             </p>
-            {user?.hasBadge ? (
+            {me?.hasBadge ? (
               <div className="text-sm leading-5 text-cool-grayscale-500">
                 <p>주라벨 서비스 내에서 인증을 통해 소믈리에</p>
                 <p>뱃지를 얻은 사람들이에요.</p>
@@ -237,7 +242,7 @@ export default function Page() {
                 ) : (
                   <RecommendedUserList
                     recommendedUserList={badgeRecommendations}
-                    userId={userId}
+                    myId={myId}
                     onBadgeClick={handleBadgeInfoModalToggle}
                   />
                 )}
@@ -286,7 +291,12 @@ export default function Page() {
               <span className="flex flex-row">
                 <p>선호하는 주종인</p>
                 <p className="mx-1 text-cool-grayscale-700">
-                  {user?.alcoholTypeIds?.join(", ")}
+                  {me?.alcoholTypeIds
+                    ?.map(
+                      (id) =>
+                        preferedAlcohlMap[id as keyof typeof preferedAlcohlMap],
+                    )
+                    .join(", ")}
                 </p>
               </span>
               <p>를 좋아하는 사람들이에요.</p>
@@ -298,7 +308,7 @@ export default function Page() {
           ) : (
             <RecommendedUserList
               recommendedUserList={tastingRecommendations}
-              userId={userId}
+              myId={myId}
               onBadgeClick={handleBadgeInfoModalToggle}
             />
           )}
@@ -306,7 +316,7 @@ export default function Page() {
       )}
       {isBadgeInfoModalOpen && (
         <BadgeInfoModal
-          showApplyButton={!user?.hasBadge}
+          showApplyButton={!me?.hasBadge}
           setIsBadgeInfoModalOpen={setIsBadgeInfoModalOpen}
         />
       )}
