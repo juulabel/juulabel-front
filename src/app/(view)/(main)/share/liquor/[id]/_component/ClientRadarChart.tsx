@@ -8,10 +8,11 @@ interface Props {
 }
 
 export default function ClientRadarChart({ flavor }: Props) {
+  if (!flavor) return null;
   return (
     <RadarChart
       dataPoints={
-        flavor.map(({ name, score }) => ({
+        flavor?.map(({ name, score }) => ({
           data: score,
           label: name,
         })) || []

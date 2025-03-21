@@ -19,12 +19,12 @@ import TraditionalLiquorDetailPrice from "@/_components/share/detail/Traditional
 import ClientRadarChart from "./_component/ClientRadarChart";
 import FilteringRouteButton from "./_component/FilteringRouteButton";
 
-// export async function generateStaticParams() {
-//   const { result } = await fetchLiquor();
-//   return result.alcoholicDrinks.map((drink) => ({
-//     id: drink.id.toString(),
-//   }));
-// }
+export async function generateStaticParams() {
+  const { result } = await fetchLiquor();
+  return result.alcoholicDrinks.map((drink) => ({
+    id: drink.id.toString(),
+  }));
+}
 
 export default async function LiquorDetailPage({ params }: SearchParamProps) {
   const numberTypeId = Number(params.id);
