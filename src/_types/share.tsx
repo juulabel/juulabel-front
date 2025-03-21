@@ -52,3 +52,67 @@ export interface INoteThumbnail {
   hasMultipleImages: boolean;
   isPrivate: boolean;
 }
+
+export interface IAlcoholDetailResponse {
+  success: boolean;
+  message: string;
+  result: {
+    alcoholicDrinksDetailInfo: IAlcoholicDrinksDetailInfo;
+    volumePriceDetails: IVolumePriceDetail[];
+    ingredientSummary: IIngredient[];
+    tastingNoteSensorSummary: ITastingNoteSensorSummary;
+    tastingNoteSummary: unknown[]; // 모르겠음
+  };
+}
+
+export interface IAlcoholicDrinksDetailInfo {
+  id: number;
+  name: string;
+  thumbnail: string;
+  alcoholContent: number;
+  alcoholicVolume: number;
+  discountPrice: number;
+  regularPrice: number;
+  rating: number;
+  tastingNoteCount: number;
+  alcoholType: {
+    id: number;
+    name: string;
+  };
+  brewery: {
+    id: number;
+    name: string;
+    region: string;
+    message: string;
+  };
+}
+
+export interface IVolumePriceDetail {
+  volume: number;
+  discountPrice: number;
+  regularPrice: number;
+}
+
+export interface IIngredient {
+  id: number;
+  name: string;
+}
+
+export interface ITastingNoteSensorSummary {
+  tastingNoteId: number;
+  rgb: string;
+  scent: string[];
+  flavor: IFlavor[];
+  sensory: ISensory[];
+}
+
+export interface IFlavor {
+  name: string;
+  score: number;
+}
+
+export interface ISensory {
+  name: string;
+  score: number;
+  id: number;
+}
