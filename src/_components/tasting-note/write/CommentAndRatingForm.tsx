@@ -150,7 +150,6 @@ const CommentAndRatingForm = forwardRef(function CommentAndRatingForm(
       });
 
       resizeObserverRef.current.observe(textareaRef.current);
-      resizeObserverRef.current.observe(textareaRef.current);
     }
     return () => {
       resizeObserverRef.current?.disconnect();
