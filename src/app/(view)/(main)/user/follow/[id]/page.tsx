@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
 import RecommendedUserList from "@/_components/follow/RecommendedUserList";
 import ServerToast from "@/_components/share/error/ServerToast";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import SwipeableTabBar from "@/_components/share/SwipeableTabBar";
 import SwipeableTabView from "@/_components/share/SwipeableTabView";
 import { getFollower } from "@/app/api/user/follow/getFollower";
@@ -17,7 +17,8 @@ import getMyInfo from "@/app/api/auth/getMyInfo";
 import UserListSkeleton from "@/_components/follow/UserListSkeleton";
 import ConfirmModal from "@/_common/ConfirmModal";
 import { useDeleteFollow } from "@/_utils/hooks/useFollow";
-
+import useMemberStore from "@/_store/memberStore";
+import { RecommendedUser } from "@/_types/user/recommendedUser";
 export default function FollowPage({
   params: { id: userId },
 }: {
@@ -28,12 +29,12 @@ export default function FollowPage({
   const [activeTabIndex, setActiveTabIndex] = useState(
     searchParams.get("type") === "following" ? 0 : 1,
   );
+
+  const { memberInfo, setMemberInfo } = useMemberStore();
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
   const [isDeleteFollowModalOpen, setIsDeleteFollowModalOpen] = useState(false);
-  const [deleteFollowUser, setDeleteFollowUser] = useState<{
-    targetUserId: number;
-    nickname: string;
-  } | null>(null);
+  const [deleteFollowUser, setDeleteFollowUser] =
+    useState<RecommendedUser | null>(null);
 
   const handleBadgeClick = useCallback(() => setIsBadgeInfoModalOpen(true), []);
   const handleCloseDeleteModal = useCallback(
@@ -45,19 +46,10 @@ export default function FollowPage({
     [],
   );
 
-  const handleDeleteClick = useCallback(
-    ({
-      targetUserId,
-      nickname,
-    }: {
-      targetUserId: number;
-      nickname: string;
-    }) => {
-      setDeleteFollowUser({ targetUserId, nickname });
-      setIsDeleteFollowModalOpen(true);
-    },
-    [],
-  );
+  const handleDeleteClick = useCallback((targetUser: RecommendedUser) => {
+    setDeleteFollowUser(targetUser);
+    setIsDeleteFollowModalOpen(true);
+  }, []);
 
   const [{ data: me }, { data: user, error: userError }] = useQueries({
     queries: [
@@ -71,6 +63,12 @@ export default function FollowPage({
       },
     ],
   });
+
+  useEffect(() => {
+    if (me) {
+      setMemberInfo(me);
+    }
+  }, [me, setMemberInfo]);
 
   // Following query
   const followingQuery = useInfiniteQuery({
@@ -104,12 +102,13 @@ export default function FollowPage({
 
   const { mutate: handleDeleteConfirm } = useDeleteFollow(userId);
 
-  const isCurrentUser = useMemo(() => me?.memberId === user?.id, [me, user]);
+  const isCurrentUser = me?.memberId === user?.id;
   const title = isCurrentUser ? "내 활동" : user?.nickname || "팔로워";
   const followingCount = user?.followingCount || 0;
   const followerCount = user?.followerCount || 0;
 
   const hasError = followingQuery.error || userError || followerQuery.error;
+
   if (hasError) {
     return (
       <ServerToast
@@ -119,6 +118,9 @@ export default function FollowPage({
       />
     );
   }
+
+  const tabLabels = ["팔로잉", "팔로워"];
+  const tabCounts = [followingCount, followerCount];
 
   return (
     <div className="h-full w-full max-w-[560px]">
@@ -133,7 +135,7 @@ export default function FollowPage({
         activeTabIndex={activeTabIndex}
         onTabChange={handleTabChange}
       >
-        {["팔로잉", "팔로워"].map((label, index) => (
+        {tabLabels.map((label, index) => (
           <div
             key={index}
             className="flex flex-row items-center justify-center"
@@ -148,7 +150,7 @@ export default function FollowPage({
               {label}
             </p>
             <p className="ml-1 text-sm text-cool-grayscale-600">
-              {index === 0 ? followingCount : followerCount}
+              {tabCounts[index]}
             </p>
           </div>
         ))}
@@ -163,8 +165,8 @@ export default function FollowPage({
             <UserListSkeleton count={10} />
           ) : (
             <RecommendedUserList
+              type="following"
               recommendedUserList={followingQuery.data ?? []}
-              myId={me.id}
               onBadgeClick={handleBadgeClick}
             />
           )}
@@ -176,8 +178,7 @@ export default function FollowPage({
           ) : (
             <RecommendedUserList
               recommendedUserList={followerQuery.data ?? []}
-              myId={me.id}
-              showDeleteButton
+              type="follower"
               onBadgeClick={handleBadgeClick}
               onDeleteClick={handleDeleteClick}
             />
@@ -198,7 +199,9 @@ export default function FollowPage({
           confirmText="팔로워에서 삭제하기"
           cancelText="취소"
           handleConfirm={() => {
-            handleDeleteConfirm({ id: deleteFollowUser.targetUserId });
+            handleDeleteConfirm({
+              targetUserId: deleteFollowUser.id.toString(),
+            });
             handleCloseDeleteModal();
           }}
           handleCancel={handleCloseDeleteModal}

@@ -1,7 +1,5 @@
-import withPWA from "next-pwa";
-
 /** @type {import('next').NextConfig} */
-const nextConfig = {  
+const nextConfig = {
   basePath: "/app",
   reactStrictMode: false,
   images: {
@@ -21,7 +19,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    instrumentationHook: true,    
+    instrumentationHook: true,
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
@@ -37,25 +35,5 @@ const nextConfig = {
   },
 };
 
-const isDev = process.env.NODE_ENV === "development";
+export default nextConfig;
 
-export default withPWA({
-  dest: "public",
-  disable: isDev,
-  scope: "/app",
-  sw: "sw.js",
-  exclude: [
-    // add buildExcludes here
-    ({ asset, compilation }) => {
-      if (
-        asset.name.startsWith("server/") ||
-        asset.name.match(
-          /^((app-|^)build-manifest\.json|react-loadable-manifest\.json)$/,
-        )
-      ) {
-        return true;
-      }
-      return false;
-    },
-  ],
-})(nextConfig);

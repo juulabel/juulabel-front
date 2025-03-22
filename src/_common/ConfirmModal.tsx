@@ -31,7 +31,7 @@ export default function ConfirmModal({
           />
           <div className="flex h-[59px] flex-col items-start justify-start gap-2 self-stretch">
             <div className="self-stretch text-center text-lg font-bold leading-[27px] text-slate-800">
-              {modalTitle.split('\n').map((line, index) => (
+              {modalTitle.split("\n").map((line, index) => (
                 <div key={index}>{line}</div>
               ))}
             </div>

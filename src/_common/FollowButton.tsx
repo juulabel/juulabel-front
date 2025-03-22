@@ -3,7 +3,7 @@ interface IFollowButton {
   textSize: string;
   isFollowed: boolean;
   onChangeFollow: (e: React.MouseEvent) => void;
-  showDeleteButton?: boolean;
+  isMySpace?: boolean;
 }
 
 export default function FollowButton({
@@ -11,7 +11,7 @@ export default function FollowButton({
   textSize,
   isFollowed,
   onChangeFollow,
-  showDeleteButton,
+  isMySpace,
 }: IFollowButton) {
   return isFollowed ? (
     <button
@@ -27,7 +27,7 @@ export default function FollowButton({
       className={`mr-[4%] flex h-9 ${width ? "w-full" : "w-[91%]"} items-center justify-center rounded-[4px] bg-black p-2 text-white text-${textSize} font-bold`}
       onClick={onChangeFollow}
     >
-      {showDeleteButton ? "맞팔로우 하기" : "팔로우 하기"}
+      {isMySpace ? "맞팔로우 하기" : "팔로우 하기"}
     </button>
   );
 }

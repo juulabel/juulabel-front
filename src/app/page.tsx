@@ -1,5 +1,5 @@
 import SplashScreen from "@/_components/SplashScreen";
 
-export default function Home() {  
+export default function Home() {
   return <SplashScreen />;
 }

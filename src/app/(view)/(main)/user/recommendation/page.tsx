@@ -17,6 +17,8 @@ import ServerToast from "@/_components/share/error/ServerToast";
 import SearchData from "@/_components/tasting-note/search/SearchData";
 import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import UserListSkeleton from "@/_components/follow/UserListSkeleton";
+import { alcoholType } from "@/_config/alcoholType";
+import useMemberStore from "@/_store/memberStore";
 
 // Memoize constant values
 const IMAGE_BASE_PATH = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;
@@ -32,14 +34,6 @@ interface IUserRecommendation {
     content: RecommendedUser[];
   };
 }
-
-const preferedAlcohlMap = {
-  1: "탁주",
-  2: "소주•증류주",
-  3: "약청주",
-  4: "과실주",
-  5: "기타 주류",
-};
 
 export default function Page() {
   const router = useRouter();
@@ -76,6 +70,8 @@ export default function Page() {
     setIsBadgeInfoModalOpen((prev) => !prev);
   }, []);
 
+  const { setMemberInfo } = useMemberStore();
+
   // User data query
   const {
     data: me,
@@ -101,6 +97,12 @@ export default function Page() {
       setTastingLastUserId(data?.tastingRecommendUser?.content[0].id);
     }
   };
+
+  useEffect(() => {
+    if (me) {
+      setMemberInfo(me);
+    }
+  }, [me]);
 
   useEffect(() => {
     fetchRecommendedSommelier();
@@ -147,7 +149,6 @@ export default function Page() {
   }, [debouncedSearchQuery, router]);
 
   // Memoized derived values
-  const myId = useMemo(() => me?.memberId?.toString() || "0", [me?.memberId]);
 
   const hasSearchResults = useMemo(
     () => searchQuery.length > 0 && searchQueryResult.length > 0,
@@ -206,8 +207,8 @@ export default function Page() {
             의 유저를 찾았어요.
           </span>
           <RecommendedUserList
+            type="recommendation"
             recommendedUserList={searchQueryResult}
-            myId={myId}
             debouncedSearchQuery={debouncedSearchQuery}
             onBadgeClick={handleBadgeInfoModalToggle}
           />
@@ -229,26 +230,12 @@ export default function Page() {
 
       {showRecommendations && (
         <>
-          <div className="mx-[4%] pb-[20px]">
-            <p className="text-base font-medium leading-6 text-cool-grayscale-800">
+          <>
+            <p className="mx-[4%] text-base font-medium leading-6 text-cool-grayscale-800">
               소믈리에 추천
             </p>
-            {me?.hasBadge ? (
-              <div className="text-sm leading-5 text-cool-grayscale-500">
-                <p>주라벨 서비스 내에서 인증을 통해 소믈리에</p>
-                <p>뱃지를 얻은 사람들이에요.</p>
-                {!badgeRecommendations ? (
-                  <UserListSkeleton count={5} />
-                ) : (
-                  <RecommendedUserList
-                    recommendedUserList={badgeRecommendations}
-                    myId={myId}
-                    onBadgeClick={handleBadgeInfoModalToggle}
-                  />
-                )}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center gap-2 pt-[29px]">
+            {!me?.hasBadge ? (
+              <div className="flex flex-col items-center justify-center gap-2 pb-[26px] pt-[29px]">
                 <div className="flex flex-row items-center justify-center gap-2 pb-[10px]">
                   <Image src={BUCKET_SVG} alt="배지" width={40} height={40} />
                   <Image
@@ -280,10 +267,26 @@ export default function Page() {
                   </div>
                 </button>
               </div>
+            ) : (
+              <>
+                <div className="mx-[4%] pb-[16px] text-sm leading-5 text-cool-grayscale-500">
+                  <p>주라벨 서비스 내에서 인증을 통해 소믈리에</p>
+                  <p>뱃지를 얻은 사람들이에요.</p>
+                </div>
+                {!badgeRecommendations ? (
+                  <UserListSkeleton count={5} />
+                ) : (
+                  <RecommendedUserList
+                    type="recommendation"
+                    recommendedUserList={badgeRecommendations}
+                    onBadgeClick={handleBadgeInfoModalToggle}
+                  />
+                )}
+              </>
             )}
-          </div>
+          </>
 
-          <div className="mx-[4%] py-[20px]">
+          <div className="mx-[4%] py-[16px]">
             <p className="text-base font-medium text-cool-grayscale-800">
               내 취향과 비슷한 유저들
             </p>
@@ -294,7 +297,7 @@ export default function Page() {
                   {me?.alcoholTypeIds
                     ?.map(
                       (id) =>
-                        preferedAlcohlMap[id as keyof typeof preferedAlcohlMap],
+                        alcoholType.find((type) => type.key === id)?.value,
                     )
                     .join(", ")}
                 </p>
@@ -307,8 +310,8 @@ export default function Page() {
             <UserListSkeleton count={5} />
           ) : (
             <RecommendedUserList
+              type="recommendation"
               recommendedUserList={tastingRecommendations}
-              myId={myId}
               onBadgeClick={handleBadgeInfoModalToggle}
             />
           )}

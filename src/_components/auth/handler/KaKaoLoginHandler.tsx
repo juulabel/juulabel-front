@@ -23,7 +23,7 @@ export default function KaKaoLoginHandler() {
     if (authCode) {
       const loginHandler = async () => {
         try {
-          const response = await instance.post(requests.postKakaoLogin, {
+          const response = await instance.post(requests.postKakaoLogin, {                        
             code: authCode,
             provider: "KAKAO",
             redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI,
@@ -47,7 +47,7 @@ export default function KaKaoLoginHandler() {
           if (isAxiosError(error) && error.response?.status === 400) {
             toast("탈퇴한 회원입니다.");
           } else {
-            //  terminal 에서 확인 필요
+            console.error(error);
             toast("비정상 접근입니다.");
           }
           router.push("/");

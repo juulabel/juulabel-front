@@ -3,7 +3,7 @@ import nookies from "nookies";
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_JUULABEL_API_URL,
-  timeout: 3000,
+  timeout: 20000,
 });
 
 instance.interceptors.request.use(
