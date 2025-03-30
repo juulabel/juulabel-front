@@ -6,23 +6,34 @@ import Loading from "@/_common/Loading";
 import { getReportList } from "@/app/api/user/getReportList";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { GoChevronLeft } from "react-icons/go";
 
 interface IReportChecked {
   [key: string]: boolean;
 }
 
-export default function Page() {
+export default function Page({
+  params: { id: reportId },
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
-  const {
-    data: reportList,
-    isLoading: isLoadingReportList,
-    error,
-  } = useQuery({
-    queryKey: ["reportList"],
-    queryFn: getReportList,
-  });
+  const reportList = {
+    data: ["광고", "욕설", "폭언", "혐오", "불법적인 활동", "기타"],
+  };
+  const acceptableReportType = ["사용자", "일상생활", "시음노트", "댓글"];
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+  // const {
+  //   data: reportList,
+  //   isLoading: isLoadingReportList,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["reportList"],
+  //   queryFn: getReportList,
+  // });
   const [reportChecked, setReportChecked] = useState<IReportChecked>({});
   const [enableSubmitButton, setEnableSubmitButton] = useState<boolean>(false);
   const [etcReport, setEtcReport] = useState<string>("");
@@ -39,9 +50,7 @@ export default function Page() {
 
       setReportChecked(initialCheckedState);
     }
-  }, [reportList]);
-
-  console.log(reportChecked);
+  }, []);
 
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -67,13 +76,19 @@ export default function Page() {
   const handleSubmitButton = () => {
     alert("정상적으로 신고되었습니다!");
   };
-  if (isLoadingReportList) return <Loading />;
-  if (error) return <div>Error : {error.message}</div>;
+  if (!acceptableReportType.includes(type ?? "")) {
+    router.push("/404");
+  }
+  // if (isLoadingReportList) return <Loading />;
+  // if (error) return <div>Error : {error.message}</div>;
   return (
-    <div className="w-full max-w-[560px]">
-      <div className="mx-[4%] my-4 flex h-16 flex-row items-center justify-between">
-        <div />
-        <div className="text-lg font-bold">사용자 신고하기</div>
+    <div className="h-full w-full max-w-[560px]">
+      <div className="mx-[4%] flex h-16 flex-row items-center justify-between">
+        <button onClick={() => router.back()} className="left-4 p-1">
+          <GoChevronLeft size={24} />
+        </button>
+
+        <div className="text-lg font-bold">{type} 신고하기</div>
         <button>
           <Image
             width={32}
@@ -84,13 +99,17 @@ export default function Page() {
           />
         </button>
       </div>
-      <div className="mx-[4%]">
+      <div className="h-[1px] w-full bg-cool-grayscale-300" />
+      <div className="mx-[4%] pt-4">
         <p className="text-xl font-bold text-cool-grayscale-800">
           신고 사유를 선택해주세요.
         </p>
-        <div className="my-4 h-[1px] w-full bg-cool-grayscale-100" />
-        <div className="flex flex-col">
-          {reportList?.data.map((index: number, report: string) => (
+        <p className="pt-[4px] text-sm font-normal text-cool-grayscale-500">
+          복수선택 가능
+        </p>
+
+        <div className="flex flex-col pt-[24px]">
+          {reportList.data.map((report: string) => (
             <>
               <div key={report} className="my-2 flex max-h-[56px] flex-row">
                 <Checkbox

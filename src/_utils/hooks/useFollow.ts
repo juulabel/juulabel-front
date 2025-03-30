@@ -62,7 +62,8 @@ export function useCommonFollow(
   };
 
   const { mutate } = useMutation({
-    mutationFn: ({ targetUserId }: FollowButtonMutateParams) => followUser(targetUserId),
+    mutationFn: ({ targetUserId }: FollowButtonMutateParams) =>
+      followUser(targetUserId),
     onSuccess: (_, { nickname, isFollowed }) => {
       toast(
         isFollowed
@@ -95,10 +96,10 @@ export function useCommonFollow(
 // Helper function to update paginated data
 const updatePaginatedData = (
   oldData: IPaginatedData | RecommendedUser[] | undefined,
-  targetUserId: string
+  targetUserId: string,
 ) => {
   if (!oldData) return oldData;
-  
+
   if ("pages" in oldData) {
     return {
       ...oldData,
@@ -110,7 +111,7 @@ const updatePaginatedData = (
       })),
     };
   }
-  
+
   return oldData.filter((user) => user.id.toString() !== targetUserId);
 };
 
@@ -118,22 +119,23 @@ export function useDeleteFollow(userId: string) {
   const queryClient = useQueryClient();
 
   const { mutate: handleDeleteButton } = useMutation({
-    mutationFn: ({ targetUserId }: { targetUserId: string }) => deleteFollower(targetUserId),
+    mutationFn: ({ targetUserId }: { targetUserId: string }) =>
+      deleteFollower(targetUserId),
     onSuccess: (_, { targetUserId }) => {
       toast("팔로워 삭제 완료했습니다");
 
       // Update following data
       queryClient.setQueryData(
         ["following", userId],
-        (oldData: IPaginatedData | RecommendedUser[] | undefined) => 
-          updatePaginatedData(oldData, targetUserId)
+        (oldData: IPaginatedData | RecommendedUser[] | undefined) =>
+          updatePaginatedData(oldData, targetUserId),
       );
 
       // Update follower data
       queryClient.setQueryData(
         ["follower", userId],
-        (oldData: IPaginatedData | RecommendedUser[] | undefined) => 
-          updatePaginatedData(oldData, targetUserId)
+        (oldData: IPaginatedData | RecommendedUser[] | undefined) =>
+          updatePaginatedData(oldData, targetUserId),
       );
 
       queryClient.refetchQueries({

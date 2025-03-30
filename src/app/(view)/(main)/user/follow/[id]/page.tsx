@@ -19,6 +19,7 @@ import ConfirmModal from "@/_common/ConfirmModal";
 import { useDeleteFollow } from "@/_utils/hooks/useFollow";
 import useMemberStore from "@/_store/memberStore";
 import { RecommendedUser } from "@/_types/user/recommendedUser";
+
 export default function FollowPage({
   params: { id: userId },
 }: {
@@ -26,16 +27,18 @@ export default function FollowPage({
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { setMemberInfo } = useMemberStore();
+
+  // State management
   const [activeTabIndex, setActiveTabIndex] = useState(
     searchParams.get("type") === "following" ? 0 : 1,
   );
-
-  const { memberInfo, setMemberInfo } = useMemberStore();
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
   const [isDeleteFollowModalOpen, setIsDeleteFollowModalOpen] = useState(false);
   const [deleteFollowUser, setDeleteFollowUser] =
     useState<RecommendedUser | null>(null);
 
+  // Event handlers
   const handleBadgeClick = useCallback(() => setIsBadgeInfoModalOpen(true), []);
   const handleCloseDeleteModal = useCallback(
     () => setIsDeleteFollowModalOpen(false),
@@ -45,13 +48,16 @@ export default function FollowPage({
     (index: number) => setActiveTabIndex(index),
     [],
   );
-
   const handleDeleteClick = useCallback((targetUser: RecommendedUser) => {
     setDeleteFollowUser(targetUser);
     setIsDeleteFollowModalOpen(true);
   }, []);
 
-  const [{ data: me }, { data: user, error: userError }] = useQueries({
+  // Data fetching
+  const [
+    { data: me, isLoading: meLoading, isError: meError },
+    { data: user, isLoading: userLoading, isError: userError },
+  ] = useQueries({
     queries: [
       {
         queryKey: ["my-info"],
@@ -88,6 +94,7 @@ export default function FollowPage({
     select: (data) => data.pages.flatMap((page) => page.content),
   });
 
+  // Infinite scroll refs
   const followingObserverRef = useInfiniteScroll({
     hasNextPage: followingQuery.hasNextPage,
     isFetchingNextPage: followingQuery.isFetchingNextPage,
@@ -102,12 +109,28 @@ export default function FollowPage({
 
   const { mutate: handleDeleteConfirm } = useDeleteFollow(userId);
 
-  const isCurrentUser = me?.memberId === user?.id;
-  const title = isCurrentUser ? "내 활동" : user?.nickname || "팔로워";
+  // Derived values
+  const isCurrentUser = useMemo(
+    () => me?.memberId === user?.id,
+    [me?.memberId, user?.id],
+  );
+  const title = useMemo(
+    () => (isCurrentUser ? "내 활동" : user?.nickname || "팔로워"),
+    [isCurrentUser, user?.nickname],
+  );
   const followingCount = user?.followingCount || 0;
   const followerCount = user?.followerCount || 0;
+  const hasError =
+    followingQuery.error || userError || meError || followerQuery.error;
+  const tabLabels = useMemo(() => ["팔로잉", "팔로워"], []);
+  const tabCounts = useMemo(
+    () => [followingCount, followerCount],
+    [followingCount, followerCount],
+  );
 
-  const hasError = followingQuery.error || userError || followerQuery.error;
+  if (meLoading || userLoading || followerQuery.isLoading) {
+    return <UserListSkeleton count={10} />;
+  }
 
   if (hasError) {
     return (
@@ -118,9 +141,6 @@ export default function FollowPage({
       />
     );
   }
-
-  const tabLabels = ["팔로잉", "팔로워"];
-  const tabCounts = [followingCount, followerCount];
 
   return (
     <div className="h-full w-full max-w-[560px]">

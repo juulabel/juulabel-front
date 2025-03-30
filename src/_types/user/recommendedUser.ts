@@ -14,4 +14,3 @@ export interface RecommendUserList {
   onBadgeClick: () => void;
   onDeleteClick?: (targetUser: RecommendedUser) => void;
 }
-

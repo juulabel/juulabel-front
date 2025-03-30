@@ -30,6 +30,7 @@ export default function Page() {
     data: user,
     isLoading: isLoadingUser,
     error: userError,
+    isError: isUserError,
   } = useQuery<IMySpace>({
     queryKey: ["my-space"],
     queryFn: () => getMySpace(cookies.accessToken),
@@ -40,7 +41,7 @@ export default function Page() {
   }, []);
 
   if (isLoadingUser) return <SkeletonUIForUserProfile />;
-  if (userError)
+  if (isUserError)
     return <ServerToast text="에러가 발생했습니다" redirectPath="/" />;
   if (!user) return null;
 

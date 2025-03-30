@@ -9,7 +9,7 @@ import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
 import { getLifeDetail } from "@/app/api/life/getLifeDetail";
 import { useQueries } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { Inputs } from "../../../write/page";
@@ -35,14 +35,10 @@ function LifeDetailPage({ params }: SearchParamProps) {
       {
         queryKey: ["lifeDetail", id],
         queryFn: () => getLifeDetail({ id: Number(id) }),
-        staleTime: 0,
-        gcTime: 0,
       },
       {
         queryKey: ["currentUserInfo"],
         queryFn: () => getMyInfo(),
-        staleTime: 0,
-        gcTime: 0,
       },
     ],
   });
@@ -58,18 +54,20 @@ function LifeDetailPage({ params }: SearchParamProps) {
     }
   }, [data, userData]);
 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = useCallback(async () => {
     const isSuccess = await deleteDailyLife(cookie.accessToken, id);
+    setDeleteModalOpen(false);
     if (isSuccess) {
-      setDeleteModalOpen(false);
       router.back();
       toast("일상생활 게시물이 삭제되었어요.");
     } else {
-      setDeleteModalOpen(false);
       toast("내부 서버 오류");
     }
-  };
-  const handleEditBtn = () => {
+  }, [cookie.accessToken, id, router]);
+
+  const handleEditBtn = useCallback(() => {
+    if (!data) return;
+
     const input: Inputs = {
       title: data.result.dailyLifeDetailInfo.title,
       content: data.result.dailyLifeDetailInfo.content,
@@ -79,9 +77,8 @@ function LifeDetailPage({ params }: SearchParamProps) {
     };
 
     sessionStorage.setItem("editLifeData", JSON.stringify(input));
-
     router.push(`/share/life/write?dailyLifeId=${id}`);
-  };
+  }, [data, id, router]);
 
   // 임시 에러 및 로딩 컴포넌트
   if (isLoadingUser || isLoadingLife) {
