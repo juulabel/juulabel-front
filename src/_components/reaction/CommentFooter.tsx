@@ -12,7 +12,10 @@ interface Props {
   dailyLifeId: string;
 }
 
-const CommentFooter = memo(function CommentFooter({ info, dailyLifeId }: Props) {
+const CommentFooter = memo(function CommentFooter({
+  info,
+  dailyLifeId,
+}: Props) {
   const [cookies] = useCookies(["accessToken"]);
   const queryClient = useQueryClient();
   const {

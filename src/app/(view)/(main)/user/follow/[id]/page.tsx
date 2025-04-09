@@ -19,6 +19,7 @@ import ConfirmModal from "@/_common/ConfirmModal";
 import { useDeleteFollow } from "@/_utils/hooks/useFollow";
 import useMemberStore from "@/_store/memberStore";
 import { RecommendedUser } from "@/_types/user/recommendedUser";
+import Loading from "@/_common/Loading";
 
 export default function FollowPage({
   params: { id: userId },
@@ -128,8 +129,8 @@ export default function FollowPage({
     [followingCount, followerCount],
   );
 
-  if (meLoading || userLoading || followerQuery.isLoading) {
-    return <UserListSkeleton count={10} />;
+  if (meLoading || userLoading) {
+    return <Loading />;
   }
 
   if (hasError) {

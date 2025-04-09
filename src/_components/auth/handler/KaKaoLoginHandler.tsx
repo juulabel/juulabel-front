@@ -23,7 +23,7 @@ export default function KaKaoLoginHandler() {
     if (authCode) {
       const loginHandler = async () => {
         try {
-          const response = await instance.post(requests.postKakaoLogin, {                        
+          const response = await instance.post(requests.postKakaoLogin, {
             code: authCode,
             provider: "KAKAO",
             redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI,
