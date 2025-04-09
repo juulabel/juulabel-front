@@ -1,4 +1,3 @@
-import ServiceWorkerRegistration from "@/_components/ServiceWorkerRegistration";
 import NotificationProvider from "@/_components/notification/NotificationProvider";
 import { AuthProvider } from "@/_lib/Provider/AuthProvider";
 import QueryProvider from "@/_lib/Provider/QueryProvider";
@@ -56,7 +55,6 @@ export default function RootLayout({
             </ToastProvider>
           </QueryProvider>
         </div>
-        <ServiceWorkerRegistration />
       </body>
     </html>
   );

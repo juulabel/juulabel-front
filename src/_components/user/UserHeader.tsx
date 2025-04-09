@@ -7,18 +7,21 @@ interface IUserHeader {
   title: string;
   handleBackButton: () => void;
   bottomBorder: boolean;
+  isMarginBottom?: boolean;
 }
 export default function UserHeader({
   title,
   handleBackButton,
   bottomBorder,
+  isMarginBottom = true,
 }: IUserHeader) {
   return (
     <div>
       <div
         className={cn(
-          "mx-[4%] mb-4 flex h-16 flex-row items-center justify-between",
+          "mx-[4%] flex h-16 flex-row items-center justify-between",
           bottomBorder && "border-b border-gray-300",
+          isMarginBottom && "mb-4",
         )}
       >
         <div>

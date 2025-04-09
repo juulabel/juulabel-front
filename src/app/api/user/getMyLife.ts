@@ -10,7 +10,7 @@ export const getMyLife = async ({
   const res = await instance.get(`/v1/api/members/daily-lives/my`, {
     params: {
       lastTastingNoteId: lastLifeId,
-      pageSize: 10,
+      pageSize: 16,
     },
     headers: {
       Authorization: `Bearer ${accessToken}`,

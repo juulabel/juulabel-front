@@ -1,6 +1,6 @@
 "use client";
 
-import LifeList from "@/_components/life/LifeList";
+import LifeThumbnail from "@/_components/life/LifeThumbnail";
 import Spinner from "@/_components/search/Spinner";
 import ServerToast from "@/_components/share/error/ServerToast";
 import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
@@ -46,7 +46,7 @@ export default function Lifes() {
       <ul>
         {life?.map((post) => (
           <li key={post.dailyLifeId}>
-            <LifeList {...post} />
+            <LifeThumbnail {...post} />
           </li>
         ))}
         <div ref={observerRef} />

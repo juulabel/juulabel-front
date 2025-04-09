@@ -37,13 +37,13 @@ export default function NicknameForm() {
   const nicknameLength = nicknameWatch.length;
 
   // 닉네임 유효성 검사
-  useEffect(() => {    
+  useEffect(() => {
     if (!nicknameWatch) {
       setIsValidNickname(false);
       setErrorMessage("");
       return;
     }
-    
+
     // 유효성 검사 규칙
     const validationRules = [
       {
@@ -54,10 +54,14 @@ export default function NicknameForm() {
         test: () => {
           const hasConsonantOnly = /[ㄱ-ㅎ]/.test(nicknameWatch);
           const hasVowelOnly = /[ㅏ-ㅣ]/.test(nicknameWatch);
-          const hasMixedConsonantAndEnglish = /[ㄱ-ㅎ].*[a-zA-Z]|[a-zA-Z].*[ㄱ-ㅎ]/.test(nicknameWatch);
-          return hasConsonantOnly || hasVowelOnly || hasMixedConsonantAndEnglish;
+          const hasMixedConsonantAndEnglish =
+            /[ㄱ-ㅎ].*[a-zA-Z]|[a-zA-Z].*[ㄱ-ㅎ]/.test(nicknameWatch);
+          return (
+            hasConsonantOnly || hasVowelOnly || hasMixedConsonantAndEnglish
+          );
         },
-        message: "자음만, 모음만, 또는 자음과 영어가 섞인 닉네임은 사용할 수 없어요.",
+        message:
+          "자음만, 모음만, 또는 자음과 영어가 섞인 닉네임은 사용할 수 없어요.",
       },
       {
         test: () => nicknameWatch.length < 2,
@@ -84,57 +88,61 @@ export default function NicknameForm() {
     setIsValidNickname(true);
   }, [nicknameWatch, setError, clearErrors]);
 
-  const onSubmit = useCallback(async (data: NicknameUserFormValues) => {    
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    try {
-      const response = await instance.get(
-        `/v1/api/members/nicknames/${data.nickname}/exists`,
-      );
+  const onSubmit = useCallback(
+    async (data: NicknameUserFormValues) => {
+      if (isSubmitting) return;
 
-      if (response.data) {
-        if (!response.data.result) {
-          setEnableButton(true);
-          clearErrors("nickname");
-          setErrorMessage("");
-          setNicknamePass("사용 가능한 닉네임이에요.");
-        } else {
-          setNicknamePass("");
-          setError("nickname", { 
-            type: "manual", 
-            message: "이미 사용중인 닉네임이에요." 
-          });
-          setErrorMessage("이미 사용중인 닉네임이에요.");
-          setIsValidNickname(false);
+      setIsSubmitting(true);
+      try {
+        const response = await instance.get(
+          `/v1/api/members/nicknames/${data.nickname}/exists`,
+        );
+
+        if (response.data) {
+          if (!response.data.result) {
+            setEnableButton(true);
+            clearErrors("nickname");
+            setErrorMessage("");
+            setNicknamePass("사용 가능한 닉네임이에요.");
+          } else {
+            setNicknamePass("");
+            setError("nickname", {
+              type: "manual",
+              message: "이미 사용중인 닉네임이에요.",
+            });
+            setErrorMessage("이미 사용중인 닉네임이에요.");
+            setIsValidNickname(false);
+          }
         }
+      } catch (error) {
+        setNicknamePass("");
+        setError("nickname", {
+          type: "manual",
+          message: "에러가 발생했습니다. 다시 시도해주세요.",
+        });
+        setErrorMessage("에러가 발생했습니다. 다시 시도해주세요.");
+        setIsValidNickname(false);
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      setNicknamePass("");
-      setError("nickname", {
-        type: "manual",
-        message: "에러가 발생했습니다. 다시 시도해주세요.",
-      });
-      setErrorMessage("에러가 발생했습니다. 다시 시도해주세요.");
-      setIsValidNickname(false);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [isSubmitting, clearErrors, setError]);
+    },
+    [isSubmitting, clearErrors, setError],
+  );
 
   const saveNicknameData = useCallback(() => {
     setNickname(getValues("nickname"));
   }, [getValues, setNickname]);
-  
+
   useEffect(() => {
     clearErrors("nickname");
     setErrorMessage("");
   }, [clearErrors]);
 
-  const isButtonDisabled = isSubmitting || !isValidNickname || nicknameLength < 2;
+  const isButtonDisabled =
+    isSubmitting || !isValidNickname || nicknameLength < 2;
   const buttonClassName = `mx-[4%] flex w-[91%] justify-center rounded-[10px] py-[14px] text-center text-white ${
-    isValidNickname && nicknameLength >= 2 && !isSubmitting 
-      ? "bg-black" 
+    isValidNickname && nicknameLength >= 2 && !isSubmitting
+      ? "bg-black"
       : "pointer-events-none bg-[#C4C4C4]"
   }`;
 
@@ -150,9 +158,7 @@ export default function NicknameForm() {
         {errorMessage && (
           <div className="mt-1 flex flex-row items-center">
             <AiFillExclamationCircle className="mr-[2px] text-error" />
-            <p className="text-[13px] font-medium text-error">
-              {errorMessage}
-            </p>
+            <p className="text-[13px] font-medium text-error">{errorMessage}</p>
           </div>
         )}
         {nicknamePass && !errorMessage && (

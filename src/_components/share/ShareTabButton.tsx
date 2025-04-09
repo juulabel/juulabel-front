@@ -1,14 +1,12 @@
 "use client";
 
 import { cn } from "@/_utils/commons";
-import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function ShareTabButton() {
   const pathname = usePathname();
 
-  console.log(pathname);
   return (
     <div className="flex h-11">
       <Link

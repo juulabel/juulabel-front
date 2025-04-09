@@ -9,4 +9,5 @@ export interface IMySpace {
   followingCount: number | null;
   followerCount: number | null;
   hasBadge: boolean;
+  documents: number | null;
 }

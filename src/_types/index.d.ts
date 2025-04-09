@@ -31,6 +31,7 @@ export interface IMyInfo {
   profileImage: string | null;
   gender: string;
   alcoholTypeIds: number[];
+  hasBadge: boolean;
 }
 
 export interface IApiResponse<T> {
@@ -159,4 +160,18 @@ export interface ILevel {
   id: number;
   score: number;
   description: string;
+}
+
+interface IPaginatedData {
+  pages: Array<{
+    content: RecommendedUser[];
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
+
+interface IUserProfileData {
+  followingCount: number;
+  followerCount: number;
+  [key: string]: unknown;
 }

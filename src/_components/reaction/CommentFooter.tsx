@@ -5,13 +5,17 @@ import postLifeLike from "@/app/api/life/postLifeLike";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useCookies } from "react-cookie";
+import { memo, useCallback } from "react";
 
 interface Props {
   info: ILifeDetailInfo | undefined;
   dailyLifeId: string;
 }
 
-export default function CommentFooter({ info, dailyLifeId }: Props) {
+const CommentFooter = memo(function CommentFooter({
+  info,
+  dailyLifeId,
+}: Props) {
   const [cookies] = useCookies(["accessToken"]);
   const queryClient = useQueryClient();
   const {
@@ -21,10 +25,9 @@ export default function CommentFooter({ info, dailyLifeId }: Props) {
     isInitialized,
   } = useCommentsPageStore();
 
-  const handleCommentsPage = () => {
-    // router.push(`/share/note/${id}/comments`);
+  const handleCommentsPage = useCallback(() => {
     setCommentsPageVisible("Y");
-  };
+  }, [setCommentsPageVisible]);
 
   const { mutate } = useMutation({
     mutationFn: ({ token, id }: { token: string; id: number }) =>
@@ -32,7 +35,7 @@ export default function CommentFooter({ info, dailyLifeId }: Props) {
         token,
         id,
       }),
-    onMutate: async ({ token, id }) => {
+    onMutate: async ({ id }) => {
       await queryClient.cancelQueries({
         queryKey: ["lifeDetail", dailyLifeId],
       });
@@ -45,19 +48,19 @@ export default function CommentFooter({ info, dailyLifeId }: Props) {
         ["lifeDetail", dailyLifeId],
         (oldData: IApiResponse<ILifeDetail>) => {
           if (!oldData) return oldData;
-
-          const isCurrentlyLiked = oldData.result.dailyLifeDetailInfo.isLiked;
+          const { dailyLifeDetailInfo } = oldData.result;
+          const isCurrentlyLiked = dailyLifeDetailInfo.isLiked;
 
           return {
             ...oldData,
             result: {
               ...oldData.result,
               dailyLifeDetailInfo: {
-                ...oldData.result.dailyLifeDetailInfo,
+                ...dailyLifeDetailInfo,
                 isLiked: !isCurrentlyLiked,
                 likeCount: isCurrentlyLiked
-                  ? oldData.result.dailyLifeDetailInfo.likeCount - 1
-                  : oldData.result.dailyLifeDetailInfo.likeCount + 1,
+                  ? dailyLifeDetailInfo.likeCount - 1
+                  : dailyLifeDetailInfo.likeCount + 1,
               },
             },
           };
@@ -66,13 +69,13 @@ export default function CommentFooter({ info, dailyLifeId }: Props) {
 
       return { previousPostData };
     },
-    onError: (err, variables, context) => {
+    onError: (_, variables, context) => {
       queryClient.setQueryData(
         ["life", variables.id],
         context?.previousPostData,
       );
     },
-    onSettled: (data, error, variables) => {
+    onSettled: (_, __, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["life", variables.id],
       });
@@ -126,4 +129,6 @@ export default function CommentFooter({ info, dailyLifeId }: Props) {
       </footer>
     </>
   );
-}
+});
+
+export default CommentFooter;

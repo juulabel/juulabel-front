@@ -3,6 +3,7 @@ import { dateViewKoreanFull } from "@/_utils/time";
 import Image from "next/image";
 import Link from "next/link";
 import Caption from "../../_common/Caption";
+import { useRouter } from "next/navigation";
 
 export const placeholderThumbnailProvider = (alcoholType: string) => {
   switch (alcoholType) {
@@ -29,9 +30,13 @@ export default function NoteThumbnail({
   hasMultipleImages,
   isPrivate,
 }: INoteThumbnail) {
+  const router = useRouter();
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg">
+      <Link
+        href={`/share/note/${TastingNoteId}`}
+        className="relative mb-2 aspect-[3/4] w-full overflow-hidden rounded-lg"
+      >
         <Caption type="primary" className="absolute left-2 top-2 z-10">
           {alcoholTypeName}
         </Caption>
@@ -53,20 +58,18 @@ export default function NoteThumbnail({
             />
           )}
         </div>
-        <Link href={`/share/note/${TastingNoteId}`}>
-          <Image
-            src={
-              thumbnailPath ??
-              `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
-            }
-            alt="시음노트 썸네일"
-            sizes="50vw"
-            fill
-            
-            className="object-cover"
-          />
-        </Link>
-      </div>
+
+        <Image
+          src={
+            thumbnailPath ??
+            `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/alcohols/${placeholderThumbnailProvider(alcoholTypeName)}.png`
+          }
+          alt="시음노트 썸네일"
+          sizes="50vw"
+          fill
+          className="object-cover"
+        />
+      </Link>
       <div className="mb-0.5 font-medium text-cool-grayscale-800">
         {alcoholicDrinksName}
       </div>

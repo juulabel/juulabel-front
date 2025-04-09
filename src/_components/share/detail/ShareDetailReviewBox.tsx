@@ -142,4 +142,3 @@ function Gap() {
 function Separator() {
   return <div className="mx-auto h-[8px] w-[1px] bg-cool-grayscale-300"></div>;
 }
-

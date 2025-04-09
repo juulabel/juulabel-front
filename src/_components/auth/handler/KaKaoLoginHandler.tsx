@@ -44,11 +44,10 @@ export default function KaKaoLoginHandler() {
             }
           }
         } catch (error) {
-          console.error(error);
-
           if (isAxiosError(error) && error.response?.status === 400) {
             toast("탈퇴한 회원입니다.");
           } else {
+            console.error(error);
             toast("비정상 접근입니다.");
           }
           router.push("/");

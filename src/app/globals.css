@@ -238,3 +238,23 @@ input[type="range"]::-moz-range-thumb {
   flex: 1 1 auto; /* Allow text to take up remaining space */
   min-width: 0; /* Prevent overflowing */
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* For Firefox compatibility on all elements */
+* {
+  scrollbar-width: none;
+}
+
+/* Hide all WebKit scrollbars globally */
+::-webkit-scrollbar {
+  display: none;
+  width: 0 !important;
+}

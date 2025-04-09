@@ -129,7 +129,7 @@ export default function EditMyInfo({
           try {
             const fileFromUrl = await urlToFile({ url: user.profileImage });
             setFile(fileFromUrl);
-            setImage(URL.createObjectURL(fileFromUrl));            
+            setImage(URL.createObjectURL(fileFromUrl));
           } catch (error) {
             console.error("Error converting profile image URL to file:", error);
           }

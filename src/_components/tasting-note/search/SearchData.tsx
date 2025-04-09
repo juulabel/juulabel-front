@@ -6,7 +6,7 @@ interface ISearchData {
   placeholder: string;
   handleClearSearchQuery: () => void;
   handleChangeQuery: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  fetchOfficialDataSearchList: (recentSearch: string) => void;  
+  fetchOfficialDataSearchList?: (recentSearch: string) => void;
   setIsInputFocused?: (isInputFocused: boolean) => void;
 }
 //handleQuerySearch를 optional로 한 이유는 handleQuerySearch는 최근 검색어를 저장하는 함수인데 해당 함수를 사용하지 않는 페이지가 있어서 이렇게 처리했습니다
@@ -20,6 +20,7 @@ export default function SearchData({
   setIsInputFocused,
 }: ISearchData) {
   const handleQuerySearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!fetchOfficialDataSearchList) return;
     if (event.key === "Enter") {
       saveRecentSearchDataToLocalStorage({
         localStorageKey: "TastingNoteRecentSearchList",

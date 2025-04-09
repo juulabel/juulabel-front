@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface IConfirmModal {
   modalTitle: string;
-  modalDescription: string;
+  modalDescription?: string;
   confirmText: string;
   cancelText: string;
   handleConfirm: () => void;
@@ -20,7 +20,7 @@ export default function ConfirmModal({
   handleCancel,
 }: IConfirmModal) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
       <div className="inline-flex h-[265px] w-[91%] max-w-[560px] flex-col items-center justify-center gap-6 rounded-2xl bg-white p-6">
         <div className="flex h-[111px] flex-col items-center justify-center gap-3 self-stretch">
           <Image
@@ -31,11 +31,15 @@ export default function ConfirmModal({
           />
           <div className="flex h-[59px] flex-col items-start justify-start gap-2 self-stretch">
             <div className="self-stretch text-center text-lg font-bold leading-[27px] text-slate-800">
-              {modalTitle}
+              {modalTitle.split("\n").map((line, index) => (
+                <div key={index}>{line}</div>
+              ))}
             </div>
-            <div className="self-stretch text-center text-base font-normal leading-normal text-slate-600">
-              {modalDescription}
-            </div>
+            {modalDescription && (
+              <div className="self-stretch text-center text-base font-normal leading-normal text-slate-600">
+                {modalDescription}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex h-[82px] flex-col items-start justify-start gap-2 self-stretch">
