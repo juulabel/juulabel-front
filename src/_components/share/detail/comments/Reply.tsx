@@ -54,25 +54,25 @@ export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
             <span>{dateView(replyInfo.createdAt)}</span>
           </div>
         </div>
-        {isAuthor && (
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              openModal({
-                commmentId: replyInfo.commentId,
-                postId: tastingNoteId,
-                content: replyInfo.content,
-              });
-            }}
-          >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/three-dots-horizontal-24.svg`}
-              width={24}
-              height={24}
-              alt="점"
-            />
-          </div>
-        )}
+
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            openModal({
+              commmentId: replyInfo.commentId,
+              postId: tastingNoteId,
+              content: replyInfo.content,
+              type: isAuthor ? "owner" : "visitor",
+            });
+          }}
+        >
+          <Image
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/three-dots-horizontal-24.svg`}
+            width={24}
+            height={24}
+            alt="점"
+          />
+        </div>
       </div>
 
       <div
