@@ -38,7 +38,7 @@ export default function ModifyDeleteSelectModalForComments({
     <ModalLayout onClose={closeModal}>
       <div className="flex h-full w-full flex-col items-center gap-3">
         <Button
-          variant="black"
+          variant="primary"
           className="h-[37px] w-full rounded-[4px] text-[14px]"
           onClick={() => {
             router.push(
@@ -51,7 +51,7 @@ export default function ModifyDeleteSelectModalForComments({
           수정하기
         </Button>
         <Button
-          variant="black"
+          variant="secondary"
           className="h-[37px] w-full rounded-[4px] text-[14px]"
           onClick={() => {
             setDeleteModalOpen(true);
