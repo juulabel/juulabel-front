@@ -6,11 +6,7 @@ interface IReportChecked {
   [key: string]: boolean;
 }
 
-export default function Page({
-  params: { id: reportId },
-}: {
-  params: { id: string };
-}) {
+export default function Page() {
   const reportList = {
     data: [
       "사기성 행위 또는 의심스러운 활동",
