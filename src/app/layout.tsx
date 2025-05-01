@@ -8,7 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import Script from "next/script";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
-import GTMRouteTracker from "@/_common/GtmRouteTracker";
+import GTMRouteTracker from "@/_common/GTMRouteTracker";
+import { Suspense } from "react";
+import Loading from "@/_common/Loading";
 
 const pretendard = localFont({
   src: "fonts/PretendardVariable.woff2",
@@ -60,7 +62,9 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${pretendard.variable} h-screen`}>
-        <GTMRouteTracker />
+        <Suspense fallback={<Loading />}>
+          <GTMRouteTracker />
+        </Suspense>
         <div className="flex h-full items-center justify-center">
           <QueryProvider>
             <ToastProvider>
