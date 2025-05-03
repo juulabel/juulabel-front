@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-type ReportType = "댓글" | "시음노트";
+type ReportType = "댓글" | "시음노트" | "일상생활";
 
 interface ReportModalContentProps {
   targetId?: string;
