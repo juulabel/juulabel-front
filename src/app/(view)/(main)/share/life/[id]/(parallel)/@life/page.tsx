@@ -16,14 +16,24 @@ import { Inputs } from "../../../write/page";
 import { SearchParamProps } from "@/_types";
 import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 import useMemberStore from "@/_store/memberStore";
+import VisitorsModalContent from "@/_components/report/VisitorsModalContent";
+import ModalLayout from "@/_common/ModalLayout";
 
 function LifeDetailPage({ params }: SearchParamProps) {
   const router = useRouter();
   const id = params.id;
   const [cookie] = useCookies(["accessToken"]);
-  const { setIsAuthor } = useAuthorCheckStore();
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const { isAuthor, setIsAuthor } = useAuthorCheckStore();
+  const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
 
   const { setMemberInfo } = useMemberStore();
 
@@ -46,8 +56,8 @@ function LifeDetailPage({ params }: SearchParamProps) {
   useEffect(() => {
     if (data && userData) {
       setIsAuthor(
-        data?.result.dailyLifeDetailInfo.memberInfo.nickname ===
-          userData.nickname,
+        data?.result.dailyLifeDetailInfo.memberInfo.memberId ===
+          userData.memberId,
       );
 
       setMemberInfo(userData);
@@ -110,7 +120,7 @@ function LifeDetailPage({ params }: SearchParamProps) {
         titleLink="/share/life"
         isActiveButton={userData.memberId == memberId}
         onClick={() => {
-          setEditModalOpen(true);
+          setModalOpen(true);
         }}
       />
       <div className="h-dvh overflow-y-scroll scrollbar-hide">
@@ -126,16 +136,27 @@ function LifeDetailPage({ params }: SearchParamProps) {
         />
       </div>
       <CommentFooter info={data.result.dailyLifeDetailInfo} dailyLifeId={id} />
-      {editModalOpen && (
-        <EditModal
-          handleEdit={handleEditBtn}
-          handleDelete={() => {
-            setEditModalOpen(false);
-            setDeleteModalOpen(true);
-          }}
-          handleCancel={() => setEditModalOpen(false)}
-        />
-      )}
+      {modalOpen &&
+        (isAuthor ? (
+          <EditModal
+            handleEdit={handleEditBtn}
+            handleDelete={() => {
+              setModalOpen(false);
+              setDeleteModalOpen(true);
+            }}
+            handleCancel={() => setModalOpen(false)}
+          />
+        ) : (
+          <ModalLayout onClose={handleModalClose}>
+            <VisitorsModalContent
+              targetId={id}
+              type="일상생활"
+              text="게시글"
+              handleModalClose={handleModalClose}
+            />
+          </ModalLayout>
+        ))}
+
       {deleteModalOpen && (
         <WarningModal
           modalTitle="게시물을 삭제하시겠어요?"
