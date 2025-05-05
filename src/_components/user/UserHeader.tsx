@@ -1,7 +1,13 @@
 "use client";
 
+import ModalLayout from "@/_common/ModalLayout";
 import { cn } from "@/_utils/commons";
 import { GoChevronLeft } from "react-icons/go";
+import UserReport from "./UserReport";
+import { useState } from "react";
+import Image from "next/image";
+import clsx from "clsx";
+import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 
 interface IUserHeader {
   title: string;
@@ -15,6 +21,15 @@ export default function UserHeader({
   bottomBorder,
   isMarginBottom = true,
 }: IUserHeader) {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const { isAuthor } = useAuthorCheckStore();
   return (
     <div>
       <div
@@ -30,7 +45,24 @@ export default function UserHeader({
           </button>
         </div>
         <div className="text-lg font-bold">{title}</div>
-        <br />
+        <div>
+          {!isAuthor && (
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/three_dots_horizontal.svg`}
+              width={28}
+              height={28}
+              alt="three dots"
+              className={clsx("animate-fadeIn cursor-pointer")}
+              onClick={handleModalOpen}
+            />
+          )}
+        </div>
+
+        {modalOpen && (
+          <ModalLayout onClose={handleModalClose}>
+            <UserReport handleModalClose={handleModalClose} />
+          </ModalLayout>
+        )}
       </div>
     </div>
   );

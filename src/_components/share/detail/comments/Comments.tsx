@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useState } from "react";
 import { IComment } from "@/_types";
 import { dateView } from "@/_utils/time";
 import Image from "next/image";
@@ -16,6 +16,7 @@ const defaultUserImageURL = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/p
 
 export default function Comments({ commentInfo, isAuthor, postId }: Props) {
   const { isOpen, openModal } = useCommentsModalStore();
+
   const userImageURL =
     commentInfo.memberInfo.profileImage || defaultUserImageURL;
 
@@ -50,26 +51,26 @@ export default function Comments({ commentInfo, isAuthor, postId }: Props) {
             <span>{dateView(commentInfo.createdAt)}</span>
           </div>
         </div>
-        {isAuthor && (
-          <div>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/three-dots-horizontal-24.svg`}
-              width={24}
-              height={24}
-              alt="점"
-              className="cursor-pointer"
-              onClick={(e: MouseEvent<HTMLImageElement>) => {
-                e.stopPropagation();
 
-                openModal({
-                  commmentId: commentInfo.commentId,
-                  postId: postId,
-                  content: commentInfo.content,
-                });
-              }}
-            />
-          </div>
-        )}
+        <div>
+          <Image
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/svg/three-dots-horizontal-24.svg`}
+            width={24}
+            height={24}
+            alt="점"
+            className="cursor-pointer"
+            onClick={(e: MouseEvent<HTMLImageElement>) => {
+              e.stopPropagation();
+
+              openModal({
+                commmentId: commentInfo.commentId,
+                postId: postId,
+                content: commentInfo.content,
+                type: isAuthor ? "owner" : "visitor",
+              });
+            }}
+          />
+        </div>
       </div>
 
       <div

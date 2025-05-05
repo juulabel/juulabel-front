@@ -28,15 +28,14 @@ export default function HeaderWithButton({
   const renderButton = () => {
     switch (buttonType) {
       case "meatballs":
-        if (isActiveButton)
-          return (
-            <RxDotsHorizontal
-              className="text-cool-grayscale-800"
-              size={24}
-              onClick={onClick}
-            />
-          );
-        break;
+        return (
+          <RxDotsHorizontal
+            className="cursor-pointer text-cool-grayscale-800"
+            size={24}
+            onClick={onClick}
+          />
+        );
+
       case "newpost":
         return (
           <div

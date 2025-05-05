@@ -29,6 +29,7 @@ import ModifyDeleteSelectModalForComments from "./ModifyDeleteSelectModalForComm
 import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
 import useMemberStore from "@/_store/memberStore";
 import getLifeComments from "@/app/api/life/getLifeComment";
+import VisitorsModalContent from "@/_components/report/VisitorsModalContent";
 
 interface Props {
   id: number;
@@ -39,7 +40,8 @@ export default function CommentsBody({ id, isLife }: Props) {
   const [cookies] = useCookies(["accessToken"]);
 
   const queryClient = useQueryClient();
-  const { isOpen, closeModal, postId, commentId } = useCommentsModalStore();
+  const { isOpen, closeModal, postId, commentId, type } =
+    useCommentsModalStore();
 
   const { isOpen: replyComponentIsOpen } = useReplyComponentStore();
 
@@ -156,14 +158,25 @@ export default function CommentsBody({ id, isLife }: Props) {
 
       <CommentsFooter id={id} isLife={isLife} />
 
-      {isOpen && (
-        <ModifyDeleteSelectModalForComments
-          postId={postId!}
-          commentId={commentId!}
-          closeModal={closeModal}
-          isLife={isLife}
-        />
-      )}
+      {isOpen &&
+        (type === "owner" ? (
+          <ModifyDeleteSelectModalForComments
+            postId={postId!}
+            commentId={commentId!}
+            closeModal={closeModal}
+            isLife={isLife}
+          />
+        ) : (
+          <ModalLayout onClose={closeModal}>
+            <VisitorsModalContent
+              targetId={(commentId ?? "").toString()}
+              postId={(postId ?? "").toString()}
+              type="댓글"
+              text="댓글"
+              handleModalClose={closeModal}
+            />
+          </ModalLayout>
+        ))}
     </>
   );
 }
