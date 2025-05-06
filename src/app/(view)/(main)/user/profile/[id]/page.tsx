@@ -72,6 +72,7 @@ export default function Page({
           title="유저 프로필"
           handleBackButton={() => router.back()}
           bottomBorder={true}
+          memberId={userId}
         />
 
         <UserProfileHeader
