@@ -39,6 +39,8 @@ interface Props {
 export default function CommentsBody({ id, isLife }: Props) {
   const [cookies] = useCookies(["accessToken"]);
 
+  const queryType = isLife ? "일상생활 댓글" : "시음노트 댓글";
+
   const queryClient = useQueryClient();
   const { isOpen, closeModal, postId, commentId, type } =
     useCommentsModalStore();
@@ -171,7 +173,7 @@ export default function CommentsBody({ id, isLife }: Props) {
             <VisitorsModalContent
               targetId={(commentId ?? "").toString()}
               postId={(postId ?? "").toString()}
-              type="댓글"
+              type={queryType}
               text="댓글"
               handleModalClose={closeModal}
             />
