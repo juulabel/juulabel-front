@@ -1,12 +1,15 @@
 "use client";
 
 import ReportForm from "@/_components/report/ReportForm";
+import { useReportStore } from "@/_store/useReportStore";
+import postReport from "@/app/api/report/postReport";
 
 interface IReportChecked {
   [key: string]: boolean;
 }
 
 export default function Page() {
+  const { reportId } = useReportStore();
   const reportList = {
     data: [
       "사기성 행위 또는 의심스러운 활동",
@@ -20,9 +23,19 @@ export default function Page() {
 
   return (
     <ReportForm
+      reportId={reportId}
       reportList={reportList}
-      onSubmit={(reportString) => {
-        console.log("유저 신고 내용:", reportString);
+      onSubmit={async (reportedContentId, reason, type) => {
+        try {
+          await postReport({
+            reportedContentId: Number(reportedContentId),
+            reason,
+            type,
+          });
+        } catch (error) {
+          console.error("신고 요청 중 오류 발생:", error);
+        }
+
         alert("정상적으로 신고되었습니다!");
       }}
     />
