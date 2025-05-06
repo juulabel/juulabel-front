@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-type ReportType = "댓글" | "시음노트" | "일상생활";
+type ReportType = "시음노트 댓글" | "시음노트" | "일상생활" | "일상생활 댓글";
 
 interface ReportModalContentProps {
   targetId?: string;
@@ -54,7 +54,7 @@ export default function VisitorsModalContent({
       >
         {text} 신고하기
       </Button>
-      <Button
+      {/* <Button
         className="h-[40px] w-full rounded bg-secondary text-[14px] text-white"
         onClick={() => {
           handleModalClose(); // 기존 모달 닫고 신고 확인 모달 오픈함
@@ -62,7 +62,7 @@ export default function VisitorsModalContent({
         }}
       >
         이 {text} 보지 않기
-      </Button>
+      </Button> */}
       <Button
         variant="none"
         className="h-[40px] w-full text-[14px] font-semibold text-cool-grayscale-500"
