@@ -1,20 +1,24 @@
 "use client";
 
 import Button from "@/_common/ui/Button";
+import { useReportStore } from "@/_store/useReportStore";
+import { getUserProfile } from "@/app/api/user/getUserProfile";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 interface ReportModalContentProps {
   handleModalClose: () => void;
+  memberId: string;
 }
 
 export default function UserReport({
   handleModalClose,
+  memberId,
 }: ReportModalContentProps) {
   const router = useRouter();
   const [checkNotToLook, setCheckNotToLook] = useState<boolean>(false);
-
+  const { setReportId } = useReportStore();
   const handleCheckNotToLookOpen = () => {
     setCheckNotToLook(true);
   };
@@ -24,7 +28,8 @@ export default function UserReport({
   };
 
   const handleReport = () => {
-    router.push(`/report/?type=사용자`);
+    setReportId(memberId);
+    router.push(`/report/?type=멤버`);
   };
 
   const handleDontLookAtThePost = () => {
@@ -40,7 +45,7 @@ export default function UserReport({
       >
         유저 신고하기
       </Button>
-      <Button
+      {/* <Button
         className="h-[40px] w-full rounded bg-secondary text-[14px] text-white"
         onClick={() => {
           handleModalClose(); // 기존 모달 닫고 신고 확인 모달 오픈함
@@ -48,7 +53,7 @@ export default function UserReport({
         }}
       >
         이 유저 게시물 보지 않기
-      </Button>
+      </Button> */}
       <Button
         variant="none"
         className="h-[40px] w-full text-[14px] font-semibold text-cool-grayscale-500"
