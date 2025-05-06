@@ -2,9 +2,10 @@
 
 import Loading from "@/_common/Loading";
 import ReportForm from "@/_components/report/ReportForm";
+import postReport from "@/app/api/report/postReport";
 import { useRouter } from "next/navigation";
 
-export default function Page({
+export default async function Page({
   params: { id: reportId },
 }: {
   params: { id: string };
@@ -22,15 +23,21 @@ export default function Page({
     ],
   };
 
-  // const acceptableReportType = ["사용자", "일상생활", "시음노트", "댓글"];
-
-  // if (isLoadingReportList) return <Loading />;
-  // if (error) return <div>Error : {error.message}</div>;
   return (
     <ReportForm
       reportList={reportList}
-      onSubmit={(reportString) => {
-        console.log("게시글 신고 내용:", reportString);
+      reportId={reportId}
+      onSubmit={async (reportedContentId, reason, type) => {
+        try {
+          await postReport({
+            reportedContentId: Number(reportedContentId),
+            reason,
+            type,
+          });
+        } catch (error) {
+          console.error("신고 요청 중 오류 발생:", error);
+        }
+
         alert("정상적으로 신고되었습니다!");
       }}
     />
