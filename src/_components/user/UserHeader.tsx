@@ -14,12 +14,14 @@ interface IUserHeader {
   handleBackButton: () => void;
   bottomBorder: boolean;
   isMarginBottom?: boolean;
+  memberId: string;
 }
 export default function UserHeader({
   title,
   handleBackButton,
   bottomBorder,
   isMarginBottom = true,
+  memberId,
 }: IUserHeader) {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const handleModalClose = () => {
@@ -60,7 +62,10 @@ export default function UserHeader({
 
         {modalOpen && (
           <ModalLayout onClose={handleModalClose}>
-            <UserReport handleModalClose={handleModalClose} />
+            <UserReport
+              handleModalClose={handleModalClose}
+              memberId={memberId}
+            />
           </ModalLayout>
         )}
       </div>
