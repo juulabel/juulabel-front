@@ -7,12 +7,17 @@ import BottomButton from "@/_common/BottomButton";
 
 interface ReportFormType {
   reportList: { data: string[] };
-  onSubmit: (report: string) => void;
+  reportId: string;
+  onSubmit: (reportedContentId: number, reason: string, type: string) => void;
 }
 interface IReportChecked {
   [key: string]: boolean;
 }
-export default function ReportForm({ reportList, onSubmit }: ReportFormType) {
+export default function ReportForm({
+  reportList,
+  reportId,
+  onSubmit,
+}: ReportFormType) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
@@ -20,6 +25,14 @@ export default function ReportForm({ reportList, onSubmit }: ReportFormType) {
   const [reportChecked, setReportChecked] = useState<IReportChecked>({});
   const [enableSubmitButton, setEnableSubmitButton] = useState<boolean>(false);
   const [etcReport, setEtcReport] = useState<string>("");
+
+  const typeMap: Record<string, string> = {
+    멤버: "MEMBER",
+    시음노트: "TASTING_NOTE",
+    "시음노트 댓글": "TASTING_NOTE_COMMENT",
+    일상생활: "DAILY_LIFE",
+    "일상생활 댓글": "DAILY_LIFE_COMMENT",
+  };
 
   useEffect(() => {
     if (reportList && reportList.data) {
@@ -86,7 +99,8 @@ export default function ReportForm({ reportList, onSubmit }: ReportFormType) {
         : etcReport.trim();
     }
 
-    onSubmit(reportsString);
+    const mappedType = typeMap[type!] ?? type!;
+    onSubmit(Number(reportId), reportsString, mappedType);
   };
 
   return (
