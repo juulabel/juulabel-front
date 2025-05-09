@@ -35,7 +35,11 @@ export default function VisitorsModalContent({
 
   const handleReport = () => {
     if (targetId) {
-      router.push(`/report/${targetId}?type=${type}`);
+      let query = `?type=${type}`;
+      if (type === "시음노트 댓글" || type === "일상생활 댓글") {
+        query += `&post=${postId}`;
+      }
+      router.push(`/report/${targetId}${query}`);
     } else {
       toast(`${type} ID를 찾을 수 없습니다.`);
     }
