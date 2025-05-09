@@ -7,8 +7,7 @@ import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 import clsx from "clsx";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-// import { toast } from "react-toastify";
+import { useState, useEffect } from "react";
 
 export default function ShareHeader() {
   const router = useRouter();
