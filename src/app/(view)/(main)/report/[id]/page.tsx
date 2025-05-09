@@ -1,17 +1,21 @@
 "use client";
 
-import Loading from "@/_common/Loading";
 import ReportForm from "@/_components/report/ReportForm";
+import useCommentsModalStore from "@/_store/tastingCommentModal";
 import postReport from "@/app/api/report/postReport";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 
-export default async function Page({
+export default function Page({
   params: { id: reportId },
 }: {
   params: { id: string };
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const postId = searchParams.get("post");
 
+  const { closeModal } = useCommentsModalStore();
   const reportList = {
     data: [
       "광고 / 스팸",
@@ -35,10 +39,42 @@ export default async function Page({
             type,
           });
         } catch (error) {
-          console.error("신고 요청 중 오류 발생:", error);
+          toast(`신고 요청 중 오류 발생: ${error}`);
         }
 
-        alert("정상적으로 신고되었습니다!");
+        let message;
+        switch (type) {
+          case "DAILY_LIFE_COMMENT":
+          case "TASTING_NOTE_COMMENT":
+            message = "해당 댓글에 대한 신고가 완료되었습니다.";
+            break;
+          case "TASTING_NOTE":
+          case "DAILY_LIFE":
+            message = "해당 게시물에 대한 신고가 완료되었습니다.";
+            break;
+          default:
+            message = "신고가 완료되었습니다.";
+        }
+        localStorage.setItem("showToast", message);
+        let redirectUrl;
+        switch (type) {
+          case "DAILY_LIFE_COMMENT":
+            redirectUrl = `/share/life/${postId}`;
+            break;
+          case "DAILY_LIFE":
+            redirectUrl = `/share/life/${reportId}`;
+            break;
+          case "TASTING_NOTE_COMMENT":
+            redirectUrl = `/share/note/${postId}`;
+            break;
+          case "TASTING_NOTE":
+            redirectUrl = `/share/note/${reportId}`;
+            break;
+          default:
+            redirectUrl = "/";
+        }
+        closeModal();
+        router.push(`${redirectUrl}`);
       }}
     />
   );
