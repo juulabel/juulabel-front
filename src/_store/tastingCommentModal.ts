@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 interface Params {
   postId: number;
-  commmentId: number;
+  commentId: number;
   content?: string;
   type: "owner" | "visitor";
 }
@@ -13,7 +13,7 @@ interface ModalState {
   commentId: number | null;
   content?: string;
   type: "owner" | "visitor" | null;
-  openModal: ({ postId, commmentId, content }: Params) => void;
+  openModal: ({ postId, commentId, content }: Params) => void;
   closeModal: () => void;
 }
 
@@ -22,11 +22,11 @@ const useCommentsModalStore = create<ModalState>((set) => ({
   postId: null,
   commentId: null,
   type: null,
-  openModal: ({ postId, commmentId, content = "", type }: Params) =>
+  openModal: ({ postId, commentId, content = "", type }: Params) =>
     set({
       isOpen: true,
       postId: postId,
-      commentId: commmentId,
+      commentId: commentId,
       content: content,
       type: type,
     }),
