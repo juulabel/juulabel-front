@@ -17,7 +17,11 @@ export default function ToastProvider({ children }: IToastProvider) {
     <>
       {children}
       <ToastContainer
-        toastClassName="flex w-full bg-cool-grayscale-800 text-white rounded px-4 py-3 mx-4"
+        toastClassName={() =>
+          topToastPaths.includes(pathName)
+            ? "bg-white text-black text-sm rounded px-4 py-3 shadow-md"
+            : "flex w-full bg-cool-grayscale-800 text-white rounded px-4 py-3 mx-4"
+        }
         bodyClassName={() => "w-full text-sm"}
         closeButton={false}
         hideProgressBar={true}
