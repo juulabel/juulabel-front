@@ -18,6 +18,7 @@ import {
   useCommentCountStore,
 } from "@/_store/tastingDetailStore";
 import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn";
+import { toast } from "react-toastify";
 
 interface Props {
   id: number;
@@ -31,6 +32,14 @@ export default function ShareNoteDetailBody({ id }: Props) {
   const { isCommentsPageVisible } = useCommentsPageStore();
 
   const { setMemberInfo } = useMemberStore();
+
+  useEffect(() => {
+    const message = localStorage.getItem("showToast");
+    if (message) {
+      toast(message);
+      localStorage.removeItem("showToast");
+    }
+  }, []);
 
   const [
     { data, isError, isFetching },
