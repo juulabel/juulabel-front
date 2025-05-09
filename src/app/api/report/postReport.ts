@@ -9,7 +9,7 @@ interface ReportPayload {
 export default async function postReport(payload: ReportPayload) {
   try {
     const response = await instance.post("/v1/api/reports", payload);
-    console.log("📩 서버 응답:", response.data);
+
     return response.data;
   } catch (error: any) {
     console.error("신고 API 요청 중 오류 발생");
