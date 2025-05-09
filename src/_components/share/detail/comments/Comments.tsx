@@ -15,7 +15,7 @@ interface Props {
 const defaultUserImageURL = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
 
 export default function Comments({ commentInfo, isAuthor, postId }: Props) {
-  const { isOpen, openModal } = useCommentsModalStore();
+  const { openModal } = useCommentsModalStore();
 
   const userImageURL =
     commentInfo.memberInfo.profileImage || defaultUserImageURL;
@@ -63,7 +63,7 @@ export default function Comments({ commentInfo, isAuthor, postId }: Props) {
               e.stopPropagation();
 
               openModal({
-                commmentId: commentInfo.commentId,
+                commentId: commentInfo.commentId,
                 postId: postId,
                 content: commentInfo.content,
                 type: isAuthor ? "owner" : "visitor",
