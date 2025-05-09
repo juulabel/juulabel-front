@@ -10,11 +10,12 @@ import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import SwipeableTabBar from "@/_components/share/SwipeableTabBar";
 import { useProfileFollow } from "@/_utils/hooks/useFollow";
 import getMyInfo from "@/app/api/auth/getMyInfo";
 import ServerToast from "@/_components/share/error/ServerToast";
+import { toast } from "react-toastify";
 
 export default function Page({
   params: { id: userId },
@@ -24,6 +25,14 @@ export default function Page({
   const router = useRouter();
   const [isBadgeInfoModalOpen, setIsBadgeInfoModalOpen] = useState(false);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  useEffect(() => {
+    const message = localStorage.getItem("showToast");
+    if (message) {
+      toast(message);
+      localStorage.removeItem("showToast");
+    }
+  }, []);
 
   const [
     { data: me, isLoading: isLoadingMe, error: meError },

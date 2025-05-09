@@ -8,7 +8,7 @@ import getMyInfo from "@/app/api/auth/getMyInfo";
 import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
 import { getLifeDetail } from "@/app/api/life/getLifeDetail";
 import { useQueries } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
@@ -26,7 +26,13 @@ function LifeDetailPage({ params }: SearchParamProps) {
   const { isAuthor, setIsAuthor } = useAuthorCheckStore();
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
+  useEffect(() => {
+    const message = localStorage.getItem("showToast");
+    if (message) {
+      toast(message);
+      localStorage.removeItem("showToast");
+    }
+  }, []);
   const handleModalClose = () => {
     setModalOpen(false);
   };
