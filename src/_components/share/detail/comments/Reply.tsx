@@ -59,7 +59,7 @@ export default function Reply({ replyInfo, tastingNoteId, isAuthor }: Props) {
           className="cursor-pointer"
           onClick={() => {
             openModal({
-              commmentId: replyInfo.commentId,
+              commentId: replyInfo.commentId,
               postId: tastingNoteId,
               content: replyInfo.content,
               type: isAuthor ? "owner" : "visitor",
