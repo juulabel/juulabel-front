@@ -6,13 +6,11 @@ import postReport from "@/app/api/report/postReport";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-interface IReportChecked {
-  [key: string]: boolean;
-}
 
 export default function Page() {
   const { reportId } = useReportStore();
   const router = useRouter();
+
   const reportList = {
     data: [
       "사기성 행위 또는 의심스러운 활동",
@@ -23,6 +21,8 @@ export default function Page() {
       "기타 (특정 상황이나 문제에 대한 신고)",
     ],
   };
+
+  if (!reportId) return null;
 
   return (
     <>
