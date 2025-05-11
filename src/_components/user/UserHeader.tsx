@@ -14,7 +14,7 @@ interface IUserHeader {
   handleBackButton: () => void;
   bottomBorder: boolean;
   isMarginBottom?: boolean;
-  memberId: string;
+  memberId?: string;
 }
 export default function UserHeader({
   title,

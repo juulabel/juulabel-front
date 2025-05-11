@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 interface ReportModalContentProps {
   handleModalClose: () => void;
-  memberId: string;
+  memberId?: string;
 }
 
 export default function UserReport({
@@ -28,8 +28,10 @@ export default function UserReport({
   };
 
   const handleReport = () => {
-    setReportId(memberId);
-    router.push(`/report/?type=멤버`);
+    if (memberId) {
+      setReportId(memberId);
+      router.push(`/report/?type=멤버`);
+    }
   };
 
   const handleDontLookAtThePost = () => {
