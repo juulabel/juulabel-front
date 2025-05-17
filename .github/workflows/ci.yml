@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      # Install
+      - name: Install Dependencies
+        run: pnpm install
+
+      # Build
+      - name: Build Project
+        run: pnpm build
+
+      # Test - test를 진행하지 않으므로 생략
+      # - name: Run Tests
+      #   run: pnpm test
+
+      # Lint
+      - name: Lint Code
+        run: pnpm lint
