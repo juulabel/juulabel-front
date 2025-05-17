@@ -1,0 +1,58 @@
+on:
+  push:
+    branches:
+      - feature/*
+
+jobs:
+  deploy:
+    env:
+      ENV_PATH: .env
+      DEPLOY_ENV: dev
+    environment: Develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          touch ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_API_MOCKING=${{ secrets.NEXT_PUBLIC_API_MOCKING }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_IMAGE_BASE_PATH=${{ secrets.NEXT_PUBLIC_IMAGE_BASE_PATH }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_JUULABEL_API_URL=${{ secrets.NEXT_PUBLIC_JUULABEL_API_URL }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_KAKAO_API_KEY=${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI }} >> ${{ env.ENV_PATH }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.14.0
+          run_install: false
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Project
+        run: pnpm build
+
+      - name: ZIP project files
+        run: |
+          zip -r juulabel-front-qa.zip . -x "*.git*" "node_modules/*"
+
+      - name: Acces to AWS
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp ./juulabel-front-qa.zip-qa s3://${{ secrets.S3_BUCKET }}/juulabel-front-qa.zip
