@@ -60,7 +60,7 @@ jobs:
       - name: Deploy to EC2
         run: |
           aws deploy create-deployment
-            --application-name juulabel-front
+            --application-name ${{ secrets.CODEDEPLOY_APPICATION_NAME }}
             --deployment-config-name CodeDeployDefault.AllAtOnce
-            --deployment-group-name juulabel-front
+            --deployment-group-name ${{ secrets.CODEDEPLOY_GROUP_NAMEE }}
             --s3-location bucket=${{ secrets.S3_BUCKET }}, bundleType=zip, key=juulabel-front-qa.zip
