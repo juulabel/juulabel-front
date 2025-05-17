@@ -15,6 +15,9 @@ permissions:
 
 jobs:
   build:
+    env:
+      ENV_PATH: .env
+    environment: Production
     runs-on: ubuntu-latest
 
     steps:
@@ -41,6 +44,17 @@ jobs:
       # Lint
       - name: Lint Code
         run: pnpm lint
+
+      - name: Create .env file
+        run: |
+          touch ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_API_MOCKING=${{ secrets.NEXT_PUBLIC_API_MOCKING }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_IMAGE_BASE_PATH=${{ secrets.NEXT_PUBLIC_IMAGE_BASE_PATH }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_JUULABEL_API_URL=${{ secrets.NEXT_PUBLIC_JUULABEL_API_URL }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_KAKAO_API_KEY=${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }} >> ${{ env.ENV_PATH }}
+          echo NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI }} >> ${{ env.ENV_PATH }}
 
       # Build
       - name: Build Project

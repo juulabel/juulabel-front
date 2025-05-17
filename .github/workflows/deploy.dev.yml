@@ -1,13 +1,12 @@
 on:
   push:
     branches:
-      - feature/*
+      - feat/*
 
 jobs:
   deploy:
     env:
       ENV_PATH: .env
-      DEPLOY_ENV: dev
     environment: Develop
     runs-on: ubuntu-latest
     steps:
