@@ -1,10 +1,10 @@
 "use client";
 
+import clsx from "clsx";
+import Image from "next/image";
 import React, { MouseEvent } from "react";
 import useReplyComponentStore from "@/_store/replyComponentStore";
 import { IComment } from "@/_types";
-import clsx from "clsx";
-import Image from "next/image";
 
 interface Props {
   commentInfo: IComment;

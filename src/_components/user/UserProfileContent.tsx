@@ -1,14 +1,14 @@
-import LifeThumbnail from "@/_components/life/LifeThumbnail";
-import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
-import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
-import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
-import SwipeableTabView from "@/_components/share/SwipeableTabView";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import React from "react";
-import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchUserContent } from "@/app/api/user/fetchUserContent";
 import { useCookies } from "react-cookie";
+import { fetchUserContent } from "@/app/api/user/fetchUserContent";
+import LifeThumbnail from "@/_components/life/LifeThumbnail";
+import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
+import SwipeableTabView from "@/_components/share/SwipeableTabView";
+import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
+import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 
 interface UserProfileContentProps {
   activeTabIndex: number;

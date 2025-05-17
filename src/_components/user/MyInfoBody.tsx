@@ -1,10 +1,10 @@
-import Modal from "@/_common/Modal";
-import { IMyInfo } from "@/_types";
-import { cn } from "@/_utils/commons";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { useCookies } from "react-cookie";
-import Image from "next/image";
+import Modal from "@/_common/Modal";
+import { cn } from "@/_utils/commons";
+import { IMyInfo } from "@/_types";
 import BadgeInfoModal from "../share/BadgeInfoModal";
 
 interface IMyInfoBody {

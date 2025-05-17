@@ -1,18 +1,18 @@
 "use client";
 
-import { IAlcoholTypeTab } from "@/_types/search/alcoholTypeTab";
-import { IAlcoholTypeData } from "@/_types/search/alcoholTypeData";
-import { cn } from "@/_utils/commons";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useMemo, useState, useCallback } from "react";
 import { GoChevronLeft } from "react-icons/go";
-import { IAlcoholSortedType } from "@/_types/search/alcoholSortedType";
-import AlcoholTypeLoader from "./AlcoholTypeLoader";
-import AlcoholTypeDataThumbnail from "./AlcoholTypeDataThumbnail";
-import Spinner from "./Spinner";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAlcoholTypeResult } from "@/app/api/search/getAlcoholTypeResult";
+import { IAlcoholSortedType } from "@/_types/search/alcoholSortedType";
+import { IAlcoholTypeData } from "@/_types/search/alcoholTypeData";
+import { IAlcoholTypeTab } from "@/_types/search/alcoholTypeTab";
+import { cn } from "@/_utils/commons";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
+import AlcoholTypeDataThumbnail from "./AlcoholTypeDataThumbnail";
+import AlcoholTypeLoader from "./AlcoholTypeLoader";
+import Spinner from "./Spinner";
 
 const TAB_ITEMS: IAlcoholTypeTab[] = [
   { id: 1, value: "탁주" },

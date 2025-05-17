@@ -1,10 +1,10 @@
+import Image from "next/image";
 import Comments from "@/_components/share/detail/comments/Comments";
 import CommentsBody from "@/_components/share/detail/comments/CommentsBody";
 import CommentsHeader from "@/_components/share/detail/comments/CommentsHeader";
 import CommentsPage from "@/_components/share/detail/comments/CommentsPage";
 import ServerToast from "@/_components/share/error/ServerToast";
 import { SearchParamProps } from "@/_types";
-import Image from "next/image";
 
 export default function CommentsPageServer({ params }: SearchParamProps) {
   const numberTypeId = Number(params.id);

@@ -1,8 +1,8 @@
 "use client";
 
 import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
-import { ILevel } from "@/_types";
 import { useRef, useState } from "react";
+import { ILevel } from "@/_types";
 
 interface Props {
   levels: ILevel[];

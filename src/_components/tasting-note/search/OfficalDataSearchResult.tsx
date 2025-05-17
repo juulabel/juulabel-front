@@ -1,7 +1,7 @@
 "use client";
 
-import { GoChevronLeft } from "react-icons/go";
 import Image from "next/image";
+import { GoChevronLeft } from "react-icons/go";
 import ScrollUpFloatingBtn from "../../search/ScrollUpFloatingBtn";
 import OfficialData from "./OfficialData";
 

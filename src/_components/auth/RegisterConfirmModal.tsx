@@ -1,7 +1,7 @@
 "use client";
 
-import { alcoholType } from "@/_config/alcoholType";
 import { useRegisterStore } from "@/_store/register";
+import { alcoholType } from "@/_config/alcoholType";
 
 interface IRegisterConfirm {
   handleRegisterConfirm: () => void;

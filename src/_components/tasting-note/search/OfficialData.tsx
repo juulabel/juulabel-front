@@ -1,13 +1,13 @@
 "use client";
 
-import { IOfficialData } from "@/_types/tasting-note/officialData";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import OfficialDataThumbnail from "./OfficialDataThumbnail";
+import Image from "next/image";
 import { getAlcoholSearchResult } from "@/app/api/search/getAlcoholSearchResult";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import Spinner from "../../search/Spinner";
+import OfficialDataThumbnail from "./OfficialDataThumbnail";
 import TraditionalDrinkInformationComponent from "./TraditionalDrinkInformationComponent";
-import Image from "next/image";
 
 export default function OfficialData({ searchQuery }: { searchQuery: string }) {
   const {

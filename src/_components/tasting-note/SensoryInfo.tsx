@@ -1,7 +1,7 @@
-import { ILevel, ISensoryLevelInfo } from "@/_types";
 import { Dispatch, SetStateAction } from "react";
-import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
+import { ILevel, ISensoryLevelInfo } from "@/_types";
 import SensoryLevelSelector from "./SensoryLevelSelector";
 
 interface Props {

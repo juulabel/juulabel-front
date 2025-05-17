@@ -1,4 +1,12 @@
 "use client";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import clsx from "clsx";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import postNoteLike from "@/app/api/tasting-note/postNoteLike";
 import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
 import { useCommentStore } from "@/_store/tastingDetailStore";
 import {
@@ -6,13 +14,6 @@ import {
   ITastingNoteDetailInfo,
   ITastingNoteResponse,
 } from "@/_types";
-import postNoteLike from "@/app/api/tasting-note/postNoteLike";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import clsx from "clsx";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;

@@ -1,8 +1,8 @@
 "use client";
 
-import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 import Image from "next/image";
 import Link from "next/link";
+import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 
 interface IMySpaceHeader {
   title: string;

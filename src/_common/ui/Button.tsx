@@ -1,6 +1,6 @@
-import { PolymorphicPropsWithoutRef } from "@/_types";
 import clsx from "clsx";
 import { ElementType } from "react";
+import { PolymorphicPropsWithoutRef } from "@/_types";
 
 type ButtonVariant = "primary" | "secondary" | "black" | "none";
 

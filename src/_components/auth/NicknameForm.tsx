@@ -1,16 +1,16 @@
 "use client";
 
+import { useEffect, useState, useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { AiFillExclamationCircle } from "react-icons/ai";
+import { FaCheckCircle } from "react-icons/fa";
+import { instance } from "@/app/api/axios";
+import BottomButton from "@/_common/BottomButton";
+import { useRegisterStore } from "@/_store/register";
 import {
   nicknameDefaultValues,
   NicknameUserFormValues,
 } from "@/_types/yup/yupRegister";
-import { AiFillExclamationCircle } from "react-icons/ai";
-import BottomButton from "@/_common/BottomButton";
-import { useForm } from "react-hook-form";
-import { FaCheckCircle } from "react-icons/fa";
-import { useEffect, useState, useCallback } from "react";
-import { instance } from "@/app/api/axios";
-import { useRegisterStore } from "@/_store/register";
 
 export default function NicknameForm() {
   const { setNickname } = useRegisterStore();

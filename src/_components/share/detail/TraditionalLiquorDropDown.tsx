@@ -1,4 +1,5 @@
 "use client";
+
 import { ReactNode, useEffect, useRef, useState, MouseEvent } from "react";
 import useVolumePriceStore from "@/_store/volumePriceStore";
 import useClickOutside from "@/_utils/hooks/useClickOutside";

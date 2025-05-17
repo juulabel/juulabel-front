@@ -1,14 +1,14 @@
 "use client";
 
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
 import RecentSearchList from "@/_components/search/RecentSearchList";
-import SearchData from "@/_components/tasting-note/search/SearchData";
-import OfficialDataSearchResult from "@/_components/tasting-note/search/OfficalDataSearchResult";
 import RelatedSearchResult from "@/_components/search/RelatedSearchResult";
+import OfficialDataSearchResult from "@/_components/tasting-note/search/OfficalDataSearchResult";
+import SearchData from "@/_components/tasting-note/search/SearchData";
 import TastingNoteSearchHeader from "@/_components/tasting-note/search/TastingNoteSearchHeader";
 import TraditionalDrinkInformationComponent from "@/_components/tasting-note/search/TraditionalDrinkInformationComponent";
 import { useDebounce } from "@/_utils/useDebounce";
-import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
-import { useEffect, useState, useCallback, useMemo } from "react";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState<string>("");

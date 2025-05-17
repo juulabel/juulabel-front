@@ -1,20 +1,20 @@
 "use client";
 
-import BottomButton from "@/_common/BottomButton";
-import ConfirmModal from "@/_common/ConfirmModal";
-import TopHeader from "@/_common/TopHeader";
-import DetailsText from "@/_components/auth/DetailsText";
-import GenderForm from "@/_components/auth/GenderForm";
-import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
-import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
-import { useRegisterStore } from "@/_store/register";
-import { instance } from "@/app/api/axios";
-import requests from "@/app/api/requests";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { instance } from "@/app/api/axios";
+import requests from "@/app/api/requests";
+import DetailsText from "@/_components/auth/DetailsText";
+import GenderForm from "@/_components/auth/GenderForm";
+import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
+import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
+import BottomButton from "@/_common/BottomButton";
+import ConfirmModal from "@/_common/ConfirmModal";
+import TopHeader from "@/_common/TopHeader";
+import { useRegisterStore } from "@/_store/register";
 
 export default function Page() {
   const registerStore = useRegisterStore();

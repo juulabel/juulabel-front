@@ -1,6 +1,6 @@
 import axios from "axios";
-import { instance } from "../axios";
 import { Cookies } from "react-cookie";
+import { instance } from "../axios";
 
 export async function getLifeDetail({ id }: { id: number }) {
   const cookies = new Cookies();

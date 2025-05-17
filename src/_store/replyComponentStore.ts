@@ -1,5 +1,5 @@
-import { IComment } from "@/_types";
 import { create } from "zustand";
+import { IComment } from "@/_types";
 
 interface ReplyState {
   isOpen: boolean;

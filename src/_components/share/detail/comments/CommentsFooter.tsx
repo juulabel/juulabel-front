@@ -1,11 +1,5 @@
 "use client";
 
-import Button from "@/_common/ui/Button";
-import useReplyComponentStore from "@/_store/replyComponentStore";
-import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
-import { IApiResponse, IComment } from "@/_types";
-import useCommentsPOST from "@/_utils/hooks/useCommentsPOST";
-import postNoteComments from "@/app/api/tasting-note/postNoteComments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { error } from "console";
 import { useRouter } from "next/navigation";
@@ -20,6 +14,12 @@ import {
 } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import postNoteComments from "@/app/api/tasting-note/postNoteComments";
+import Button from "@/_common/ui/Button";
+import useReplyComponentStore from "@/_store/replyComponentStore";
+import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
+import useCommentsPOST from "@/_utils/hooks/useCommentsPOST";
+import { IApiResponse, IComment } from "@/_types";
 
 interface Props {
   id: number;

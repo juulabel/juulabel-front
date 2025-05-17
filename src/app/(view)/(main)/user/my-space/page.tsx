@@ -1,22 +1,21 @@
 "use client";
 
-import Navigation from "@/_common/Navigation";
-import ServerToast from "@/_components/share/error/ServerToast";
-import SkeletonUIForUserProfile from "@/_components/share/SkeletonUIForUserProfile";
-import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
-import MySpaceHeader from "@/_components/user/MySpaceHeader";
-import UserProfileHeader from "@/_components/user/UserProfileHeader";
-import UserProfileStats from "@/_components/user/UserProfileStats";
-import UserProfileContent from "@/_components/user/UserProfileContent";
-import SwipeableTabBar from "@/_components/share/SwipeableTabBar";
-import { IMySpace } from "@/_types/user/mySpaceData";
-import { getMySpace } from "@/app/api/user/getMySpace";
-
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { useCookies } from "react-cookie";
+import { getMySpace } from "@/app/api/user/getMySpace";
+import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
+import SkeletonUIForUserProfile from "@/_components/share/SkeletonUIForUserProfile";
+import SwipeableTabBar from "@/_components/share/SwipeableTabBar";
+import ServerToast from "@/_components/share/error/ServerToast";
+import MySpaceHeader from "@/_components/user/MySpaceHeader";
+import UserProfileContent from "@/_components/user/UserProfileContent";
+import UserProfileHeader from "@/_components/user/UserProfileHeader";
+import UserProfileStats from "@/_components/user/UserProfileStats";
+import Navigation from "@/_common/Navigation";
+import { IMySpace } from "@/_types/user/mySpaceData";
 
 export default function Page() {
   const [cookies] = useCookies(["accessToken"]);

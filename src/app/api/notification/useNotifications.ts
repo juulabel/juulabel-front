@@ -1,7 +1,7 @@
-import { INotificationSummary } from "@/_types/notification";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import nookies from "nookies";
+import { INotificationSummary } from "@/_types/notification";
 import { instance } from "../axios";
 
 /**

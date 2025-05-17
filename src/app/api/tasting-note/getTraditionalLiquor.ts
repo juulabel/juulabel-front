@@ -1,6 +1,6 @@
-import { IAlcoholDetailResponse } from "@/_types/share";
 import axios from "axios";
 import { Cookies } from "react-cookie";
+import { IAlcoholDetailResponse } from "@/_types/share";
 
 export default async function getTraditionalLiquor({
   alcoholicDrinksId,

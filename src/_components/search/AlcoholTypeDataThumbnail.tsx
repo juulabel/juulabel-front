@@ -1,8 +1,8 @@
-import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
-import { IAlcoholTypeData } from "@/_types/search/alcoholTypeData";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
+import { IAlcoholTypeData } from "@/_types/search/alcoholTypeData";
 
 export default function AlcoholTypeDataThumbnail({
   id,

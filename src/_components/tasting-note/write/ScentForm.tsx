@@ -1,10 +1,10 @@
-import BottomButton from "@/_common/BottomButton";
-import { useTastingNoteInformationStore } from "@/_store/tastingNote";
-import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
-import { getScents } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getScents } from "@/app/api/tasting-note/getTastingNoteFormInformation";
+import BottomButton from "@/_common/BottomButton";
+import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 
 interface IScentChip {
   name: string;

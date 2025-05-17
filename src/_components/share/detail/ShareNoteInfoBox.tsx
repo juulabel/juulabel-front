@@ -1,6 +1,7 @@
 "use client";
-import { IAlchoholicDrinksInfo, ITastingNoteDetailInfo } from "@/_types";
+
 import { useRouter } from "next/navigation";
+import { IAlchoholicDrinksInfo, ITastingNoteDetailInfo } from "@/_types";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;

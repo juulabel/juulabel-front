@@ -1,16 +1,16 @@
 "use client";
 
-import BottomButton from "@/_common/BottomButton";
-import Checkbox from "@/_common/Checkbox";
-import ConfirmModal from "@/_common/ConfirmModal";
-import UserHeader from "@/_components/user/UserHeader";
-import { cn } from "@/_utils/commons";
-import { deleteUser } from "@/app/api/user/deleteUser";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { deleteUser } from "@/app/api/user/deleteUser";
+import UserHeader from "@/_components/user/UserHeader";
+import BottomButton from "@/_common/BottomButton";
+import Checkbox from "@/_common/Checkbox";
+import ConfirmModal from "@/_common/ConfirmModal";
+import { cn } from "@/_utils/commons";
 
 export default function Page() {
   const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);

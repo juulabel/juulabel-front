@@ -1,8 +1,9 @@
 "use client";
-import ShareHeader from "@/_components/share/detail/ShareHeader";
-import { useCommentStore } from "@/_store/tastingDetailStore";
+
 import clsx from "clsx";
 import React, { ReactNode } from "react";
+import ShareHeader from "@/_components/share/detail/ShareHeader";
+import { useCommentStore } from "@/_store/tastingDetailStore";
 
 export default function NoteDetailLayout({
   // children,

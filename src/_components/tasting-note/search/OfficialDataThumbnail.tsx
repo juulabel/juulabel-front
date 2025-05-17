@@ -1,10 +1,10 @@
 "use client";
 
-import Caption from "@/_common/Caption";
-import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
-import { IOfficialData } from "@/_types/tasting-note/officialData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
+import Caption from "@/_common/Caption";
+import { IOfficialData } from "@/_types/tasting-note/officialData";
 
 export default function OfficialDataThumbnail({
   id: alcoholicDrinksId,

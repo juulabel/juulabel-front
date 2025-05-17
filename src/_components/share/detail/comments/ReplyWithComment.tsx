@@ -1,12 +1,13 @@
 "use client";
-import useReplyComponentStore from "@/_store/replyComponentStore";
+
 import clsx from "clsx";
-import Comments from "./Comments";
 import { useEffect, useState } from "react";
-import ReplyList from "./ReplyList";
-import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
-import DeletedComments from "./DeletedComments";
 import useMemberStore from "@/_store/memberStore";
+import useReplyComponentStore from "@/_store/replyComponentStore";
+import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
+import Comments from "./Comments";
+import DeletedComments from "./DeletedComments";
+import ReplyList from "./ReplyList";
 
 export default function ReplyWithComment() {
   const { isCommentsPageVisible } = useCommentsPageStore();

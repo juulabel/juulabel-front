@@ -1,35 +1,35 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import Comments from "./Comments";
-import getNoteComments from "@/app/api/tasting-note/getNoteComments";
-import { useCookies } from "react-cookie";
 import {
   useInfiniteQuery,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { IComment, IReply } from "@/_types";
-import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
-import CommentsFooter from "./CommentsFooter";
+import clsx from "clsx";
+import React, { useEffect, useRef, useState } from "react";
+import { useCookies } from "react-cookie";
 import Skeleton from "react-loading-skeleton";
-import SkeletonUI from "./SkeletonUI";
-import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
-import ServerToast from "../../error/ServerToast";
+import { toast } from "react-toastify";
+import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
+import getLifeComments from "@/app/api/life/getLifeComment";
+import deleteNoteComments from "@/app/api/tasting-note/deleteNoteComments";
+import getNoteComments from "@/app/api/tasting-note/getNoteComments";
+import VisitorsModalContent from "@/_components/report/VisitorsModalContent";
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
-import useCommentsModalStore from "@/_store/tastingCommentModal";
-import deleteNoteComments from "@/app/api/tasting-note/deleteNoteComments";
-import { toast } from "react-toastify";
-import clsx from "clsx";
+import useMemberStore from "@/_store/memberStore";
 import useReplyComponentStore from "@/_store/replyComponentStore";
-import ReplyWithComment from "./ReplyWithComment";
+import useCommentsModalStore from "@/_store/tastingCommentModal";
+import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
+import { IComment, IReply } from "@/_types";
+import ServerToast from "../../error/ServerToast";
+import Comments from "./Comments";
+import CommentsFooter from "./CommentsFooter";
 import DeletedComments from "./DeletedComments";
 import ModifyDeleteSelectModalForComments from "./ModifyDeleteSelectModalForComments";
-import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
-import useMemberStore from "@/_store/memberStore";
-import getLifeComments from "@/app/api/life/getLifeComment";
-import VisitorsModalContent from "@/_components/report/VisitorsModalContent";
+import ReplyWithComment from "./ReplyWithComment";
+import SkeletonUI from "./SkeletonUI";
 
 interface Props {
   id: number;

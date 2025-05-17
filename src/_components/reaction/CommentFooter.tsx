@@ -1,11 +1,11 @@
-import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
-import { IApiResponse } from "@/_types";
-import { ILifeDetail, ILifeDetailInfo } from "@/_types/share";
-import postLifeLike from "@/app/api/life/postLifeLike";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useCookies } from "react-cookie";
 import { memo, useCallback } from "react";
+import { useCookies } from "react-cookie";
+import postLifeLike from "@/app/api/life/postLifeLike";
+import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
+import { ILifeDetail, ILifeDetailInfo } from "@/_types/share";
+import { IApiResponse } from "@/_types";
 
 interface Props {
   info: ILifeDetailInfo | undefined;

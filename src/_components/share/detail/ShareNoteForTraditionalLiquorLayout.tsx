@@ -1,15 +1,17 @@
 "use client";
-import { ReactNode, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import FilterDropdown from "@/_components/share/detail/FilterDropdown";
+
+import { useIsFetching } from "@tanstack/react-query";
 import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import FilterDropdown from "@/_components/share/detail/FilterDropdown";
 import ShareNoteForTraditionalLiquorFilter from "@/_components/share/detail/ShareNoteForTraditionalLiquorFilter";
 import useTastingNoteStore from "@/_store/tastingNoteCountState";
-import { useIsFetching } from "@tanstack/react-query";
-import Skeleton from "react-loading-skeleton";
 import useTraditionalLiquorList from "@/_utils/hooks/useTraditionalLiquorList";
-import { useRouter } from "next/navigation";
+
 interface Props {
   children: ReactNode;
   id: number;

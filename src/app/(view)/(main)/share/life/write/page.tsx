@@ -1,22 +1,23 @@
 "use client";
-import Checkbox from "@/_common/Checkbox";
-import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
-import { GoChevronRight } from "react-icons/go";
-import { Controller, useForm } from "react-hook-form";
-import Image from "next/image";
-import { cn } from "@/_utils/commons";
-import { MouseEvent, useEffect, useState, useCallback, Suspense } from "react";
-import { IoClose } from "react-icons/io5";
-import ImageIcon from "@/icons/image_icon.svg";
-import Modal from "@/_common/Modal";
-import { formInstance } from "@/app/api/axios";
-import { useCookies } from "react-cookie";
-import { toast } from "react-toastify";
+
 import axios from "axios";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import { MouseEvent, useEffect, useState, useCallback, Suspense } from "react";
+import { useCookies } from "react-cookie";
+import { Controller, useForm } from "react-hook-form";
+import { GoChevronRight } from "react-icons/go";
+import { IoClose } from "react-icons/io5";
+import { toast } from "react-toastify";
+import { formInstance } from "@/app/api/axios";
 import { urlToFile } from "@/app/api/life/urlToFile";
+import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
+import Checkbox from "@/_common/Checkbox";
 import Loading from "@/_common/Loading";
+import Modal from "@/_common/Modal";
+import { cn } from "@/_utils/commons";
 import { resizeImage } from "@/_utils/resizeImage";
+import ImageIcon from "@/icons/image_icon.svg";
 
 export interface Inputs {
   title: string;

@@ -1,16 +1,19 @@
 "use client";
+
 import { useInfiniteQuery } from "@tanstack/react-query";
-import getTastingNoteForAlcoholicDrinks from "@/app/api/tasting-note/getTastingNoteForAlcoholicDrinks";
+import Image from "next/image";
 import React, { useEffect } from "react";
-import ShareNoteThumbnailForGather from "@/_components/share/detail/ShareNoteThumbnailForGather";
-import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import getTastingNoteForAlcoholicDrinks from "@/app/api/tasting-note/getTastingNoteForAlcoholicDrinks";
+import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn";
 import Spinner from "@/_components/search/Spinner";
-import useTastingNoteStore from "@/_store/tastingNoteCountState";
+import ShareNoteThumbnailForGather from "@/_components/share/detail/ShareNoteThumbnailForGather";
 import ServerToast from "@/_components/share/error/ServerToast";
-import Image from "next/image";
-import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn"; // 기본 스타일 추가
+import useTastingNoteStore from "@/_store/tastingNoteCountState";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
+
+// 기본 스타일 추가
 
 interface Props {
   id: number;

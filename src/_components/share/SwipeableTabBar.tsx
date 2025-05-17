@@ -1,4 +1,5 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
+
 interface SwipeableTabBarProps {
   activeTabIndex: number;
   children: ReactNode[];

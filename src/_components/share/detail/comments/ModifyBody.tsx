@@ -1,6 +1,7 @@
 "use client";
 
-import useCommentsModalStore from "@/_store/tastingCommentModal";
+import Image from "next/image";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, {
   ChangeEvent,
   useEffect,
@@ -8,13 +9,12 @@ import React, {
   useState,
   MouseEvent,
 } from "react";
-import Image from "next/image";
-import useCommentsModify from "@/_utils/hooks/useCommentsModify";
-import ServerToast from "../../error/ServerToast";
-import useReplyComponentStore from "@/_store/replyComponentStore";
-import { useParams, usePathname, useRouter } from "next/navigation";
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
+import useReplyComponentStore from "@/_store/replyComponentStore";
+import useCommentsModalStore from "@/_store/tastingCommentModal";
+import useCommentsModify from "@/_utils/hooks/useCommentsModify";
+import ServerToast from "../../error/ServerToast";
 
 export default function ModifyBody() {
   const MAX_LENGTH = 600;

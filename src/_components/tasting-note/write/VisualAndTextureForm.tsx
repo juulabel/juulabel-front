@@ -1,19 +1,19 @@
-import BottomButton from "@/_common/BottomButton";
-import { useTastingNoteInformationStore } from "@/_store/tastingNote";
-import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
-import { cn } from "@/_utils/commons";
-import {
-  getColors,
-  getSensories,
-} from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
-import LevelSelector from "./LevelSelector";
+import {
+  getColors,
+  getSensories,
+} from "@/app/api/tasting-note/getTastingNoteFormInformation";
+import BottomButton from "@/_common/BottomButton";
+import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
+import { cn } from "@/_utils/commons";
 import { ISensoryLevelInfo } from "@/_types";
 import SensoryInfo from "../SensoryInfo";
+import LevelSelector from "./LevelSelector";
 
 interface ColorInfo {
   id: number;

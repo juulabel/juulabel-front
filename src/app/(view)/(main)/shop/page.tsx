@@ -1,7 +1,7 @@
 "use client";
 
-import ShopLayout from "@/_components/shop/ShopLayout";
 import Image from "next/image";
+import ShopLayout from "@/_components/shop/ShopLayout";
 
 export default function Notes() {
   return (

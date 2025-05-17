@@ -1,5 +1,5 @@
-import { cn } from "@/_utils/commons";
 import { cva } from "class-variance-authority";
+import { cn } from "@/_utils/commons";
 
 interface ICaption {
   children: React.ReactNode;

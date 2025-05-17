@@ -1,7 +1,8 @@
-import { ILifeList } from "@/_types/share";
-import { dateView } from "@/_utils/time";
 import Image from "next/image";
 import Link from "next/link";
+import { ILifeList } from "@/_types/share";
+import { dateView } from "@/_utils/time";
+
 export default function LifeThumbnail({
   title,
   content,

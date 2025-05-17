@@ -1,9 +1,9 @@
-import Navigation from "@/_common/Navigation";
-import FloatingBtn from "@/_components/share/FloatingBtn";
-import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
+import FloatingBtn from "@/_components/share/FloatingBtn";
+import Navigation from "@/_common/Navigation";
 
 export default function ShopLayout({ children }: { children: ReactNode }) {
   const { data: notificationCount = 0, isLoading } =

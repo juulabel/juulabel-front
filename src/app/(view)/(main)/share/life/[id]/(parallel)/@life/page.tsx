@@ -1,23 +1,24 @@
 "use client";
-import WarningModal from "@/_components/notification/WarningModal";
-import CommentFooter from "@/_components/reaction/CommentFooter";
-import EditModal from "@/_components/share/EditModal";
-import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
-import LifeViewer from "@/_components/share/life/LifeViewer";
-import getMyInfo from "@/app/api/auth/getMyInfo";
-import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
-import { getLifeDetail } from "@/app/api/life/getLifeDetail";
+
 import { useQueries } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import { Inputs } from "../../../write/page";
-import { SearchParamProps } from "@/_types";
-import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
-import useMemberStore from "@/_store/memberStore";
+import getMyInfo from "@/app/api/auth/getMyInfo";
+import { deleteDailyLife } from "@/app/api/life/deleteDailyLife";
+import { getLifeDetail } from "@/app/api/life/getLifeDetail";
+import WarningModal from "@/_components/notification/WarningModal";
+import CommentFooter from "@/_components/reaction/CommentFooter";
 import VisitorsModalContent from "@/_components/report/VisitorsModalContent";
+import EditModal from "@/_components/share/EditModal";
+import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
+import LifeViewer from "@/_components/share/life/LifeViewer";
 import ModalLayout from "@/_common/ModalLayout";
+import useMemberStore from "@/_store/memberStore";
+import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
+import { SearchParamProps } from "@/_types";
+import { Inputs } from "../../../write/page";
 
 function LifeDetailPage({ params }: SearchParamProps) {
   const router = useRouter();

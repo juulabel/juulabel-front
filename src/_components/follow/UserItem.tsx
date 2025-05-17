@@ -1,10 +1,10 @@
-import { RecommendedUser } from "@/_types/user/recommendedUser";
-import { useCallback, memo, useState } from "react";
 import Image from "next/image";
-import FollowButton from "@/_common/FollowButton";
-import { useCommonFollow } from "@/_utils/hooks/useFollow";
 import { usePathname, useRouter } from "next/navigation";
+import { useCallback, memo, useState } from "react";
+import FollowButton from "@/_common/FollowButton";
 import useMemberStore from "@/_store/memberStore";
+import { RecommendedUser } from "@/_types/user/recommendedUser";
+import { useCommonFollow } from "@/_utils/hooks/useFollow";
 
 const DEFAULT_PROFILE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/placeholders/profile/default_profile.png`;
 const BADGE_IMAGE = `${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kisa-badge.png`;

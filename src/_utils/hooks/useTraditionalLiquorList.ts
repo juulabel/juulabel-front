@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { IApiResponse } from "@/_types";
-import { IResponseTranditionalLiquor } from "@/_types/tasting-note/officialData";
-import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
 import { useEffect } from "react";
+import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
 import useVolumePriceStore from "@/_store/volumePriceStore";
+import { IResponseTranditionalLiquor } from "@/_types/tasting-note/officialData";
+import { IApiResponse } from "@/_types";
 
 export default function useTraditionalLiquorList(id: number) {
   const { setVolumePriceDetails } = useVolumePriceStore((state) => ({

@@ -1,5 +1,5 @@
-import { instance } from "../axios";
 import { Cookies } from "react-cookie";
+import { instance } from "../axios";
 
 export async function getUserProfile(id: string) {
   try {

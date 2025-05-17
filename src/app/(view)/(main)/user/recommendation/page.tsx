@@ -1,24 +1,24 @@
 "use client";
 
-import Loading from "@/_common/Loading";
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState, useMemo } from "react";
+import getMyInfo from "@/app/api/auth/getMyInfo";
+import { getSearchUser } from "@/app/api/user/getSearchUser";
+import { getUserRecommendation } from "@/app/api/user/getUserRecommendations";
 import FollowHeader from "@/_components/follow/FollowHeader";
 import RecommendedUserList from "@/_components/follow/RecommendedUserList";
-import { RecommendedUser } from "@/_types/user/recommendedUser";
-import { getUserRecommendation } from "@/app/api/user/getUserRecommendations";
-import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { useDebounce } from "@/_utils/useDebounce";
-import { getSearchUser } from "@/app/api/user/getSearchUser";
-import Image from "next/image";
-import { IMyInfo } from "@/_types";
-import getMyInfo from "@/app/api/auth/getMyInfo";
+import UserListSkeleton from "@/_components/follow/UserListSkeleton";
+import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import ServerToast from "@/_components/share/error/ServerToast";
 import SearchData from "@/_components/tasting-note/search/SearchData";
-import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
-import UserListSkeleton from "@/_components/follow/UserListSkeleton";
-import { alcoholType } from "@/_config/alcoholType";
+import Loading from "@/_common/Loading";
 import useMemberStore from "@/_store/memberStore";
+import { RecommendedUser } from "@/_types/user/recommendedUser";
+import { useDebounce } from "@/_utils/useDebounce";
+import { alcoholType } from "@/_config/alcoholType";
+import { IMyInfo } from "@/_types";
 
 // Memoize constant values
 const IMAGE_BASE_PATH = process.env.NEXT_PUBLIC_IMAGE_BASE_PATH;

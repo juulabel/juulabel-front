@@ -1,18 +1,18 @@
 "use client";
 
-import SearchData from "@/_components/tasting-note/search/SearchData";
-import { useDebounce } from "@/_utils/useDebounce";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { getRelatedSearchData } from "@/app/api/tasting-note/getRelatedSearchData";
 import AlcoholSlider from "@/_components/search/AlcoholSlider";
-import Navigation from "@/_common/Navigation";
-import SearchHeader from "@/_components/search/SearchHeader";
-import RelatedSearchResult from "@/_components/search/RelatedSearchResult";
-import RecentSearchList from "@/_components/search/RecentSearchList";
-import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn";
 import AlcoholTypeData from "@/_components/search/AlcoholTypeData";
+import RecentSearchList from "@/_components/search/RecentSearchList";
+import RelatedSearchResult from "@/_components/search/RelatedSearchResult";
+import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn";
+import SearchHeader from "@/_components/search/SearchHeader";
 import OfficialDataSearchResult from "@/_components/tasting-note/search/OfficalDataSearchResult";
+import SearchData from "@/_components/tasting-note/search/SearchData";
+import Navigation from "@/_common/Navigation";
 import { IAlcoholTypeTab } from "@/_types/search/alcoholTypeTab";
+import { useDebounce } from "@/_utils/useDebounce";
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState("");

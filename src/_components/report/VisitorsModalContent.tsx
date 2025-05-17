@@ -1,9 +1,9 @@
 "use client";
 
-import Button from "@/_common/ui/Button";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import Button from "@/_common/ui/Button";
 
 type ReportType = "시음노트 댓글" | "시음노트" | "일상생활" | "일상생활 댓글";
 

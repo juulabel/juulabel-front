@@ -1,7 +1,8 @@
 "use client";
-import { cn } from "@/_utils/commons";
+
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { cn } from "@/_utils/commons";
 
 interface Props {
   layoutId?: string;

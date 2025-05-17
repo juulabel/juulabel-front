@@ -1,16 +1,17 @@
 "use client";
-import React, { MouseEvent } from "react";
-import Image from "next/image";
-import { IReply } from "@/_types";
-import { dateView } from "@/_utils/time";
-import useCommentsLike from "@/_utils/hooks/useCommentsLike";
-import clsx from "clsx";
-import useReplyComponentStore from "@/_store/replyComponentStore";
+
 import { useQuery } from "@tanstack/react-query";
-import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
-import { useCookies } from "react-cookie";
-import useCommentsModalStore from "@/_store/tastingCommentModal";
+import clsx from "clsx";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import React, { MouseEvent } from "react";
+import { useCookies } from "react-cookie";
+import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
+import useReplyComponentStore from "@/_store/replyComponentStore";
+import useCommentsModalStore from "@/_store/tastingCommentModal";
+import useCommentsLike from "@/_utils/hooks/useCommentsLike";
+import { dateView } from "@/_utils/time";
+import { IReply } from "@/_types";
 
 interface Props {
   tastingNoteId: number;

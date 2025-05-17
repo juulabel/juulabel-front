@@ -1,12 +1,12 @@
 "use client";
 
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getLifeList } from "@/app/api/life/getLifeList";
 import LifeThumbnail from "@/_components/life/LifeThumbnail";
 import Spinner from "@/_components/search/Spinner";
 import ServerToast from "@/_components/share/error/ServerToast";
 import LifeListSkeletonList from "@/_components/share/life/SkeletonUIForLifeList";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
-import { getLifeList } from "@/app/api/life/getLifeList";
-import { useInfiniteQuery } from "@tanstack/react-query";
 
 export default function Lifes() {
   const {

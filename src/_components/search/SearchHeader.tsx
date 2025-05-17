@@ -1,6 +1,6 @@
-import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 import Image from "next/image";
 import Link from "next/link";
+import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 
 export default function SearchHeader() {
   const { data: notificationCount = 0, isLoading } =

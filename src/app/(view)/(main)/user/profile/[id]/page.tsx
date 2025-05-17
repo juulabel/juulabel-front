@@ -1,21 +1,21 @@
 "use client";
 
-import FollowButton from "@/_common/FollowButton";
-import UserHeader from "@/_components/user/UserHeader";
-import UserProfileHeader from "@/_components/user/UserProfileHeader";
-import UserProfileStats from "@/_components/user/UserProfileStats";
-import UserProfileContent from "@/_components/user/UserProfileContent";
-import SkeletonUIForUserProfile from "@/_components/share/SkeletonUIForUserProfile";
-import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
-import { getUserProfile } from "@/app/api/user/getUserProfile";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
-import SwipeableTabBar from "@/_components/share/SwipeableTabBar";
-import { useProfileFollow } from "@/_utils/hooks/useFollow";
-import getMyInfo from "@/app/api/auth/getMyInfo";
-import ServerToast from "@/_components/share/error/ServerToast";
 import { toast } from "react-toastify";
+import getMyInfo from "@/app/api/auth/getMyInfo";
+import { getUserProfile } from "@/app/api/user/getUserProfile";
+import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
+import SkeletonUIForUserProfile from "@/_components/share/SkeletonUIForUserProfile";
+import SwipeableTabBar from "@/_components/share/SwipeableTabBar";
+import ServerToast from "@/_components/share/error/ServerToast";
+import UserHeader from "@/_components/user/UserHeader";
+import UserProfileContent from "@/_components/user/UserProfileContent";
+import UserProfileHeader from "@/_components/user/UserProfileHeader";
+import UserProfileStats from "@/_components/user/UserProfileStats";
+import FollowButton from "@/_common/FollowButton";
+import { useProfileFollow } from "@/_utils/hooks/useFollow";
 
 export default function Page({
   params: { id: userId },

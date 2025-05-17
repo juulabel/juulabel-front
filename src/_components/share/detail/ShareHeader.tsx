@@ -1,13 +1,15 @@
 "use client";
-import ModalLayout from "@/_common/ModalLayout";
 
-import OwnerModalContent from "@/_components/report/OwnerModalContent";
-import VisitorsModalContent from "@/_components/report/VisitorsModalContent";
-import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
 import clsx from "clsx";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import OwnerModalContent from "@/_components/report/OwnerModalContent";
+import VisitorsModalContent from "@/_components/report/VisitorsModalContent";
+import ModalLayout from "@/_common/ModalLayout";
+import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
+
+// import { toast } from "react-toastify";
 
 export default function ShareHeader() {
   const router = useRouter();

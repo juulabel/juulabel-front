@@ -1,9 +1,9 @@
 "use client";
 
 import clsx from "clsx";
-import { parseNumberOfDefault } from "@/_utils/commons";
 import React from "react";
 import useVolumePriceStore from "@/_store/volumePriceStore";
+import { parseNumberOfDefault } from "@/_utils/commons";
 
 interface Props {
   regularPrice: number;

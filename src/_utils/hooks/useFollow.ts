@@ -1,9 +1,9 @@
-import { IPaginatedData } from "@/_types";
-import { RecommendedUser } from "@/_types/user/recommendedUser";
-import { deleteFollower } from "@/app/api/user/follow/deleteFollower";
-import { followUser } from "@/app/api/user/follow/followUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { deleteFollower } from "@/app/api/user/follow/deleteFollower";
+import { followUser } from "@/app/api/user/follow/followUser";
+import { RecommendedUser } from "@/_types/user/recommendedUser";
+import { IPaginatedData } from "@/_types";
 
 export function useProfileFollow(
   userId: string,

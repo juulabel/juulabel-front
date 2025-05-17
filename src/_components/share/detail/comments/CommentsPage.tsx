@@ -1,10 +1,11 @@
 "use client";
-import { useCommentStore } from "@/_store/tastingDetailStore";
-import CommentsBody from "./CommentsBody";
-import CommentsHeader from "./CommentsHeader";
+
 import clsx from "clsx";
 import { useEffect } from "react";
 import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
+import { useCommentStore } from "@/_store/tastingDetailStore";
+import CommentsBody from "./CommentsBody";
+import CommentsHeader from "./CommentsHeader";
 
 interface Props {
   id: number;

@@ -1,23 +1,23 @@
+import clsx from "clsx";
+import Image from "next/image";
+import { Fragment } from "react";
+import { fetchLiquor } from "@/app/api/getTraditioanlLiquorList";
+import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
+import Separator from "@/_components/share/Separator";
 import MoonRating from "@/_components/share/detail/MoonRating";
 import ShareAboutAlcoholReview from "@/_components/share/detail/ShareAboutAlcoholReview";
 import ShareAboutTheSmellOfAlcohol from "@/_components/share/detail/ShareAboutTheSmellOfAlcohol";
 import ShareTraditionalLiquor from "@/_components/share/detail/ShareTraditionalLiquor";
 import TraditionalLiquorBackground from "@/_components/share/detail/TraditionalLiquorBackground";
-import ServerToast from "@/_components/share/error/ServerToast";
-import Separator from "@/_components/share/Separator";
-import RadarChart from "@/_components/tasting-note/write/HexagonChart";
-import { SearchParamProps } from "@/_types";
-import { DrinkApiResponse } from "@/_types/tasting-note/drink";
-import { fetchLiquor } from "@/app/api/getTraditioanlLiquorList";
-import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
-import clsx from "clsx";
-import Image from "next/image";
-import { Fragment } from "react";
-import ImageRouteBackButton from "./_component/ImageRouteBackButton";
 import TraditionalLiquorCapacityCell from "@/_components/share/detail/TraditionalLiquorCapacityCell";
 import TraditionalLiquorDetailPrice from "@/_components/share/detail/TraditionalLiquorDetailPrice";
+import ServerToast from "@/_components/share/error/ServerToast";
+import RadarChart from "@/_components/tasting-note/write/HexagonChart";
+import { DrinkApiResponse } from "@/_types/tasting-note/drink";
+import { SearchParamProps } from "@/_types";
 import ClientRadarChart from "./_component/ClientRadarChart";
 import FilteringRouteButton from "./_component/FilteringRouteButton";
+import ImageRouteBackButton from "./_component/ImageRouteBackButton";
 
 export async function generateStaticParams() {
   const { result } = await fetchLiquor();
