@@ -62,4 +62,4 @@ jobs:
           --application-name ${{ secrets.CODEDEPLOY_APPICATION_NAME }}
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name ${{ secrets.CODEDEPLOY_GROUP_NAME }}
-          --s3-location bucket=${{ secrets.S3_BUCKET }}, bundleType=zip, key=juulabel-front-qa.zip
+          --s3-location bucket=${{ secrets.S3_BUCKET }},key=juulabel-front-qa.zip,bundleType=zip
