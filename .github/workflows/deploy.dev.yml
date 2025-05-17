@@ -16,6 +16,7 @@ jobs:
       - name: Create .env file
         run: |
           touch ${{ env.ENV_PATH }}
+          echo ENV_VERSION='dev' >> ${{ env.ENV_PATH }}
           echo NEXT_PUBLIC_API_MOCKING=${{ secrets.NEXT_PUBLIC_API_MOCKING }} >> ${{ env.ENV_PATH }}
           echo NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }} >> ${{ env.ENV_PATH }}
           echo NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI }} >> ${{ env.ENV_PATH }}
@@ -55,3 +56,11 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp ./juulabel-front-qa.zip s3://${{ secrets.S3_BUCKET }}/juulabel-front-qa.zip
+
+      - name: Deploy to EC2
+        run: |
+          aws deploy create-deployment
+            --application-name juulabel-front
+            --deployment-config-name CodeDeployDefault.AllAtOnce
+            --deployment-group-name juulabel-front
+            --s3-location bucket=${{ secrets.S3_BUCKET }}, bundleType=zip, key=juulabel-front-qa.zip

@@ -3,13 +3,15 @@ os:
   - linux
 files:
   - source: /
-    destination: /home/juulabel/
+    destination: /home/juulabel-front
 file_exists_behavior: OVERWRITE
+permissions:
+  - object: /home/juulabel-front
+    pattern: "**"
+    owner: root
+    group: root
+    mode: 755
 hooks:
-  BeforeInstall:
-    - location: scripts/before_install.sh
-      timeout: 300
-      runas: root
   AfterInstall:
     - location: scripts/after_install.sh
       timeout: 300
