@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState, useCallback } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import type { Swiper as SwiperType } from "swiper";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 interface SwipeableTabViewProps {
   activeIndex: number;

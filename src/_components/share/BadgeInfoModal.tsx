@@ -1,6 +1,6 @@
-import { cn } from "@/_utils/commons";
 import Image from "next/image";
 import { useRef, useEffect, useCallback } from "react";
+import { cn } from "@/_utils/commons";
 
 interface BadgeInfoModalProps {
   setIsBadgeInfoModalOpen: (isOpen: boolean) => void;

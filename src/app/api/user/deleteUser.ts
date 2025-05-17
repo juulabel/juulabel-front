@@ -1,6 +1,6 @@
+import { headers } from "next/headers";
 import { instance } from "@/app/api/axios";
 import requests from "../requests";
-import { headers } from "next/headers";
 
 export async function deleteUser({
   accessToken,

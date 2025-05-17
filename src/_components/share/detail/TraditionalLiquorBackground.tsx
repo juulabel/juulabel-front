@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-
-import bgImage1 from "@/icons/images/traditional_liquor_bg.jpg";
+import React from "react";
 import bgImage2 from "@/icons/images/traditional_liquor_bg2.jpg";
+import bgImage1 from "@/icons/images/traditional_liquor_bg.jpg";
 
 const bgImages = [bgImage1, bgImage2];
 

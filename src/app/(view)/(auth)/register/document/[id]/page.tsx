@@ -1,10 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import TopHeader from "@/_common/TopHeader";
 import axios from "axios";
+import { useParams } from "next/navigation";
 import { Fragment } from "react";
+import TopHeader from "@/_common/TopHeader";
 
 export default function Page() {
   const { id } = useParams();

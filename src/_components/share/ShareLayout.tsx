@@ -1,10 +1,10 @@
-import Navigation from "@/_common/Navigation";
-import FloatingBtn from "@/_components/share/FloatingBtn";
-import ShareTabButton from "@/_components/share/ShareTabButton";
-import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useFetchNotificationCount } from "@/app/api/notification/useNotifications";
+import FloatingBtn from "@/_components/share/FloatingBtn";
+import ShareTabButton from "@/_components/share/ShareTabButton";
+import Navigation from "@/_common/Navigation";
 
 export default function ShareLayout({ children }: { children: ReactNode }) {
   const { data: notificationCount = 0, isLoading } =

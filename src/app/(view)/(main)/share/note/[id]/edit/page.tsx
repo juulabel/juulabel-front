@@ -1,7 +1,11 @@
 "use client";
 
-import Loading from "@/_common/Loading";
-import TopHeader from "@/_common/TopHeader";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useCookies } from "react-cookie";
+import { getAlcoholType } from "@/app/api/common/getAlcoholType";
+import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
 import ShareWriteTopHeader from "@/_components/share/ShareWriteTopHeader";
 import CommentAndRatingForm from "@/_components/tasting-note/write/CommentAndRatingForm";
 import FlavorForm from "@/_components/tasting-note/write/FlavorForm";
@@ -9,16 +13,12 @@ import OfficialBasicInformationForm from "@/_components/tasting-note/write/Offic
 import ScentForm from "@/_components/tasting-note/write/ScentForm";
 import UnOfficialBasicInformationForm from "@/_components/tasting-note/write/UnOfficialBasicInformationForm";
 import VisualAndTextureForm from "@/_components/tasting-note/write/VisualAndTextureForm";
+import Loading from "@/_common/Loading";
+import TopHeader from "@/_common/TopHeader";
 import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
-import { ITastingNoteWriteRequest } from "@/_types";
 import { cn } from "@/_utils/commons";
 import useTastingNoteDataForEdit from "@/_utils/hooks/useTastingNoteDataForEdit";
-import { getAlcoholType } from "@/app/api/common/getAlcoholType";
-import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
-import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
-import { useCookies } from "react-cookie";
+import { ITastingNoteWriteRequest } from "@/_types";
 
 interface IAlcoholType {
   id: number;

@@ -1,6 +1,6 @@
-import { ITastingNoteRequest } from "@/_types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { ITastingNoteRequest } from "@/_types";
 
 interface TastingNoteState {
   tastingNoteRequest: ITastingNoteRequest | null;

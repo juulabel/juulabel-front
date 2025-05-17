@@ -1,9 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
 import Caption from "@/_common/Caption";
 import { INoteThumbnail } from "@/_types/share";
 import { dateViewKoreanFull } from "@/_utils/time";
-import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
 
 export default function ShareNoteThumbnailForGather({
   TastingNoteId,

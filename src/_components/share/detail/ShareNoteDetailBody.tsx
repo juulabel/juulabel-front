@@ -1,24 +1,25 @@
 "use client";
-import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
-import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
+
 import { useQueries } from "@tanstack/react-query";
+import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import ServerToast from "../error/ServerToast";
-import LikeCommentFooter from "../LikeCommentFooter";
-import ShareDetailNoteImageBox from "./ShareDetailNoteImageBox";
-import ShareDetailReviewBox from "./ShareDetailReviewBox";
-import ShareNoteInfoBox from "./ShareNoteInfoBox";
-import SkeletonUI from "./SkeletonUI";
-import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
-import clsx from "clsx";
+import { toast } from "react-toastify";
+import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
+import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
+import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn";
 import useMemberStore from "@/_store/memberStore";
+import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
 import {
   useAuthorCheckStore,
   useCommentCountStore,
 } from "@/_store/tastingDetailStore";
-import ScrollUpFloatingBtn from "@/_components/search/ScrollUpFloatingBtn";
-import { toast } from "react-toastify";
+import LikeCommentFooter from "../LikeCommentFooter";
+import ServerToast from "../error/ServerToast";
+import ShareDetailNoteImageBox from "./ShareDetailNoteImageBox";
+import ShareDetailReviewBox from "./ShareDetailReviewBox";
+import ShareNoteInfoBox from "./ShareNoteInfoBox";
+import SkeletonUI from "./SkeletonUI";
 
 interface Props {
   id: number;

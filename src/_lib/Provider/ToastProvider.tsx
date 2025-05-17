@@ -1,9 +1,11 @@
 "use client";
 
-import { cn } from "@/_utils/commons";
 import { usePathname } from "next/navigation";
 import { Slide, ToastContainer, Zoom } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Make sure you import default styles
+import "react-toastify/dist/ReactToastify.css";
+import { cn } from "@/_utils/commons";
+
+// Make sure you import default styles
 
 interface IToastProvider {
   children: React.ReactNode;

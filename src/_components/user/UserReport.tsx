@@ -1,11 +1,11 @@
 "use client";
 
-import Button from "@/_common/ui/Button";
-import { useReportStore } from "@/_store/useReportStore";
-import { getUserProfile } from "@/app/api/user/getUserProfile";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { getUserProfile } from "@/app/api/user/getUserProfile";
+import Button from "@/_common/ui/Button";
+import { useReportStore } from "@/_store/useReportStore";
 
 interface ReportModalContentProps {
   handleModalClose: () => void;

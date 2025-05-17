@@ -1,7 +1,7 @@
-import { dateViewKoreanFull } from "@/_utils/time";
 import Image from "next/image";
-import LifeCarousel from "./LifeCarousel";
 import Link from "next/link";
+import { dateViewKoreanFull } from "@/_utils/time";
+import LifeCarousel from "./LifeCarousel";
 
 interface ILifeViewer {
   title: string;

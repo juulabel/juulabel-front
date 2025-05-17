@@ -1,8 +1,9 @@
 "use client";
-import { cn } from "@/_utils/commons";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { cn } from "@/_utils/commons";
 
 export default function FloatingBtn() {
   const [clicked, setClicked] = useState<boolean>(false);

@@ -1,21 +1,21 @@
 "use client";
 
-import React, { Fragment, useEffect } from "react";
-import Image from "next/image";
-import clsx from "clsx";
-import RadarChart from "@/_components/tasting-note/write/HexagonChart";
-import ShareAboutTheSmellOfAlcohol from "./ShareAboutTheSmellOfAlcohol";
-import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
-import MoonRating from "./MoonRating";
-import Separator from "../Separator";
 import { useQuery } from "@tanstack/react-query";
-import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
-import { mapImageUrl, parseNumberOfDefault } from "@/_utils/commons";
-import { IApiResponse } from "@/_types";
-import { IResponseTranditionalLiquor } from "@/_types/tasting-note/officialData";
+import clsx from "clsx";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import React, { Fragment, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
+import RadarChart from "@/_components/tasting-note/write/HexagonChart";
+import { IResponseTranditionalLiquor } from "@/_types/tasting-note/officialData";
+import { mapImageUrl, parseNumberOfDefault } from "@/_utils/commons";
+import { IApiResponse } from "@/_types";
+import Separator from "../Separator";
+import MoonRating from "./MoonRating";
+import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
+import ShareAboutTheSmellOfAlcohol from "./ShareAboutTheSmellOfAlcohol";
 
 export default function ShareTraditionalLiquorSkeletonUI() {
   const mediumTextStyle = "text-[16px] font-normal text-cool-grayscale-700";

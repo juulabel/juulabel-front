@@ -1,9 +1,9 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import BottomButton from "@/_common/BottomButton";
 import { useTastingNoteInformationStore } from "@/_store/tastingNote";
 import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
-import { usePathname } from "next/navigation";
 
 interface IOfficialBasicInformationForm {
   alcoholicDrinksId: string;

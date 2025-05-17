@@ -1,13 +1,13 @@
 "use client";
 
-import ModalLayout from "@/_common/ModalLayout";
-import { cn } from "@/_utils/commons";
-import { GoChevronLeft } from "react-icons/go";
-import UserReport from "./UserReport";
-import { useState } from "react";
-import Image from "next/image";
 import clsx from "clsx";
+import Image from "next/image";
+import { useState } from "react";
+import { GoChevronLeft } from "react-icons/go";
+import ModalLayout from "@/_common/ModalLayout";
 import { useAuthorCheckStore } from "@/_store/tastingDetailStore";
+import { cn } from "@/_utils/commons";
+import UserReport from "./UserReport";
 
 interface IUserHeader {
   title: string;

@@ -1,9 +1,10 @@
 "use client";
+
+import clsx from "clsx";
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import ReplyInput from "./ReplyInput";
-import Image from "next/image";
 import ReplyList from "./ReplyList";
-import clsx from "clsx";
 
 interface Props {
   replyOpen: boolean;

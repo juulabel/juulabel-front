@@ -1,6 +1,6 @@
 import { Fragment } from "react";
-import Separator from "../Separator";
 import { flavorMap } from "@/_utils/commons";
+import Separator from "../Separator";
 
 interface Props {
   flavorLevelIds: number[];

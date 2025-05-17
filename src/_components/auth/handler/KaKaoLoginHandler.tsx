@@ -1,14 +1,14 @@
 "use client";
 
-import { useRegisterStore } from "@/_store/register";
-import { instance } from "@/app/api/axios";
-import requests from "@/app/api/requests";
+import { isAxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
-import LoginLoading from "./LoginLoading";
 import { toast } from "react-toastify";
-import { isAxiosError } from "axios";
+import { instance } from "@/app/api/axios";
+import requests from "@/app/api/requests";
+import { useRegisterStore } from "@/_store/register";
+import LoginLoading from "./LoginLoading";
 
 export default function KaKaoLoginHandler() {
   const { setEmail, setProvider, setProviderId } = useRegisterStore();

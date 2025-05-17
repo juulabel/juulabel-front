@@ -1,8 +1,8 @@
 "use client";
 
-import { subscribeToNotifications } from "@/app/api/notification/useNotifications";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { subscribeToNotifications } from "@/app/api/notification/useNotifications";
 
 export default function NotificationProvider({
   children,

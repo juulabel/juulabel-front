@@ -1,5 +1,7 @@
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css"; // 기본 스타일 추가
+import "react-loading-skeleton/dist/skeleton.css";
+
+// 기본 스타일 추가
 
 export default function SkeletonUI() {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
-import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 
 interface IRelatedSearchResult {
   searchedData: string;

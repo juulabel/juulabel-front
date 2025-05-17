@@ -1,12 +1,12 @@
 "use client";
 
-import Loading from "@/_common/Loading";
-import AlcoholSearchDataThumbnail from "@/_components/search/AlcoholSearchDataThumbnailThumbnail";
-import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
-import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import AlcoholSearchDataThumbnail from "@/_components/search/AlcoholSearchDataThumbnailThumbnail";
+import HeaderWithButton from "@/_components/share/life/HeaderWithButton";
+import Loading from "@/_common/Loading";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 
 export default function Page() {
   const [cookies, setCookie] = useCookies(["accessToken"]);

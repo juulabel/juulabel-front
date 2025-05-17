@@ -1,24 +1,25 @@
 "use client";
-import clsx from "clsx";
-import React, { useEffect } from "react";
-import Image from "next/image";
-import { useState } from "react";
+
 import {
   QueryFunctionContext,
   useInfiniteQuery,
   useQuery,
 } from "@tanstack/react-query";
+import clsx from "clsx";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
+import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
+import getDailyLifeReply from "@/app/api/life/getDailyLifeReply";
 import getReply from "@/app/api/tasting-note/getReply";
+import useMemberStore from "@/_store/memberStore";
 import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 import { IReply } from "@/_types";
-import Reply from "./Reply";
-import getCurrentUserInfo from "@/app/api/common/getCurrentUserInfo";
-import { useCookies } from "react-cookie";
 import DeletedComments from "./DeletedComments";
 import DeletedCommentsForReply from "./DeletedCommentsForReply";
-import useMemberStore from "@/_store/memberStore";
-import { usePathname } from "next/navigation";
-import getDailyLifeReply from "@/app/api/life/getDailyLifeReply";
+import Reply from "./Reply";
 
 interface Props {
   parentCommentId: number;

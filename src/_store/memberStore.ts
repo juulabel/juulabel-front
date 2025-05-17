@@ -1,5 +1,5 @@
-import { IMyInfo } from "@/_types";
 import { create } from "zustand";
+import { IMyInfo } from "@/_types";
 
 interface MemberState {
   memberInfo: IMyInfo | null;

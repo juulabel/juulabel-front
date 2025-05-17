@@ -1,5 +1,5 @@
-import ModifyBody from "@/_components/share/detail/comments/ModifyBody";
 import Image from "next/image";
+import ModifyBody from "@/_components/share/detail/comments/ModifyBody";
 
 export default function CommentsModifyComments() {
   return (

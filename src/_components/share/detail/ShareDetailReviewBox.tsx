@@ -1,15 +1,16 @@
 "use client";
+
 import React, { Fragment, ReactNode, useEffect, useState } from "react";
-import HexagonChart from "../../tasting-note/write/HexagonChart";
-import MoonRating from "./MoonRating";
-import { ITastingNoteDetailInfo } from "@/_types";
 import {
   flavorMap,
   flavorScoreMap,
   scentMap,
   sensoryMap,
 } from "@/_utils/commons";
+import { ITastingNoteDetailInfo } from "@/_types";
+import HexagonChart from "../../tasting-note/write/HexagonChart";
 import RadarChart from "../../tasting-note/write/HexagonChart";
+import MoonRating from "./MoonRating";
 import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
 
 interface Props {

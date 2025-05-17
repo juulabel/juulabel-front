@@ -1,16 +1,16 @@
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+import Script from "next/script";
+import { Suspense } from "react";
+import "react-toastify/dist/ReactToastify.css";
 import NotificationProvider from "@/_components/notification/NotificationProvider";
+import GTMRouteTracker from "@/_common/GTMRouteTracker";
+import Loading from "@/_common/Loading";
 import { AuthProvider } from "@/_lib/Provider/AuthProvider";
 import QueryProvider from "@/_lib/Provider/QueryProvider";
 import ToastProvider from "@/_lib/Provider/ToastProvider";
-import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
-import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
-import Script from "next/script";
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
-import GTMRouteTracker from "@/_common/GTMRouteTracker";
-import { Suspense } from "react";
-import Loading from "@/_common/Loading";
 
 const pretendard = localFont({
   src: "fonts/PretendardVariable.woff2",

@@ -1,16 +1,17 @@
 "use client";
+
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { getLifeDetail } from "@/app/api/life/getLifeDetail";
+import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
 import useReplyComponentStore from "@/_store/replyComponentStore";
 import { useCommentsPageStore } from "@/_store/tastingCommentsPageStore";
 import {
   useCommentCountStore,
   useCommentStore,
 } from "@/_store/tastingDetailStore";
-import { getLifeDetail } from "@/app/api/life/getLifeDetail";
-import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 interface Props {
   isLife?: boolean;

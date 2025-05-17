@@ -1,9 +1,9 @@
-import BottomButton from "@/_common/BottomButton";
-import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
-import { getFlavors } from "@/app/api/tasting-note/getTastingNoteFormInformation";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { getFlavors } from "@/app/api/tasting-note/getTastingNoteFormInformation";
+import BottomButton from "@/_common/BottomButton";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 import { useTastingNoteInformationStore } from "../../../_store/tastingNote";
 import RadarChart from "./HexagonChart";
 import LevelSelector from "./LevelSelector";

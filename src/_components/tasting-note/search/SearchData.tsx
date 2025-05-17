@@ -1,5 +1,5 @@
-import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 import Image from "next/image";
+import saveRecentSearchDataToLocalStorage from "@/_utils/saveRecentSearchDataToLocalStorage";
 
 interface ISearchData {
   searchQuery: string;

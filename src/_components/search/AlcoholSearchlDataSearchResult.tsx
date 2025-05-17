@@ -1,10 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
 import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import AlcoholSearchData from "./AlcoholSearchData";
-import Image from "next/image";
 
 interface IAlcoholSearchDataSearchResult {
   query: string;

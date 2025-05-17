@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
-import LifeCarousel from "../life/LifeCarousel";
-import Image from "next/image";
-import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
-import { useCookies } from "react-cookie";
 import { useQuery } from "@tanstack/react-query";
-import { ITastingNoteDetailInfo } from "@/_types";
-import { dateViewKoreanFull } from "@/_utils/time";
-import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
+import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
+import { placeholderThumbnailProvider } from "@/_components/tasting-note/NoteThumbnail";
 import FullScreenImageCarousel from "@/_common/FullScreenImageCarousel";
+import { dateViewKoreanFull } from "@/_utils/time";
+import { ITastingNoteDetailInfo } from "@/_types";
+import LifeCarousel from "../life/LifeCarousel";
 
 interface Props {
   info: ITastingNoteDetailInfo | undefined;

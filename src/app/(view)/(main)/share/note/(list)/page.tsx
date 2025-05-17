@@ -1,12 +1,12 @@
 "use client";
 
-import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
-import Spinner from "@/_components/search/Spinner";
-import ServerToast from "@/_components/share/error/ServerToast";
-import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
-import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
-import getNoteList from "@/app/api/tasting-note/getNoteList";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import getNoteList from "@/app/api/tasting-note/getNoteList";
+import Spinner from "@/_components/search/Spinner";
+import SkeletomUIForList from "@/_components/share/SkeletonUIForList";
+import ServerToast from "@/_components/share/error/ServerToast";
+import NoteThumbnail from "@/_components/tasting-note/NoteThumbnail";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 
 export default function Notes() {
   const {

@@ -1,14 +1,14 @@
 "use client";
 
-import Loading from "@/_common/Loading";
-import UserHeader from "@/_components/user/UserHeader";
-import getMyInfo from "@/app/api/auth/getMyInfo";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import getMyInfo from "@/app/api/auth/getMyInfo";
 import EditMyInfo from "@/_components/user/EditMyInfo";
-import ConfirmModal from "@/_common/ConfirmModal";
 import MyInfoBody from "@/_components/user/MyInfoBody";
+import UserHeader from "@/_components/user/UserHeader";
+import ConfirmModal from "@/_common/ConfirmModal";
+import Loading from "@/_common/Loading";
 import { IMyInfo } from "@/_types";
 
 export default function Page() {

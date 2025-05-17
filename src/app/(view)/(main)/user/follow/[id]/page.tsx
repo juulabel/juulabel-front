@@ -1,25 +1,25 @@
 "use client";
 
 import { useInfiniteQuery, useQueries } from "@tanstack/react-query";
-import { getFollowee } from "@/app/api/user/follow/getFollowee";
-import UserHeader from "@/_components/user/UserHeader";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import getMyInfo from "@/app/api/auth/getMyInfo";
+import { getFollowee } from "@/app/api/user/follow/getFollowee";
+import { getFollower } from "@/app/api/user/follow/getFollower";
 import { getUserProfile } from "@/app/api/user/getUserProfile";
 import RecommendedUserList from "@/_components/follow/RecommendedUserList";
-import ServerToast from "@/_components/share/error/ServerToast";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import UserListSkeleton from "@/_components/follow/UserListSkeleton";
+import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
 import SwipeableTabBar from "@/_components/share/SwipeableTabBar";
 import SwipeableTabView from "@/_components/share/SwipeableTabView";
-import { getFollower } from "@/app/api/user/follow/getFollower";
-import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
-import BadgeInfoModal from "@/_components/share/BadgeInfoModal";
-import getMyInfo from "@/app/api/auth/getMyInfo";
-import UserListSkeleton from "@/_components/follow/UserListSkeleton";
+import ServerToast from "@/_components/share/error/ServerToast";
+import UserHeader from "@/_components/user/UserHeader";
 import ConfirmModal from "@/_common/ConfirmModal";
-import { useDeleteFollow } from "@/_utils/hooks/useFollow";
+import Loading from "@/_common/Loading";
 import useMemberStore from "@/_store/memberStore";
 import { RecommendedUser } from "@/_types/user/recommendedUser";
-import Loading from "@/_common/Loading";
+import { useDeleteFollow } from "@/_utils/hooks/useFollow";
+import useInfiniteScroll from "@/_utils/hooks/useInfiniteScroll";
 
 export default function FollowPage({
   params: { id: userId },

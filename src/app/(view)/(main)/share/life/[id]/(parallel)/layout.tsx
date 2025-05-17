@@ -1,6 +1,7 @@
 "use client";
-import { useCommentStore } from "@/_store/tastingDetailStore";
+
 import React, { ReactNode } from "react";
+import { useCommentStore } from "@/_store/tastingDetailStore";
 
 export default function LifeDetailLayout({
   // children,

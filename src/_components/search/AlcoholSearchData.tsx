@@ -1,9 +1,9 @@
 "use client";
 
-import OfficialDataThumbnail from "./AlcoholSearchDataThumbnailThumbnail";
-import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import { useMemo } from "react";
+import { IAlcoholSearchData } from "@/_types/search/alcoholSearchData";
 import AlcoholTypeLoader from "../search/AlcoholTypeLoader";
+import OfficialDataThumbnail from "./AlcoholSearchDataThumbnailThumbnail";
 import Spinner from "./Spinner";
 
 interface AlcoholSearchDataProps {

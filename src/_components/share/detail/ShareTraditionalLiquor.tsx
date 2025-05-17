@@ -1,26 +1,26 @@
 "use client";
 
-import React, { Fragment, useEffect } from "react";
-import Image from "next/image";
-import clsx from "clsx";
-import RadarChart from "@/_components/tasting-note/write/HexagonChart";
-import ShareAboutTheSmellOfAlcohol from "./ShareAboutTheSmellOfAlcohol";
-import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
-import MoonRating from "./MoonRating";
-import Separator from "../Separator";
 import { useQuery } from "@tanstack/react-query";
-import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
-import { mapImageUrl, parseNumberOfDefault } from "@/_utils/commons";
-import { IApiResponse } from "@/_types";
-import { IResponseTranditionalLiquor } from "@/_types/tasting-note/officialData";
+import clsx from "clsx";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import ShareTraditionalLiquorSkeletonUI from "./ShareTraditionalLiquorSkeletonUI";
-import TraditionalLiquorCapacityCell from "@/_components/share/detail/TraditionalLiquorCapacityCell";
-import useVolumePriceStore from "@/_store/volumePriceStore";
-import TraditionalLiquorDetailPrice from "@/_components/share/detail/TraditionalLiquorDetailPrice";
-import useTraditionalLiquorList from "@/_utils/hooks/useTraditionalLiquorList";
+import React, { Fragment, useEffect } from "react";
+import getTraditionalLiquor from "@/app/api/tasting-note/getTraditionalLiquor";
 import TraditionalLiquorBackground from "@/_components/share/detail/TraditionalLiquorBackground";
+import TraditionalLiquorCapacityCell from "@/_components/share/detail/TraditionalLiquorCapacityCell";
+import TraditionalLiquorDetailPrice from "@/_components/share/detail/TraditionalLiquorDetailPrice";
+import RadarChart from "@/_components/tasting-note/write/HexagonChart";
+import useVolumePriceStore from "@/_store/volumePriceStore";
+import { IResponseTranditionalLiquor } from "@/_types/tasting-note/officialData";
+import { mapImageUrl, parseNumberOfDefault } from "@/_utils/commons";
+import useTraditionalLiquorList from "@/_utils/hooks/useTraditionalLiquorList";
+import { IApiResponse } from "@/_types";
+import Separator from "../Separator";
 import ServerToast from "../error/ServerToast";
+import MoonRating from "./MoonRating";
+import ShareAboutAlcoholReview from "./ShareAboutAlcoholReview";
+import ShareAboutTheSmellOfAlcohol from "./ShareAboutTheSmellOfAlcohol";
+import ShareTraditionalLiquorSkeletonUI from "./ShareTraditionalLiquorSkeletonUI";
 
 interface Props {
   id: number;

@@ -1,16 +1,16 @@
 "use client";
 
-import Button from "@/_common/ui/Button";
-import { IAlcoholType } from "@/_types/tasting-note/officialData";
-import { getAlcoholType } from "@/app/api/common/getAlcoholType";
-import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import WarningModal from "../notification/WarningModal";
+import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useDeleteTastingNote } from "@/app/api/tasting-note/deleteTastingNote";
+import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
+import Button from "@/_common/ui/Button";
+import { IAlcoholType } from "@/_types/tasting-note/officialData";
+import WarningModal from "../notification/WarningModal";
 
 export default function OwnerModalContent({
   postId,

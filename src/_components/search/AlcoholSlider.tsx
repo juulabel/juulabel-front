@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { alcoholType } from "@/_config/alcoholType";
 import { IAlcoholTypeTab } from "@/_types/search/alcoholTypeTab";
+import { alcoholType } from "@/_config/alcoholType";
 
 interface AlcoholSliderProps {
   onAlcoholTypeClick: (tab: IAlcoholTypeTab) => void; // Use the type here

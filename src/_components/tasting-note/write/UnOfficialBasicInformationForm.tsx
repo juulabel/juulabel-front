@@ -1,16 +1,16 @@
 "use client";
 
-import BottomButton from "@/_common/BottomButton";
-import Loading from "@/_common/Loading";
-import { useTastingNoteInformationStore } from "@/_store/tastingNote";
-import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
-import { getAlcoholType } from "@/app/api/common/getAlcoholType";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { FormEvent, useEffect, useState, MouseEvent } from "react";
 import { useForm } from "react-hook-form";
+import { getAlcoholType } from "@/app/api/common/getAlcoholType";
+import BottomButton from "@/_common/BottomButton";
+import Loading from "@/_common/Loading";
+import { useTastingNoteInformationStore } from "@/_store/tastingNote";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
 
 interface AlcoholTypeResponse {
   id: number;

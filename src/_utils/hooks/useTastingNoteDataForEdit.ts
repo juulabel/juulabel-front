@@ -1,11 +1,11 @@
-import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
-import { ITastingNoteWriteRequest } from "@/_types";
-import { IAlcoholType } from "@/_types/tasting-note/officialData";
-import { getAlcoholType } from "@/app/api/common/getAlcoholType";
-import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { useCookies } from "react-cookie";
+import { getAlcoholType } from "@/app/api/common/getAlcoholType";
+import getNoteDetail from "@/app/api/tasting-note/getNoteDetail";
+import { useTastingNoteStore } from "@/_store/useTastingNoteStore";
+import { IAlcoholType } from "@/_types/tasting-note/officialData";
+import { ITastingNoteWriteRequest } from "@/_types";
 
 export default function useTastingNoteDataForEdit(id: number) {
   const { setTastingNoteRequest, setImageUrlList } = useTastingNoteStore();

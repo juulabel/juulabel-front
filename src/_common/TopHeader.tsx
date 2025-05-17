@@ -1,9 +1,9 @@
 "use client";
 
-import { cn } from "@/_utils/commons";
 import { motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { GoChevronLeft } from "react-icons/go";
+import { cn } from "@/_utils/commons";
 
 interface ITopHeader {
   title: string;

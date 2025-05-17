@@ -1,14 +1,14 @@
 "use client";
 
+import clsx from "clsx";
+import Image from "next/image";
+import { useParams, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { PropsWithChildren, MouseEvent } from "react";
-import Image from "next/image";
+import useReplyComponentStore from "@/_store/replyComponentStore";
+import useCommentsLike from "@/_utils/hooks/useCommentsLike";
 import { IComment } from "@/_types";
 import ReplyBody from "./ReplyBody";
-import useCommentsLike from "@/_utils/hooks/useCommentsLike";
-import { useParams, usePathname } from "next/navigation";
-import clsx from "clsx";
-import useReplyComponentStore from "@/_store/replyComponentStore";
 
 interface Props {
   commentInfo: IComment;

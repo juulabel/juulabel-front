@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useRef, useState, TouchEvent } from "react";
-import Image from "next/image";
 import { constants } from "buffer";
-import { cn } from "@/_utils/commons";
+import Image from "next/image";
+import { useCallback, useRef, useState, TouchEvent } from "react";
 import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
+import { cn } from "@/_utils/commons";
 
 interface Props {
   images: string[];

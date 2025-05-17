@@ -1,7 +1,7 @@
-import { SearchParamProps } from "@/_types";
-import ServerToast from "@/_components/share/error/ServerToast";
-import ShareNoteForTraditionalLiquorLayout from "@/_components/share/detail/ShareNoteForTraditionalLiquorLayout";
 import ShareNoteForTraditionalLiquorBody from "@/_components/share/detail/ShareNoteForTraditionalLiquorBody";
+import ShareNoteForTraditionalLiquorLayout from "@/_components/share/detail/ShareNoteForTraditionalLiquorLayout";
+import ServerToast from "@/_components/share/error/ServerToast";
+import { SearchParamProps } from "@/_types";
 
 export default function NoteFilterPage({ params }: SearchParamProps) {
   const numberTypeId = Number(params.id);

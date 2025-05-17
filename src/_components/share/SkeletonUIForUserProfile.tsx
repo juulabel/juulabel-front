@@ -1,6 +1,6 @@
-import UserHeader from "../user/UserHeader";
 import { useRouter } from "next/navigation";
 import Loading from "@/_common/Loading";
+import UserHeader from "../user/UserHeader";
 import SkeletomUIForList from "./SkeletonUIForList";
 
 export default function SkeletonUIForUserProfile() {

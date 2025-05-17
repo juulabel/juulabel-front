@@ -1,11 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import ModalLayout from "@/_common/ModalLayout";
 import Button from "@/_common/ui/Button";
-import { useState } from "react";
-import CommentsDeleteModal from "./CommentsDeleteModal";
-import { useRouter } from "next/navigation";
 import useReplyComponentStore from "@/_store/replyComponentStore";
+import CommentsDeleteModal from "./CommentsDeleteModal";
 
 interface Props {
   postId: number;

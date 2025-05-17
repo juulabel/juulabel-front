@@ -1,5 +1,5 @@
-import { IVolumePriceDetails } from "@/_types/tasting-note/officialData";
 import { create } from "zustand";
+import { IVolumePriceDetails } from "@/_types/tasting-note/officialData";
 
 interface VolumePriceStore {
   volumePriceDetails: IVolumePriceDetails[];

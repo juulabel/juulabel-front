@@ -1,11 +1,11 @@
 "use client";
 
-import Loading from "@/_common/Loading";
-import { alcoholType } from "@/_config/alcoholType";
-import { getAlcoholTypes } from "@/app/api/auth/register/getAlcoholTypes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
+import { getAlcoholTypes } from "@/app/api/auth/register/getAlcoholTypes";
+import Loading from "@/_common/Loading";
+import { alcoholType } from "@/_config/alcoholType";
 
 interface IPreferredAlcohol {
   alcoholTypes: number[];

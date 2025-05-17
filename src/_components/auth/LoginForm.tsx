@@ -1,9 +1,9 @@
 "use client";
 
-import TopHeader from "@/_common/TopHeader";
-import LoginButton from "@/_components/auth/LoginButton";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import LoginButton from "@/_components/auth/LoginButton";
+import TopHeader from "@/_common/TopHeader";
 
 export default function LoginForm() {
   const kakaoSocialLoginLink = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI}&response_type=code`;

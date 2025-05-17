@@ -1,18 +1,18 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { GoChevronRight } from "react-icons/go";
+import { getTerms } from "@/app/api/auth/register/getTerms";
+import BottomButton from "@/_common/BottomButton";
+import Checkbox from "@/_common/Checkbox";
+import { useRegisterStore } from "@/_store/register";
 import {
   AgreementUserFormValues,
   termsMapping,
 } from "@/_types/yup/yupRegister";
-import { Controller, useForm } from "react-hook-form";
-import { useRegisterStore } from "@/_store/register";
-import BottomButton from "@/_common/BottomButton";
-import { useQuery } from "@tanstack/react-query";
-import { GoChevronRight } from "react-icons/go";
-import { useRouter } from "next/navigation";
-import Checkbox from "@/_common/Checkbox";
-import { getTerms } from "@/app/api/auth/register/getTerms";
-import { useEffect } from "react";
 
 export default function RegisterAgreementForm() {
   const router = useRouter();

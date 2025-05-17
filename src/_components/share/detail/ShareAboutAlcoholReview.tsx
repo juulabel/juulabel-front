@@ -1,7 +1,7 @@
 "use client";
 
-import { sensoryMap } from "@/_utils/commons";
 import { Fragment, ReactNode, useEffect } from "react";
+import { sensoryMap } from "@/_utils/commons";
 
 interface Props {
   sensoryLevelIds: number[] | undefined;

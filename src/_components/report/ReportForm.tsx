@@ -1,9 +1,9 @@
-import Checkbox from "@/_common/Checkbox";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
-import Image from "next/image";
 import BottomButton from "@/_common/BottomButton";
+import Checkbox from "@/_common/Checkbox";
 
 interface ReportFormType {
   reportList: { data: string[] };

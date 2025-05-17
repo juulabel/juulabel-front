@@ -1,10 +1,10 @@
 "use client";
 
-import { INotificationSummary } from "@/_types/notification";
-import { dateViewKoreanFull } from "@/_utils/time";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { INotificationSummary } from "@/_types/notification";
+import { dateViewKoreanFull } from "@/_utils/time";
 
 const NotificationTypeLabels: { [key: string]: string } = {
   POST_LIKE: "공유공간",
