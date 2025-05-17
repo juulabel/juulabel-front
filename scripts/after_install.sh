@@ -12,18 +12,18 @@ if [ "$ENV_VERSION" == "dev" ]; then
   mv /home/juulabel-front /home/juulabel-qa/juulabel-front
   cd /home/juulabel-qa/juulabel-front
   pnpm install
-  pm2 stop juulabel-front-qa
-  pm2 start npm --name juulabel-front-qa -- run start:qa
-  pm2 reload juulabel-front-qa
+  pm2 stop front-qa
+  pm2 start npm --name front-qa -- run start:qa
+  pm2 reload front-qa
 elif [ "$ENV_VERSION" == "production" ]; then
   echo "=== [PM2 restart] Restart juulabel-front process ==="
   rm -rf /home/juulabel/juulabel-front
   rm -rf /home/juulabel-backup/juulabel-front
   cp /home/juulabel-front /home/juulabel-backup/juulabel-front
-  mv /home/juulabel-front /home/juulabel-qa/juulabel-front
+  mv /home/juulabel-front /home/juulabel/juulabel-front
   cd /home/juulabel/juulabel-front
   pnpm install
-  pm2 stop juulabel-front
-  pm2 start npm --name juulabel-front -- run start
-  pm2 reload juulabel-front
+  pm2 stop front-live
+  pm2 start npm --name front-live -- run start
+  pm2 reload front-live
 fi
