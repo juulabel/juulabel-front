@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - feat/**
   pull_request:
     branches:
       - main
@@ -25,13 +26,14 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.14.0
+
       # Install
       - name: Install Dependencies
         run: pnpm install
-
-      # Build
-      - name: Build Project
-        run: pnpm build
 
       # Test - test를 진행하지 않으므로 생략
       # - name: Run Tests
@@ -40,3 +42,7 @@ jobs:
       # Lint
       - name: Lint Code
         run: pnpm lint
+
+      # Build
+      - name: Build Project
+        run: pnpm build
