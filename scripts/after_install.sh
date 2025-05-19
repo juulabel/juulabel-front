@@ -5,6 +5,10 @@ set -e
 echo "=== [PM2 restart] Restart juulabel-front process ==="
 
 ENV_VERSION=$(grep ENV_VERSION /home/juulabel-front/.env | cut -d '=' -f2)
+export NVM_DIR="/home/ubuntu/.nvm"
+source "$NVM_DIR/nvm.sh"
+
+export PATH="/home/ubuntu/.nvm/versions/node/v22.4.0/bin:$PATH" 
 
 if [ "$ENV_VERSION" == "dev" ]; then
   echo "=== [PM2 restart] Restart juulabel-front-qa process ==="
