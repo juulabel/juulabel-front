@@ -30,7 +30,7 @@ export default function UserReport({
   const handleReport = () => {
     if (memberId) {
       setReportId(memberId);
-      router.push(`/report/?type=멤버`);
+      router.push(`/report/?type=유저`);
     }
   };
 
