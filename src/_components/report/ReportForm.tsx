@@ -27,7 +27,7 @@ export default function ReportForm({
   const [etcReport, setEtcReport] = useState<string>("");
 
   const typeMap: Record<string, string> = {
-    멤버: "MEMBER",
+    유저: "MEMBER",
     시음노트: "TASTING_NOTE",
     "시음노트 댓글": "TASTING_NOTE_COMMENT",
     일상생활: "DAILY_LIFE",
