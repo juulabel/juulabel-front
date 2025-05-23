@@ -19,7 +19,7 @@ if [ "$ENV_VERSION" == "dev" ]; then
   pnpm install
 
   sudo -u ubuntu -H bash -c "
-    source $NVM_DIR/nvm.sh
+    source /home/ubuntu/.nvm/nvm.sh
     pm2 delete front-qa
     pm2 start npm --name front-qa -- run start:qa
   "
@@ -33,7 +33,7 @@ elif [ "$ENV_VERSION" == "production" ]; then
   pnpm install
 
   sudo -u ubuntu -H bash -c "
-    source $NVM_DIR/nvm.sh
+    source /home/ubuntu/.nvm/nvm.sh
     pm2 delete front-live
     pm2 start npm --name front-live -- run start
   "
