@@ -9,6 +9,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 export PATH="/home/ubuntu/.nvm/versions/node/v22.4.0/bin:$PATH" 
+export PM2_HOME="$HOME/.pm2"
 
 if [ "$ENV_VERSION" == "dev" ]; then
   echo "=== [PM2 restart] Restart juulabel-front-qa process ==="
