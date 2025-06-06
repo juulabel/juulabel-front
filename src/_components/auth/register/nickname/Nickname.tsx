@@ -1,10 +1,9 @@
-import NicknameForm from "@/_components/auth/NicknameForm";
+import NicknameForm from "@/_components/auth/register/nickname/NicknameForm";
 import TopHeader from "@/_common/TopHeader";
 
-export default function Page() {
+export default function NickName({ onNext }: { onNext: () => void }) {
   return (
     <>
-      <TopHeader title="회원가입" step={2} rest={1} />
       <div className="mx-[4%] mb-4 mt-10 flex flex-col">
         <h2 className="my-1 text-xl font-bold">닉네임을 설정해주세요.</h2>
         <div className="my-1 flex flex-col text-sm font-medium text-cool-grayscale-600">
@@ -15,7 +14,7 @@ export default function Page() {
           닉네임은 추후 변경이 가능해요!
         </span>
       </div>
-      <NicknameForm />
+      <NicknameForm onNext={() => onNext()} />
     </>
   );
 }

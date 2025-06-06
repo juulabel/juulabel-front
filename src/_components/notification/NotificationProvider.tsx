@@ -23,10 +23,10 @@ export default function NotificationProvider({
       });
     };
 
-    const unsubscribe = subscribeToNotifications(handleNewNotification);
+    // const unsubscribe = subscribeToNotifications(handleNewNotification);
 
     return () => {
-      unsubscribe();
+      // unsubscribe();
     };
   }, []);
 

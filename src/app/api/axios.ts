@@ -4,6 +4,9 @@ import nookies from "nookies";
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_JUULABEL_API_URL,
   timeout: 20000,
+  withCredentials: true,
+  xsrfCookieName: "csrfToken",
+  xsrfHeaderName: "X-CSRF-TOKEN",
 });
 
 instance.interceptors.request.use(
@@ -11,10 +14,10 @@ instance.interceptors.request.use(
     // 브라우저 환경에서만 쿠키 읽기
     if (typeof window !== "undefined") {
       const cookies = nookies.get();
-      const accessToken = cookies.accessToken;
+      const csrftoken = cookies.csrfToken;
 
-      if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
+      if (csrftoken) {
+        config.headers["X-CSRF-TOKEN"] = csrftoken;
       }
     }
     return config;
@@ -28,4 +31,5 @@ export const formInstance = axios.create({
   headers: {
     "Content-Type": "multipart/form-data",
   },
+  withCredentials: true,
 });

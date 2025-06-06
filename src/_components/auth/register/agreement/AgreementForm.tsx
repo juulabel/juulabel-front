@@ -14,7 +14,7 @@ import {
   termsMapping,
 } from "@/_types/yup/yupRegister";
 
-export default function RegisterAgreementForm() {
+export default function AgreementForm({ onNext }: { onNext: () => void }) {
   const router = useRouter();
   const {
     data: terms,
@@ -55,6 +55,7 @@ export default function RegisterAgreementForm() {
     setServiceAgree(getValues("serviceAgree"));
     setPrivateInformationAgree(getValues("privateInformationAgree"));
     setMarketingAgree(getValues("marketingAgree"));
+    onNext();
   };
 
   // 리렌더링 시 zustand 상태 반영
@@ -163,7 +164,6 @@ export default function RegisterAgreementForm() {
         )}
       </div>
       <BottomButton
-        url="/register/name"
         enableButton={
           allAgreeWatch || (serviceAgreeWatch && privateInformationAgreeWatch)
         }
