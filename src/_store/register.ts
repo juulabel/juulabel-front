@@ -23,6 +23,7 @@ interface IRegisterUserState {
   genderCheck: boolean;
   preferredAlcoholType: number[];
   memberId: number;
+  signUpToken: string;
   setAllAgree: (value: boolean) => void;
   setServiceAgree: (value: boolean) => void;
   setPrivateInformationAgree: (value: boolean) => void;
@@ -35,6 +36,7 @@ interface IRegisterUserState {
   setGendercheck: (value: boolean) => void;
   setPreferredAlcoholType: (value: number[]) => void;
   setMemberId: (value: number) => void;
+  setSignUpToken: (value: string) => void;
 }
 
 export const useRegisterStore = create(
@@ -61,6 +63,7 @@ export const useRegisterStore = create(
       genderCheck: false,
       preferredAlcoholType: [],
       memberId: 0,
+      signUpToken: "",
       setAllAgree: (value: boolean) =>
         set((state) => ({ ...state, allAgree: value })),
       setServiceAgree: (value: boolean) =>
@@ -104,9 +107,13 @@ export const useRegisterStore = create(
       setMemberId: (value: number) => {
         set((state) => ({ ...state, memberId: value }));
       },
+      setSignUpToken: (value: string) => {
+        set((state) => ({ ...state, signUpToken: value }));
+      },
     }),
     {
       name: "userRegisterStorage",
+      getStorage: () => sessionStorage,
     },
   ),
 );

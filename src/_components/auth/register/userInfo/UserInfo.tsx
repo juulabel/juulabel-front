@@ -3,29 +3,23 @@
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { instance } from "@/app/api/axios";
 import requests from "@/app/api/requests";
-import DetailsText from "@/_components/auth/DetailsText";
-import GenderForm from "@/_components/auth/GenderForm";
-import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
-import RegisterConfirmModal from "@/_components/auth/RegisterConfirmModal";
+import RegisterConfirmModal from "@/_components/auth/register/RegisterConfirmModal";
+import UserInfoText from "@/_components/auth/register/userInfo/UserInfoText";
 import BottomButton from "@/_common/BottomButton";
-import ConfirmModal from "@/_common/ConfirmModal";
-import TopHeader from "@/_common/TopHeader";
+import GenderForm from "@/_common/GenderForm";
+import PreferredAlcoholForm from "@/_common/PreferredAlcoholForm";
 import { useRegisterStore } from "@/_store/register";
 
-export default function Page() {
+export default function UserInfo() {
   const registerStore = useRegisterStore();
   const router = useRouter();
-  const [cookies, setCookie] = useCookies(["accessToken"]);
   const [alcoholTypes, setAlcoholTypes] = useState<number[]>([]);
   const [gender, setGender] = useState<string>("");
   const [genderCheck, setGenderCheck] = useState<boolean>(false);
   const [registerConfirmModalOpen, setRegisterConfirmModalOpen] =
-    useState<boolean>(false);
-  const [registerCancelModalOpen, setRegisterCancelModalOpen] =
     useState<boolean>(false);
 
   const enableRegisterButton =
@@ -58,40 +52,17 @@ export default function Page() {
     setRegisterConfirmModalOpen(false);
   };
 
-  const handleRegisterCancelModalOpen = () => {
-    setRegisterCancelModalOpen(true);
-  };
-
-  const handleRegisterCancelModalClose = () => {
-    setRegisterCancelModalOpen(false);
-  };
-
-  const handleRegisterCancel = () => {
-    router.replace("/");
-  };
-
   const handleRegisterConfirm = async () => {
     const data = {
-      email: registerStore.email,
       nickname: registerStore.nickname,
       gender: registerStore.gender,
-      provider: registerStore.provider,
-      providerId: registerStore.providerId,
       alcoholTypeIds: registerStore.preferredAlcoholType,
-      termsAgreements: [
-        registerStore.serviceAgree,
-        registerStore.privateInformationAgree,
-        registerStore.marketingAgree,
-      ],
+      termsAgreements: [registerStore.privateInformationAgree],
     };
     try {
       const response = await instance.post(requests.postSignUp, data);
       if (response.status === 200) {
         localStorage.setItem("recentLogin", registerStore.provider);
-        registerStore.setMemberId(response.data.result.memberId);
-        setCookie("accessToken", response.data.result.token.accessToken, {
-          path: "/",
-        });
         router.replace("/share/note");
       }
     } catch (error) {
@@ -118,13 +89,7 @@ export default function Page() {
   return (
     registerStore.nickname && (
       <>
-        <TopHeader
-          title="회원가입"
-          step={3}
-          rest={0}
-          onClick={handleRegisterCancelModalOpen}
-        />
-        <DetailsText />
+        <UserInfoText />
         <GenderForm
           genderCheck={genderCheck}
           maleClicked={maleClicked}
@@ -152,16 +117,6 @@ export default function Page() {
         >
           회원가입 완료하기
         </BottomButton>
-        {registerCancelModalOpen && (
-          <ConfirmModal
-            modalTitle="회원가입을 중단하시겠어요?"
-            modalDescription="마지막 단계에요! 그래도 중단하시겠어요?"
-            confirmText="중단하기"
-            cancelText="닫기"
-            handleConfirm={handleRegisterCancel}
-            handleCancel={handleRegisterCancelModalClose}
-          />
-        )}
         {registerConfirmModalOpen && (
           <RegisterConfirmModal
             handleRegisterConfirm={handleRegisterConfirm}

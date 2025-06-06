@@ -10,22 +10,28 @@ interface ITopHeader {
   step: number;
   rest: number;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  goBack?: () => void;
 }
 
-export default function TopHeader({ title, step, rest, onClick }: ITopHeader) {
+export default function TopHeader({
+  title,
+  step,
+  rest,
+  onClick,
+  goBack,
+}: ITopHeader) {
   const router = useRouter();
   const totalSteps = step + rest; // 전체 단계 수
   const pathname = usePathname();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (onClick) {
-      event.preventDefault();
-      onClick(event);
-    } else {
+    if (goBack) {
       if (step === 1) {
         router.replace("/");
+      } else if (step === 3 && onClick) {
+        onClick(event);
       } else {
-        router.back();
+        goBack();
       }
     }
   };

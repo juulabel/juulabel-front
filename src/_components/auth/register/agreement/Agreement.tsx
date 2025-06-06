@@ -1,16 +1,14 @@
-import RegisterAgreementForm from "@/_components/auth/RegisterAgreementForm";
-import TopHeader from "@/_common/TopHeader";
+import AgreementForm from "./AgreementForm";
 
-export default function Page() {
+export default function Agreement({ onNext }: { onNext: () => void }) {
   return (
     <>
-      <TopHeader title="회원가입" step={1} rest={2} />
       <div className="mx-[4%] mb-[50vh] mt-[6vh]">
         <h2 className="text-xl font-bold">
           주라벨을 사용하려면 <br /> 아래에 대한 약관 동의가 필요해요
         </h2>
       </div>
-      <RegisterAgreementForm />
+      <AgreementForm onNext={() => onNext()} />
     </>
   );
 }
