@@ -1,0 +1,92 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import LoginButton from "@/_components/auth/login/LoginButton";
+import TopHeader from "@/_common/TopHeader";
+
+export default function LoginForm() {
+  // state 추가 deviceID
+  const deviceId = localStorage.getItem("device-id") || uuidv4();
+  if (!localStorage.getItem("device-id")) {
+    localStorage.setItem("device-id", deviceId);
+  }
+  const kakaoSocialLoginLink = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI}&response_type=code&state=${deviceId}`;
+  const googleSocialLoginLink = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&scope=email&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI}&state=${deviceId}`;
+  const [kakaoRecentLogin, setKakaoRecentLogin] = useState<boolean>(false);
+  const [googleRecentLogin, setGoogleRecentLogin] = useState<boolean>(false);
+
+  const handleKakaoLogin = () => {
+    window.location.href = kakaoSocialLoginLink;
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = googleSocialLoginLink;
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("recentLogin") === "KAKAO")
+      setKakaoRecentLogin(true);
+    else if (localStorage.getItem("recentLogin") === "GOOGLE")
+      setGoogleRecentLogin(true);
+  }, []);
+
+  return (
+    <div className="flex h-full w-full max-w-[560px] animate-fade-in-up flex-col items-center justify-center gap-5">
+      <TopHeader title="로그인" step={0} rest={0} />
+      <div className="mb-4 flex flex-col items-center justify-center">
+        <Image
+          width={228}
+          height={112}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/main_logo.png`}
+          alt="주라벨 메인로고"
+          priority
+        />
+        <h2 className="mt-4 text-xl font-bold text-primary-700">
+          주라벨에 오신 것을 환영해요!
+        </h2>
+      </div>
+      <LoginButton buttonType="kakao" handleButton={handleKakaoLogin}>
+        {kakaoRecentLogin && (
+          <div className="absolute bottom-9 left-[2%]">
+            <Image
+              width={71}
+              height={31}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/tool-tip.png`}
+              alt="최근 로그인"
+            />
+          </div>
+        )}
+
+        <Image
+          width={24}
+          height={24}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/kakao_icon.png`}
+          alt="카카오 소셜 로그인 버튼"
+        />
+        <p className="ml-1 text-base font-medium">카카오로 시작하기</p>
+      </LoginButton>
+
+      <LoginButton buttonType="google" handleButton={handleGoogleLogin}>
+        <div className="absolute bottom-9 right-[280px]">
+          {googleRecentLogin && (
+            <Image
+              width={71}
+              height={31}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/tool-tip.png`}
+              alt="최근 로그인"
+            />
+          )}
+        </div>
+        <Image
+          width={20}
+          height={20}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_PATH}/images/google_icon.png`}
+          alt="구글 소셜 로그인 버튼"
+        />
+        <p className="ml-1 text-base font-medium">구글로 시작하기</p>
+      </LoginButton>
+    </div>
+  );
+}
