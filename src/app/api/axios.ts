@@ -1,5 +1,6 @@
 import axios from "axios";
 import nookies from "nookies";
+import { v4 as uuidv4 } from "uuid";
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_JUULABEL_API_URL,
@@ -13,9 +14,14 @@ instance.interceptors.request.use(
     if (typeof window !== "undefined") {
       const cookies = nookies.get();
       const csrftoken = cookies.csrfToken;
+      const deviceId = localStorage.getItem("device-id") || uuidv4();
+      if (!localStorage.getItem("device-id")) {
+        localStorage.setItem("device-id", deviceId);
+      }
 
       if (csrftoken) {
         config.headers["X-CSRF-TOKEN"] = csrftoken;
+        config.headers["Device-Id"] = deviceId;
       }
     }
     return config;
