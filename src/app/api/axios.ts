@@ -5,8 +5,6 @@ export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_JUULABEL_API_URL,
   timeout: 20000,
   withCredentials: true,
-  xsrfCookieName: "csrfToken",
-  xsrfHeaderName: "X-CSRF-TOKEN",
 });
 
 instance.interceptors.request.use(
