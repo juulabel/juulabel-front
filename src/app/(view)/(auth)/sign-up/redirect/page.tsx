@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RegisterSetup from "@/_components/auth/register/RegisterSetup";
 import ConfirmModal from "@/_common/ConfirmModal";
 import TopHeader from "@/_common/TopHeader";
@@ -42,6 +42,18 @@ export default function Page() {
       setStep(STEPS[0]);
     }
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <>
