@@ -18,12 +18,10 @@ interface IRegisterUserState {
   nickname: string;
   email: string;
   provider: string;
-  providerId: string;
   gender: string;
   genderCheck: boolean;
   preferredAlcoholType: number[];
   memberId: number;
-  signUpToken: string;
   setAllAgree: (value: boolean) => void;
   setServiceAgree: (value: boolean) => void;
   setPrivateInformationAgree: (value: boolean) => void;
@@ -31,12 +29,10 @@ interface IRegisterUserState {
   setNickname: (value: string) => void;
   setEmail: (value: string) => void;
   setProvider: (value: string) => void;
-  setProviderId: (value: string) => void;
   setGender: (value: string) => void;
   setGendercheck: (value: boolean) => void;
   setPreferredAlcoholType: (value: number[]) => void;
   setMemberId: (value: number) => void;
-  setSignUpToken: (value: string) => void;
 }
 
 export const useRegisterStore = create(
@@ -58,12 +54,10 @@ export const useRegisterStore = create(
       nickname: "",
       email: "",
       provider: "",
-      providerId: "",
       gender: "",
       genderCheck: false,
       preferredAlcoholType: [],
       memberId: 0,
-      signUpToken: "",
       setAllAgree: (value: boolean) =>
         set((state) => ({ ...state, allAgree: value })),
       setServiceAgree: (value: boolean) =>
@@ -95,8 +89,6 @@ export const useRegisterStore = create(
       setEmail: (value: string) => set((state) => ({ ...state, email: value })),
       setProvider: (value: string) =>
         set((state) => ({ ...state, provider: value })),
-      setProviderId: (value: string) =>
-        set((state) => ({ ...state, providerId: value })),
       setGender: (value: string) =>
         set((state) => ({ ...state, gender: value })),
       setGendercheck: (value: boolean) =>
@@ -106,9 +98,6 @@ export const useRegisterStore = create(
       },
       setMemberId: (value: number) => {
         set((state) => ({ ...state, memberId: value }));
-      },
-      setSignUpToken: (value: string) => {
-        set((state) => ({ ...state, signUpToken: value }));
       },
     }),
     {
