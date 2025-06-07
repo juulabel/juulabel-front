@@ -57,7 +57,11 @@ export default function UserInfo() {
       nickname: registerStore.nickname,
       gender: registerStore.gender,
       alcoholTypeIds: registerStore.preferredAlcoholType,
-      termsAgreements: [registerStore.privateInformationAgree],
+      termsAgreements: [
+        registerStore.serviceAgree,
+        registerStore.privateInformationAgree,
+        registerStore.marketingAgree,
+      ],
     };
     try {
       const response = await instance.post(requests.postSignUp, data);
