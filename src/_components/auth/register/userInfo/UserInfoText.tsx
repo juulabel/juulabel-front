@@ -2,7 +2,7 @@
 
 import { useRegisterStore } from "@/_store/register";
 
-export default function DetailsText() {
+export default function UserInfoText() {
   const registerStore = useRegisterStore();
   return (
     <div>

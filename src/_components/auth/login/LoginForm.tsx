@@ -2,12 +2,18 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import LoginButton from "@/_components/auth/LoginButton";
+import { v4 as uuidv4 } from "uuid";
+import LoginButton from "@/_components/auth/login/LoginButton";
 import TopHeader from "@/_common/TopHeader";
 
 export default function LoginForm() {
-  const kakaoSocialLoginLink = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI}&response_type=code`;
-  const googleSocialLoginLink = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&scope=email&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI}`;
+  // state 추가 deviceID
+  const deviceId = localStorage.getItem("device-id") || uuidv4();
+  if (!localStorage.getItem("device-id")) {
+    localStorage.setItem("device-id", deviceId);
+  }
+  const kakaoSocialLoginLink = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI}&response_type=code&state=${deviceId}`;
+  const googleSocialLoginLink = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&scope=email&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_LOGIN_REDIRECT_URI}&state=${deviceId}`;
   const [kakaoRecentLogin, setKakaoRecentLogin] = useState<boolean>(false);
   const [googleRecentLogin, setGoogleRecentLogin] = useState<boolean>(false);
 

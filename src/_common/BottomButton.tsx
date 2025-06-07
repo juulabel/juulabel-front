@@ -34,9 +34,6 @@ export default function BottomButton({
       ) : (
         <button
           onClick={(e: MouseEvent) => {
-            e.stopPropagation();
-            e.preventDefault();
-
             onClick();
           }}
           className={`flex w-[91%] max-w-[560px] items-center justify-center rounded-[10px] py-[14px] text-base font-bold text-white ${

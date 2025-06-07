@@ -13,8 +13,9 @@ import {
   AgreementUserFormValues,
   termsMapping,
 } from "@/_types/yup/yupRegister";
+import AgreementFormSkeleton from "./AgreementformtSkeleton";
 
-export default function RegisterAgreementForm() {
+export default function AgreementForm({ onNext }: { onNext: () => void }) {
   const router = useRouter();
   const {
     data: terms,
@@ -55,6 +56,7 @@ export default function RegisterAgreementForm() {
     setServiceAgree(getValues("serviceAgree"));
     setPrivateInformationAgree(getValues("privateInformationAgree"));
     setMarketingAgree(getValues("marketingAgree"));
+    onNext();
   };
 
   // 리렌더링 시 zustand 상태 반영
@@ -99,8 +101,13 @@ export default function RegisterAgreementForm() {
     setValue,
   ]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error : {error.message}</div>;
+  if (isLoading) {
+    return <AgreementFormSkeleton />;
+  }
+  if (error) {
+    router.push("/error");
+    return null;
+  }
 
   return (
     <form className="w-full max-w-[560px]">
@@ -163,7 +170,6 @@ export default function RegisterAgreementForm() {
         )}
       </div>
       <BottomButton
-        url="/register/name"
         enableButton={
           allAgreeWatch || (serviceAgreeWatch && privateInformationAgreeWatch)
         }

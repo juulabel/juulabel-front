@@ -12,7 +12,7 @@ import {
   NicknameUserFormValues,
 } from "@/_types/yup/yupRegister";
 
-export default function NicknameForm() {
+export default function NicknameForm({ onNext }: { onNext: () => void }) {
   const { setNickname } = useRegisterStore();
   const [nicknamePass, setNicknamePass] = useState<string>("");
   const [enableButton, setEnableButton] = useState<boolean>(false);
@@ -129,9 +129,13 @@ export default function NicknameForm() {
     [isSubmitting, clearErrors, setError],
   );
 
+  // const saveNicknameData = useCallback(() => {
+  //   setNickname(getValues("nickname"));
+  // }, [getValues, setNickname]);
   const saveNicknameData = useCallback(() => {
     setNickname(getValues("nickname"));
-  }, [getValues, setNickname]);
+    onNext();
+  }, [getValues, setNickname, onNext]);
 
   useEffect(() => {
     clearErrors("nickname");
@@ -179,11 +183,7 @@ export default function NicknameForm() {
       >
         중복 검사
       </button>
-      <BottomButton
-        url="/register/details"
-        enableButton={enableButton}
-        onClick={saveNicknameData}
-      >
+      <BottomButton enableButton={enableButton} onClick={saveNicknameData}>
         다음
       </BottomButton>
     </form>

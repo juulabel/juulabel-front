@@ -18,7 +18,6 @@ interface IRegisterUserState {
   nickname: string;
   email: string;
   provider: string;
-  providerId: string;
   gender: string;
   genderCheck: boolean;
   preferredAlcoholType: number[];
@@ -30,7 +29,6 @@ interface IRegisterUserState {
   setNickname: (value: string) => void;
   setEmail: (value: string) => void;
   setProvider: (value: string) => void;
-  setProviderId: (value: string) => void;
   setGender: (value: string) => void;
   setGendercheck: (value: boolean) => void;
   setPreferredAlcoholType: (value: number[]) => void;
@@ -56,7 +54,6 @@ export const useRegisterStore = create(
       nickname: "",
       email: "",
       provider: "",
-      providerId: "",
       gender: "",
       genderCheck: false,
       preferredAlcoholType: [],
@@ -92,8 +89,6 @@ export const useRegisterStore = create(
       setEmail: (value: string) => set((state) => ({ ...state, email: value })),
       setProvider: (value: string) =>
         set((state) => ({ ...state, provider: value })),
-      setProviderId: (value: string) =>
-        set((state) => ({ ...state, providerId: value })),
       setGender: (value: string) =>
         set((state) => ({ ...state, gender: value })),
       setGendercheck: (value: boolean) =>
@@ -107,6 +102,7 @@ export const useRegisterStore = create(
     }),
     {
       name: "userRegisterStorage",
+      getStorage: () => sessionStorage,
     },
   ),
 );

@@ -8,10 +8,10 @@ import { toast } from "react-toastify";
 import { checkNickname } from "@/app/api/auth/checkName";
 import { formInstance } from "@/app/api/axios";
 import { urlToFile } from "@/app/api/life/urlToFile";
-import GenderForm from "@/_components/auth/GenderForm";
-import PreferredAlcoholForm from "@/_components/auth/PreferredAlcoholForm";
 import ProfileChangeModal from "@/_components/user/ProfileChangeModal";
 import BottomButton from "@/_common/BottomButton";
+import GenderForm from "@/_common/GenderForm";
+import PreferredAlcoholForm from "@/_common/PreferredAlcoholForm";
 import { resizeImage } from "@/_utils/resizeImage";
 import { IMyInfo } from "@/_types";
 
