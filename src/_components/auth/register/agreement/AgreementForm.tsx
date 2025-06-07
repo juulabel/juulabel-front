@@ -13,6 +13,7 @@ import {
   AgreementUserFormValues,
   termsMapping,
 } from "@/_types/yup/yupRegister";
+import AgreementFormSkeleton from "./AgreementformtSkeleton";
 
 export default function AgreementForm({ onNext }: { onNext: () => void }) {
   const router = useRouter();
@@ -100,8 +101,13 @@ export default function AgreementForm({ onNext }: { onNext: () => void }) {
     setValue,
   ]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error : {error.message}</div>;
+  if (isLoading) {
+    return <AgreementFormSkeleton />;
+  }
+  if (error) {
+    router.push("/error");
+    return null;
+  }
 
   return (
     <form className="w-full max-w-[560px]">
